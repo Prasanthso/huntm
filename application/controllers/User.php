@@ -9,6 +9,7 @@ class User extends CI_Controller {
 		$this->load->model('WebsiteModel');
     }
     
+     //this is my signup page section
     public function signup() {
         $this->load->view('signup_form'); //this is my signup page view
     }
@@ -141,8 +142,8 @@ class User extends CI_Controller {
 	
 	//here suggestion page section
     public function suggestion_form() {
-        // $data['method'] = "suggestion";
-         $this->load->view('website_dashboard',$data); 
+        $data['method'] = "suggestion";
+        $this->load->view('website_dashboard',$data); 
     }
 
 	public function submit_suggestion() {
@@ -216,14 +217,14 @@ class User extends CI_Controller {
 		}
 	}	
 
-	 // Display form and websites list
-	 public function index() {
+	 // Add Website section
+     public function index() {
         $data['users'] = $this->WebsiteModel->get_users();
         $data['errors'] = [];
-		$data['method'] = "add_website";
-        $this->load->view('add_website', $data);
+        $data['method'] = "add_website"; 
+        $this->load->view('website_dashboard',$data); 
     }
-
+    
     // Store website login details in the database
     public function store() {
         $data['users'] = $this->WebsiteModel->get_users();
@@ -269,7 +270,9 @@ class User extends CI_Controller {
 
     // Show dashboard with saved websites
     public function dashboard() {
-		$this->load->view('dashword_view');
+        $data['websites'] = $this->WebsiteModel->get_all_websites();
+        $data['method'] = "display_website";
+        $this->load->view('website_dashboard',$data); 
 	}
 
 	 // Auto-login using cURL and open in a new tab

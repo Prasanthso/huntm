@@ -64,6 +64,7 @@ class WebsiteController extends CI_Controller {
     // Show dashboard with saved websites
     public function dashboard() {
         $data['websites'] = $this->WebsiteModel->get_all_websites();
+        $date['method'] = 'store_website';
         $this->load->view('dashboard_view', $data);
     }
 
