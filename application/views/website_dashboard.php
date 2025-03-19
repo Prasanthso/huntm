@@ -390,23 +390,6 @@
                         </ul>
                     </div>
                 </div>
-
-
-                
-                 <div class="form-check">
-                    <input class="form-check-input me-2" type="checkbox" id="operationCheck">
-                    <label class="form-check-label" for="operationCheck">
-                        <a href="<?php echo base_url('user/operation'); ?>" class="text-decoration-none">Operation</a>
-                    </label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input me-2" type="checkbox" id="customerReportCheck">
-                    <label class="form-check-label" for="customerReportCheck">
-                        <a href="<?php echo base_url('user/customer_report'); ?>" class="text-decoration-none">Customer Report</a>
-                    </label>
-                </div>
-
             </div>
         </div>
         
@@ -463,7 +446,7 @@
 
                             <div class="form-group">
                                 <textarea name="message" class="form-control validate" id="message" placeholder="Enter your message"></textarea>
-                                <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span>
+                                <!-- <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span> -->
                             </div>
 
                             <div class="form-group">
