@@ -75,11 +75,18 @@
             border: none;
             background-color: #2C3E50;
             color: white;
+            transition: background-color 0.3s ease, color 0.3s ease; 
         }
         
-        .list-group-item a:hover {
+        /* .list-group-item a:hover {
             background-color: #f1f1f1;
             color: black;
+        } */
+
+        .list-group-item:hover {
+            background-color: #f1f1f1; 
+            color: black; 
+            font-weight: bold;
         }
         
         .form-check{
@@ -98,14 +105,31 @@
         
         .dropdown-toggle {
             color: white;
+            transition: background-color 0.3s ease, color 0.3s ease; 
         }
 
-        .dropdown-menu {
+        .dropdown-toggle:hover {
+            background-color: white; 
+            color: black;
+            font-weight: bold;
+        }
+
+        /* .dropdown-menu {
             background-color: #f1f1f1;
             border: 1px solid #ddd;
             width: 100% !important;
+        } */
+
+        .dropdown-item {
+            color: #333; 
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        .dropdown-item:hover {
+            background-color: #f1f1f1; 
+            color: #2C3E50;
+            font-weight: bold;
+        }
         .dropdown-item {
             display: block;
             width: 100%; 
@@ -356,6 +380,134 @@
             border-radius: 5px;
         }
        
+        /* Responsive Styles */
+        /* Hide hamburger menu on large screens */
+        .hamburger {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute; 
+        right: 20px;
+        top: 50%; 
+        transform: translateY(-50%); 
+    }
+
+        /* Show hamburger menu on small screens */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            #sidebar {
+                left: -250px;
+                width: 250px;
+                height: 100%;
+                z-index: 2000;
+                transition: left 0.3s ease-in-out;
+            }
+
+            #sidebar.active {
+                left: 0;
+            }
+
+            .main-container {
+                margin-top: 60px;
+            }
+
+            .suggest-form {
+                margin-left: 20px;
+                margin-right: 20px;
+                width: calc(100% - 40px);
+                padding: 15px;
+            }
+
+            .form-container{
+                margin-left: 20px;
+                width: calc(100% - 40px);
+            }
+
+            .container{
+                margin-left: 20px;
+                width: calc(100% - 40px);
+            }
+            header {
+                padding: 10px;
+            }
+
+            h1 {
+                margin: 20px 0;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .huntmlogo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .navbar-brand {
+                font-size: 20px;
+            }
+
+            .suggest-form {
+                margin-left: 15px;
+                width: calc(100% - 20px);
+            }
+
+            .form-container{
+                margin-left: 20px;
+                width: calc(100% - 20px);
+            }
+
+            .container {
+                margin-left: 10px;
+                margin-right: 10px;
+                width: calc(100% - 20px);
+                padding: 15px; 
+                overflow-x: auto; 
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            table {
+                width: 100%; 
+                font-size: 14px;
+                min-width: 600px; 
+            }
+
+            th, td {
+                padding: 8px;
+                white-space: nowrap; 
+            }
+
+            .truncate-url {
+                max-width: none; 
+            }
+
+            .btn-copy {
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 14px; 
+                padding: 6px 10px; 
+            }
+        }
+
+            .image-section {
+                height: 120px;
+            }
+
+            .image-text {
+                font-size: 16px;
+            }
+        
     </style>
 </head>
 <body>
@@ -365,6 +517,9 @@
             <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo">
             <span class="navbar-brand">Huntm</span>
         </a>
+        <button class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </button>
     </header>
     
     <div class="main-container">
@@ -446,7 +601,7 @@
 
                             <div class="form-group">
                                 <textarea name="message" class="form-control validate" id="message" placeholder="Enter your message"></textarea>
-                                <!-- <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span> -->
+                                <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span>
                             </div>
 
                             <div class="form-group">
@@ -572,6 +727,21 @@
         </main>
     </div>
     <script>
+       document.addEventListener("DOMContentLoaded", function () {
+            const hamburger = document.getElementById("hamburger");
+            const sidebar = document.getElementById("sidebar");
+
+            hamburger.addEventListener("click", function () {
+                sidebar.classList.toggle("active");
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener("click", function (event) {
+                if (window.innerWidth <= 768 && !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                    sidebar.classList.remove("active");
+                }
+            });
+        });
         // Suggetion script
         
         let mediaRecorder;
