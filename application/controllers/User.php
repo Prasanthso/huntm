@@ -8,6 +8,11 @@ class User extends CI_Controller {
         $this->load->database();
 		$this->load->model('WebsiteModel');
     }
+
+    public function index()
+    {
+        $this->load->view('login_form');
+    }
     
      //this is my signup page section
     public function signup() {
@@ -218,12 +223,12 @@ class User extends CI_Controller {
 	}	
 
 	 // Add Website section
-     public function index() {
-        $data['users'] = $this->WebsiteModel->get_users();
-        $data['errors'] = [];
-        $data['method'] = "add_website"; 
-        $this->load->view('website_dashboard',$data); 
-    }
+    //  public function index() {
+    //     $data['users'] = $this->WebsiteModel->get_users();
+    //     $data['errors'] = [];
+    //     $data['method'] = "add_website"; 
+    //     $this->load->view('website_dashboard',$data); 
+    // }
     
     // Store website login details in the database
     public function store() {
