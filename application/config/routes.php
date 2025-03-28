@@ -60,5 +60,13 @@ $route['reset-password/(:any)'] = 'Forgotpassword/reset_password';
 $route['login'] = 'login/index';
 $route['login/authenticate'] = 'login/authenticate';
 
+//Invoiced Order routes
+$route['WebScrapping'] = 'WebScrapping/webscrapping_data'; 
+$route['uploadfile'] = 'WebScrapping/upload_excel';
+
+//open Order routes
+$route['OpenOrder'] = 'OpenOrder/openorder_data';  
+$route['uploadfile_openorder'] = 'OpenOrder/upload_excel';  
+
 
 

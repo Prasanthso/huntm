@@ -152,75 +152,76 @@ class User extends CI_Controller {
     }
 
 	public function submit_suggestion() {
-		$application = $this->input->post('application', true);
-		$suggestion_type = $this->input->post('suggestion_type', true);
-		$message = $this->input->post('message', true);
-		$voice_message = $this->input->post('voice_message', true);
-	
-		$errors = [];
-
-		//check validation of form
-		if (empty($application)) {
-			$errors['application'] = 'Application field is required.';
-		}
-		if (empty($suggestion_type)) {
-			$errors['suggestion_type'] = 'Suggestion type field is required.';
-		}
-		if (empty($message)) {
-			$errors['message'] = 'Message field is required.';
-		}
-	
-		if (!empty($errors)) {
-			$this->session->set_flashdata('errors', $errors);
-			redirect('user/suggestion_form');
-		}
-	
-		$audio_filename = null;
-		$audio_folder = FCPATH . 'application/assets/audio/'; // Audio folder path
-	
-		if (!is_dir($audio_folder)) {
-			if (!mkdir($audio_folder, 0777, true)) {
-				$this->session->set_flashdata('errors', ['Failed to create audio folder.']);
-				redirect('user/suggestion_form');
-			}
-		}
-	
-		if (!empty($voice_message)) {
-			$sanitized_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $name); 
-			$sanitized_name = preg_replace('/\s+/', '_', $sanitized_name); 
-			$audio_filename = $sanitized_name . '.wav'; 
-			$audio_path = $audio_folder . $audio_filename;
-	
-			$decoded_audio = base64_decode($voice_message, true);
-			if ($decoded_audio === false) {
-				$this->session->set_flashdata('errors', ['Base64 decoding failed. Please check the provided audio data.']);
-				redirect('user/suggestion_form');
-			}
-	
-			if (file_put_contents($audio_path, $decoded_audio) === false) {
-				$this->session->set_flashdata('errors', ['Failed to save the audio file. Please check file permissions.']);
-				redirect('user/suggestion_form');
-			}
-		}
-	
-		$data = [
-			'application' => $application,
-			'suggestion_type' => $suggestion_type,
-			'message' => $message,
-			'voice_message' => $audio_filename
-		];
-	
-		$inserted = $this->User_model->insert_suggestion($data);
-	
-		if ($inserted) {
-			$this->session->set_flashdata('success', '✅ Suggestion submitted successfully.');
-			redirect('user/suggestion_form');
-		} else {
-			log_message('error', 'Database insertion failed: ' . print_r($this->db->error(), true));
-			$this->session->set_flashdata('errors', ['Failed to submit suggestion.']);
-			redirect('user/suggestion_form');
-		}
-	}	
+        $application = $this->input->post('application', true);
+        $suggestion_type = $this->input->post('suggestion_type', true);
+        $message = $this->input->post('message', true);
+        $voice_message = $this->input->post('voice_message', true);
+    
+        $errors = [];
+    
+        // Check validation of form
+        if (empty($application)) {
+            $errors['application'] = 'Application field is required.';
+        }
+        if (empty($suggestion_type)) {
+            $errors['suggestion_type'] = 'Suggestion type field is required.';
+        }
+        if (empty($message)) {
+            $errors['message'] = 'Message field is required.';
+        }
+    
+        if (!empty($errors)) {
+            $this->session->set_flashdata('errors', $errors);
+            redirect('user/suggestion_form');
+        }
+    
+        $audio_filename = null;
+        $audio_folder = FCPATH . 'application/assets/audio/'; // Audio folder path
+    
+        if (!is_dir($audio_folder)) {
+            if (!mkdir($audio_folder, 0777, true)) {
+                $this->session->set_flashdata('errors', ['Failed to create audio folder.']);
+                redirect('user/suggestion_form');
+            }
+        }
+    
+        if (!empty($voice_message)) {
+            // Generate a unique filename
+            $unique_id = time(); // You can also use uniqid() for more uniqueness
+            $audio_filename = 'audio_' . $unique_id . '.wav'; 
+            $audio_path = $audio_folder . $audio_filename;
+    
+            $decoded_audio = base64_decode($voice_message, true);
+            if ($decoded_audio === false) {
+                $this->session->set_flashdata('errors', ['Base64 decoding failed. Please check the provided audio data.']);
+                redirect('user/suggestion_form');
+            }
+    
+            if (file_put_contents($audio_path, $decoded_audio) === false) {
+                $this->session->set_flashdata('errors', ['Failed to save the audio file. Please check file permissions.']);
+                redirect('user/suggestion_form');
+            }
+        }
+    
+        $data = [
+            'application' => $application,
+            'suggestion_type' => $suggestion_type,
+            'message' => $message,
+            'voice_message' => $audio_filename // Store unique filename in DB
+        ];
+    
+        $inserted = $this->User_model->insert_suggestion($data);
+    
+        if ($inserted) {
+            $this->session->set_flashdata('success', '✅ Suggestion submitted successfully.');
+            redirect('user/suggestion_form');
+        } else {
+            log_message('error', 'Database insertion failed: ' . print_r($this->db->error(), true));
+            $this->session->set_flashdata('errors', ['Failed to submit suggestion.']);
+            redirect('user/suggestion_form');
+        }
+    }
+    
 
 	 // Add Website section
     //  public function index() {
