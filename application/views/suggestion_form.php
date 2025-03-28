@@ -200,7 +200,7 @@
 <body>
 
 <header>
-    <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
+    <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
 </header>
 <div class="container">
     <div class="suggest-content"> 
@@ -212,9 +212,9 @@
     </div>
     <div class="suggest-form">
         <div class="image-section"> 
-            <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
+            <img src="/Image/Suggestion-image.jpg" alt="Suggestion"> 
         </div>
-        <form id="suggestionForm" method="post" action="<?= base_url('user/submit_suggestion'); ?>">
+        <form id="suggestionForm" method="post" action="<?= base_url('submitsuggetions'); ?>">
         <div class="form-group">
             <label>
                 <input type="checkbox" id="anonymous" name="anonymous"> Submit Anonymously

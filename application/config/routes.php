@@ -52,12 +52,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'User';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['login'] = 'Loginform/login';
-$route['login_submit'] = 'Loginform/login_submit';
-$route['logout'] = 'Loginform/logout';
-$route['forgot-password'] = 'Forgotpassword';
-$route['reset-password/(:any)'] = 'Forgotpassword/reset_password';
-$route['login'] = 'login/index';
+// $route['login'] = 'loginform/login';
+// $route['login_submit'] = 'loginform/login_submit';
+// $route['logout'] = 'Loginform/logout';
+// $route['forgot-password'] = 'Forgotpassword';
+// $route['reset-password/(:any)'] = 'Forgotpassword/reset_password';
+
+$route['loginform'] = 'User/login';
+$route['loginuser'] = 'User/login_user';
+$route['signup'] = 'UserProfile/signupform';
+$route['signupsubmit'] = 'UserProfile/submit';
+$route['suggestionform'] = 'User/suggestion_form';
+$route['dashboard'] = 'User/dashboardview';
+$route['submitsuggetions'] = 'User/submit_suggestion';
+
+$route['addwebsite'] = 'WebsiteDetails/addwebsite';
+$route['storewebsite'] = 'WebsiteDetails/store';
+
 $route['login/authenticate'] = 'login/authenticate';
 
 

@@ -1,7 +1,7 @@
 <!-- <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class WebsiteController extends CI_Controller {
+class WebsiteDetails extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,10 +12,18 @@ class WebsiteController extends CI_Controller {
     }
 
     // Display form and websites list
-    public function index() {
+    // public function index() {
+    //     $data['users'] = $this->WebsiteModel->get_users();
+    //     $data['errors'] = [];
+    //     $this->load->view('add_website', $data);
+    // }
+
+	 // Add Website section
+     public function addwebsite() {
         $data['users'] = $this->WebsiteModel->get_users();
         $data['errors'] = [];
-        $this->load->view('add_website', $data);
+        $data['method'] = "add_website"; 
+        $this->load->view('website_dashboard',$data); 
     }
 
     // Store website login details in the database

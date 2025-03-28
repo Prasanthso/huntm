@@ -371,8 +371,8 @@
         <!-- Sidebar -->
         <div id="sidebar" class="border-end">
             <div class="list-group list-group-flush">
-                <a href="<?php echo base_url('user/dashboardview'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
-                <a href="<?php echo base_url('user/submit_suggestion'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
+                <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
@@ -385,8 +385,8 @@
                             Website
                         </a>
                         <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('User/index'); ?>">Add Website</a></li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('User/dashboard'); ?>">Store Website</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
                         </ul>
                     </div>
                 </div>
@@ -405,7 +405,7 @@
                         <div class="image-section"> 
                             <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
                         </div>
-                        <form id="suggestionForm" method="post" action="<?= base_url('user/submit_suggestion'); ?>">
+                        <form id="suggestionForm" method="post" action="<?= base_url('suggestionform'); ?>">
                             
                             <div class="form-group">
                                 <input class="form-check-input me-2" type="checkbox" id="anonymous" name="anonymous">
@@ -473,7 +473,7 @@
                     <?php } elseif ($method == 'add_website') { ?>
                     <div class="form-container">
                         <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
-                        <form action="<?= base_url('User/store'); ?>" method="POST">
+                        <form action="<?= base_url('storewebsite'); ?>" method="POST">
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-link"></i></span>

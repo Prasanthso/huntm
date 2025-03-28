@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="<?= base_url('/Huntm/assets/css/registrationform.css'); ?>">
+    <!-- <link rel="stylesheet" href="<?= base_url('/Huntm/assets/css/registrationform.css'); ?>"> -->
 
     <title>Create Account</title>
     <style>
@@ -163,8 +163,8 @@
 </head>
 <body>
 <header>
-        <a href="#"><h1 style="font-size:25px; color:white;"><img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
-    </header>
+        <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
+</header>
 <div class="container">
     
 
@@ -178,7 +178,7 @@
 
     <div class="reg_container">
         <h2>CREATE ACCOUNT</h2>
-        <form method="post" action="<?= base_url('user/submit') ?>">
+        <form method="POST" action="">  <!--"<?= base_url('signupsubmit') ?>" id="singupform">-->
             <?php 
                 $errors = $this->session->flashdata('errors') ?? [];
                 $old_data = $this->session->flashdata('old_data') ?? [];
@@ -290,7 +290,7 @@
             </div>
 
             <button type="submit" class="btn">Sign Up</button>
-            <p style="text-align:center; padding-top: 10px;">Already have an account? <a href="login_user">Login</a></p>
+            <p style="text-align:center; padding-top: 10px;">Already have an account? <a href="<?php echo base_url('loginform');?>">Login</a></p>
 
         </form>
         <!-- <div class="icon-box">
