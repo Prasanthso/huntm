@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'UserController';
+$route['default_controller'] = 'User';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['default_controller'] = 'TeamPlayerScraper';
@@ -62,6 +62,14 @@ $route['reset-password/(:any)'] = 'Forgotpassword/reset_password';
 $route['default_controller'] = 'login';  // This ensures 'login' is the first page
 $route['login'] = 'login/index';
 $route['login/authenticate'] = 'login/authenticate';
+
+//Invoiced Order routes
+$route['WebScrapping'] = 'WebScrapping/webscrapping_data'; 
+$route['uploadfile'] = 'WebScrapping/upload_excel';
+
+//open Order routes
+$route['OpenOrder'] = 'OpenOrder/openorder_data';  
+$route['uploadfile_openorder'] = 'OpenOrder/upload_excel';  
 
 
 
