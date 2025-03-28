@@ -355,6 +355,30 @@
             font-size: 14px;
             border-radius: 5px;
         }
+
+	/* for dashboard styles */
+        .dashboard-card {
+            color: white;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .dashboard-card:hover {
+            transform: scale(1.05);
+        }
+        .card-total-customers { background: linear-gradient(45deg, #4CAF50, #2E7D32); }
+        .card-total-orders { background: linear-gradient(45deg, #FF9800, #F57C00); }
+        .card-total-revenue { background: linear-gradient(45deg, #2196F3, #1976D2); }
+        .expand-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .collapsed .expand-icon {
+            transform: rotate(0deg);
+        }
+        .expand .expand-icon {
+            transform: rotate(180deg);
+        }
+    
        
     </style>
 </head>
@@ -395,11 +419,13 @@
         
         <main>
             <?php if (isset($method)) { ?>
+				
                 <!-- Dashboard Section -->
                 <?php if ($method == 'dashboard') { ?>
-                    <h1>Welcome to Dashboard</h1>
-
-                    <!-- Suggestion Section -->
+				
+                    <!-- <h1>Welcome to Dashboard</h1> -->
+					
+	         	<!-- Suggestion Section -->
                 <?php } elseif ($method == 'suggestion') { ?>
                     <div class="suggest-form">
                         <div class="image-section"> 
@@ -729,6 +755,16 @@
                 });
             <?php endif; ?>
         });
+
+	
+        // Add expand/collapse effect to icons into dashboard
+        document.querySelectorAll(".dashboard-card").forEach(card => {
+            card.addEventListener("click", function() {
+                let icon = this.querySelector(".expand-icon");
+                icon.classList.toggle("expand");
+            });
+        });
+  
     </script>
 </body>
 </html>

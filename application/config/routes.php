@@ -69,6 +69,7 @@ $route['submitsuggetions'] = 'User/submit_suggestion';
 $route['addwebsite'] = 'WebsiteDetails/addwebsite';
 $route['storewebsite'] = 'WebsiteDetails/store';
 
+$route['show'] = 'Dashboard/show';
 $route['login/authenticate'] = 'login/authenticate';
 
 
