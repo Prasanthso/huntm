@@ -63,5 +63,9 @@ $route['default_controller'] = 'login';  // This ensures 'login' is the first pa
 $route['login'] = 'login/index';
 $route['login/authenticate'] = 'login/authenticate';
 
+//test
+
+
+
 
 
