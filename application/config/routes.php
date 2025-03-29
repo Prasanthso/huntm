@@ -65,7 +65,7 @@ $route['signupsubmit'] = 'UserProfile/submit';
 $route['suggestionform'] = 'User/suggestion_form';
 $route['dashboard'] = 'User/dashboardview';
 $route['submitsuggetions'] = 'User/submit_suggestion';
-
+$route['store'] = 'User/store';
 $route['addwebsite'] = 'WebsiteDetails/addwebsite';
 $route['storewebsite'] = 'WebsiteDetails/store';
 

@@ -357,28 +357,37 @@
         }
 
 	/* for dashboard styles */
-        .dashboard-card {
-            color: white;
-            transition: transform 0.2s ease-in-out;
+         .content {
+            margin-left: 260px; /* Push content to the right */
+            padding: 20px;
+        }
+		
+		.dashboard-card {
+            padding: 20px;
+            border-radius: 10px;
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .dashboard-card:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-        .card-total-customers { background: linear-gradient(45deg, #4CAF50, #2E7D32); }
-        .card-total-orders { background: linear-gradient(45deg, #FF9800, #F57C00); }
-        .card-total-revenue { background: linear-gradient(45deg, #2196F3, #1976D2); }
-        .expand-icon {
-            font-size: 1.5rem;
-            transition: transform 0.3s;
-        }
-        .collapsed .expand-icon {
-            transform: rotate(0deg);
-        }
-        .expand .expand-icon {
-            transform: rotate(180deg);
-        }
-    
+        .card-1 { background: #f8f9fa; color: #333; }
+        .card-2 { background: #e3f2fd; color: #01579b; }
+        .card-3 { background: #e8f5e9; color: #1b5e20; }
+        .card-4 { background: #fff3e0; color: #e65100; }
+        .card-5 { background: #fce4ec; color: #880e4f; }
+        .card-6 { background: #ede7f6; color: #4527a0; }
+        .card-7 { background: #ffebee; color: #b71c1c; }
+        .card-8 { background: #fff8e1; color: #ff8f00; }
+        .card-9 { background: #e0f7fa; color: #006064; }
+        .card-10 { background: #f1f8e9; color: #33691e; }
+        .card-11 { background: #ede7f6; color: #4a148c; }
+        .card-12 { background: #d7ccc8; color: #5d4037; }
+        .card-13 { background: #fbe9e7; color: #bf360c; }
+        .card-14 { background: #d1c4e9; color: #311b92; }
+        .card-15 { background: #c5cae9; color: #283593; }
+        .card-16 { background: #b2dfdb; color: #004d40; }
        
     </style>
 </head>
@@ -422,8 +431,119 @@
 				
                 <!-- Dashboard Section -->
                 <?php if ($method == 'dashboard') { ?>
-				
-                    <!-- <h1>Welcome to Dashboard</h1> -->
+				<!-- <h1>Welcome to Dashboard</h1> -->
+				 
+<div class="content">
+<div class="container mt-4">
+    <div class="row g-2">
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-1" onclick="showDetails('customers')">
+                <h6>👥 Customers</h6>
+                <p class="fs-5">150</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-2" onclick="showDetails('orders')">
+                <h6>📦 Orders</h6>
+                <p class="fs-5">320</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-3" onclick="showDetails('revenue')">
+                <h6>💰 Revenue</h6>
+                <p class="fs-5">$12,500</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-4" onclick="showDetails('products')">
+                <h6>🛍️ Products</h6>
+                <p class="fs-5">50</p>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-5" onclick="showDetails('employees')">
+                <h6>👨‍💼 Employees</h6>
+                <p class="fs-5">30</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-6" onclick="showDetails('feedback')">
+                <h6>📝 Feedback</h6>
+                <p class="fs-5">85</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-7" onclick="showDetails('returns')">
+                <h6>🔄 Returns</h6>
+                <p class="fs-5">20</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-8" onclick="showDetails('profits')">
+                <h6>📈 Profits</h6>
+                <p class="fs-5">$8,000</p>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-9" onclick="showDetails('suppliers')">
+                <h6>🏭 Suppliers</h6>
+                <p class="fs-5">10</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-10" onclick="showDetails('new-users')">
+                <h6>🆕 New Users</h6>
+                <p class="fs-5">120</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
+                <h6>🚚 Deliveries</h6>
+                <p class="fs-5">200</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-12" onclick="showDetails('pending')">
+                <h6>⏳ Pending</h6>
+                <p class="fs-5">25</p>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-13" onclick="showDetails('shipped')">
+                <h6>📦 Shipped</h6>
+                <p class="fs-5">180</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
+                <h6>❌ Canceled</h6>
+                <p class="fs-5">15</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-15" onclick="showDetails('reviews')">
+                <h6>⭐ Reviews</h6>
+                <p class="fs-5">300</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-16" onclick="showDetails('support')">
+                <h6>💬 Support Requests</h6>
+                <p class="fs-5">40</p>
+            </div>
+        </div>
+    </div>
+	<!-- 🔽 Details Section Below the Cards -->
+    <div id="details" class="mt-4" style="display: none;">
+        <h4 id="details-title"></h4>
+        <ul id="details-list" class="list-group"></ul>
+    </div>
+</div>
+</div>
+
 					
 	         	<!-- Suggestion Section -->
                 <?php } elseif ($method == 'suggestion') { ?>
@@ -734,10 +854,72 @@
                 alert("Copied to clipboard!");
             });
         }
+
+		function showDetails(type) {
+    let title = document.getElementById('details-title');
+    let list = document.getElementById('details-list');
+    let detailsSection = document.getElementById('details');
+
+    list.innerHTML = ''; // Clear previous data
+
+    if (type === 'customers') {
+        title.innerText = '👥 Customer List';
+        list.innerHTML = `
+            <li class="list-group-item">John Doe</li>
+            <li class="list-group-item">Jane Smith</li>
+            <li class="list-group-item">David Johnson</li>`;
+    } 
+    else if (type === 'orders') {
+        title.innerText = '📦 Order Details';
+        list.innerHTML = `
+            <li class="list-group-item">Order #123 - ✅ Completed</li>
+            <li class="list-group-item">Order #124 - 🕒 Pending</li>`;
+    } 
+    else if (type === 'revenue') {
+        title.innerText = '💰 Revenue Breakdown';
+        list.innerHTML = `
+            <li class="list-group-item">January: 💲3,500</li>
+            <li class="list-group-item">February: 💲4,200</li>`;
+    } 
+    else if (type === 'products') {
+        title.innerText = '🛍️ Product List';
+        list.innerHTML = `
+            <li class="list-group-item">Laptop</li>
+            <li class="list-group-item">Smartphone</li>`;
+    } 
+    else if (type === 'employees') {
+        title.innerText = '👨‍💼 Employee List';
+        list.innerHTML = `
+            <li class="list-group-item">Alice Brown</li>
+            <li class="list-group-item">Robert White</li>`;
+    } 
+    else if (type === 'suppliers') {
+        title.innerText = '🚛 Supplier List';
+        list.innerHTML = `
+            <li class="list-group-item">TechSupplies Co.</li>
+            <li class="list-group-item">Global Parts Ltd.</li>`;
+    } 
+    else if (type === 'expenses') {
+        title.innerText = '📉 Expense Report';
+        list.innerHTML = `
+            <li class="list-group-item">Rent: 💲1,500</li>
+            <li class="list-group-item">Utilities: 💲800</li>`;
+    } 
+    else if (type === 'profits') {
+        title.innerText = '📈 Profit Summary';
+        list.innerHTML = `
+            <li class="list-group-item">January: 💲3,000</li>
+            <li class="list-group-item">February: 💲3,900</li>`;
+    }
+
+    detailsSection.style.display = 'block';
+}
+
     </script>
     <!-- Include SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+	
         document.addEventListener("DOMContentLoaded", function () {
             <?php if ($this->session->flashdata('success')): ?>
                 Swal.fire({
