@@ -61,19 +61,19 @@ class WebsiteDetails extends CI_Controller {
 
             if ($this->WebsiteModel->insert_website($insert_data)) {
                 $this->session->set_flashdata('success', 'Website added successfully!');
-                redirect('WebsiteController/dashboard');
+                redirect('storewebsite');
             } else {
                 $this->session->set_flashdata('error', 'Failed to add website.');
-                redirect('WebsiteController/index');
+                redirect('addwebsite');
             }
         }
     }
-
+    
     // Show dashboard with saved websites
-    public function dashboard() {
+    public function stored_website() {
         $data['websites'] = $this->WebsiteModel->get_all_websites();
-        $date['method'] = 'store_website';
-        $this->load->view('dashboard_view', $data);
+        $data['method'] = 'store_website';
+        $this->load->view('website_dashboard',$data); 
     }
 
     // Auto-login using cURL and open in a new tab
@@ -106,7 +106,7 @@ class WebsiteDetails extends CI_Controller {
         if (!empty($final_url)) {
             echo "<script>window.open('$final_url');</script>";
         } else {
-            echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('WebsiteController/dashboard')."';</script>";
+            echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
         }
     }
 
@@ -114,11 +114,11 @@ class WebsiteDetails extends CI_Controller {
         $this->load->view('website_dashboard');
     }
 
-    public function store_website() {
-        $this->load->model('WebsiteModel'); 
-        $data['websites'] = $this->WebsiteModel->get_all_websites();
+    // public function store_website() {
+    //     $this->load->model('WebsiteModel'); 
+    //     $data['websites'] = $this->WebsiteModel->get_all_websites();
     
-        $this->load->view('store_website', $data); // Only load the table, not the full page
-    }
+    //     $this->load->view('store_website', $data); // Only load the table, not the full page
+    // }
 }
 ?> -->

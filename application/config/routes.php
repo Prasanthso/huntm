@@ -67,7 +67,9 @@ $route['dashboard'] = 'User/dashboardview';
 $route['submitsuggetions'] = 'User/submit_suggestion';
 
 $route['addwebsite'] = 'WebsiteDetails/addwebsite';
-$route['storewebsite'] = 'WebsiteDetails/store';
+$route['submitaddwebite'] = 'WebsiteDetails/store';
+$route['storewebsite'] = 'WebsiteDetails/stored_website';  //Display the stored webite
+$route['auto-login'] = 'WebsiteDetails/auto_login'; //use for auto login 
 
 $route['show'] = 'Dashboard/show';
 $route['login/authenticate'] = 'login/authenticate';
