@@ -16,6 +16,7 @@
             padding: 0;
             background-color: #f9f9f9;
             color: #333;
+			left:0;
         }
 
         h1 {
@@ -361,13 +362,13 @@
             margin-left: 260px; /* Push content to the right */
             padding: 20px;
         }
-		
+		card{widht:100%;}
 		.dashboard-card {
-			
+		
             padding: 20px;
 			width: 200px;
 			height: 100px;
-            border-radius: 10px;
+            border-radius: 20px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -375,7 +376,7 @@
             transform: translateY(-5px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-        .card-1 { background: #f8f9fa; color: #333; }
+        .card-1 { background:rgb(200, 208, 216); color: #333; }
         .card-2 { background: #e3f2fd; color: #01579b; }
         .card-3 { background: #e8f5e9; color: #1b5e20; }
         .card-4 { background: #fff3e0; color: #e65100; }
@@ -437,7 +438,7 @@
 				<!-- <h1>Welcome to Dashboard</h1> -->
 				 
 <div class="content">
-<div class="container mt-4">
+<div class="container-sm mt-3">
 <div class="row row-cols-4 g-2">
         <div class="col-3">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('customers')">
