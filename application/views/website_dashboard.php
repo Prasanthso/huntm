@@ -431,93 +431,6 @@
         </div>
         
         <main>
-<<<<<<< 
-    <?php if (isset($method)) { ?>
-
-        <!-- Dashboard Section -->
-        <?php if ($method == 'dashboard') { ?>
-            <h1>Welcome to Dashboard</h1>
-        <!-- Suggestion Section -->
-        <?php } elseif ($method == 'suggestion') { ?>
-            <div class="suggest-form">
-                <div class="image-section"> 
-                    <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
-                </div>
-                <form id="suggestionForm" method="post" action="<?= base_url('suggestionform'); ?>">
-
-                    <div class="form-group">
-                        <input class="form-check-input me-2" type="checkbox" id="anonymous" name="anonymous">
-                        <label class="form-check-label" for="anonymous">Submit Anonymously</label>
-                    </div>
-
-                    <?php if ($this->session->flashdata('success')): ?>
-                        <script>
-                            window.onload = function() {
-                                showAlert("<?php echo htmlspecialchars($this->session->flashdata('success')); ?>", "success");
-                            };
-                        </script>
-                    <?php elseif ($this->session->flashdata('error')): ?>
-                        <script>
-                            window.onload = function() {
-                                showAlert("<?php echo htmlspecialchars($this->session->flashdata('error')); ?>", "error");
-                            };
-                        </script>
-                    <?php endif; ?>
-
-                    <div class="form-group">
-                        <select name="application" class="form-control validate" id="application">
-                            <option value="">Application</option>
-                            <option value="SDMS">SDMS</option>
-                            <option value="BI Report">BI Report</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <span class="error"><?php echo isset($errors['application']) ? htmlspecialchars($errors['application']) : ''; ?></span>
-                    </div>
-
-                    <div class="form-group">
-                        <select name="suggestion_type" class="form-control validate" id="suggestion_type">
-                            <option value="">Suggestion Type</option>
-                            <option value="Change">Change</option>
-                            <option value="Suggestion">Suggestion</option>
-                        </select>
-                        <span class="error"><?php echo isset($errors['suggestion_type']) ? htmlspecialchars($errors['suggestion_type']) : ''; ?></span>
-                    </div>
-
-                    <div class="form-group">
-                        <textarea name="message" class="form-control validate" id="message" placeholder="Enter your message"></textarea>
-                        <!-- <span class="error"><?php echo isset($errors['message']) ? htmlspecialchars($errors['message']) : ''; ?></span> -->
-                    </div>
-
-                    <div class="form-group">
-                        <button type="button" onclick="startRecording()" class="recording-btn">Start Recording</button>
-                        <button type="button" onclick="stopRecording()" class="recording-btn1">Stop Recording</button>
-                        <span id="status"></span>
-                        <div id="timer"></div>
-                        <audio id="audioPlayback" controls style="display:none;"></audio>
-                        <span class="error"><?php echo isset($errors['voice_message']) ? htmlspecialchars($errors['voice_message']) : ''; ?></span>
-                    </div>
-
-                    <?php if (isset($errors['general'])): ?>
-                        <div class="alert alert-danger"><?php echo htmlspecialchars($errors['general']); ?></div>
-                    <?php endif; ?>
-
-                    <button type="submit" class="submit-btn">Save</button>
-                    <button type="button" class="back-btn" onclick="goBack()">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </button>
-                </form>
-            </div>
-
-        <!-- Add Website Section -->
-        <?php } elseif ($method == 'add_website') { ?>
-            <div class="form-container">
-                <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
-                <form action="<?= base_url('submitaddwebite'); ?>" method="POST">
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-link"></i></span>
-                            <input type="text" name="url" class="form-control" placeholder="Website URL" value="<?= set_value('url') ?>">
-=======
             <?php if (isset($method)) { ?>
 				
                 <!-- Dashboard Section -->
@@ -641,97 +554,172 @@
                     <div class="suggest-form">
                         <div class="image-section"> 
                             <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
->>>>>>> 3f3672764d49b2e44df87cfd12d5b9313e043799
                         </div>
-                        <?php if (!empty($errors['url'])): ?>
-                            <small class="text-danger"><?= htmlspecialchars($errors['url']); ?></small>
-                        <?php endif; ?>
+                        <form id="suggestionForm" method="post" action="<?= base_url('suggestionform'); ?>">
+                            
+                            <div class="form-group">
+                                <input class="form-check-input me-2" type="checkbox" id="anonymous" name="anonymous">
+                                <label class="form-check-label" for="anonymous">Submit Anonymously</label>
+                            </div>
+
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <script>
+                                    window.onload = function() {
+                                        showAlert("<?php echo $this->session->flashdata('success'); ?>", "success");
+                                    };
+                                </script>
+                            <?php elseif ($this->session->flashdata('error')): ?>
+                                <script>
+                                    window.onload = function() {
+                                        showAlert("<?php echo $this->session->flashdata('error'); ?>", "error");
+                                    };
+                                </script>
+                            <?php endif; ?>
+                            <div class="form-group">
+                                <select name="application" class="form-control validate" id="application">
+                                    <option value="">Application</option>
+                                    <option value="SDMS">SDMS</option>
+                                    <option value="BI Report">BI Report</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span class="error"><?php echo isset($errors['application']) ? $errors['application'] : ''; ?></span>
+                            </div>
+
+                            <div class="form-group">
+                                <select name="suggestion_type" class="form-control validate" id="suggestion_type">
+                                    <option value="">Suggestion Type</option>
+                                    <option value="Change">Change</option>
+                                    <option value="Suggestion">Suggestion</option>
+                                </select>
+                                <span class="error"><?php echo isset($errors['suggestion_type']) ? $errors['suggestion_type'] : ''; ?></span>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="message" class="form-control validate" id="message" placeholder="Enter your message"></textarea>
+                                <!-- <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span> -->
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" onclick="startRecording()" class="recording-btn">Start Recording</button>
+                                <button type="button" onclick="stopRecording()" class="recording-btn1">Stop Recording</button>
+                                <span id="status"></span>
+                                <div id="timer"></div>
+                                <audio id="audioPlayback" controls style="display:none;"></audio>
+                                <span class="error"><?php echo isset($errors['voice_message']) ? $errors['voice_message'] : ''; ?></span>
+                            </div>
+
+                            <?php if (isset($errors['general'])): ?>
+                                <div class="alert alert-danger"><?php echo $errors['general']; ?></div>
+                            <?php endif; ?>
+
+                            <button type="submit" class="submit-btn">Save</button>
+                            <button type="button" class="back-btn" onclick="goBack()">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                        </form>
+                    </div>
+                
+                        <!-- Add website -->
+                    <?php } elseif ($method == 'add_website') { ?>
+                    <div class="form-container">
+                        <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
+                        <form action="<?= base_url('storewebsite'); ?>" method="POST">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-link"></i></span>
+                                    <input type="text" name="url" class="form-control" placeholder="Website URL" value="<?= set_value('url') ?>">
+                                </div>
+                                <?php if (!empty($errors['url'])): ?>
+                                    <small class="text-danger"><?= $errors['url']; ?></small>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" name="userId" class="form-control" placeholder="UserId" value="<?= set_value('userId') ?>"> 
+                                </div>
+                                <?php if (!empty($errors['userId'])): ?>
+                                    <small class="text-danger"><?= $errors['userId']; ?></small>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" name="password" class="form-control" placeholder="Password">
+                                </div>
+                                <?php if (!empty($errors['password'])): ?>
+                                    <small class="text-danger"><?= $errors['password']; ?></small>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-users"></i></span>
+                                    <select name="user_id" class="form-select">
+                                        <option value="">Select a user</option>
+                                        <?php foreach ($users as $user): ?>
+                                            <option value="<?= $user['id']; ?>"><?= $user['name']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <?php if (!empty($errors['user_id'])): ?>
+                                    <small class="text-danger"><?= $errors['user_id']; ?></small>
+                                <?php endif; ?>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Save</button>
+                        </form>
                     </div>
 
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input type="text" name="userId" class="form-control" placeholder="UserId" value="<?= set_value('userId') ?>"> 
-                        </div>
-                        <?php if (!empty($errors['userId'])): ?>
-                            <small class="text-danger"><?= htmlspecialchars($errors['userId']); ?></small>
+                    <!-- Display and store website -->
+                <?php } elseif ($method == 'display_website') { ?>
+                    <div class="container">
+                        <h2>Stored Websites</h2>
+
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
                         <?php endif; ?>
-                    </div>
 
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            <input type="password" name="password" class="form-control" placeholder="Password">
-                        </div>
-                        <?php if (!empty($errors['password'])): ?>
-                            <small class="text-danger"><?= htmlspecialchars($errors['password']); ?></small>
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
+
+                        <table class="table">
+                            <tr>
+                                <th>Website URL</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Login</th>
+                            </tr>
+                            <?php foreach ($websites as $website): ?>
+                                <tr>
+                                    <td>
+                                        <span class="truncate-url"><?php echo htmlspecialchars($website['website_url']); ?></span>
+                                        <button class="btn-copy" onclick="copyToClipboard('<?php echo htmlspecialchars($website['website_url']); ?>')">📋</button>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
+                                    <td class="password-hidden">******</td>
+                                    <td>
+                                        <form action="<?php echo site_url('User/auto_login'); ?>" method="POST">
+                                            <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
+                                            <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
+                                            <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
+                                            <button type="submit">Auto-Login</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
                     </div>
-
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-users"></i></span>
-                            <select name="user_id" class="form-select">
-                                <option value="">Select a user</option>
-                                <?php foreach ($users as $user): ?>
-                                    <option value="<?= htmlspecialchars($user['id']); ?>"><?= htmlspecialchars($user['name']); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <?php if (!empty($errors['user_id'])): ?>
-                            <small class="text-danger"><?= htmlspecialchars($errors['user_id']); ?></small>
-                        <?php endif; ?>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100">Save</button>
-                </form>
-            </div>
-
-        <!-- Store Website Section -->
-        <?php } elseif ($method == 'store_website') { ?>
-            <div class="container">
-                <h2>Stored Websites</h2>
-
-                <?php if ($this->session->flashdata('success')): ?>
-                    <p style="color: green;"><?php echo htmlspecialchars($this->session->flashdata('success')); ?></p>
-                <?php endif; ?>
-
-                <?php if ($this->session->flashdata('error')): ?>
-                    <p style="color: red;"><?php echo htmlspecialchars($this->session->flashdata('error')); ?></p>
-                <?php endif; ?>
-
-                <table class="table">
-                    <tr>
-                        <th>Website URL</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Login</th>
-                    </tr>
-                    <?php foreach ($websites as $website): ?>
-                        <tr>
-                            <td>
-                                <span class="truncate-url"><?php echo htmlspecialchars($website['website_url']); ?></span>
-                                <button class="btn-copy" onclick="copyToClipboard('<?php echo htmlspecialchars($website['website_url']); ?>')">📋</button>
-                            </td>
-                            <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
-                            <td class="password-hidden">******</td>
-                            <td>
-                                <form action="<?php echo site_url('auto-login'); ?>" method="POST">
-                                    <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
-                                    <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
-                                    <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                    <button type="submit">Auto-Login</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
-            </div>
-        <?php } else { ?>
-            <h1>Invalid Request</h1>
-        <?php } ?>
-    <?php } ?>
-</main>
+                <?php } else { ?>
+                    <h1>Invalid Request</h1>
+                <?php } ?>
+            <?php } else { ?>
+                <h1>Invalid Request</h1>
+            <?php } ?>
+        </main>
     </div>
     <script>
         // Suggetion script
