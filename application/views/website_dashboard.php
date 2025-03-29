@@ -363,7 +363,10 @@
         }
 		
 		.dashboard-card {
+			
             padding: 20px;
+			width: 200px;
+			height: 100px;
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -386,7 +389,7 @@
         .card-12 { background: #d7ccc8; color: #5d4037; }
         .card-13 { background: #fbe9e7; color: #bf360c; }
         .card-14 { background: #d1c4e9; color: #311b92; }
-        .card-15 { background: #c5cae9; color: #283593; }
+        .card-15 { background:rgb(176, 229, 162); color: #283593; }
         .card-16 { background: #b2dfdb; color: #004d40; }
        
     </style>
@@ -435,9 +438,9 @@
 				 
 <div class="content">
 <div class="container mt-4">
-    <div class="row g-2">
+<div class="row row-cols-4 g-2">
         <div class="col-3">
-            <div class="card text-center dashboard-card card-1" onclick="showDetails('customers')">
+            <div class="card text-center dashboard-card card-1"  onclick="showDetails('customers')">
                 <h6>👥 Customers</h6>
                 <p class="fs-5">150</p>
             </div>
@@ -449,24 +452,24 @@
             </div>
         </div>
         <div class="col-3">
-            <div class="card text-center dashboard-card card-3" onclick="showDetails('revenue')">
+            <div class="card text-center dashboard-card card-3"  onclick="showDetails('revenue')">
                 <h6>💰 Revenue</h6>
                 <p class="fs-5">$12,500</p>
             </div>
         </div>
         <div class="col-3">
-            <div class="card text-center dashboard-card card-4" onclick="showDetails('products')">
+            <div class="card text-center dashboard-card card-4"  onclick="showDetails('products')">
                 <h6>🛍️ Products</h6>
                 <p class="fs-5">50</p>
             </div>
         </div>
 
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-5" onclick="showDetails('employees')">
+        <!-- <div class="col-3">
+            <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
                 <h6>👨‍💼 Employees</h6>
                 <p class="fs-5">30</p>
             </div>
-        </div>
+        </div> -->
         <div class="col-3">
             <div class="card text-center dashboard-card card-6" onclick="showDetails('feedback')">
                 <h6>📝 Feedback</h6>
@@ -474,26 +477,26 @@
             </div>
         </div>
         <div class="col-3">
-            <div class="card text-center dashboard-card card-7" onclick="showDetails('returns')">
+            <div class="card text-center dashboard-card card-7"  onclick="showDetails('returns')">
                 <h6>🔄 Returns</h6>
                 <p class="fs-5">20</p>
             </div>
         </div>
         <div class="col-3">
-            <div class="card text-center dashboard-card card-8" onclick="showDetails('profits')">
+            <div class="card text-center dashboard-card card-8"  onclick="showDetails('profits')">
                 <h6>📈 Profits</h6>
                 <p class="fs-5">$8,000</p>
             </div>
         </div>
 
         <div class="col-3">
-            <div class="card text-center dashboard-card card-9" onclick="showDetails('suppliers')">
+            <div class="card text-center dashboard-card card-9"  onclick="showDetails('suppliers')">
                 <h6>🏭 Suppliers</h6>
                 <p class="fs-5">10</p>
             </div>
         </div>
         <div class="col-3">
-            <div class="card text-center dashboard-card card-10" onclick="showDetails('new-users')">
+            <div class="card text-center dashboard-card card-10"  onclick="showDetails('new-users')">
                 <h6>🆕 New Users</h6>
                 <p class="fs-5">120</p>
             </div>
@@ -505,18 +508,18 @@
             </div>
         </div>
         <div class="col-3">
-            <div class="card text-center dashboard-card card-12" onclick="showDetails('pending')">
+            <div class="card text-center dashboard-card card-12"  onclick="showDetails('pending')">
                 <h6>⏳ Pending</h6>
                 <p class="fs-5">25</p>
             </div>
         </div>
 
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-13" onclick="showDetails('shipped')">
+        <!-- <div class="col-3">
+            <div class="card text-center dashboard-card card-13"  onclick="showDetails('shipped')">
                 <h6>📦 Shipped</h6>
                 <p class="fs-5">180</p>
             </div>
-        </div>
+        </div> -->
         <div class="col-3">
             <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
                 <h6>❌ Canceled</h6>
