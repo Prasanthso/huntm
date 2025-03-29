@@ -439,70 +439,71 @@
 				 
 <div class="content">
 <div class="container-sm mt-3">
-<div class="row row-cols-4 g-2">
-        <div class="col-3">
+<div class="row row-cols-3 g-4 mr-0 pr-0">
+    
+        <div class="col-md-4">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('customers')">
-                <h6>👥 Customers</h6>
+                <h6>👥 Backlog</h6>
                 <p class="fs-5">150</p>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-2" onclick="showDetails('orders')">
-                <h6>📦 Orders</h6>
+                <h6>📦 Fund Balance</h6>
                 <p class="fs-5">320</p>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-3"  onclick="showDetails('revenue')">
-                <h6>💰 Revenue</h6>
+                <h6>💰 Customer Srengh</h6>
                 <p class="fs-5">$12,500</p>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-4"  onclick="showDetails('products')">
-                <h6>🛍️ Products</h6>
+                <h6>🛍️ SBC</h6>
                 <p class="fs-5">50</p>
             </div>
         </div>
 
-        <!-- <div class="col-3">
+        <!-- <div class="col">
             <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
                 <h6>👨‍💼 Employees</h6>
                 <p class="fs-5">30</p>
             </div>
         </div> -->
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-6" onclick="showDetails('feedback')">
-                <h6>📝 Feedback</h6>
+                <h6>📝 Nil Refill</h6>
                 <p class="fs-5">85</p>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-7"  onclick="showDetails('returns')">
-                <h6>🔄 Returns</h6>
+                <h6>🔄  KYC</h6>
                 <p class="fs-5">20</p>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-8"  onclick="showDetails('profits')">
-                <h6>📈 Profits</h6>
+                <h6>📈 MI Due</h6>
                 <p class="fs-5">$8,000</p>
             </div>
         </div>
 
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-9"  onclick="showDetails('suppliers')">
-                <h6>🏭 Suppliers</h6>
+                <h6>🏭 Hose Due</h6>
                 <p class="fs-5">10</p>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col">
             <div class="card text-center dashboard-card card-10"  onclick="showDetails('new-users')">
-                <h6>🆕 New Users</h6>
+                <h6>🆕 Mobile No</h6>
                 <p class="fs-5">120</p>
             </div>
         </div>
-        <div class="col-3">
+        <!-- <div class="col-3">
             <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
                 <h6>🚚 Deliveries</h6>
                 <p class="fs-5">200</p>
@@ -520,7 +521,7 @@
                 <h6>📦 Shipped</h6>
                 <p class="fs-5">180</p>
             </div>
-        </div> -->
+        </div> -
         <div class="col-3">
             <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
                 <h6>❌ Canceled</h6>
@@ -538,7 +539,7 @@
                 <h6>💬 Support Requests</h6>
                 <p class="fs-5">40</p>
             </div>
-        </div>
+        </div> -->
     </div>
 	<!-- 🔽 Details Section Below the Cards -->
     <div id="details" class="mt-4" style="display: none;">
@@ -618,12 +619,11 @@
                             </button>
                         </form>
                     </div>
-                
-                        <!-- Add website -->
+
                     <?php } elseif ($method == 'add_website') { ?>
-                    <div class="form-container">
+                        <div class="form-container">
                         <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
-                        <form action="<?= base_url('storewebsite'); ?>" method="POST">
+                        <form action="<?= base_url('submitaddwebite'); ?>" method="POST">
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-link"></i></span>
@@ -672,9 +672,8 @@
                             <button type="submit" class="btn btn-primary w-100">Save</button>
                         </form>
                     </div>
-
                     <!-- Display and store website -->
-                <?php } elseif ($method == 'display_website') { ?>
+                <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
                         <h2>Stored Websites</h2>
 
