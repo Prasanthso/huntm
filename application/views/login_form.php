@@ -103,7 +103,7 @@
         .forgot-password {
             display: block;
             margin-top: 10px;
-            text-align: center;
+            text-align: left;
             font-size: 14px;
         }
 
@@ -160,7 +160,7 @@
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
 
-                <a href="<?= base_url('user/send_password') ?>" class="forgot-password">Forgot Password?</a>
+                <a href="#" class="forgot-password">Forgot Password?</a>
                 <p class="register-link">New to Huntm.in? <a href="<?= base_url('user/signup') ?>">Register</a></p>
             </form>
         </div>
