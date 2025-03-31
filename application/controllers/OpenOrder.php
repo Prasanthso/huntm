@@ -19,15 +19,14 @@ class OpenOrder extends CI_Controller {
     }
 
     public function openorder_data() {
-        $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv)';
-        $data['method'] = 'open_order';
-        $this->load->view('website_dashboard', $data);
+        $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv) with columns: Area Name, Open Refill Order.';
+        $this->load->view('openorder_view', $data);
     }
 
     public function upload_excel() {
         if (!isset($_FILES['excel_file']['name']) || empty($_FILES['excel_file']['name'])) {
             $this->session->set_flashdata('error', 'No file uploaded.');
-            redirect('uploadfile_openorder');
+            redirect('OpenOrder/openorder_data');
         }
 
         $file_name = $_FILES['excel_file']['tmp_name'];
@@ -36,12 +35,12 @@ class OpenOrder extends CI_Controller {
 
         if (!in_array(strtolower($file_ext), $allowed_ext)) {
             $this->session->set_flashdata('error', 'Invalid file format. Only XLS, XLSX, and CSV files are allowed.');
-            redirect('uploadfile_openorder');
+            redirect('OpenOrder/openorder_data');
         }
 
         if ($_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
             $this->session->set_flashdata('error', 'File upload failed. Error code: ' . $_FILES['excel_file']['error']);
-            redirect('uploadfile_openorder');
+            redirect('OpenOrder/openorder_data');
         }
 
         try {
@@ -50,7 +49,7 @@ class OpenOrder extends CI_Controller {
 
             if (empty($sheetData) || count($sheetData) < 2) {
                 $this->session->set_flashdata('error', 'The uploaded file is empty or has no valid data.');
-                redirect('uploadfile_openorder');
+                redirect('OpenOrder/openorder_data');
             }
 
             $insert_data = array();
@@ -85,6 +84,6 @@ class OpenOrder extends CI_Controller {
             $this->session->set_flashdata('error', 'Error: ' . $e->getMessage());
         }
 
-        redirect('uploadfile_openorder');
+        redirect('OpenOrder/openorder_data');
     }
 }
