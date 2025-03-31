@@ -117,13 +117,13 @@
             color: black;
             font-weight: bold;
         }
-       
+
         /* .dropdown-menu {
             background-color: #f1f1f1;
             border: 1px solid #ddd;
             width: 100% !important;
         } */
-    
+
         .dropdown-item {
             color: black; 
             transition: background-color 0.3s ease, color 0.3s ease;
@@ -658,49 +658,49 @@
         <div id="sidebar" class="border-end">
             <div class="list-group list-group-flush">
                 <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
-                <div class="list-group-item p-0">
-            <div class="dropdown w-100">
-                <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
-                   href="#" 
-                   role="button" 
+                <div class="list-group-item p-0"> 
+                    <div class="dropdown w-100"> 
+                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
+                        href="#" 
+                        role="button" 
                    id="fileUploadDropdown" 
-                   data-bs-toggle="dropdown" 
-                   aria-expanded="false">
-                    File Upload
-                </a>
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                            File Upload
+                        </a>
                 <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
                     <li class="dropdown-submenu">
                         <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Backlog
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
-                            <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
-                            <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
-                        </ul>
-                    </li>
+                                    Backlog
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
+                                    <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
+                                </ul>
+                            </li>
                     <li><a class="dropdown-item" href="<?php echo base_url('fundbalance_uploadfile'); ?>">Fund Balance</a></li>
-                </ul>
-            </div>
-        </div>
+                        </ul>
+                    </div>
+                </div>
         
-        <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
-        
-        <div class="list-group-item p-0">
-            <div class="dropdown w-100">
-                <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
-                   href="#" 
-                   role="button" 
-                   id="websiteDropdown" 
-                   data-bs-toggle="dropdown" 
-                   aria-expanded="false">
-                    Website
-                </a>
-                <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
+                <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
+                
+                <div class="list-group-item p-0"> 
+                    <div class="dropdown w-100"> 
+                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
+                        href="#" 
+                        role="button" 
+                        id="websiteDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                            Website
+                        </a>
+                        <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
                     <li><a class="dropdown-item" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
                     <li><a class="dropdown-item" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
-                </ul>
-            </div>
-        </div>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -904,7 +904,7 @@
                             
                             <p class="text-muted text-center"> <?php echo $message; ?> </p>
                             
-                            <form action="<?php echo site_url('FundBalance/upload_excel'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            <form action="<?php echo site_url('fundbalance_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 <div class="mb-3">
                                     <label for="excel_file" class="form-label">Select Excel File</label>
                                     <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
@@ -1068,7 +1068,7 @@
                                     <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
                                     <td class="password-hidden">******</td>
                                     <td>
-                                        <form action="<?php echo site_url('User/auto_login'); ?>" method="POST">
+                                        <form action="<?php echo site_url('auto-login'); ?>" method="POST">
                                             <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
                                             <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
                                             <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
@@ -1352,7 +1352,7 @@
                 icon.classList.toggle("expand");
             });
         });
-        
+  
         document.addEventListener('DOMContentLoaded', function () {
             const fileUploadDropdown = document.getElementById('fileUploadDropdown');
             const backlogDropdown = document.getElementById('backlogDropdown');
