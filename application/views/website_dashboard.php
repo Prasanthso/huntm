@@ -16,6 +16,7 @@
             padding: 0;
             background-color: #f9f9f9;
             color: #333;
+			left:0;
         }
 
         h1 {
@@ -442,6 +443,42 @@
             font-size: 14px;
             border-radius: 5px;
         }
+
+	/* for dashboard styles */
+         .content {
+            margin-left: 260px; /* Push content to the right */
+            padding: 20px;
+        }
+		card{widht:100%;}
+		.dashboard-card {
+		
+            padding: 20px;
+			width: 200px;
+			height: 100px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .card-1 { background:rgb(200, 208, 216); color: #333; }
+        .card-2 { background: #e3f2fd; color: #01579b; }
+        .card-3 { background: #e8f5e9; color: #1b5e20; }
+        .card-4 { background: #fff3e0; color: #e65100; }
+        .card-5 { background: #fce4ec; color: #880e4f; }
+        .card-6 { background: #ede7f6; color: #4527a0; }
+        .card-7 { background: #ffebee; color: #b71c1c; }
+        .card-8 { background: #e0f7fa; color: #006064; }
+        .card-9 { background: #fff8e1; color: #ff8f00; }
+        .card-10 { background: #f1f8e9; color: #33691e; }
+        .card-11 { background: #ede7f6; color: #4a148c; }
+        .card-12 { background: #d7ccc8; color: #5d4037; }
+        .card-13 { background: #fbe9e7; color: #bf360c; }
+        .card-14 { background: #d1c4e9; color: #311b92; }
+        .card-15 { background:rgb(176, 229, 162); color: #283593; }
+        .card-16 { background: #b2dfdb; color: #004d40; }
        
         /* Responsive Styles */
         /* Hide hamburger menu on large screens */
@@ -628,8 +665,8 @@
                             Website
                         </a>
                         <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('User/index'); ?>">Add Website</a></li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('User/dashboard'); ?>">Store Website</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
                         </ul>
                     </div>
                 </div>
@@ -638,10 +675,122 @@
         
         <main>
             <?php if (isset($method)) { ?>
+				
                 <!-- Dashboard Section -->
                 <?php if ($method == 'dashboard') { ?>
-                    <h1>Welcome to Dashboard</h1>
+				<!-- <h1>Welcome to Dashboard</h1> -->
+				 
+<div class="content">
+<div class="container-sm mt-3">
+<div class="row row-cols-3 g-4 mr-0 pr-0">
+    
+        <div class="col-md-4">
+            <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
+                <h6>👥 Backlog</h6>
+                <p class="fs-5">Areas:150</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
+                <h6>📦 Fund Balance</h6>
+                <p class="fs-5">Rs:320</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-3"  onclick="showDetails('customers')">
+                <h6>💰 Customer Strength</h6>
+                <p class="fs-5">12,500</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-4"  onclick="showDetails('sbc')">
+                <h6>🛍️ SBC</h6>
+                <p class="fs-5">Qty:50</p>
+            </div>
+        </div>
 
+        <!-- <div class="col">
+            <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
+                <h6>👨‍💼 Employees</h6>
+                <p class="fs-5">30</p>
+            </div>
+        </div> -->
+        <div class="col">
+            <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
+                <h6>📝 Nil Refill</h6>
+                <p class="fs-5">85</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-7"  onclick="showDetails('kyc')">
+                <h6>🔄  KYC</h6>
+                <p class="fs-5">20</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
+                <h6>📈 MI Due</h6>
+                <p class="fs-5">$8,000</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card text-center dashboard-card card-9"  onclick="showDetails('hose-due')">
+                <h6>🏭 Hose Due</h6>
+                <p class="fs-5">10</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-10"  onclick="showDetails('mobileno')">
+                <h6>🆕 Mobile No</h6>
+                <p class="fs-5">120</p>
+            </div>
+        </div>
+        <!-- <div class="col-3">
+            <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
+                <h6>🚚 Deliveries</h6>
+                <p class="fs-5">200</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-12"  onclick="showDetails('pending')">
+                <h6>⏳ Pending</h6>
+                <p class="fs-5">25</p>
+            </div>
+        </div>
+
+        <!-- <div class="col-3">
+            <div class="card text-center dashboard-card card-13"  onclick="showDetails('shipped')">
+                <h6>📦 Shipped</h6>
+                <p class="fs-5">180</p>
+            </div>
+        </div> -
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
+                <h6>❌ Canceled</h6>
+                <p class="fs-5">15</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-15" onclick="showDetails('reviews')">
+                <h6>⭐ Reviews</h6>
+                <p class="fs-5">300</p>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card text-center dashboard-card card-16" onclick="showDetails('support')">
+                <h6>💬 Support Requests</h6>
+                <p class="fs-5">40</p>
+            </div>
+        </div> -->
+    </div>
+	<!-- 🔽 Details Section Below the Cards -->
+    <div id="details" class="mt-4" style="display: none;">
+        <h4 id="details-title"></h4>
+        <ul id="details-list" class="list-group"></ul>
+    </div>
+</div>
+</div>
                 <!-- Invoice Order sevice area -->
                 <?php } elseif ($method == 'invoice_order') { ?>
                     <div class="container1">
@@ -743,7 +892,7 @@
                         <div class="image-section"> 
                             <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
                         </div>
-                        <form id="suggestionForm" method="post" action="<?= base_url('user/submit_suggestion'); ?>">
+                        <form id="suggestionForm" method="post" action="<?= base_url('suggestionform'); ?>">
                             
                             <div class="form-group">
                                 <input class="form-check-input me-2" type="checkbox" id="anonymous" name="anonymous">
@@ -806,12 +955,11 @@
                             </button>
                         </form>
                     </div>
-                
-                        <!-- Add website -->
+
                     <?php } elseif ($method == 'add_website') { ?>
-                    <div class="form-container">
+                        <div class="form-container">
                         <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
-                        <form action="<?= base_url('User/store'); ?>" method="POST">
+                        <form action="<?= base_url('submitaddwebite'); ?>" method="POST">
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-link"></i></span>
@@ -860,9 +1008,8 @@
                             <button type="submit" class="btn btn-primary w-100">Save</button>
                         </form>
                     </div>
-
                     <!-- Display and store website -->
-                <?php } elseif ($method == 'display_website') { ?>
+                <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
                         <h2>Stored Websites</h2>
 
@@ -1061,10 +1208,93 @@
                 alert("Copied to clipboard!");
             });
         }
+
+		function showDetails(type) {
+    let title = document.getElementById('details-title');
+    let list = document.getElementById('details-list');
+    let detailsSection = document.getElementById('details');
+
+    list.innerHTML = ''; // Clear previous data
+
+    if (type === 'backlog') {
+        title.innerText = '👥 Backlog';
+        list.innerHTML = `
+            <li class="list-group-item"> No of.Area : 50</li>
+            <li class="list-group-item"> 🕒 Pending Qty: 2</li>
+            <li class="list-group-item"> ✅ Open Qty: 50</li>
+			<li class="list-group-item">  Total : 52</li>`;
+    } 
+    else if (type === 'fundbalance') {
+        title.innerText = '📦 fundbalance Details';
+        list.innerHTML = `
+            <li class="list-group-item">Balance 💲123 </li>`;
+    } 
+    else if (type === 'revenue') {
+        title.innerText = '💰 Revenue Breakdown';
+        list.innerHTML = `
+            <li class="list-group-item">January: 💲3,500</li>
+            <li class="list-group-item">February: 💲4,200</li>`;
+    } 
+    else if (type === 'sbc') {
+        title.innerText = '🛍️ SBC Customers';
+        list.innerHTML = `
+            <li class="list-group-item"> Qty : 100 </li>
+            <li class="list-group-item"> Percentage: 10%</li>`;
+    } 
+    else if (type === 'customers') {
+        title.innerText = '👨‍💼 Customers Strength';
+        list.innerHTML = `
+            <li class="list-group-item"> Active: 450 </li>
+            <li class="list-group-item"> Suspended : 5</li>
+			<li class="list-group-item"> Deactived: 40 </li>`;
+    } 
+	
+    else if (type === 'nilrefill') {
+        title.innerText = '🚛 Nilrefill List';
+        list.innerHTML = `
+            <li class="list-group-item"> Less than 6 months.</li>
+			<ul>
+			<li class="list-group-item"> Qty:</li>
+			<li class="list-group-item"> Percentage:</li>
+			</ul>
+            <li class="list-group-item"> Less than 1 Year.</li>
+			<ul>
+			<li class="list-group-item"> Qty:</li>
+			<li class="list-group-item"> Percentage:</li>
+			</ul>
+			`;
+    } 
+	else if (type === 'kyc') {
+        title.innerText = '📉 KYC Pending';
+        list.innerHTML = `
+            <li class="list-group-item">PMUY </li>
+			<ul>
+			<li>Qty</li>
+			<li>Percentage</li>
+			</ul>
+            <li class="list-group-item">Utilities: 💲800</li>`;
+    } 
+    // else if (type === 'kyc') {
+    //     title.innerText = '📉 Expense Report';
+    //     list.innerHTML = `
+    //         <li class="list-group-item">Rent: 💲1,500</li>
+    //         <li class="list-group-item">Utilities: 💲800</li>`;
+    // } 
+    else if (type === 'profits') {
+        title.innerText = '📈 Profit Summary';
+        list.innerHTML = `
+            <li class="list-group-item">January: 💲3,000</li>
+            <li class="list-group-item">February: 💲3,900</li>`;
+    }
+
+    detailsSection.style.display = 'block';
+}
+
     </script>
     <!-- Include SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+	
         document.addEventListener("DOMContentLoaded", function () {
             <?php if ($this->session->flashdata('success')): ?>
                 Swal.fire({
@@ -1082,6 +1312,16 @@
                 });
             <?php endif; ?>
         });
+
+	
+        // Add expand/collapse effect to icons into dashboard
+        document.querySelectorAll(".dashboard-card").forEach(card => {
+            card.addEventListener("click", function() {
+                let icon = this.querySelector(".expand-icon");
+                icon.classList.toggle("expand");
+            });
+        });
+  
     </script>
 </body>
 </html>

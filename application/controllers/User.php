@@ -8,6 +8,11 @@ class User extends CI_Controller {
         $this->load->database();
 		$this->load->model('WebsiteModel');
     }
+
+    public function index()
+    {
+        $this->load->view('login_form');
+    }
     
      //this is my signup page section
     public function signup() {
@@ -127,16 +132,16 @@ class User extends CI_Controller {
             if (password_verify($password, $user->Password)) {  
                 $this->session->set_userdata('id', $user->id);
                 $this->session->set_flashdata('login_success', true); // ✅ Set flashdata for success message
-                redirect('user/suggestion_form'); // Redirect to Suggestion Form
+                redirect('User/suggestion_form'); // Redirect to Suggestion Form
             } else {
                 $errors['password'] = 'Incorrect password.';
                 $this->session->set_flashdata('errors', $errors);
-                redirect('user/login');
+                redirect('User/login');
             }
         } else {
             $errors['email'] = 'No account exists with this email.';
             $this->session->set_flashdata('errors', $errors);
-            redirect('user/login');
+            redirect('User/login');
         }
     }
 	
@@ -219,12 +224,12 @@ class User extends CI_Controller {
     
 
 	 // Add Website section
-     public function index() {
-        $data['users'] = $this->WebsiteModel->get_users();
-        $data['errors'] = [];
-        $data['method'] = "add_website"; 
-        $this->load->view('website_dashboard',$data); 
-    }
+    //  public function index() {
+    //     $data['users'] = $this->WebsiteModel->get_users();
+    //     $data['errors'] = [];
+    //     $data['method'] = "add_website"; 
+    //     $this->load->view('website_dashboard',$data); 
+    // }
     
     // Store website login details in the database
     public function store() {

@@ -143,7 +143,7 @@
 
         <div class="reg_container">
             <h2>LOG IN</h2>
-            <form method="post" action="<?= base_url('user/login_user') ?>">
+            <form method="post" action="<?= base_url('loginuser') ?>">
                 <?php $errors = $this->session->flashdata('errors') ?? []; ?>
 
                 <div class="mb-3">
@@ -153,15 +153,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <input type="password" name="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" 
-                           placeholder="Password">
+                    <input type="password" name="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+					    placeholder="Password">
                     <div class="error"><?= $errors['password'] ?? ''; ?></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
 
-                <a href="<?= base_url('user/send_password') ?>" class="forgot-password">Forgot Password?</a>
-                <p class="register-link">New to Huntm.in? <a href="<?= base_url('user/signup') ?>">Register</a></p>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                <p class="register-link">New to Huntm.in? <a href = "<?php echo base_url('signup'); ?>" >Register</a></p>
             </form>
         </div>
     </div>
@@ -189,7 +189,7 @@
             successModal.show();
 
             setTimeout(() => {
-                window.location.href = "<?= base_url('user/suggestion_form') ?>";
+                window.location.href = "<?= base_url('suggestionform') ?>";
             }, 2000);
         };
     </script>
