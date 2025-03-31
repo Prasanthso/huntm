@@ -626,7 +626,7 @@
         <!-- Sidebar -->
         <div id="sidebar" class="border-end">
             <div class="list-group list-group-flush">
-                <a href="<?php echo base_url('user/dashboardview'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
                         <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
@@ -652,7 +652,7 @@
                         </ul>
                     </div>
                 </div>
-                <a href="<?php echo base_url('user/submit_suggestion'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
+                <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
