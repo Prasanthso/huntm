@@ -19,6 +19,18 @@ class WebsiteModel extends CI_Model {
         return $this->db->insert('website_table', $data);
     }
 
+    // public function insert_website($data) {
+    //     $this->db->insert('website', $data);
+        
+    //     // Check for errors
+    //     if ($this->db->error()) {
+    //         log_message('error', 'Database error: ' . print_r($this->db->error(), true));
+    //         return false;
+    //     }
+        
+    //     return $this->db->affected_rows() > 0;
+    // }
+
     // Fetch all websites with user information
     // public function get_websites() {
     //     $this->db->select('website_table.*, users.name as user_name');

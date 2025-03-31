@@ -132,16 +132,16 @@ class User extends CI_Controller {
             if (password_verify($password, $user->Password)) {  
                 $this->session->set_userdata('id', $user->id);
                 $this->session->set_flashdata('login_success', true); // ✅ Set flashdata for success message
-                redirect('user/suggestion_form'); // Redirect to Suggestion Form
+                redirect('User/suggestion_form'); // Redirect to Suggestion Form
             } else {
                 $errors['password'] = 'Incorrect password.';
                 $this->session->set_flashdata('errors', $errors);
-                redirect('user/login');
+                redirect('User/login');
             }
         } else {
             $errors['email'] = 'No account exists with this email.';
             $this->session->set_flashdata('errors', $errors);
-            redirect('user/login');
+            redirect('User/login');
         }
     }
 	

@@ -1,7 +1,7 @@
 <!-- <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class WebsiteController extends CI_Controller {
+class WebsiteDetails extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -12,10 +12,18 @@ class WebsiteController extends CI_Controller {
     }
 
     // Display form and websites list
-    public function index() {
+    // public function index() {
+    //     $data['users'] = $this->WebsiteModel->get_users();
+    //     $data['errors'] = [];
+    //     $this->load->view('add_website', $data);
+    // }
+
+	 // Add Website section
+     public function addwebsite() {
         $data['users'] = $this->WebsiteModel->get_users();
         $data['errors'] = [];
-        $this->load->view('add_website', $data);
+        $data['method'] = "add_website"; 
+        $this->load->view('website_dashboard',$data); 
     }
 
     // Store website login details in the database
@@ -53,19 +61,19 @@ class WebsiteController extends CI_Controller {
 
             if ($this->WebsiteModel->insert_website($insert_data)) {
                 $this->session->set_flashdata('success', 'Website added successfully!');
-                redirect('WebsiteController/dashboard');
+                redirect('storewebsite');
             } else {
                 $this->session->set_flashdata('error', 'Failed to add website.');
-                redirect('WebsiteController/index');
+                redirect('addwebsite');
             }
         }
     }
-
+    
     // Show dashboard with saved websites
-    public function dashboard() {
+    public function stored_website() {
         $data['websites'] = $this->WebsiteModel->get_all_websites();
-        $date['method'] = 'store_website';
-        $this->load->view('dashboard_view', $data);
+        $data['method'] = 'store_website';
+        $this->load->view('website_dashboard',$data); 
     }
 
     // Auto-login using cURL and open in a new tab
@@ -98,7 +106,7 @@ class WebsiteController extends CI_Controller {
         if (!empty($final_url)) {
             echo "<script>window.open('$final_url');</script>";
         } else {
-            echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('WebsiteController/dashboard')."';</script>";
+            echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
         }
     }
 
@@ -106,11 +114,11 @@ class WebsiteController extends CI_Controller {
         $this->load->view('website_dashboard');
     }
 
-    public function store_website() {
-        $this->load->model('WebsiteModel'); 
-        $data['websites'] = $this->WebsiteModel->get_all_websites();
+    // public function store_website() {
+    //     $this->load->model('WebsiteModel'); 
+    //     $data['websites'] = $this->WebsiteModel->get_all_websites();
     
-        $this->load->view('store_website', $data); // Only load the table, not the full page
-    }
+    //     $this->load->view('store_website', $data); // Only load the table, not the full page
+    // }
 }
 ?> -->
