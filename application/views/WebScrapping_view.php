@@ -10,7 +10,7 @@
 
 <div class="container mt-5">
     <div class="card shadow p-4">
-        <h2 class="text-center mb-4">Upload Excel File</h2>
+        <h2 class="text-center mb-4">Upload Invoice Order Data</h2>
 
         <?php if ($this->session->flashdata('error')): ?>
             <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>

@@ -9,40 +9,49 @@ require_once APPPATH . 'libraries/Composer/Pcre/Preg.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-class WebScrapping extends CI_Controller {
+class FundBalance extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('WebScrapping_model');
+        $this->load->model('FundBalance_model');
         $this->load->helper(array('form', 'url'));
         $this->load->library('session');
     }
 
-    public function webscrapping_data() {
-        $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv) with columns: Area Name, CashMemo Generated, Status.';
-        $data['method'] = 'invoice_order';
+    public function fundbalance_data() {
+        $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv)';
+        $data['method'] = 'fund_balance';
         $this->load->view('website_dashboard', $data);
     }
 
     public function upload_excel() {
         if (!isset($_FILES['excel_file']['name']) || empty($_FILES['excel_file']['name'])) {
             $this->session->set_flashdata('error', 'No file uploaded.');
-            redirect('WebScrapping');
+            redirect('FundBalance/fundbalance_data');
         }
 
         $file_name = $_FILES['excel_file']['tmp_name'];
+        $file_ext = pathinfo($_FILES['excel_file']['name'], PATHINFO_EXTENSION);
+        $allowed_ext = array('xls', 'xlsx', 'csv');
+
+        if (!in_array(strtolower($file_ext), $allowed_ext)) {
+            $this->session->set_flashdata('error', 'Invalid file format. Only XLS, XLSX, and CSV files are allowed.');
+            redirect('FundBalance/fundbalance_data');
+        }
 
         if ($_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
             $this->session->set_flashdata('error', 'File upload failed. Error code: ' . $_FILES['excel_file']['error']);
-            redirect('WebScrapping');
+            redirect('FundBalance/fundbalance_data');
         }
 
         try {
             $spreadsheet = IOFactory::load($file_name);
             $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
-            // Debug: Log the raw sheet data
-            error_log('Sheet Data: ' . print_r($sheetData, true));
+            if (empty($sheetData) || count($sheetData) < 2) {
+                $this->session->set_flashdata('error', 'The uploaded file is empty or has no valid data.');
+                redirect('FundBalance/fundbalance_data');
+            }
 
             $insert_data = array();
             $header = true;
@@ -53,23 +62,17 @@ class WebScrapping extends CI_Controller {
                     continue;
                 }
 
-                // Debug: Log each row
-                error_log('Processing Row: ' . print_r($row, true));
-
-                if (count($row) >= 3 && !empty($row[0])) {
+                if (count($row) >= 3 && !empty(trim($row[0]))) {
                     $insert_data[] = array(
-                        'area_name' => $row[0],
-                        'cashmemo_generated' => $row[1],
-                        'status' => $row[2]
+                        'cca' => trim($row[0]),
+                        'balance_risk_category_code' => trim($row[1]),
+                        'risk_category_description' => trim($row[2])
                     );
                 }
             }
 
-            // Debug: Log the final insert data
-            error_log('Insert Data: ' . print_r($insert_data, true));
-
             if (!empty($insert_data)) {
-                $result = $this->WebScrapping_model->insert_data($insert_data);
+                $result = $this->FundBalance_model->insert_data($insert_data);
                 if ($result) {
                     $this->session->set_flashdata('success', 'Data imported successfully. Rows inserted: ' . count($insert_data));
                 } else {
@@ -83,6 +86,6 @@ class WebScrapping extends CI_Controller {
             $this->session->set_flashdata('error', 'Error: ' . $e->getMessage());
         }
 
-        redirect('WebScrapping');
+        redirect('FundBalance/fundbalance_data');
     }
 }

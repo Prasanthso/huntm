@@ -110,7 +110,8 @@
         }
 
         .dropdown-toggle:hover {
-            background-color: white; 
+            /* background-color: white;  */
+            transition: background-color 0.3s ease, color 0.3s ease;
             color: black;
             font-weight: bold;
         }
@@ -120,9 +121,11 @@
             border: 1px solid #ddd;
             width: 100% !important;
         } */
+        .dropdown-menu {
 
+        }
         .dropdown-item {
-            color: #333; 
+            color: black; 
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -138,10 +141,59 @@
             transition: background-color 0.3s ease-in-out;
             white-space: nowrap; 
         }
+       
+        .navbar .nav-item .nav-link {
+            color: #fff; 
+            padding: 10px 15px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .navbar .nav-item .nav-link:hover,
+        .navbar .nav-item .nav-link:focus {
+            background: #007bff; 
+            color: #fff;
+            border-radius: 5px;
+        }
+
+    
+        .dropdown-menu {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            color: #333;
+            padding: 10px 15px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .dropdown-item:hover {
+            background: #007bff;
+            color: #fff;
+        }
+
+
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
 
         .dropdown-item:hover {
             background-color: rgba(200, 200, 200, 0.4);
             color: black;
+        }
+
+        .dropdown:hover {
+            background-color: rgba(200, 200, 200, 0.4);
+            color: black;
+            font-weight: bold;
+        }
+
+        .backlogDropdown:hover{
+            color: black; 
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .suggest-form {
@@ -321,12 +373,23 @@
     .container {
         width: 100%;
         background: white;
-        padding: 20px;
-        border-radius: 10px;
+        /* padding: 20px;
+        border-radius: 10px; */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         margin-left: 300px;
         margin-top: 50px;
     }
+
+    .container1 {
+        width: 100%;
+        background: white;
+        /* padding: 20px;
+        border-radius: 10px; */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+        margin-left: 300px;
+        margin-top: 50px;
+    }
+    
     h2 {
         text-align: center;
         color: #333;
@@ -563,8 +626,33 @@
         <!-- Sidebar -->
         <div id="sidebar" class="border-end">
             <div class="list-group list-group-flush">
-                <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
-                <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
+                <a href="<?php echo base_url('user/dashboardview'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
+                <div class="list-group-item p-0"> 
+                    <div class="dropdown w-100"> 
+                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
+                        href="#" 
+                        role="button" 
+                        id="websiteDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                            File Upload
+                        </a>
+                        <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Backlog
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
+                                    <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('FundBalance/upload_excel'); ?>">Fund Balance</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <a href="<?php echo base_url('user/submit_suggestion'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
@@ -703,9 +791,102 @@
     </div>
 </div>
 </div>
+                <!-- Invoice Order sevice area -->
+                <?php } elseif ($method == 'invoice_order') { ?>
+                    <div class="container1">
+                        <div class="card shadow p-4">
+                            <h2 class="text-center mb-4">Upload Invoice Order Data</h2>
 
-					
-	         	<!-- Suggestion Section -->
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
+                            <?php endif; ?>
+
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                            <?php endif; ?>
+
+                            <form action="<?php echo site_url('uploadfile'); ?>" method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label class="form-label">Choose an Excel file:</label>
+                                    <input type="file" name="excel_file" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+
+                     <!-- Open Order sevice area -->
+                <?php } elseif ($method == 'open_order') { ?>
+                    <div class="container">
+                        <div class="card shadow-lg p-4">
+                            <h2 class="text-center mb-4">Upload Open Order Data</h2>
+                            
+                            <!-- Display success or error messages -->
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <?php echo $this->session->flashdata('success'); ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <?php echo $this->session->flashdata('error'); ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                            
+                            <form action="<?php echo base_url('uploadfile_openorder'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="excel_file" class="form-label">Select Excel File</label>
+                                    <input type="file" name="excel_file" id="excel_file" class="form-control" required>
+                                    <div class="invalid-feedback">Please select a valid Excel file.</div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                <!-- Fund Balance section -->
+                <?php } elseif ($method == 'fund_balance') { ?>
+                    <div class="container ">
+                        <div class="card shadow p-4">
+                            <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
+                            
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <?php echo $this->session->flashdata('success'); ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <?php echo $this->session->flashdata('error'); ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                            
+                            <form action="<?php echo site_url('FundBalance/upload_excel'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="excel_file" class="form-label">Select Excel File</label>
+                                    <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                                    <div class="invalid-feedback">Please select a valid Excel file.</div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Upload File</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Suggestion Section -->
                 <?php } elseif ($method == 'suggestion') { ?>
                     <div class="suggest-form">
                         <div class="image-section"> 
