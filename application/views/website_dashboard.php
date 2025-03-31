@@ -185,7 +185,7 @@
             color: black;
         }
 
-        .dropdown-toggle:hover {
+        .dropdown-toggle a:hover {
             background-color: white; 
             color: black; 
             font-weight: bold; 
@@ -393,7 +393,7 @@
         /* padding: 20px;
         border-radius: 10px; */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
-        margin-left: 300px;
+        margin-left: 370px;
         margin-top: 50px;
     }
     
@@ -475,6 +475,17 @@
             color: black; 
         }
 
+        .fileupload{
+            color: white;
+            background-color: #2C3E50; 
+        }
+
+        .fileupload:hover{
+            background-color: white; 
+            color: black; 
+            font-weight: bold; 
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
 	/* for dashboard styles */
          .content {
             margin-left: 260px; /* Push content to the right */
@@ -660,17 +671,17 @@
                 <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
-                        href="#" 
-                        role="button" 
-                   id="fileUploadDropdown" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                            File Upload
+                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
+                            href="#" 
+                            role="button" 
+                            id="fileUploadDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                                File Upload
                         </a>
-                <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
-                    <li class="dropdown-submenu">
-                        <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Backlog
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
@@ -678,7 +689,8 @@
                                     <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
                                 </ul>
                             </li>
-                    <li><a class="dropdown-item" href="<?php echo base_url('fundbalance_uploadfile'); ?>">Fund Balance</a></li>
+
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('FundBalance/upload_excel'); ?>">Fund Balance</a></li>
                         </ul>
                     </div>
                 </div>
@@ -687,7 +699,7 @@
                 
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
+                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
                         href="#" 
                         role="button" 
                         id="websiteDropdown" 
@@ -848,7 +860,7 @@
 
                      <!-- Open Order sevice area -->
                 <?php } elseif ($method == 'open_order') { ?>
-                    <div class="container">
+                    <div class="container1">
                         <div class="card shadow-lg p-4">
                             <h2 class="text-center mb-4">Upload Open Order Data</h2>
                             
@@ -884,8 +896,8 @@
 
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
-                    <div class="container ">
-                        <div class="card shadow p-4">
+                    <div class="container1">
+                        <div class="card shadow-lg p-4">
                             <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
                             
                             <?php if ($this->session->flashdata('success')): ?>
