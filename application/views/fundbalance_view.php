@@ -36,7 +36,7 @@
         
         <form action="<?php echo site_url('FundBalance/upload_excel'); ?>" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="file" name="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                <input type="file" name="excel_file" class="form-control" accept=".xls,.xlsx,.csv">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn">Upload File</button>

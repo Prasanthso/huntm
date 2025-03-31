@@ -19,8 +19,9 @@ class FundBalance extends CI_Controller {
     }
 
     public function fundbalance_data() {
-        $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv) with columns: CCA, Balance Risk Category Code, and Risk Category Description.';
-        $this->load->view('fundbalance_view', $data);
+        $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv)';
+        $data['method'] = 'fund_balance';
+        $this->load->view('website_dashboard', $data);
     }
 
     public function upload_excel() {

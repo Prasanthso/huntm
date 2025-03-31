@@ -20,7 +20,8 @@ class WebScrapping extends CI_Controller {
 
     public function webscrapping_data() {
         $data['message'] = 'Please upload an Excel file (.xlsx, .xls, or .csv) with columns: Area Name, CashMemo Generated, Status.';
-        $this->load->view('WebScrapping_view', $data);
+        $data['method'] = 'invoice_order';
+        $this->load->view('website_dashboard', $data);
     }
 
     public function upload_excel() {
