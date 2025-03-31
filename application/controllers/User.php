@@ -9,10 +9,10 @@ class User extends CI_Controller {
 		// $this->load->model('WebsiteModel');
     }
 
-    // public function index()
-    // {
-    //     $this->load->view('login_form');
-    // }
+    public function index()
+    {
+        $this->load->view('login_form');
+    }
     
     //  //this is my signup page section
     // public function signup() {

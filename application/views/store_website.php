@@ -109,7 +109,7 @@
                 <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
                 <td class="password-hidden">******</td>
                 <td>
-                    <form action="<?php echo site_url('User/auto_login'); ?>" method="POST">
+                    <form action="<?php echo site_url('auto-login'); ?>" method="POST">
                         <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
                         <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
                         <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
