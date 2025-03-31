@@ -383,8 +383,8 @@
         .card-5 { background: #fce4ec; color: #880e4f; }
         .card-6 { background: #ede7f6; color: #4527a0; }
         .card-7 { background: #ffebee; color: #b71c1c; }
-        .card-8 { background: #fff8e1; color: #ff8f00; }
-        .card-9 { background: #e0f7fa; color: #006064; }
+        .card-8 { background: #e0f7fa; color: #006064; }
+        .card-9 { background: #fff8e1; color: #ff8f00; }
         .card-10 { background: #f1f8e9; color: #33691e; }
         .card-11 { background: #ede7f6; color: #4a148c; }
         .card-12 { background: #d7ccc8; color: #5d4037; }
@@ -442,27 +442,27 @@
 <div class="row row-cols-3 g-4 mr-0 pr-0">
     
         <div class="col-md-4">
-            <div class="card text-center dashboard-card card-1"  onclick="showDetails('customers')">
+            <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
                 <h6>👥 Backlog</h6>
-                <p class="fs-5">150</p>
+                <p class="fs-5">Areas:150</p>
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-2" onclick="showDetails('orders')">
+            <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
                 <h6>📦 Fund Balance</h6>
-                <p class="fs-5">320</p>
+                <p class="fs-5">Rs:320</p>
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-3"  onclick="showDetails('revenue')">
-                <h6>💰 Customer Srengh</h6>
-                <p class="fs-5">$12,500</p>
+            <div class="card text-center dashboard-card card-3"  onclick="showDetails('customers')">
+                <h6>💰 Customer Strength</h6>
+                <p class="fs-5">12,500</p>
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-4"  onclick="showDetails('products')">
+            <div class="card text-center dashboard-card card-4"  onclick="showDetails('sbc')">
                 <h6>🛍️ SBC</h6>
-                <p class="fs-5">50</p>
+                <p class="fs-5">Qty:50</p>
             </div>
         </div>
 
@@ -473,32 +473,32 @@
             </div>
         </div> -->
         <div class="col">
-            <div class="card text-center dashboard-card card-6" onclick="showDetails('feedback')">
+            <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
                 <h6>📝 Nil Refill</h6>
                 <p class="fs-5">85</p>
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-7"  onclick="showDetails('returns')">
+            <div class="card text-center dashboard-card card-7"  onclick="showDetails('kyc')">
                 <h6>🔄  KYC</h6>
                 <p class="fs-5">20</p>
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-8"  onclick="showDetails('profits')">
+            <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
                 <h6>📈 MI Due</h6>
                 <p class="fs-5">$8,000</p>
             </div>
         </div>
 
         <div class="col">
-            <div class="card text-center dashboard-card card-9"  onclick="showDetails('suppliers')">
+            <div class="card text-center dashboard-card card-9"  onclick="showDetails('hose-due')">
                 <h6>🏭 Hose Due</h6>
                 <p class="fs-5">10</p>
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-10"  onclick="showDetails('new-users')">
+            <div class="card text-center dashboard-card card-10"  onclick="showDetails('mobileno')">
                 <h6>🆕 Mobile No</h6>
                 <p class="fs-5">120</p>
             </div>
@@ -865,18 +865,18 @@
 
     list.innerHTML = ''; // Clear previous data
 
-    if (type === 'customers') {
-        title.innerText = '👥 Customer List';
+    if (type === 'backlog') {
+        title.innerText = '👥 Backlog';
         list.innerHTML = `
-            <li class="list-group-item">John Doe</li>
-            <li class="list-group-item">Jane Smith</li>
-            <li class="list-group-item">David Johnson</li>`;
+            <li class="list-group-item"> No of.Area : 50</li>
+            <li class="list-group-item"> 🕒 Pending Qty: 2</li>
+            <li class="list-group-item"> ✅ Open Qty: 50</li>
+			<li class="list-group-item">  Total : 52</li>`;
     } 
-    else if (type === 'orders') {
-        title.innerText = '📦 Order Details';
+    else if (type === 'fundbalance') {
+        title.innerText = '📦 fundbalance Details';
         list.innerHTML = `
-            <li class="list-group-item">Order #123 - ✅ Completed</li>
-            <li class="list-group-item">Order #124 - 🕒 Pending</li>`;
+            <li class="list-group-item">Balance 💲123 </li>`;
     } 
     else if (type === 'revenue') {
         title.innerText = '💰 Revenue Breakdown';
@@ -884,30 +884,51 @@
             <li class="list-group-item">January: 💲3,500</li>
             <li class="list-group-item">February: 💲4,200</li>`;
     } 
-    else if (type === 'products') {
-        title.innerText = '🛍️ Product List';
+    else if (type === 'sbc') {
+        title.innerText = '🛍️ SBC Customers';
         list.innerHTML = `
-            <li class="list-group-item">Laptop</li>
-            <li class="list-group-item">Smartphone</li>`;
+            <li class="list-group-item"> Qty : 100 </li>
+            <li class="list-group-item"> Percentage: 10%</li>`;
     } 
-    else if (type === 'employees') {
-        title.innerText = '👨‍💼 Employee List';
+    else if (type === 'customers') {
+        title.innerText = '👨‍💼 Customers Strength';
         list.innerHTML = `
-            <li class="list-group-item">Alice Brown</li>
-            <li class="list-group-item">Robert White</li>`;
+            <li class="list-group-item"> Active: 450 </li>
+            <li class="list-group-item"> Suspended : 5</li>
+			<li class="list-group-item"> Deactived: 40 </li>`;
     } 
-    else if (type === 'suppliers') {
-        title.innerText = '🚛 Supplier List';
+	
+    else if (type === 'nilrefill') {
+        title.innerText = '🚛 Nilrefill List';
         list.innerHTML = `
-            <li class="list-group-item">TechSupplies Co.</li>
-            <li class="list-group-item">Global Parts Ltd.</li>`;
+            <li class="list-group-item"> Less than 6 months.</li>
+			<ul>
+			<li class="list-group-item"> Qty:</li>
+			<li class="list-group-item"> Percentage:</li>
+			</ul>
+            <li class="list-group-item"> Less than 1 Year.</li>
+			<ul>
+			<li class="list-group-item"> Qty:</li>
+			<li class="list-group-item"> Percentage:</li>
+			</ul>
+			`;
     } 
-    else if (type === 'expenses') {
-        title.innerText = '📉 Expense Report';
+	else if (type === 'kyc') {
+        title.innerText = '📉 KYC Pending';
         list.innerHTML = `
-            <li class="list-group-item">Rent: 💲1,500</li>
+            <li class="list-group-item">PMUY </li>
+			<ul>
+			<li>Qty</li>
+			<li>Percentage</li>
+			</ul>
             <li class="list-group-item">Utilities: 💲800</li>`;
     } 
+    // else if (type === 'kyc') {
+    //     title.innerText = '📉 Expense Report';
+    //     list.innerHTML = `
+    //         <li class="list-group-item">Rent: 💲1,500</li>
+    //         <li class="list-group-item">Utilities: 💲800</li>`;
+    // } 
     else if (type === 'profits') {
         title.innerText = '📈 Profit Summary';
         list.innerHTML = `
