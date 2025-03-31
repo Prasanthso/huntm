@@ -372,8 +372,8 @@
     .container {
         width: 100%;
         background: white;
-        padding: 20px;
-        border-radius: 10px;
+        /* padding: 20px;
+        border-radius: 10px; */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         margin-left: 300px;
         margin-top: 50px;
@@ -382,9 +382,9 @@
     .container1 {
         width: 100%;
         background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        /* padding: 20px;
+        border-radius: 10px; */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
         margin-left: 300px;
         margin-top: 50px;
     }
@@ -704,8 +704,8 @@
 
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
-                    <div class="container mt-5">
-                        <div class="card shadow-lg p-4">
+                    <div class="container ">
+                        <div class="card shadow p-4">
                             <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
                             
                             <?php if ($this->session->flashdata('success')): ?>
