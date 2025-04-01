@@ -87,4 +87,11 @@ class OpenOrder extends CI_Controller {
 
         redirect('OpenOrder');
     }
+
+     //Display data from open order data in website
+     public function display_open_data(){
+        $data['method'] = 'display_open_data';
+        $data['excel_orders'] = $this->OpenOrder_model->get_all_data(); 
+        $this->load->view('website_dashboard', $data);
+    }
 }

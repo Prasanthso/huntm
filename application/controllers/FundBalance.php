@@ -89,4 +89,9 @@ class FundBalance extends CI_Controller {
 
         redirect('fundbalance');
     }
+    public function display_fundbalance(){
+        $data['method'] = 'display_fundbalance';
+        $data['fundbalances'] = $this->FundBalance_model->get_all_data(); 
+        $this->load->view('website_dashboard', $data);
+    }
 }

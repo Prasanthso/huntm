@@ -85,4 +85,11 @@ class WebScrapping extends CI_Controller {
 
         redirect('WebScrapping');
     }
+
+    //Display data from invoice order data in website
+    public function display_invoice_data(){
+        $data['method'] = 'display_invoice_data';
+        $data['orders'] = $this->WebScrapping_model->get_all_data(); 
+        $this->load->view('website_dashboard', $data);
+    }
 }

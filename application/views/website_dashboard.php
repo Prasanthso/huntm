@@ -396,6 +396,26 @@
         margin-left: 370px;
         margin-top: 50px;
     }
+
+    .container2 {
+        width: 90%;
+        background: white;
+        /* padding: 20px;
+        border-radius: 10px; */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+        margin-left: 350px;
+        margin-top: 50px;
+    }
+
+    .container3 {
+        width: 100%;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+        margin-left: 350px;
+        margin-top: 50px;
+    }
     
     h2 {
         text-align: center;
@@ -694,6 +714,30 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="list-group-item p-0"> 
+                    <div class="dropdown w-100"> 
+                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
+                            href="#" 
+                            role="button" 
+                            id="fileUploadDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false" 
+                            aria-haspopup="true">
+                            Backlog
+                        </a>
+                        <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
+                            <li><a class="dropdown-item" href="<?php echo base_url('invoiceorder'); ?>">Invoice Order Service Area </a></li>
+                            <li><a class="dropdown-item" href="<?php echo base_url('open-process-order'); ?>">Process Order Service Area</a></li>
+                            <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Total</a></li>
+                        </ul>  
+                    </div>
+                </div>
+
+                <a class="dropdown-item fileupload list-group-item list-group-item-action w-100" href="<?php echo base_url('fundbalance_data'); ?>">Fund Balance</a>
+                        
+                  
+
                 <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
                 <div class="list-group-item p-0"> 
@@ -859,8 +903,8 @@
 
                      <!-- Open Order sevice area -->
                 <?php } elseif ($method == 'open_order') { ?>
-                    <div class="container1">
-                        <div class="card shadow-lg p-4">
+                    <div class="container2">
+                        <div class="card shadow-lg p-4 ">
                             <h2 class="text-center mb-4">Upload Open Order Data</h2>
                             
                             <!-- Display success or error messages -->
@@ -926,6 +970,132 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+
+                <!-- display open process data in website -->
+                <?php } elseif ($method == 'display_invoice_data') { ?>
+                    <div class="container3">
+                        <h2>Invoice Order Service Area</h2>
+
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
+                        <?php endif; ?>
+
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
+                        <?php endif; ?>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Area Name</th>
+                                    <th>Cashmemo Generated</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($orders)): ?>
+                                    <?php $serial_no = 1; ?>
+                                    <?php foreach ($orders as $order): ?>
+                                        <tr>
+                                            <td><?php echo $serial_no++; ?></td>
+                                            <td><?php echo $order['area_name']; ?></td>
+                                            <td><?php echo $order['cashmemo_generated']; ?></td>
+                                            <td><?php echo $order['status']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4">No records found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <?php } elseif ($method == 'display_open_data') {?>
+                        <div class="container3">
+                        <h2>Open Process Service Area</h2>
+
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
+                        <?php endif; ?>
+
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
+                        <?php endif; ?>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Area Name</th>
+                                    <th>Open Refill Orders</th>
+                                    <!-- <th>Status</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($excel_orders)): ?>
+                                    <?php $serial_no = 1;  ?>
+                                    <?php foreach ($excel_orders as $excel_order): ?>
+                                        <tr>
+                                            <td><?php echo $serial_no++; ?></td> 
+                                            <td><?php echo $excel_order['area_name']; ?></td>
+                                            <td><?php echo $excel_order['open_refill_orders']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="3">No records found.</td> <!-- Adjust colspan to 3 due to new column -->
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <?php } elseif ($method == 'display_fundbalance') { ?>
+                        <div class="container3">
+                        <h2>Fund Balance</h2>
+
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
+                        <?php endif; ?>
+
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
+                        <?php endif; ?>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>CCA</th>
+                                    <th>Balance</th>
+                                    <th>Risk Category Code</th>
+                                    <th>Risk Category Description</th>
+                                    <!-- <th>Status</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($fundbalances)): ?>
+                                    <?php $serial_no = 1;  ?>
+                                    <?php foreach ($fundbalances as $fundbalance): ?>
+                                        <tr>
+                                            <td><?php echo $serial_no++; ?></td> 
+                                            <td><?php echo $fundbalance['cca']; ?></td>
+                                            <td><?php echo $fundbalance['balance']; ?></td>
+                                            <td><?php echo $fundbalance['risk_category_code']; ?></td>
+                                            <td><?php echo $fundbalance['risk_category_description']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No records found.</td> 
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
 
                     <!-- Suggestion Section -->

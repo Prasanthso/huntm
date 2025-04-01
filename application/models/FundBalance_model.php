@@ -15,4 +15,12 @@ class FundBalance_model extends CI_Model {
         // Then insert the new data
         return $this->db->insert_batch('fund_balance', $data);
     }
+
+    public function get_all_data() {
+        $this->db->select('cca, balance, risk_category_code, risk_category_description');
+        $this->db->from('fund_balance');
+        $query = $this->db->get();
+        log_message('debug', 'Query Result: ' . print_r($query->result_array(), true)); 
+        return $query->result_array();
+    }
 }

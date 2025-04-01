@@ -86,5 +86,14 @@ $route['uploadfile_openorder'] = 'OpenOrder/upload_excel';
 $route['fundbalance'] = 'FundBalance/fundbalance_data';
 $route['fundbalance_uploadfile'] = 'FundBalance/upload_excel';
 
+//display invoice data in website
+$route['invoiceorder'] = 'WebScrapping/display_invoice_data';
+
+//display open process data in website
+$route['open-process-order'] = 'OpenOrder/display_open_data';
+
+//display fund balance data in website
+$route['fundbalance_data'] = 'FundBalance/display_fundbalance';
+
 
 
