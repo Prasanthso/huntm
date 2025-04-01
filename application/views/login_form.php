@@ -71,21 +71,22 @@
             padding-right: 10px;
             color:#0000FF;
         }
-			.reg_container {
+			/* .reg_container {
 			background: rgba(255, 255, 255, 0.95);
 			padding: 30px;
 			border-radius: 10px;
-			max-width: 500px; /* Increased from 400px to 500px */
+			max-width: 500px; 
 			width: 60%;
 			text-align: center;
-		}
-        /* .reg_container {
+		} */
+        .reg_container {
             max-width: 700px;
+			/* width: 80%; */
             margin: 40px;
             background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px; 
-        } */
+        }
 
         .reg_container h2 {
             font-weight: bold;
