@@ -65,8 +65,9 @@ class FundBalance extends CI_Controller {
                 if (count($row) >= 3 && !empty(trim($row[0]))) {
                     $insert_data[] = array(
                         'cca' => trim($row[0]),
-                        'balance_risk_category_code' => trim($row[1]),
-                        'risk_category_description' => trim($row[2])
+                        'balance' => trim($row[1]),
+                         'risk_category_code' => trim($row[2]),
+                        'risk_category_description' => trim($row[3])
                     );
                 }
             }
