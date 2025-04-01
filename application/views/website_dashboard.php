@@ -50,7 +50,9 @@
         a {
             text-decoration: none;
         }
-        
+        a:hover{
+            color: black;
+        }
         .navbar-brand {
             color: white;
             font-size: 25px;
@@ -79,10 +81,10 @@
             transition: background-color 0.3s ease, color 0.3s ease; 
         }
         
-        /* .list-group-item a:hover {
+        .list-group-item a:hover {
             background-color: #f1f1f1;
             color: black;
-        } */
+        }
 
         .list-group-item:hover {
             background-color: #f1f1f1; 
@@ -109,7 +111,7 @@
             transition: background-color 0.3s ease, color 0.3s ease; 
         }
 
-        .dropdown-toggle:hover {
+        .dropdown-toggle a:hover {
             /* background-color: white;  */
             transition: background-color 0.3s ease, color 0.3s ease;
             color: black;
@@ -121,9 +123,7 @@
             border: 1px solid #ddd;
             width: 100% !important;
         } */
-        .dropdown-menu {
 
-        }
         .dropdown-item {
             color: black; 
             transition: background-color 0.3s ease, color 0.3s ease;
@@ -143,7 +143,7 @@
         }
        
         .navbar .nav-item .nav-link {
-            color: #fff; 
+            color: black; 
             padding: 10px 15px;
             transition: background 0.3s ease-in-out;
         }
@@ -180,9 +180,16 @@
             margin-top: 0;
         }
 
-        .dropdown-item:hover {
+        .dropdown-item a:hover {
             background-color: rgba(200, 200, 200, 0.4);
             color: black;
+        }
+
+        .dropdown-toggle a:hover {
+            background-color: white; 
+            color: black; 
+            font-weight: bold; 
+            transition: background-color 0.3s ease, color 0.3s ease; 
         }
 
         .dropdown:hover {
@@ -386,7 +393,7 @@
         /* padding: 20px;
         border-radius: 10px; */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
-        margin-left: 300px;
+        margin-left: 370px;
         margin-top: 50px;
     }
     
@@ -444,6 +451,41 @@
             border-radius: 5px;
         }
 
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+            top: 100%;
+            left: 0;
+            margin-top: -1px;
+        }
+
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+
+        .list-group-item.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa; 
+            color: black; 
+        }
+
+        .fileupload{
+            color: white;
+            background-color: #2C3E50; 
+        }
+
+        .fileupload:hover{
+            background-color: white; 
+            color: black; 
+            font-weight: bold; 
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
 	/* for dashboard styles */
          .content {
             margin-left: 260px; /* Push content to the right */
@@ -629,17 +671,17 @@
                 <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
-                        href="#" 
-                        role="button" 
-                        id="websiteDropdown" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                            File Upload
+                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
+                            href="#" 
+                            role="button" 
+                            id="fileUploadDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                                File Upload
                         </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Backlog
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
@@ -656,7 +698,7 @@
                 
                 <div class="list-group-item p-0"> 
                     <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
+                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
                         href="#" 
                         role="button" 
                         id="websiteDropdown" 
@@ -665,8 +707,8 @@
                             Website
                         </a>
                         <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
+                    <li><a class="dropdown-item" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
+                    <li><a class="dropdown-item" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
                         </ul>
                     </div>
                 </div>
@@ -817,7 +859,7 @@
 
                      <!-- Open Order sevice area -->
                 <?php } elseif ($method == 'open_order') { ?>
-                    <div class="container">
+                    <div class="container1">
                         <div class="card shadow-lg p-4">
                             <h2 class="text-center mb-4">Upload Open Order Data</h2>
                             
@@ -853,8 +895,8 @@
 
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
-                    <div class="container ">
-                        <div class="card shadow p-4">
+                    <div class="container1">
+                        <div class="card shadow-lg p-4">
                             <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
                             
                             <?php if ($this->session->flashdata('success')): ?>
@@ -873,7 +915,7 @@
                             
                             <p class="text-muted text-center"> <?php echo $message; ?> </p>
                             
-                            <form action="<?php echo site_url('FundBalance/upload_excel'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            <form action="<?php echo site_url('fundbalance_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 <div class="mb-3">
                                     <label for="excel_file" class="form-label">Select Excel File</label>
                                     <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
@@ -1322,6 +1364,24 @@
             });
         });
   
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileUploadDropdown = document.getElementById('fileUploadDropdown');
+            const backlogDropdown = document.getElementById('backlogDropdown');
+            const fundBalanceLink = document.querySelector('a[href*=fundbalance_uploadfile"]');
+
+            fileUploadDropdown.addEventListener('click', function () {
+                this.classList.add('active');
+            });
+
+            backlogDropdown.addEventListener('click', function () {
+                fileUploadDropdown.classList.add('active');
+            });
+
+            fundBalanceLink.addEventListener('click', function () {
+                fileUploadDropdown.classList.add('active');
+            });
+        });
+        
     </script>
 </body>
 </html>
