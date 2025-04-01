@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Form</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -35,20 +35,27 @@
         a {
             text-decoration: none;
         }
-        
-        .login-page{
+		.login-page {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        /* .login-page{
             display: grid;
             grid-template-columns: repeat(2,1fr);
             gap:20px;
             margin-top: 100px;
-        }
+        } */
 
         .reg_content {
             padding-left: 5%;
         }
 
         .reg_content h1 {
-            font-size: 50px;
+            font-size: 2rem;
             font-weight: bold;
             color: white;
         }
@@ -64,14 +71,21 @@
             padding-right: 10px;
             color:#0000FF;
         }
-
-        .reg_container {
+			.reg_container {
+			background: rgba(255, 255, 255, 0.95);
+			padding: 30px;
+			border-radius: 10px;
+			max-width: 500px; /* Increased from 400px to 500px */
+			width: 60%;
+			text-align: center;
+		}
+        /* .reg_container {
             max-width: 700px;
             margin: 40px;
             background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px; 
-        }
+        } */
 
         .reg_container h2 {
             font-weight: bold;
@@ -87,6 +101,14 @@
             border-radius: 5px;
             font-size: 16px;
         }
+		
+		.btn-primary {
+			background: #510AC9;
+			border: none;
+		}
+		.btn-primary:hover {
+			background: #3A0C91;
+		}
 
         button {
             width: 100%;
@@ -100,39 +122,52 @@
             transition: background 0.3s;
         }
 
-        .forgot-password {
+        /* .forgot-password {
             display: block;
             margin-top: 10px;
             text-align: center;
             font-size: 14px;
-        }
+        } */
 
-        .register-link {
+        /* .register-link {
             margin-top: 10px;
             font-size: 14px;
             text-align: center;
-        }
+        } */
 
-        .register-link a {
+        /* .register-link a {
             color: #510AC9;
             text-decoration: none;
             font-weight: bold;
-        }
+        } */
 
         .error {
             color: red;
             font-size: 14px;
         }
+		@media (min-width: 768px) {
+			.reg_container {
+				max-width: 600px; /* Wider on tablets and larger screens */
+			}
+		}
+
+		@media (min-width: 1024px) {
+			.reg_container {
+				max-width: 700px; /* Even wider on desktops */
+			}
+		}
+
     </style>
 </head>
 <body>
     <header>
-        <a href="#"><h1 style="font-size:25px; color:white;">
-            <img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo"> Huntm
-        </h1></a>
+	<a href="#" class="text-white text-decoration-none d-flex align-items-center">
+        <img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo me-2"> 
+        <h1 class="h4 m-0">Huntm</h1>
+    </a>
     </header>
 
-    <div class="login-page">
+    <div class="login-page container">
         <div class="reg_content">
             <h1>Keep your customers engaged</h1>
             <p><i class="fas fa-chevron-right"></i>Send campaigns to customers</p>
@@ -141,27 +176,31 @@
             <p><i class="fas fa-chevron-right"></i>Get insights</p>
         </div>
 
-        <div class="reg_container">
-            <h2>LOG IN</h2>
+        <div class="reg_container shadow">
+            <h2 class="fw-bold text-dark">LOG IN</h2>
             <form method="post" action="<?= base_url('loginuser') ?>">
                 <?php $errors = $this->session->flashdata('errors') ?? []; ?>
 
                 <div class="mb-3">
                     <input type="text" name="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" 
-                           placeholder="Mobile Number or Email Id" value="<?= $this->session->flashdata('email') ?? '' ?>">
-                    <div class="error"><?= $errors['email'] ?? ''; ?></div>
+                           placeholder="Mobile Number or Email Id"
+						   value="<?= htmlspecialchars($this->session->flashdata('email') ?? '') ?>">
+
+                    <div class="invalid-feedback"><?= $errors['email'] ?? ''; ?></div>
+						<!-- value="<?= $this->session->flashdata('email') ?? '' ?>"> -->
                 </div>
+			
 
                 <div class="mb-3">
                     <input type="password" name="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
 					    placeholder="Password">
-                    <div class="error"><?= $errors['password'] ?? ''; ?></div>
+                    <div class="invalid-feedback"><?= $errors['password'] ?? ''; ?></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
 
-                <a href="#" class="forgot-password">Forgot Password?</a>
-                <p class="register-link">New to Huntm.in? <a href = "<?php echo base_url('signup'); ?>" >Register</a></p>
+                <a href="#" class="d-block mt-2 text-primary">Forgot Password?</a>
+                <p class="mt-2">New to Huntm.in? <a href = "<?php echo base_url('signup'); ?>" class="text-primary fw-bold">Register</a></p>
             </form>
         </div>
     </div>
@@ -182,17 +221,20 @@
 
     <!-- JavaScript for showing success modal -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
     <?php if ($this->session->flashdata('login_success')): ?>
-    <script>
-        window.onload = function() {
+  
             var successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
 
             setTimeout(() => {
                 window.location.href = "<?= base_url('suggestionform') ?>";
             }, 2000);
-        };
+		
+	<?php endif; ?>
+	});
     </script>
-    <?php endif; ?>
+   
 </body>
 </html>
