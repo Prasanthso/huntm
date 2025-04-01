@@ -693,13 +693,13 @@
         <div class="col">
             <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
                 <h6>📦 Fund Balance</h6>
-                <p class="fs-5">Rs:320</p>
+                <p class="fs-5">$320</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-3"  onclick="showDetails('customers')">
-                <h6>💰 Customer Strength</h6>
-                <p class="fs-5">12,500</p>
+                <h6>👨‍💼 Customer Strength</h6>
+                <p class="fs-5">495</p>
             </div>
         </div>
         <div class="col">
@@ -713,6 +713,7 @@
             <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
                 <h6>👨‍💼 Employees</h6>
                 <p class="fs-5">30</p>
+				💰
             </div>
         </div> -->
         <div class="col">
@@ -730,7 +731,7 @@
         <div class="col">
             <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
                 <h6>📈 MI Due</h6>
-                <p class="fs-5">$8,000</p>
+                <p class="fs-5">8,000</p>
             </div>
         </div>
 
@@ -1200,7 +1201,7 @@
         });
 
         function goBack() {
-            window.location.href = "<?= base_url('user/login_user'); ?>"; // Adjust this to your login route
+            window.location.href = "<?= base_url('loginuser'); ?>"; // Adjust this to your login route
         }
 
         function copyToClipboard(text) {
@@ -1225,18 +1226,18 @@
 			<li class="list-group-item">  Total : 52</li>`;
     } 
     else if (type === 'fundbalance') {
-        title.innerText = '📦 fundbalance Details';
+        title.innerText = '📦 Fundbalance Details';
         list.innerHTML = `
             <li class="list-group-item">Balance 💲123 </li>`;
     } 
-    else if (type === 'revenue') {
-        title.innerText = '💰 Revenue Breakdown';
-        list.innerHTML = `
-            <li class="list-group-item">January: 💲3,500</li>
-            <li class="list-group-item">February: 💲4,200</li>`;
-    } 
+    // else if (type === 'revenue') {
+    //     title.innerText = '💰 Revenue Breakdown';
+    //     list.innerHTML = `
+    //         <li class="list-group-item">January: 💲3,500</li>
+    //         <li class="list-group-item">February: 💲4,200</li>`;
+    // } 
     else if (type === 'sbc') {
-        title.innerText = '🛍️ SBC Customers';
+        title.innerText = '👨‍💼 SBC Customers';
         list.innerHTML = `
             <li class="list-group-item"> Qty : 100 </li>
             <li class="list-group-item"> Percentage: 10%</li>`;
@@ -1250,29 +1251,80 @@
     } 
 	
     else if (type === 'nilrefill') {
-        title.innerText = '🚛 Nilrefill List';
+        title.innerText = '🚛 Nil-refill List';
         list.innerHTML = `
             <li class="list-group-item"> Less than 6 months.</li>
 			<ul>
-			<li class="list-group-item"> Qty:</li>
-			<li class="list-group-item"> Percentage:</li>
+			<li> No of Area: 25</li> 
+			<li>Qty : 100</li>
+			<li>Percentage: 10% </li>
+			<li>Total: 100</li>
 			</ul>
             <li class="list-group-item"> Less than 1 Year.</li>
 			<ul>
-			<li class="list-group-item"> Qty:</li>
-			<li class="list-group-item"> Percentage:</li>
+			<li> No of Area: 25</li> 
+			<li>Qty : 200</li>
+			<li>Percentage : 20%</li>
+			<li>Total: 200</li>
 			</ul>
 			`;
     } 
 	else if (type === 'kyc') {
-        title.innerText = '📉 KYC Pending';
+        title.innerText = '⏳ KYC Pending';
+        list.innerHTML = `
+            <li class="list-group-item">PMUY </li>
+			 <li class="list-group-item"> Less than 6 months.</li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 100</li>
+			<li>Percentage: 10% </li>
+			<li>Total: 100</li>
+			</ul>
+            <li class="list-group-item"> Less than 1 Year.</li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 200</li>
+			<li>Percentage : 20%</li>
+			<li>Total: 200</li>
+			</ul>
+			`;
+    } 
+	else if (type === 'hose-due') {
+        title.innerText = '🏭 Hose-Due';
         list.innerHTML = `
             <li class="list-group-item">PMUY </li>
 			<ul>
-			<li>Qty</li>
-			<li>Percentage</li>
+			<li> No of Area: 25</li> 
+			<li>Qty : 100</li>
+			<li>Percentage: 10% </li>
+			<li>Total: 100</li>
 			</ul>
-            <li class="list-group-item">Utilities: 💲800</li>`;
+            <li class="list-group-item">Non-PMUY </li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 200</li>
+			<li>Percentage : 20%</li>
+			<li>Total: 200</li>
+			</ul>
+			`;
+    } 
+	else if (type === 'mi-due') {
+        title.innerText = '📈 MI-Due';
+        list.innerHTML = `
+            <li class="list-group-item">PMUY </li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 100</li>
+			<li>Percentage: 10% </li>
+			<li>Total: 100</li>
+			</ul>
+            <li class="list-group-item">Non-PMUY </li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 200</li>
+			<li>Percentage : 20%</li>
+			<li>Total: 200</li>
+			</ul>`;
     } 
     // else if (type === 'kyc') {
     //     title.innerText = '📉 Expense Report';
@@ -1280,11 +1332,23 @@
     //         <li class="list-group-item">Rent: 💲1,500</li>
     //         <li class="list-group-item">Utilities: 💲800</li>`;
     // } 
-    else if (type === 'profits') {
-        title.innerText = '📈 Profit Summary';
+    else if (type === 'mobileno') {
+        title.innerText = '📈 Mobileno';
         list.innerHTML = `
-            <li class="list-group-item">January: 💲3,000</li>
-            <li class="list-group-item">February: 💲3,900</li>`;
+            <li class="list-group-item">PMUY </li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 100</li>
+			<li>Percentage: 10% </li>
+			<li>Total: 100</li>
+			</ul>
+            <li class="list-group-item">Non-PMUY </li>
+			<ul>
+			<li> No of Area: 25</li> 
+			<li>Qty : 200</li>
+			<li>Percentage : 20%</li>
+			<li>Total: 200</li>
+			</ul>`;
     }
 
     detailsSection.style.display = 'block';
