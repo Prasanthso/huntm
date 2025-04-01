@@ -92,11 +92,11 @@ class UserProfile extends CI_Controller {
 	$response = $this->User_model->store($data);
 
 	if ($response) {
-		echo "<script>alert('✅ Registration successful! Redirecting to login page...'); window.location.href = '" . base_url('user/login') . "';</script>";
+		echo "<script>alert('✅ Registration successful! Redirecting to login page...'); window.location.href = '" . base_url('loginform') . "';</script>";
 		exit;
 	} else {
 		$this->session->set_flashdata('error', '❌ Error in registration. Please try again.');
-		redirect('user/signup');
+		redirect('signup');
 	}
 }
 

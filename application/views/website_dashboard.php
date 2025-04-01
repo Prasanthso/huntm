@@ -694,7 +694,6 @@
                         </ul>
                     </div>
                 </div>
-        
                 <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
                 <div class="list-group-item p-0"> 
