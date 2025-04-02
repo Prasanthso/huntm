@@ -99,5 +99,10 @@ $route['open-process-order'] = 'OpenOrder/display_open_data';
 //display fund balance data in website
 $route['fundbalance_data'] = 'FundBalance/display_fundbalance';
 
+//Display customer strength
+$route['customer_strength'] = 'customer_strength/customer_strength_data';
+
+//Display Nillfill data
+$route['nillfill'] = 'NilRefill/nill_fill_data';
 
 

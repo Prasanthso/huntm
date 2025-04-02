@@ -84,7 +84,7 @@ class CustomerRegister extends CI_Controller {
                         'consumer_type' => isset($row[18]) ? trim($row[18]) : '',
                         'consumer_category' => isset($row[19]) ? trim($row[19]) : '',
                         'consumer_sub_status' => isset($row[20]) ? trim($row[20]) : '',
-                        'name' => isset($row[21]) ? trim($row[21]) : '',
+                        'consumer_name' => isset($row[21]) ? trim($row[21]) : '',
                         'consumer_number' => isset($row[22]) ? trim($row[22]) : '',
                         'consumer_status' => isset($row[23]) ? trim($row[23]) : '',
                         'area_name' => isset($row[24]) ? trim($row[24]) : '',
@@ -130,9 +130,5 @@ class CustomerRegister extends CI_Controller {
         redirect('customerregister');
     }
 
-    // public function display() {
-    //     $data['method'] = 'display_customerregister';
-    //     $data['customers'] = $this->CustomerRegister_model->get_all_data();
-    //     $this->load->view('customer_register_view', $data);
-    // }
+    
 }

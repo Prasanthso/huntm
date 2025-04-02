@@ -23,7 +23,9 @@ class Customer_strength extends CI_Controller {
         if (empty($data['customers'])) {
             $data['customers'] = [];
         }
-
+        // $data['method'] = 'customer_strenght';
+        // $this->load->view('website_dasboard', $data);
         $this->load->view('customer_strength', $data);
+        
     }
 }
