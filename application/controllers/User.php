@@ -132,7 +132,8 @@ class User extends CI_Controller {
             if (password_verify($password, $user->Password)) {  
                 $this->session->set_userdata('id', $user->id);
                 $this->session->set_flashdata('login_success', true); // ✅ Set flashdata for success message
-                redirect('User/suggestion_form'); // Redirect to Suggestion Form
+                // redirect('User/suggestion_form'); // Redirect to Suggestion Form
+				$this->load->view('layout');
             } else {
                 $errors['password'] = 'Incorrect password.';
                 $this->session->set_flashdata('errors', $errors);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -543,62 +543,43 @@
             }
         }
 
-        @media (max-width: 576px) {
-            .huntmlogo {
-                width: 40px;
-                height: 40px;
-            }
+		@media (max-width: 576px) {
+    .huntmlogo {
+        width: 50px;
+        height: 50px;
+    }
 
-            .navbar-brand {
-                font-size: 20px;
-            }
+    h1 {
+        font-size: 20px;
+        margin: 5px;
+    }
 
-            .suggest-form {
-                margin-left: 15px;
-                width: calc(100% - 20px);
-            }
+    .list-group-item {
+        font-size: 14px;
+    }
 
-            .form-container{
-                margin-left: 20px;
-                width: calc(100% - 20px);
-            }
+    .dropdown-item {
+        font-size: 14px;
+    }
 
-            .container {
-                margin-left: 10px;
-                margin-right: 10px;
-                width: calc(100% - 20px);
-                padding: 15px; 
-                overflow-x: auto; 
-            }
+    .btn {
+        font-size: 14px;
+        padding: 8px;
+    }
 
-            h2 {
-                font-size: 20px;
-            }
+    input, select, textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
 
-            table {
-                width: 100%; 
-                font-size: 14px;
-                min-width: 600px; 
-            }
+    .image-text {
+        font-size: 16px;
+    }
 
-            th, td {
-                padding: 8px;
-                white-space: nowrap; 
-            }
-
-            .truncate-url {
-                max-width: none; 
-            }
-
-            .btn-copy {
-                font-size: 12px;
-            }
-
-            button {
-                font-size: 14px; 
-                padding: 6px 10px; 
-            }
-        }
+    .submit-btn {
+        font-size: 14px;
+    }
+}
 
             .image-section {
                 height: 120px;
@@ -675,8 +656,7 @@
         
         <main>
             <?php if (isset($method)) { ?>
-				
-                <!-- Dashboard Section -->
+				<!-- Dashboard Section -->
                 <?php if ($method == 'dashboard') { ?>
 				<!-- <h1>Welcome to Dashboard</h1> -->
 				 
@@ -709,13 +689,6 @@
             </div>
         </div>
 
-        <!-- <div class="col">
-            <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
-                <h6>👨‍💼 Employees</h6>
-                <p class="fs-5">30</p>
-				💰
-            </div>
-        </div> -->
         <div class="col">
             <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
                 <h6>📝 Nil Refill</h6>
@@ -747,43 +720,8 @@
                 <p class="fs-5">120</p>
             </div>
         </div>
-        <!-- <div class="col-3">
-            <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
-                <h6>🚚 Deliveries</h6>
-                <p class="fs-5">200</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-12"  onclick="showDetails('pending')">
-                <h6>⏳ Pending</h6>
-                <p class="fs-5">25</p>
-            </div>
-        </div>
+      
 
-        <!-- <div class="col-3">
-            <div class="card text-center dashboard-card card-13"  onclick="showDetails('shipped')">
-                <h6>📦 Shipped</h6>
-                <p class="fs-5">180</p>
-            </div>
-        </div> -
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
-                <h6>❌ Canceled</h6>
-                <p class="fs-5">15</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-15" onclick="showDetails('reviews')">
-                <h6>⭐ Reviews</h6>
-                <p class="fs-5">300</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-16" onclick="showDetails('support')">
-                <h6>💬 Support Requests</h6>
-                <p class="fs-5">40</p>
-            </div>
-        </div> -->
     </div>
 	<!-- 🔽 Details Section Below the Cards -->
     <div id="details" class="mt-4" style="display: none;">
