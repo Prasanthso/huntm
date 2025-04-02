@@ -74,17 +74,21 @@ $route['auto-login'] = 'WebsiteDetails/auto_login'; //use for auto login
 $route['show'] = 'Dashboard/show';
 $route['login/authenticate'] = 'login/authenticate';
 
-//Invoiced Order routes
+//Invoiced Order upload file
 $route['WebScrapping'] = 'WebScrapping/webscrapping_data'; 
 $route['uploadfile'] = 'WebScrapping/upload_excel';
 
-//open Order routes
+//open Order upload file
 $route['OpenOrder'] = 'OpenOrder/openorder_data';  
 $route['uploadfile_openorder'] = 'OpenOrder/upload_excel';  
 
-//fund balance routes
+//fund balance upload file
 $route['fundbalance'] = 'FundBalance/fundbalance_data';
 $route['fundbalance_uploadfile'] = 'FundBalance/upload_excel';
+
+//Customer register upload file
+$route['customerregister'] = 'CustomerRegister/customerregister_data';
+$route['customerregister_uploadfile'] = 'CustomerRegister/upload_excel';
 
 //display invoice data in website
 $route['invoiceorder'] = 'WebScrapping/display_invoice_data';

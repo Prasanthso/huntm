@@ -506,6 +506,38 @@
             font-weight: bold; 
             transition: background-color 0.3s ease, color 0.3s ease; 
         }
+
+        /* BI Report upload file style */
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .upload-form {
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
 	/* for dashboard styles */
          .content {
             margin-left: 260px; /* Push content to the right */
@@ -710,7 +742,8 @@
                                 </ul>
                             </li>
 
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('FundBalance/upload_excel'); ?>">Fund Balance</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('fundbalance'); ?>">Fund Balance</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('customerregister'); ?>">Customer Register</a></li>
                         </ul>
                     </div>
                 </div>
@@ -968,6 +1001,30 @@
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">Upload File</button>
                                 </div>
+                            </form>
+                        </div>
+                    </div>
+                
+                <?php } elseif ($method == 'customer_register') { ?>
+                    <div class="container1">
+                        <h2>Customer Register Upload Data</h2>
+
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <div class="message success"><?php echo $this->session->flashdata('success'); ?></div>
+                        <?php endif; ?>
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <div class="message error"><?php echo $this->session->flashdata('error'); ?></div>
+                        <?php endif; ?>
+
+                        <?php if (isset($message)): ?>
+                            <div class="message"><?php echo $message; ?></div>
+                        <?php endif; ?>
+
+                        <div class="upload-form">
+                            <form method="post" enctype="multipart/form-data" action="<?php echo base_url('customerregister'); ?>">
+                                <input type="file" name="excel_file" accept=".xls,.xlsx,.csv" required>
+                                <br>
+                                <input type="submit" value="Upload Excel">
                             </form>
                         </div>
                     </div>
