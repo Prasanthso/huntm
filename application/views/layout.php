@@ -70,64 +70,14 @@
     </header>
     
     <div class="sidebar" id="sidebar">
-        <a href="#"><img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" style="width: 50px;"><h4>Huntm</h4></a>
-        <a href="#">Dashboard</a>
+        <a href="<?php echo base_url('dashboard'); ?>"><img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" style="width: 50px;"><h4>Huntm</h4></a>
+        <a href="<?php echo base_url('dashboard'); ?>">Dashboard</a>
         <a href="#">File Upload</a>
         <a href="#">Suggestion</a>
         <a href="#">Website</a>
     </div>
     
-	<div>
-        <!-- Sidebar -->
-        <div id="sidebar" class="border-end">
-            <div class="list-group list-group-flush">
-                <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
-                <div class="list-group-item p-0"> 
-                    <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
-                        href="#" 
-                        role="button" 
-                        id="websiteDropdown" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                            File Upload
-                        </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Backlog
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
-                                    <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
-                                    <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
-                                </ul>
-                            </li>
-
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('FundBalance/upload_excel'); ?>">Fund Balance</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
-                
-                <div class="list-group-item p-0"> 
-                    <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle text-decoration-none d-block px-3 py-2" 
-                        href="#" 
-                        role="button" 
-                        id="websiteDropdown" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                            Website
-                        </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+	       
     
     <script>
         document.getElementById("sidebarToggle").addEventListener("click", function() {
