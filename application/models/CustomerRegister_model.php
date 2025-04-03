@@ -57,5 +57,25 @@ class CustomerRegister_model extends CI_Model {
         }
         return [];
     }  
+
+    //KYC data
+    public function get_kyc_data() {
+        $this->db->select("area_name, consumer_id, consumer_name, scheme_selected,kyc_number");
+        $this->db->where('consumer_category', 'domestic'); 
+        $query = $this->db->get($this->table);
+    
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            foreach ($result as &$row) {
+                if ($row['scheme_selected'] == 'Ujjwala') {
+                    $row['scheme_selected'] = 'PMUY';
+                } else {
+                    $row['scheme_selected'] = 'Non PMUY';
+                }
+            }
+            return $result;
+        }
+        return [];
+    }  
     
 }

@@ -105,4 +105,5 @@ $route['customer_strength'] = 'customer_strength/customer_strength_data';
 //Display Nillfill data
 $route['nillfill'] = 'NilRefill/nill_fill_data';
 
-
+//Display KYC data
+$route['kycdata'] = 'Kyc_data/kyc_data';
