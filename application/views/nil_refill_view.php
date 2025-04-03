@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nil Refill Report</title>
-    <!-- Add required CSS dependencies -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <style>
@@ -15,13 +14,11 @@
             background-color: #f4f7fc;
             color: #333;
         }
-
         h2 {
             text-align: center;
             margin: 40px 0;
             color: #007BFF;
         }
-
         .container {
             width: 100%;
             margin: 0 auto;
@@ -30,38 +27,31 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         table {
             width: 90%;
             border-collapse: collapse;
             margin: 20px auto;
         }
-
         th, td {
             padding: 12px;
             text-align: center;
             border: 1px solid #ddd;
             font-size: 14px;
         }
-
         th {
             background-color: #28a745;
             color: #fff;
             font-weight: 500;
         }
-
         td {
             background-color: #f9f9f9;
         }
-
         tr:nth-child(even) td {
             background-color: #f2f2f2;
         }
-
         tr:hover td {
             background-color: #e2f1ff;
         }
-
         .badge {
             display: inline-block;
             padding: 5px 10px;
@@ -69,38 +59,41 @@
             font-weight: 500;
             border-radius: 12px;
         }
-
         .badge-pmuy {
             background-color: #28a745;
             color: white;
         }
-
         .badge-non-pmuy {
             background-color: #dc3545;
             color: white;
         }
-
         .filter-section {
             margin: 20px 0;
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 8px;
         }
-
         .no-data {
             text-align: center;
             color: #999;
             padding: 20px;
         }
-
         .select2-container {
             min-width: 200px;
+        }
+        .date-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .date-input {
+            flex: 1;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Nill Refill Data</h2>
+        <h2>Nil Refill Data</h2>
 
         <!-- Filter Section -->
         <div class="filter-section">
@@ -108,6 +101,20 @@
                 <div class="col-md-4">
                     <label for="areaFilter" class="fw-bold">Area Name:</label>
                     <select id="areaFilter" class="form-select select2" multiple="multiple"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold">Last Refill Date Range:</label>
+                    <div class="date-filter">
+                        <input type="date" id="fromDate" class="form-control date-input">
+                        <span>to</span>
+                        <input type="date" id="toDate" class="form-control date-input">
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button id="resetFilters" class="btn btn-secondary w-100">Reset Filters</button>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button id="applyFilters" class="btn btn-primary w-100">Apply Filters</button>
                 </div>
             </div>
         </div>
@@ -159,7 +166,7 @@
                     <th>Consumer ID</th>
                     <th>Consumer Name</th>
                     <th>Scheme Selected</th>
-                    <th>Consumer Sub Status</th>
+                    <th>Last Refill Date</th>
                 </tr>
             </thead>
             <tbody id="customerTableBody">
@@ -174,7 +181,9 @@
                                     <?= htmlspecialchars($nillrefills['scheme_selected']); ?>
                                 </span>
                             </td>
-                            <td><?= htmlspecialchars($nillrefills['last_refill_date']); ?></td>
+                            <td data-date="<?= date('Y-m-d', strtotime($nillrefills['last_refill_date'])); ?>">
+                                <?= htmlspecialchars($nillrefills['last_refill_date']); ?>
+                            </td>
                         </tr>
                     <?php } ?>
                 <?php } else { ?>
@@ -195,7 +204,6 @@
         </nav>
     </div>
 
-    <!-- Add required JS dependencies -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -208,13 +216,21 @@
                 width: '100%'
             });
 
+            // Set default date ranges (last 6 months)
+            const today = new Date();
+            const sixMonthsAgo = new Date();
+            sixMonthsAgo.setMonth(today.getMonth() - 6);
+            
+            $("#fromDate").val(sixMonthsAgo.toISOString().split('T')[0]);
+            $("#toDate").val(today.toISOString().split('T')[0]);
+
             let currentPage = 1;
             const recordsPerPage = 10;
             let filteredRows = [];
             const tableBody = document.getElementById("customerTableBody");
             const originalRows = Array.from(tableBody.getElementsByTagName("tr"));
 
-            // Populate area filter
+            // Populate area filter dropdown
             function populateAreaFilter() {
                 const areas = new Set();
                 originalRows.forEach(row => {
@@ -224,25 +240,48 @@
                     }
                 });
 
+                $("#areaFilter").empty();
                 areas.forEach(area => {
                     $("#areaFilter").append(new Option(area, area));
                 });
             }
 
-            // Filter table function
+            // Filter table based on selected criteria
             function filterTable() {
                 const selectedAreas = $("#areaFilter").val() || [];
+                const fromDate = $("#fromDate").val();
+                const toDate = $("#toDate").val();
 
                 filteredRows = originalRows.filter(row => {
+                    // Skip the "no data" row
+                    if (row.querySelector('.no-data')) return false;
+                    
+                    // Area filter
                     const area = row.cells[0]?.textContent.trim();
-                    return selectedAreas.length === 0 || selectedAreas.includes(area);
+                    const areaMatch = selectedAreas.length === 0 || selectedAreas.includes(area);
+                    
+                    // Date filter
+                    const dateCell = row.cells[4];
+                    const dateStr = dateCell.getAttribute('data-date');
+                    if (!dateStr) return areaMatch;
+                    
+                    const refillDate = new Date(dateStr);
+                    const filterFromDate = fromDate ? new Date(fromDate) : null;
+                    const filterToDate = toDate ? new Date(toDate) : null;
+                    
+                    // Check if date is within range
+                    let dateMatch = true;
+                    if (filterFromDate) dateMatch = dateMatch && (refillDate >= filterFromDate);
+                    if (filterToDate) dateMatch = dateMatch && (refillDate <= filterToDate);
+                    
+                    return areaMatch && dateMatch;
                 });
 
                 currentPage = 1;
                 updateTable();
             }
 
-            // Update table display
+            // Update table display with pagination
             function updateTable() {
                 tableBody.innerHTML = "";
                 const start = (currentPage - 1) * recordsPerPage;
@@ -277,8 +316,18 @@
                 }
             });
 
-            // Filter change event
-            $("#areaFilter").on("change", filterTable);
+            // Filter change events
+            $("#applyFilters").on("click", filterTable);
+            
+            // Reset filters
+            $("#resetFilters").on("click", function() {
+                $("#areaFilter").val(null).trigger('change');
+                const sixMonthsAgo = new Date();
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                $("#fromDate").val(sixMonthsAgo.toISOString().split('T')[0]);
+                $("#toDate").val(new Date().toISOString().split('T')[0]);
+                filterTable();
+            });
 
             // Initial setup
             populateAreaFilter();
