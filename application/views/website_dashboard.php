@@ -70,6 +70,7 @@
             position: fixed;
             top: 80px;
             left: 0;
+			
         }
         
         .list-group-item {
@@ -395,11 +396,11 @@
         color: #333;
         font-weight: bold;
     }
-    table {
+     table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
-    }
+    } 
     th, td {
         padding: 12px;
         border: 1px solid #ddd;
@@ -497,19 +498,21 @@
 
         /* Show hamburger menu on small screens */
         @media (max-width: 768px) {
+			table{width:50%;}
+			body{margin:0;}
             .hamburger {
                 display: block;
             }
 
-            #sidebar {
+            #sidebar{
                 left: -250px;
                 width: 250px;
                 height: 100%;
                 z-index: 2000;
                 transition: left 0.3s ease-in-out;
             }
-			.content{ margin-left: 10px;}
-			.dashboard-card{width: 100px; height: 100px;};
+			.content{ margin-left: 0px;}
+			.dashboard-card{width: 100px; height: 110px;}
             #sidebar.active {
                 left: 0;
             }
@@ -528,11 +531,13 @@
             .form-container{
                 margin-left: 20px;
                 width: calc(100% - 40px);
+				
             }
 
             .container{
                 margin-left: 20px;
                 width: calc(100% - 40px);
+				
             }
             header {
                 padding: 10px;
@@ -542,49 +547,49 @@
                 margin: 20px 0;
                 text-align: center;
             }
-			p{font-size:20px;}
-			/* table {width: 40%;} */
+
+			p{margin: top 2px;font-size:14px;}
+		
         }
 
 		@media (max-width: 576px) {
-    .huntmlogo {
-        width: 50px;
-        height: 50px;
-    }
+		.huntmlogo {
+			width: 50px;
+			height: 50px;
+		}
 
-    h1 {
-        font-size: 20px;
-        margin: 5px;
-    }
+		h1 {
+			font-size: 20px;
+			margin: 5px;
+		}
 
-    .list-group-item {
-        font-size: 14px;
-    }
+		.list-group-item {
+			font-size: 14px;
+		}
 
-    .dropdown-item {
-        font-size: 14px;
-    }
+		.dropdown-item {
+			font-size: 14px;
+		}
 
-    .btn {
-        font-size: 14px;
-        padding: 8px;
-    }
+		.btn {
+			font-size: 14px;
+			padding: 8px;
+		}
 
-    input, select, textarea {
-        font-size: 14px;
-        padding: 8px;
-    }
+		input, select, textarea {
+			font-size: 14px;
+			padding: 8px;
+		}
 
-    .image-text {
-        font-size: 16px;
-    }
+		.image-text {
+			font-size: 16px;
+		}
 
-    .submit-btn {
-        font-size: 14px;
-    }
+		.submit-btn {
+			font-size: 14px;
+		}
 
-}
-
+	}
             .image-section {
                 height: 120px;
             }
@@ -671,57 +676,57 @@
         <div class="col-md-4">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
-			<p class="fs-6 fs-md-5">Areas: 150</p>
+			<p>Areas: 150</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">📦 Fund Balance</h6>
-                <p class="fs-5">$320</p>
+                <p>$320</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-3"  onclick="showDetails('customers')">
-			<h6 class="fs-6 fs-md-5 fs-lg-4">👨‍💼 Customer Strength</h6>
-                <p class="fs-5">495</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">👨‍💼 Customers</h6>
+                <p>495</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-4"  onclick="showDetails('sbc')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">🛍️ SBC</h6>
-                <p class="fs-5">Qty:50</p>
+                <p>Qty:50</p>
             </div>
         </div>
 
         <div class="col">
             <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">📝 Nil Refill</h6>
-                <p class="fs-5">85</p>
+                <p>85</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-7"  onclick="showDetails('kyc')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">🔄  KYC</h6>
-                <p class="fs-5">20</p>
+                <p>20</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">📈 MI Due</h6>
-                <p class="fs-5">8,000</p>
+                <p>8,000</p>
             </div>
         </div>
 
         <div class="col">
             <div class="card text-center dashboard-card card-9"  onclick="showDetails('hose-due')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">🏭 Hose Due</h6>
-                <p class="fs-5">10</p>
+                <p>10</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-10"  onclick="showDetails('mobileno')">
 			<h6 class="fs-6 fs-md-5 fs-lg-4">🆕 Mobile No</h6>
-                <p class="fs-5">120</p>
+                <p>120</p>
             </div>
         </div>
       
@@ -963,7 +968,7 @@
                         <?php if ($this->session->flashdata('error')): ?>
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
-
+						<div class="table-responsive">
                         <table class="table">
                             <tr>
                                 <th>Website URL</th>
@@ -990,6 +995,7 @@
                                 </tr>
                             <?php endforeach; ?>
                         </table>
+						</div>
                     </div>
                 <?php } else { ?>
                     <h1>Invalid Request</h1>
