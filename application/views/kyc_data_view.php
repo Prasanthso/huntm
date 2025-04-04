@@ -83,124 +83,155 @@
             min-width: 200px;
             width: 100% !important;
         }
+        .clickable {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #007bff;
+        }
+        .clickable:hover {
+            color: #0056b3;
+        }
+        .view-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+        #backButton {
+            display: none;
+            margin-bottom: 15px;
+        }
+        #areaBreakdownView, #customerDetailsView {
+            margin-top: 30px;
+        }
+        .fixed-summary {
+            /* position: sticky; */
+            top: 20px;
+            background-color: white;
+            /* z-index: 100; */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>KYC Data Table</h2>
         
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label for="areaFilter" class="fw-bold">Area Name:</label>
-                    <select id="areaFilter" class="form-select select2" multiple="multiple"></select>
-                </div>
-                <div class="col-md-4">
-                    <label for="kycStatusFilter" class="fw-bold">KYC Status:</label>
-                    <select id="kycStatusFilter" class="form-select">
-                        <option value="">All</option>
-                        <option value="complete">Complete</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label for="schemeFilter" class="fw-bold">Scheme:</label>
-                    <select id="schemeFilter" class="form-select">
-                        <option value="">All</option>
-                        <option value="PMUY">PMUY</option>
-                        <option value="Non PMUY">Non PMUY</option>
-                    </select>
-                </div>
-            </div>
+        <!-- Fixed Summary Table -->
+        <div class="fixed-summary" id="summaryTableContainer">
+            <table class="custom-table" id="summaryTable">
+                <thead>
+                    <tr class="head-row">
+                        <th rowspan="2">KYC Data</th>
+                        <th colspan="3">KYC Pending</th>
+                    </tr>
+                    <tr class="sub-header">
+                        <th class="clickable" data-scheme="PMUY">PMUY</th>
+                        <th class="clickable" data-scheme="Non PMUY">Non PMUY</th>
+                        <th class="clickable" data-scheme="Total">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($kyc_data)) : ?>
+                        <?php foreach ($kyc_data as $row) : ?>
+                            <tr>
+                                <td>Qty</td>
+                                <td class="clickable" data-scheme="PMUY"><?= htmlspecialchars($row["PMUY"] ?? 0) ?></td>
+                                <td class="clickable" data-scheme="Non PMUY"><?= htmlspecialchars($row["Non_PMUY"] ?? 0) ?></td>
+                                <td class="clickable" data-scheme="Total"><?= htmlspecialchars($row["Total"] ?? 0) ?></td>
+                            </tr>
+                            <tr>
+                                <td>%</td>
+                                <td><?= htmlspecialchars($row["PMUY_Pending"] ?? '0%') ?></td>
+                                <td><?= htmlspecialchars($row["Non_PMUY_Pending"] ?? '0%') ?></td>
+                                <td><?= htmlspecialchars($row["Total_Pending"] ?? '0%') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="4" class="no-data">No summary data available</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
 
-        <!-- Summary Table -->
-        <table class="custom-table">
-            <thead>
-                <tr class="head-row">
-                    <th rowspan="2">KYC Data</th>
-                    <th colspan="3">KYC Pending</th>
-                </tr>
-                <tr class="sub-header">
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($kyc_data)) : ?>
-                    <?php foreach ($kyc_data as $row) : ?>
+        <button id="backButton" class="btn btn-outline-primary btn-sm">Back</button>
+        
+        <!-- Main Content Area -->
+        <div id="mainContent">
+            <!-- Area Breakdown Table (hidden initially) -->
+            <div id="areaBreakdownView" style="display: none;">
+                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <table class="custom-table">
+                    <thead>
                         <tr>
-                            <td>Qty</td>
-                            <td><?= htmlspecialchars($row["PMUY"] ?? 0) ?></td>
-                            <td><?= htmlspecialchars($row["Non_PMUY"] ?? 0) ?></td>
-                            <td><?= htmlspecialchars($row["Total"] ?? 0) ?></td>
+                            <th>Area Name</th>
+                            <th>Count</th>
                         </tr>
+                    </thead>
+                    <tbody id="areaBreakdownBody"></tbody>
+                </table>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
+                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Customer Details Table -->
+            <div id="customerDetailsView" style="display: none;">
+                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <table class="custom-table">
+                    <thead>
                         <tr>
-                            <td>%</td>
-                            <td><?= htmlspecialchars($row["PMUY_Pending"] ?? '0%') ?></td>
-                            <td><?= htmlspecialchars($row["Non_PMUY_Pending"] ?? '0%') ?></td>
-                            <td><?= htmlspecialchars($row["Total_Pending"] ?? '0%') ?></td>
+                            <th>Area Name</th>
+                            <th>Consumer ID</th>
+                            <th>Consumer Name</th>
+                            <th>Scheme Selected</th>
+                            <th>KYC Status</th>
                         </tr>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <tr>
-                        <td colspan="4" class="no-data">No summary data available</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-        <!-- Detailed Table -->
-        <table class="custom-table mt-3">
-            <thead>
-                <tr>
-                    <th>Area Name</th>
-                    <th>Consumer ID</th>
-                    <th>Consumer Name</th>
-                    <th>Scheme Selected</th>
-                    <th>KYC Number</th>
-                    <th>KYC Status</th>
-                </tr>
-            </thead>
-            <tbody id="customerTableBody">
-                <?php if (!empty($kycdata)) : ?>
-                    <?php foreach ($kycdata as $kyc_data) : ?>
-                        <?php $kycStatus = !empty($kyc_data['kyc_number']) && $kyc_data['kyc_number'] !== '' ? 'complete' : 'pending'; ?>
-                        <tr data-kyc-status="<?= $kycStatus ?>" data-scheme="<?= htmlspecialchars($kyc_data['scheme_selected'] ?? '') ?>">
-                            <td><?= htmlspecialchars($kyc_data['area_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($kyc_data['consumer_id'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($kyc_data['consumer_name'] ?? '') ?></td>
-                            <td>
-                                <span class="badge <?= ($kyc_data['scheme_selected'] === 'PMUY') ? 'badge-pmuy' : 'badge-non-pmuy' ?>">
-                                    <?= htmlspecialchars($kyc_data['scheme_selected'] ?? '') ?>
-                                </span>
-                            </td>
-                            <td><?= htmlspecialchars($kyc_data['kyc_number'] ?? 'Not Available') ?></td>
-                            <td>
-                                <span class="badge <?= $kycStatus === 'complete' ? 'badge-pmuy' : 'badge-non-pmuy' ?>">
-                                    <?= ucfirst($kycStatus) ?>
-                                </span>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <tr>
-                        <td colspan="6" class="no-data">No data available</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-        <!-- Pagination -->
-        <nav>
-            <ul class="pagination justify-content-center mt-3">
-                <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
+                    </thead>
+                    <tbody id="customerTableBody">
+                        <?php if (!empty($kycdata)) : ?>
+                            <?php foreach ($kycdata as $kyc_data) : ?>
+                                <?php $kycStatus = !empty($kyc_data['kyc_number']) && $kyc_data['kyc_number'] !== '' ? 'complete' : 'pending'; ?>
+                                <tr data-area="<?= htmlspecialchars($kyc_data['area_name'] ?? '') ?>" 
+                                    data-kyc-status="<?= $kycStatus ?>" 
+                                    data-scheme="<?= htmlspecialchars($kyc_data['scheme_selected'] ?? '') ?>">
+                                    <td><?= htmlspecialchars($kyc_data['area_name'] ?? '') ?></td>
+                                    <td><?= htmlspecialchars($kyc_data['consumer_id'] ?? '') ?></td>
+                                    <td><?= htmlspecialchars($kyc_data['consumer_name'] ?? '') ?></td>
+                                    <td>
+                                        <span class="badge <?= ($kyc_data['scheme_selected'] === 'PMUY') ? 'badge-pmuy' : 'badge-non-pmuy' ?>">
+                                            <?= htmlspecialchars($kyc_data['scheme_selected'] ?? '') ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge <?= $kycStatus === 'complete' ? 'badge-pmuy' : 'badge-non-pmuy' ?>">
+                                            <?= ucfirst($kycStatus) ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="6" class="no-data">No data available</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -208,100 +239,250 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Initialize Select2
-            $("#areaFilter").select2({
-                placeholder: "Select areas",
-                allowClear: true,
-                width: '100%'
-            });
-
+            // View management variables
+            let currentView = 'summary'; // 'summary', 'area', 'customer'
+            let viewHistory = [];
+            
+            // Pagination variables
             let currentPage = 1;
+            let currentAreaPage = 1;
             const recordsPerPage = 10;
-            let filteredRows = [];
-            const tableBody = document.getElementById("customerTableBody");
-            const originalRows = Array.from(tableBody.getElementsByTagName("tr"));
+            
+            // Data variables
+            let allCustomers = <?= json_encode($kycdata ?? []) ?>;
+            let filteredCustomers = [];
+            let areaBreakdownData = [];
+            let currentScheme = null;
+            let currentArea = null;
 
-            // Populate area filter dropdown
-            function populateAreaFilter() {
-                const areas = new Set();
-                originalRows.forEach(row => {
-                    const area = row.cells[0]?.textContent.trim();
-                    if (area && area !== "No data available") {
-                        areas.add(area);
-                    }
-                });
+            // Initialize the view
+            initView();
 
-                $("#areaFilter").empty().append('<option></option>');
-                areas.forEach(area => {
-                    $("#areaFilter").append(new Option(area, area));
-                });
+            function initView() {
+                // Initialize customer table
+                setupCustomerTable();
+                
+                // Show summary table (always visible)
+                $('#summaryTableContainer').show();
+                
+                // Hide other views initially
+                $('#areaBreakdownView').hide();
+                $('#customerDetailsView').hide();
+                $('#backButton').hide();
             }
 
-            // Filter table based on selected area, KYC status, and scheme
-            function filterTable() {
-                const selectedAreas = $("#areaFilter").val() || [];
-                const selectedStatus = $("#kycStatusFilter").val();
-                const selectedScheme = $("#schemeFilter").val();
-
-                filteredRows = originalRows.filter(row => {
-                    const area = row.cells[0]?.textContent.trim();
-                    const kycStatus = row.getAttribute('data-kyc-status');
-                    const scheme = row.getAttribute('data-scheme');
-                    
-                    const areaMatch = selectedAreas.length === 0 || selectedAreas.includes(area);
-                    const statusMatch = !selectedStatus || kycStatus === selectedStatus;
-                    const schemeMatch = !selectedScheme || scheme === selectedScheme;
-
-                    return areaMatch && statusMatch && schemeMatch;
-                });
-
+            function setupCustomerTable() {
+                filteredCustomers = allCustomers;
                 currentPage = 1;
-                updateTable();
+                updateCustomerTable();
             }
 
-            // Update table display with pagination
-            function updateTable() {
-                tableBody.innerHTML = "";
+            function updateCustomerTable() {
                 const start = (currentPage - 1) * recordsPerPage;
                 const end = start + recordsPerPage;
-                const pageRows = filteredRows.slice(start, end);
-
+                const pageRows = filteredCustomers.slice(start, end);
+                const tableBody = $("#customerTableBody");
+                
+                tableBody.empty();
+                
                 if (pageRows.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" class="no-data">No matching data found</td></tr>';
+                    tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
                 } else {
-                    pageRows.forEach(row => tableBody.appendChild(row.cloneNode(true)));
+                    pageRows.forEach(customer => {
+                        const kycStatus = customer.kyc_number && customer.kyc_number !== '' ? 'complete' : 'pending';
+                        tableBody.append(`
+                            <tr>
+                                <td>${customer.area_name || 'N/A'}</td>
+                                <td>${customer.consumer_id || 'N/A'}</td>
+                                <td>${customer.consumer_name || 'N/A'}</td>
+                                <td>
+                                    <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
+                                        ${customer.scheme_selected || 'N/A'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge ${kycStatus === 'complete' ? 'badge-pmuy' : 'badge-non-pmuy'}">
+                                        ${kycStatus.charAt(0).toUpperCase() + kycStatus.slice(1)}
+                                    </span>
+                                </td>
+                            </tr>
+                        `);
+                    });
                 }
-
+                
                 $("#currentPage").text(currentPage);
                 $("#prevPage").toggleClass("disabled", currentPage === 1);
-                $("#nextPage").toggleClass("disabled", (currentPage * recordsPerPage) >= filteredRows.length);
+                $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
             }
 
-            // Pagination controls
-            $("#prevPage").on("click", function (e) {
+            function showAreaBreakdown(scheme) {
+                currentScheme = scheme;
+                
+                // Filter customers based on scheme and pending KYC
+                filteredCustomers = allCustomers.filter(customer => {
+                    const schemeMatch = scheme === 'Total' ? true : customer.scheme_selected === scheme;
+                    const kycPending = !customer.kyc_number || customer.kyc_number === '';
+                    return schemeMatch && kycPending;
+                });
+                
+                // Group by area
+                const areaCounts = {};
+                filteredCustomers.forEach(customer => {
+                    const area = customer.area_name || 'Unknown';
+                    if (!areaCounts[area]) {
+                        areaCounts[area] = 0;
+                    }
+                    areaCounts[area]++;
+                });
+                
+                // Convert to array for display
+                areaBreakdownData = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
+                
+                // Sort by count descending
+                areaBreakdownData.sort((a, b) => b.count - a.count);
+                
+                // Update title
+                const title = scheme === 'Total' ? 'Pending KYC Customers (All Schemes) by Area' : `Pending KYC Customers (${scheme}) by Area`;
+                $('#areaBreakdownTitle').text(title);
+                
+                // Update view
+                currentAreaPage = 1;
+                updateAreaBreakdownTable();
+                
+                // Show area breakdown view
+                $('#areaBreakdownView').show();
+                $('#customerDetailsView').hide();
+                $('#backButton').show();
+                
+                // Update view history
+                viewHistory.push(currentView);
+                currentView = 'area';
+            }
+
+            function updateAreaBreakdownTable() {
+                const start = (currentAreaPage - 1) * recordsPerPage;
+                const end = start + recordsPerPage;
+                const pageAreas = areaBreakdownData.slice(start, end);
+                const tableBody = $("#areaBreakdownBody");
+                
+                tableBody.empty();
+                
+                if (pageAreas.length === 0) {
+                    tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
+                } else {
+                    pageAreas.forEach(({area, count}) => {
+                        tableBody.append(`
+                            <tr>
+                                <td class="clickable area-click" data-area="${area}">${area || 'N/A'}</td>
+                                <td>${count}</td>
+                            </tr>
+                        `);
+                    });
+                    
+                    // Add click handlers for area rows
+                    $('.area-click').on('click', function() {
+                        const area = $(this).data('area');
+                        showCustomerDetails(area);
+                    });
+                }
+                
+                $("#currentAreaPage").text(currentAreaPage);
+                $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+            }
+
+            function showCustomerDetails(area) {
+                currentArea = area;
+                
+                // Filter customers for this area
+                const areaCustomers = filteredCustomers.filter(customer => 
+                    (customer.area_name || 'Unknown') === area
+                );
+                
+                filteredCustomers = areaCustomers;
+                currentPage = 1;
+                
+                // Update title
+                const schemeText = currentScheme === 'Total' ? 'All Schemes' : currentScheme;
+                $('#customerDetailsTitle').text(`Pending KYC Customers (${schemeText}) in ${area}`);
+                
+                // Update table
+                updateCustomerTable();
+                
+                // Show customer details view
+                $('#areaBreakdownView').hide();
+                $('#customerDetailsView').show();
+                $('#backButton').show();
+                
+                // Update view history
+                viewHistory.push(currentView);
+                currentView = 'customer';
+            }
+
+            function goBack() {
+                if (viewHistory.length === 0) return;
+                
+                const previousView = viewHistory.pop();
+                
+                if (previousView === 'summary') {
+                    // Hide all views except summary (which is always visible)
+                    $('#areaBreakdownView').hide();
+                    $('#customerDetailsView').hide();
+                    $('#backButton').hide();
+                    currentView = 'summary';
+                } 
+                else if (previousView === 'area') {
+                    // Show area breakdown view
+                    $('#areaBreakdownView').show();
+                    $('#customerDetailsView').hide();
+                    currentView = 'area';
+                }
+                
+                if (viewHistory.length === 0) {
+                    $('#backButton').hide();
+                }
+            }
+
+            // Event listeners
+            $('.clickable[data-scheme]').on('click', function() {
+                showAreaBreakdown($(this).data('scheme'));
+            });
+            
+            $('#backButton').on('click', goBack);
+            
+            // Pagination controls for customer table
+            $("#prevPage").on('click', function(e) {
                 e.preventDefault();
                 if (currentPage > 1) {
                     currentPage--;
-                    updateTable();
+                    updateCustomerTable();
                 }
             });
-
-            $("#nextPage").on("click", function (e) {
+            
+            $("#nextPage").on('click', function(e) {
                 e.preventDefault();
-                if ((currentPage * recordsPerPage) < filteredRows.length) {
+                if ((currentPage * recordsPerPage) < filteredCustomers.length) {
                     currentPage++;
-                    updateTable();
+                    updateCustomerTable();
                 }
             });
-
-            // Filter change events
-            $("#areaFilter").on("change", filterTable);
-            $("#kycStatusFilter").on("change", filterTable);
-            $("#schemeFilter").on("change", filterTable);
-
-            // Initial setup
-            populateAreaFilter();
-            filterTable();
+            
+            // Pagination controls for area breakdown
+            $("#prevAreaPage").on('click', function(e) {
+                e.preventDefault();
+                if (currentAreaPage > 1) {
+                    currentAreaPage--;
+                    updateAreaBreakdownTable();
+                }
+            });
+            
+            $("#nextAreaPage").on('click', function(e) {
+                e.preventDefault();
+                if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
+                    currentAreaPage++;
+                    updateAreaBreakdownTable();
+                }
+            });
         });
     </script>
 </body>
