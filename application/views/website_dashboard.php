@@ -498,13 +498,23 @@
 
         /* Show hamburger menu on small screens */
         @media (max-width: 768px) {
-			table{width:50%;}
+
+			/* .table{
+				width: 50%;
+			
+			}  */
+			/* .table th{font-size: 12px;width:10%;} */
+			 .btnautologin {
+			font-size: 10px;
+			padding: 8px;
+		} 
 			body{margin:0;}
             .hamburger {
                 display: block;
             }
 
             #sidebar{
+				top: 70px;
                 left: -250px;
                 width: 250px;
                 height: 100%;
@@ -522,23 +532,25 @@
             }
 
             .suggest-form {
-                margin-left: 20px;
+                margin-left: 30px;
                 margin-right: 20px;
-                width: calc(100% - 40px);
+				width: calc(100% - 40px);
                 padding: 15px;
             }
 
             .form-container{
-                margin-left: 20px;
-                width: calc(100% - 40px);
-				
+                margin : 40px;
+				padding :10px;
+                width: calc(100% - 30px);
             }
 
             .container{
-                margin-left: 20px;
+                margin-left : 20px;
+				margin-right : -200px;
+				/* padding: 20px; */
                 width: calc(100% - 40px);
 				
-            }
+			}
             header {
                 padding: 10px;
             }
@@ -588,6 +600,7 @@
 		.submit-btn {
 			font-size: 14px;
 		}
+	
 
 	}
             .image-section {
@@ -801,7 +814,7 @@
 
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
-                    <div class="container ">
+                    <div class="container">
                         <div class="card shadow p-4">
                             <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
                             
@@ -959,7 +972,7 @@
                     <!-- Display and store website -->
                 <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
-                        <h2>Stored Websites</h2>
+                        <h2 class="text-center">Stored Websites</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -968,14 +981,17 @@
                         <?php if ($this->session->flashdata('error')): ?>
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
+						<!-- <div class="d-flex justify-content-center"> -->
 						<div class="table-responsive">
                         <table class="table">
+						<thead class="table-primary">
                             <tr>
                                 <th>Website URL</th>
                                 <th>Username</th>
                                 <th>Password</th>
                                 <th>Login</th>
                             </tr>
+						</thead>
                             <?php foreach ($websites as $website): ?>
                                 <tr>
                                     <td>
@@ -989,13 +1005,14 @@
                                             <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
                                             <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
                                             <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                            <button type="submit">Auto-Login</button>
+                                            <button class="btnautologin" type="submit">Auto-Login</button>
                                         </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
 						</div>
+						<!-- </div> -->
                     </div>
                 <?php } else { ?>
                     <h1>Invalid Request</h1>
