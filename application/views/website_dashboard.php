@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -72,6 +72,7 @@
             position: fixed;
             top: 80px;
             left: 0;
+			
         }
         
         .list-group-item {
@@ -402,11 +403,11 @@
         color: #333;
         font-weight: bold;
     }
-    table {
+     table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
-    }
+    } 
     th, td {
         padding: 12px;
         border: 1px solid #ddd;
@@ -491,7 +492,7 @@
             margin-left: 260px; /* Push content to the right */
             padding: 20px;
         }
-		card{widht:100%;}
+		/* card{width:100%;} */
 		.dashboard-card {
 		
             padding: 20px;
@@ -539,18 +540,31 @@
 
         /* Show hamburger menu on small screens */
         @media (max-width: 768px) {
+
+			/* .table{
+				width: 50%;
+			
+			}  */
+			/* .table th{font-size: 12px;width:10%;} */
+			 .btnautologin {
+			font-size: 10px;
+			padding: 8px;
+		} 
+			body{margin:0;}
             .hamburger {
                 display: block;
             }
 
-            #sidebar {
+            #sidebar{
+				top: 70px;
                 left: -250px;
                 width: 250px;
                 height: 100%;
                 z-index: 2000;
                 transition: left 0.3s ease-in-out;
             }
-
+			.content{ margin-left: 0px;}
+			.dashboard-card{width: 100px; height: 110px;}
             #sidebar.active {
                 left: 0;
             }
@@ -560,21 +574,25 @@
             }
 
             .suggest-form {
-                margin-left: 20px;
+                margin-left: 30px;
                 margin-right: 20px;
-                width: calc(100% - 40px);
+				width: calc(100% - 40px);
                 padding: 15px;
             }
 
             .form-container{
-                margin-left: 20px;
-                width: calc(100% - 40px);
+                margin : 40px;
+				padding :10px;
+                width: calc(100% - 30px);
             }
 
             .container{
-                margin-left: 20px;
+                margin-left : 20px;
+				margin-right : -200px;
+				/* padding: 20px; */
                 width: calc(100% - 40px);
-            }
+				
+			}
             header {
                 padding: 10px;
             }
@@ -583,65 +601,50 @@
                 margin: 20px 0;
                 text-align: center;
             }
+
+			p{margin: top 2px;font-size:14px;}
+		
         }
 
-        @media (max-width: 576px) {
-            .huntmlogo {
-                width: 40px;
-                height: 40px;
-            }
+		@media (max-width: 576px) {
+		.huntmlogo {
+			width: 50px;
+			height: 50px;
+		}
 
-            .navbar-brand {
-                font-size: 20px;
-            }
+		h1 {
+			font-size: 20px;
+			margin: 5px;
+		}
 
-            .suggest-form {
-                margin-left: 15px;
-                width: calc(100% - 20px);
-            }
+		.list-group-item {
+			font-size: 14px;
+		}
 
-            .form-container{
-                margin-left: 20px;
-                width: calc(100% - 20px);
-            }
+		.dropdown-item {
+			font-size: 14px;
+		}
 
-            .container {
-                margin-left: 10px;
-                margin-right: 10px;
-                width: calc(100% - 20px);
-                padding: 15px; 
-                overflow-x: auto; 
-            }
+		.btn {
+			font-size: 14px;
+			padding: 8px;
+		}
 
-            h2 {
-                font-size: 20px;
-            }
+		input, select, textarea {
+			font-size: 14px;
+			padding: 8px;
+		}
 
-            table {
-                width: 100%; 
-                font-size: 14px;
-                min-width: 600px; 
-            }
+		.image-text {
+			font-size: 16px;
+		}
 
-            th, td {
-                padding: 8px;
-                white-space: nowrap; 
-            }
+		.submit-btn {
+			font-size: 14px;
+		}
+	
 
-            .truncate-url {
-                max-width: none; 
-            }
-
-            .btn-copy {
-                font-size: 12px;
-            }
-
-            button {
-                font-size: 14px; 
-                padding: 6px 10px; 
-            }
-        }
-
+	}
             .image-section {
                 height: 120px;
             }
@@ -717,114 +720,72 @@
         
         <main>
             <?php if (isset($method)) { ?>
-				
-                <!-- Dashboard Section -->
+				<!-- Dashboard Section -->
                 <?php if ($method == 'dashboard') { ?>
 				<!-- <h1>Welcome to Dashboard</h1> -->
-				 
-<div class="content">
-<div class="container-sm mt-3">
-<div class="row row-cols-3 g-4 mr-0 pr-0">
+					
+	<div class="content">
+	<div class="container-sm mt-3">
+	<div class="row row-cols-3 g-4 mr-0 pr-0">
     
         <div class="col-md-4">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
-                <h6>👥 Backlog</h6>
-                <p class="fs-5">Areas:150</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
+			<p>Areas: 150</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
-                <h6>📦 Fund Balance</h6>
-                <p class="fs-5">Rs:320</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">📦 Fund Balance</h6>
+                <p>$320</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-3"  onclick="showDetails('customers')">
-                <h6>💰 Customer Strength</h6>
-                <p class="fs-5">12,500</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">👨‍💼 Customers</h6>
+                <p>495</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-4"  onclick="showDetails('sbc')">
-                <h6>🛍️ SBC</h6>
-                <p class="fs-5">Qty:50</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">🛍️ SBC</h6>
+                <p>Qty:50</p>
             </div>
         </div>
 
-        <!-- <div class="col">
-            <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
-                <h6>👨‍💼 Employees</h6>
-                <p class="fs-5">30</p>
-            </div>
-        </div> -->
         <div class="col">
             <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
-                <h6>📝 Nil Refill</h6>
-                <p class="fs-5">85</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">📝 Nil Refill</h6>
+                <p>85</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-7"  onclick="showDetails('kyc')">
-                <h6>🔄  KYC</h6>
-                <p class="fs-5">20</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">🔄  KYC</h6>
+                <p>20</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
-                <h6>📈 MI Due</h6>
-                <p class="fs-5">$8,000</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">📈 MI Due</h6>
+                <p>8,000</p>
             </div>
         </div>
 
         <div class="col">
             <div class="card text-center dashboard-card card-9"  onclick="showDetails('hose-due')">
-                <h6>🏭 Hose Due</h6>
-                <p class="fs-5">10</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">🏭 Hose Due</h6>
+                <p>10</p>
             </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-10"  onclick="showDetails('mobileno')">
-                <h6>🆕 Mobile No</h6>
-                <p class="fs-5">120</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">🆕 Mobile No</h6>
+                <p>120</p>
             </div>
         </div>
-        <!-- <div class="col-3">
-            <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
-                <h6>🚚 Deliveries</h6>
-                <p class="fs-5">200</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-12"  onclick="showDetails('pending')">
-                <h6>⏳ Pending</h6>
-                <p class="fs-5">25</p>
-            </div>
-        </div>
+      
 
-        <!-- <div class="col-3">
-            <div class="card text-center dashboard-card card-13"  onclick="showDetails('shipped')">
-                <h6>📦 Shipped</h6>
-                <p class="fs-5">180</p>
-            </div>
-        </div> -
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
-                <h6>❌ Canceled</h6>
-                <p class="fs-5">15</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-15" onclick="showDetails('reviews')">
-                <h6>⭐ Reviews</h6>
-                <p class="fs-5">300</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-16" onclick="showDetails('support')">
-                <h6>💬 Support Requests</h6>
-                <p class="fs-5">40</p>
-            </div>
-        </div> -->
     </div>
 	<!-- 🔽 Details Section Below the Cards -->
     <div id="details" class="mt-4" style="display: none;">
@@ -895,8 +856,8 @@
 
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
-                    <div class="container1">
-                        <div class="card shadow-lg p-4">
+                    <div class="container">
+                        <div class="card shadow p-4">
                             <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
                             
                             <?php if ($this->session->flashdata('success')): ?>
@@ -1053,7 +1014,7 @@
                     <!-- Display and store website -->
                 <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
-                        <h2>Stored Websites</h2>
+                        <h2 class="text-center">Stored Websites</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -1062,14 +1023,17 @@
                         <?php if ($this->session->flashdata('error')): ?>
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
-
+						<!-- <div class="d-flex justify-content-center"> -->
+						<div class="table-responsive">
                         <table class="table">
+						<thead class="table-primary">
                             <tr>
                                 <th>Website URL</th>
                                 <th>Username</th>
                                 <th>Password</th>
                                 <th>Login</th>
                             </tr>
+						</thead>
                             <?php foreach ($websites as $website): ?>
                                 <tr>
                                     <td>
@@ -1083,12 +1047,14 @@
                                             <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
                                             <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
                                             <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                            <button type="submit">Auto-Login</button>
+                                            <button class="btnautologin" type="submit">Auto-Login</button>
                                         </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
+						</div>
+						<!-- </div> -->
                     </div>
                 <?php } else { ?>
                     <h1>Invalid Request</h1>
@@ -1242,7 +1208,7 @@
         });
 
         function goBack() {
-            window.location.href = "<?= base_url('user/login_user'); ?>"; // Adjust this to your login route
+            window.location.href = "<?= base_url('loginuser'); ?>"; // Adjust this to your login route
         }
 
         function copyToClipboard(text) {
@@ -1252,82 +1218,140 @@
         }
 
 		function showDetails(type) {
-    let title = document.getElementById('details-title');
-    let list = document.getElementById('details-list');
-    let detailsSection = document.getElementById('details');
+			let title = document.getElementById('details-title');
+			let list = document.getElementById('details-list');
+			let detailsSection = document.getElementById('details');
 
-    list.innerHTML = ''; // Clear previous data
+			list.innerHTML = ''; // Clear previous data
 
-    if (type === 'backlog') {
-        title.innerText = '👥 Backlog';
-        list.innerHTML = `
-            <li class="list-group-item"> No of.Area : 50</li>
-            <li class="list-group-item"> 🕒 Pending Qty: 2</li>
-            <li class="list-group-item"> ✅ Open Qty: 50</li>
-			<li class="list-group-item">  Total : 52</li>`;
-    } 
-    else if (type === 'fundbalance') {
-        title.innerText = '📦 fundbalance Details';
-        list.innerHTML = `
-            <li class="list-group-item">Balance 💲123 </li>`;
-    } 
-    else if (type === 'revenue') {
-        title.innerText = '💰 Revenue Breakdown';
-        list.innerHTML = `
-            <li class="list-group-item">January: 💲3,500</li>
-            <li class="list-group-item">February: 💲4,200</li>`;
-    } 
-    else if (type === 'sbc') {
-        title.innerText = '🛍️ SBC Customers';
-        list.innerHTML = `
-            <li class="list-group-item"> Qty : 100 </li>
-            <li class="list-group-item"> Percentage: 10%</li>`;
-    } 
-    else if (type === 'customers') {
-        title.innerText = '👨‍💼 Customers Strength';
-        list.innerHTML = `
-            <li class="list-group-item"> Active: 450 </li>
-            <li class="list-group-item"> Suspended : 5</li>
-			<li class="list-group-item"> Deactived: 40 </li>`;
-    } 
-	
-    else if (type === 'nilrefill') {
-        title.innerText = '🚛 Nilrefill List';
-        list.innerHTML = `
-            <li class="list-group-item"> Less than 6 months.</li>
-			<ul>
-			<li class="list-group-item"> Qty:</li>
-			<li class="list-group-item"> Percentage:</li>
-			</ul>
-            <li class="list-group-item"> Less than 1 Year.</li>
-			<ul>
-			<li class="list-group-item"> Qty:</li>
-			<li class="list-group-item"> Percentage:</li>
-			</ul>
-			`;
-    } 
-	else if (type === 'kyc') {
-        title.innerText = '📉 KYC Pending';
-        list.innerHTML = `
-            <li class="list-group-item">PMUY </li>
-			<ul>
-			<li>Qty</li>
-			<li>Percentage</li>
-			</ul>
-            <li class="list-group-item">Utilities: 💲800</li>`;
-    } 
-    // else if (type === 'kyc') {
-    //     title.innerText = '📉 Expense Report';
-    //     list.innerHTML = `
-    //         <li class="list-group-item">Rent: 💲1,500</li>
-    //         <li class="list-group-item">Utilities: 💲800</li>`;
-    // } 
-    else if (type === 'profits') {
-        title.innerText = '📈 Profit Summary';
-        list.innerHTML = `
-            <li class="list-group-item">January: 💲3,000</li>
-            <li class="list-group-item">February: 💲3,900</li>`;
-    }
+			if (type === 'backlog') {
+				title.innerText = '👥 Backlog';
+				list.innerHTML = `
+					<li class="list-group-item"> No of.Area : 50</li>
+					<li class="list-group-item"> 🕒 Pending Qty: 2</li>
+					<li class="list-group-item"> ✅ Open Qty: 50</li>
+					<li class="list-group-item">  Total : 52</li>`;
+			} 
+			else if (type === 'fundbalance') {
+				title.innerText = '📦 Fundbalance Details';
+				list.innerHTML = `
+					<li class="list-group-item">Balance 💲123 </li>`;
+			} 
+			// else if (type === 'revenue') {
+			//     title.innerText = '💰 Revenue Breakdown';
+			//     list.innerHTML = `
+			//         <li class="list-group-item">January: 💲3,500</li>
+			//         <li class="list-group-item">February: 💲4,200</li>`;
+			// } 
+			else if (type === 'sbc') {
+				title.innerText = '👨‍💼 SBC Customers';
+				list.innerHTML = `
+					<li class="list-group-item"> Qty : 100 </li>
+					<li class="list-group-item"> Percentage: 10%</li>`;
+			} 
+			else if (type === 'customers') {
+				title.innerText = '👨‍💼 Customers Strength';
+				list.innerHTML = `
+					<li class="list-group-item"> Active: 450 </li>
+					<li class="list-group-item"> Suspended : 5</li>
+					<li class="list-group-item"> Deactived: 40 </li>`;
+			} 
+			
+			else if (type === 'nilrefill') {
+				title.innerText = '🚛 Nil-refill List';
+				list.innerHTML = `
+					<li class="list-group-item"> Less than 6 months.</li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 100</li>
+					<li>Percentage: 10% </li>
+					<li>Total: 100</li>
+					</ul>
+					<li class="list-group-item"> Less than 1 Year.</li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 200</li>
+					<li>Percentage : 20%</li>
+					<li>Total: 200</li>
+					</ul>
+					`;
+			} 
+			else if (type === 'kyc') {
+				title.innerText = '⏳ KYC Pending';
+				list.innerHTML = `
+					<li class="list-group-item">PMUY </li>
+					<li class="list-group-item"> Less than 6 months.</li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 100</li>
+					<li>Percentage: 10% </li>
+					<li>Total: 100</li>
+					</ul>
+					<li class="list-group-item"> Less than 1 Year.</li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 200</li>
+					<li>Percentage : 20%</li>
+					<li>Total: 200</li>
+					</ul>
+					`;
+			} 
+			else if (type === 'hose-due') {
+				title.innerText = '🏭 Hose-Due';
+				list.innerHTML = `
+					<li class="list-group-item">PMUY </li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 100</li>
+					<li>Percentage: 10% </li>
+					<li>Total: 100</li>
+					</ul>
+					<li class="list-group-item">Non-PMUY </li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 200</li>
+					<li>Percentage : 20%</li>
+					<li>Total: 200</li>
+					</ul>
+					`;
+			} 
+			else if (type === 'mi-due') {
+				title.innerText = '📈 MI-Due';
+				list.innerHTML = `
+					<li class="list-group-item">PMUY </li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 100</li>
+					<li>Percentage: 10% </li>
+					<li>Total: 100</li>
+					</ul>
+					<li class="list-group-item">Non-PMUY </li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 200</li>
+					<li>Percentage : 20%</li>
+					<li>Total: 200</li>
+					</ul>`;
+			} 
+		
+			else if (type === 'mobileno') {
+				title.innerText = '📈 Mobileno';
+				list.innerHTML = `
+					<li class="list-group-item">PMUY </li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 100</li>
+					<li>Percentage: 10% </li>
+					<li>Total: 100</li>
+					</ul>
+					<li class="list-group-item">Non-PMUY </li>
+					<ul>
+					<li> No of Area: 25</li> 
+					<li>Qty : 200</li>
+					<li>Percentage : 20%</li>
+					<li>Total: 200</li>
+					</ul>`;
+			}
 
     detailsSection.style.display = 'block';
 }

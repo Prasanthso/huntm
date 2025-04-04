@@ -82,6 +82,7 @@ $route['uploadfile'] = 'WebScrapping/upload_excel';
 $route['OpenOrder'] = 'OpenOrder/openorder_data';  
 $route['uploadfile_openorder'] = 'OpenOrder/upload_excel';  
 
+
 //fund balance routes
 $route['fundbalance'] = 'FundBalance/fundbalance_data';
 $route['fundbalance_uploadfile'] = 'FundBalance/upload_excel';
