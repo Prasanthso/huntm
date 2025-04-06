@@ -1,4 +1,3 @@
-/* Base Styles (unchanged) */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -13,7 +12,67 @@ h2 {
     color: #28a745;
 }
 
-/* Table Styling */
+.container4 {
+    width: 100%;
+    /* margin-left: 100%; */
+    margin: 10px 200px;
+    padding: 10px 50px;
+    /* padding-left: 100%; */
+    /* background-color: #fff; */
+    /* margin-left: 60px;
+    padding-left: 50px; */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container5 {
+    width: 100%;
+    /* margin-left: 60px; */
+    /* padding-left: 50px; */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* .parent_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh;  *
+    background-color: #f0f0f0; /* optional background *
+} */
+
+.kyc_container {
+    width: 80%;
+    /* max-width: 1000px; */
+    margin-left: 250px;
+    padding-left: 100px;
+    margin-top: 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* background-color: #fff; */
+}
+
+
+/* Table Styling
+.table_bi_report {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 20px 50px; 
+    /* margin-left: 50px; *
+    padding: 20px;
+} */
+
+.table_area {
+    width: 90%;
+    border-collapse: collapse;
+    /* margin: 20px 50px;  */
+    /* margin-left: 50px; */
+    /* padding: 20px; */
+    /* padding-left: 50px; */
+    table-layout: fixed;
+}
+
 th, td {
     padding: 20px;
     text-align: center;
@@ -67,7 +126,6 @@ tr:hover td {
     font-size: 12px;
     font-weight: 500;
 }
-
 /* Summary Table */
 .summary-table th,
 .summary-table td {
@@ -122,55 +180,174 @@ tr:hover td {
     margin-bottom: 15px;
 }
 
-/* Container Styles with Responsive Adjustments */
-.container4, 
-.container5,
-.kyc_container,
-.customerstrength-summary,
-.kyc-summary,
-.sbc_summary,
-.nerefil-summary,
-.midue-summary,
-.hosedue_summary,
-.customer_area_details,
-.sbc_area_details, 
-.sbc_customer_details,
-.kyc-area-details, 
-.kyc_customer_details,
-.nilrefil_area_details, 
-.nilrefil_customer_details,
-.midue-area-details, 
-.midue_customer_details,
-.hosedue-area-details, 
-.hosedue_customer_details {
-    width: 90%;
-    margin: 20px auto;
+.customerstrength-summary {
+    width: 75%;
+    background-color: white;
     padding: 15px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-left: 300px;
+    /* margin-right: 30px; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    table-layout: fixed;
 }
-
-/* Table Responsive Styles */
-.table_area,
-.customer-table,
-.nilrefil_summary_table,
-.custom-table,
 .summary-table-customer {
     width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-    margin: 10px 0;
+    table-layout: fixed; /* Prevents the table from shrinking or adjusting dynamically */
+    border-collapse: collapse; /* Optional: Keeps borders clean and avoids extra spacing */
+}
+.kyc-summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 350px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.sbc_summary{
+    width: 75%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 300px;
+    /* margin-right: 30px; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+.nerefil-summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 350px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.midue-summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 100px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.hosedue_summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 100px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.area-table{
+    width: 80% !important; /* or max-width */
+    table-layout: fixed; 
+    margin-left: 80px;
+}
+#mainContent {
+    margin-top: 20px;
 }
 
-.area-table {
-    width: 100% !important;
-    table-layout: auto;
-    margin: 10px 0;
-}
-
-/* Back button styling */
 #backButton {
+    display: none;
+}
+
+.nilrefil_summary_table {
+    width: 75%;
+    margin-left: 40px;
+    padding-left: 150px;
+    border-collapse: collapse; 
+}
+
+.customer-table {
+    width: 80%;
+    margin-left: 40px;
+    padding-left: 150px;
+    border-collapse: collapse; 
+}
+
+.custom-table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-bottom: 20px;
+   font-size: 0.9rem;
+    
+}
+.customer_area_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 300px;
+    width: 75%;
+}
+.sbc_area_details, .sbc_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 300px;
+    width: 75%;
+}
+.kyc-area-details, .kyc_customer_details {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 350px;
+    width: 81%;
+}
+.nilrefil_area_details, .nilrefil_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 350px;
+    width: 75%;
+}
+.midue-area-details, .midue_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 100px;
+    width: 75%;
+}
+.hosedue-area-details, .hosedue_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 100px;
+    width: 75%;
+}
+.custom-table th, .custom-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+.custom-table th {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 500;
+}
+.custom-table td {
+    background-color: #f9f9f9;
+}
+.custom-table tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+.custom-table tr:hover td {
+    background-color: #e2f1ff;
+}
+
+ /* Back button styling */
+ #backButton {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -203,7 +380,7 @@ tr:hover td {
 }
 
 .badge-missing {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Red color */
     color: white;
     padding: 5px 10px;
     border-radius: 12px;
@@ -217,143 +394,9 @@ tr:hover td {
 
 .dashboard-back-btn {
     margin-bottom: 15px;
+    margin-left: 250px;
     margin-top: 30px;
 }
-
 .table-responsive {
     overflow-x: auto;
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Media Queries for Responsive Design */
-@media (max-width: 1200px) {
-    .container4, 
-    .container5,
-    .kyc_container,
-    .customerstrength-summary,
-    .kyc-summary,
-    .sbc_summary,
-    .nerefil-summary,
-    .midue-summary,
-    .hosedue_summary,
-    .customer_area_details,
-    .sbc_area_details, 
-    .sbc_customer_details,
-    .kyc-area-details, 
-    .kyc_customer_details,
-    .nilrefil_area_details, 
-    .nilrefil_customer_details,
-    .midue-area-details, 
-    .midue_customer_details,
-    .hosedue-area-details, 
-    .hosedue_customer_details {
-        width: 95%;
-        margin: 15px auto;
-        padding: 10px;
-    }
-    
-    th, td {
-        padding: 12px;
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 992px) {
-    h2 {
-        font-size: 1.5rem;
-        margin: 30px 0;
-    }
-    
-    .dashboard-back-btn {
-        margin-left: 20px;
-    }
-    
-    th, td {
-        padding: 10px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 768px) {
-    .container4, 
-    .container5,
-    .kyc_container,
-    .customerstrength-summary,
-    .kyc-summary,
-    .sbc_summary,
-    .nerefil-summary,
-    .midue-summary,
-    .hosedue_summary,
-    .customer_area_details,
-    .sbc_area_details, 
-    .sbc_customer_details,
-    .kyc-area-details, 
-    .kyc_customer_details,
-    .nilrefil_area_details, 
-    .nilrefil_customer_details,
-    .midue-area-details, 
-    .midue_customer_details,
-    .hosedue-area-details, 
-    .hosedue_customer_details {
-        width: 98%;
-        margin: 10px auto;
-        padding: 8px;
-    }
-    
-    h2 {
-        font-size: 1.3rem;
-        margin: 20px 0;
-    }
-    
-    th, td {
-        padding: 8px;
-        font-size: 11px;
-    }
-    
-    .badge, 
-    .badge-pmuy, 
-    .badge-non-pmuy, 
-    .badge-commercial, 
-    .badge-due, 
-    .badge-missing {
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-}
-
-@media (max-width: 576px) {
-    .table-responsive {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .table_area,
-    .customer-table,
-    .nilrefil_summary_table,
-    .custom-table,
-    .summary-table-customer,
-    .area-table {
-        display: block;
-        width: 100%;
-    }
-    
-    th, td {
-        padding: 6px;
-        font-size: 10px;
-        white-space: nowrap;
-    }
-    
-    h2 {
-        font-size: 1.2rem;
-        margin: 15px 0;
-    }
-    
-    #backButton {
-        width: 40px;
-        height: 40px;
-        font-size: 0.8rem;
-    }
 }

@@ -121,7 +121,7 @@
         <div class="col">
             <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
                 <h6>📦 Fund Balance</h6>
-                <p class="fs-5">Rs:</p>
+                <p class="fs-5">Rs:760,461.17</p>
             </div>
         </div>
         <div class="col">
@@ -2556,7 +2556,7 @@
                     <thead>
                         <tr>
                             <th>Area Name</th>
-                            <th>Consumer ID</th>
+                            <th>Consumer Number</th>
                             <th>Consumer Name</th>
                             <th>Phone Number</th>
                             <th>Scheme</th>
@@ -2675,7 +2675,7 @@
                         tableBody.append(`
                             <tr>
                                 <td>${customer.area_name || 'N/A'}</td>
-                                <td>${customer.consumer_id || 'N/A'}</td>
+                                <td>${customer.consumer_number || 'N/A'}</td>
                                 <td>${customer.consumer_name || 'N/A'}</td>
                                 <td>${customer.phone_number || 'N/A'}</td>
                                 <td>

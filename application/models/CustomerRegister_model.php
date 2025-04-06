@@ -100,7 +100,7 @@ class CustomerRegister_model extends CI_Model {
     
     //Hose Due Data
     public function get_hose_due_data() {
-        $this->db->select("area_name, consumer_id, consumer_name, phone_number, scheme_selected,  tube_change_date,tube_change_due_date");
+        $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected,  tube_change_date,tube_change_due_date");
         $this->db->where('consumer_category', 'domestic'); 
         $query = $this->db->get($this->table);
     
