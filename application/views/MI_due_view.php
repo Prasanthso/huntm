@@ -28,18 +28,14 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         .summary-section {
-            /* position: sticky; */
             top: 0;
             background-color: #fff;
-            /* z-index: 1000; */
             padding: 20px 0;
             border-bottom: 2px solid #ddd;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .content-section {
             margin-top: 100px;
-            /* max-height: calc(100vh - 300px);
-            overflow-y: auto; */
         }
         .custom-table {
             width: 90%;
@@ -156,7 +152,7 @@
         <!-- Scrollable Content Section -->
         <div class="content-section">
             <!-- Area Breakdown Table -->
-            <div id="areaBreakdownView">
+            <div id="areaBreakdownView" style="display: none;">
                 <h4 class="view-title" id="areaBreakdownTitle"></h4>
                 <table class="custom-table">
                     <thead>
@@ -177,17 +173,17 @@
             </div>
 
             <!-- Customer Details Table -->
-            <div id="customerDetailsView">
-                <a class="back-button" id="backToAreaView">&larr; Back to Area Breakdown</a>
+            <div id="customerDetailsView" style="display: none;">
+                <a class="back-button" id="backToAreaView">← Back to Area Breakdown</a>
                 <h4 class="view-title" id="customerDetailsTitle"></h4>
                 <table class="custom-table">
                     <thead>
                         <tr>
                             <th>Area Name</th>
-                            <th>Consumer ID</th>
+                            <th>Consumer Number</th>
                             <th>Consumer Name</th>
+                            <th>Phone Number</th>
                             <th>Scheme</th>
-                            <th>Inspection Date</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -290,7 +286,6 @@
                 $('#areaBreakdownView').show();
                 $('#customerDetailsView').hide();
                 
-                // Scroll to the area breakdown view
                 $('.content-section').scrollTop(0);
             }
 
@@ -344,7 +339,6 @@
                 $('#areaBreakdownView').hide();
                 $('#customerDetailsView').show();
                 
-                // Scroll to the top of the content section
                 $('.content-section').scrollTop(0);
             }
 
@@ -360,23 +354,20 @@
                     tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
                 } else {
                     pageRows.forEach(customer => {
-                        const inspectionDate = customer.mandatory_inspection_date ? 
-                            new Date(customer.mandatory_inspection_date).toLocaleDateString() : 'Not Scheduled';
-                        
                         let badgeClass = 'badge-due';
                         let statusText = 'Due';
                         
                         tableBody.append(`
                             <tr>
                                 <td>${customer.area_name || 'N/A'}</td>
-                                <td>${customer.consumer_id || 'N/A'}</td>
+                                <td>${customer.consumer_number || 'N/A'}</td>
                                 <td>${customer.consumer_name || 'N/A'}</td>
+                                <td>${customer.phone_number || 'N/A'}</td>
                                 <td>
                                     <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
                                         ${customer.scheme_selected || 'N/A'}
                                     </span>
                                 </td>
-                                <td>${inspectionDate}</td>
                                 <td><span class="badge ${badgeClass}">${statusText}</span></td>
                             </tr>
                         `);

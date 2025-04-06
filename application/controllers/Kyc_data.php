@@ -21,7 +21,9 @@ class Kyc_data extends CI_Controller {
         if (empty($data['kycdata'])) {
             $data['kycdata'] = [];
         }
-        $this->load->view('kyc_data_view', $data);
+        // $this->load->view('kyc_data_view', $data);
+        $data['method'] = 'kyc_data';
+        $this->load->view('website_dashboard', $data);
     }
 }
 ?>

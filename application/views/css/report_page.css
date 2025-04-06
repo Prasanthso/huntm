@@ -1,0 +1,359 @@
+/* Base Styles (unchanged) */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    margin: 40px 0;
+    color: #28a745;
+}
+
+/* Table Styling */
+th, td {
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+th {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 500;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+
+tr:hover td {
+    background-color: #e2f1ff;
+}
+
+/* Badge styling */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.badge-pmuy {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-non-pmuy {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-commercial {
+    background-color: #6c757d;
+    color: white;
+    padding: 5px 5px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Summary Table */
+.summary-table th,
+.summary-table td {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+}
+
+.summary-table th {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+.summary-table td {
+    text-align: center;
+}
+
+/* No data message */
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+.pagination {
+    justify-content: center;
+}
+
+.page-link {
+    cursor: pointer;
+}
+
+.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.clickable:hover {
+    color: #0056b3;
+}
+
+.view-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #28a745;
+}
+
+.summary-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+/* Container Styles with Responsive Adjustments */
+.container4, 
+.container5,
+.kyc_container,
+.customerstrength-summary,
+.kyc-summary,
+.sbc_summary,
+.nerefil-summary,
+.midue-summary,
+.hosedue_summary,
+.customer_area_details,
+.sbc_area_details, 
+.sbc_customer_details,
+.kyc-area-details, 
+.kyc_customer_details,
+.nilrefil_area_details, 
+.nilrefil_customer_details,
+.midue-area-details, 
+.midue_customer_details,
+.hosedue-area-details, 
+.hosedue_customer_details {
+    width: 90%;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Responsive Styles */
+.table_area,
+.customer-table,
+.nilrefil_summary_table,
+.custom-table,
+.summary-table-customer {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    margin: 10px 0;
+}
+
+.area-table {
+    width: 100% !important;
+    table-layout: auto;
+    margin: 10px 0;
+}
+
+/* Back button styling */
+#backButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 101;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#backButton:hover {
+    background-color: #2980b9;
+}
+
+.badge-due {
+    background-color: #ffc107;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-missing {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-back-btn {
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1200px) {
+    .container4, 
+    .container5,
+    .kyc_container,
+    .customerstrength-summary,
+    .kyc-summary,
+    .sbc_summary,
+    .nerefil-summary,
+    .midue-summary,
+    .hosedue_summary,
+    .customer_area_details,
+    .sbc_area_details, 
+    .sbc_customer_details,
+    .kyc-area-details, 
+    .kyc_customer_details,
+    .nilrefil_area_details, 
+    .nilrefil_customer_details,
+    .midue-area-details, 
+    .midue_customer_details,
+    .hosedue-area-details, 
+    .hosedue_customer_details {
+        width: 95%;
+        margin: 15px auto;
+        padding: 10px;
+    }
+    
+    th, td {
+        padding: 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 992px) {
+    h2 {
+        font-size: 1.5rem;
+        margin: 30px 0;
+    }
+    
+    .dashboard-back-btn {
+        margin-left: 20px;
+    }
+    
+    th, td {
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container4, 
+    .container5,
+    .kyc_container,
+    .customerstrength-summary,
+    .kyc-summary,
+    .sbc_summary,
+    .nerefil-summary,
+    .midue-summary,
+    .hosedue_summary,
+    .customer_area_details,
+    .sbc_area_details, 
+    .sbc_customer_details,
+    .kyc-area-details, 
+    .kyc_customer_details,
+    .nilrefil_area_details, 
+    .nilrefil_customer_details,
+    .midue-area-details, 
+    .midue_customer_details,
+    .hosedue-area-details, 
+    .hosedue_customer_details {
+        width: 98%;
+        margin: 10px auto;
+        padding: 8px;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+        margin: 20px 0;
+    }
+    
+    th, td {
+        padding: 8px;
+        font-size: 11px;
+    }
+    
+    .badge, 
+    .badge-pmuy, 
+    .badge-non-pmuy, 
+    .badge-commercial, 
+    .badge-due, 
+    .badge-missing {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table_area,
+    .customer-table,
+    .nilrefil_summary_table,
+    .custom-table,
+    .summary-table-customer,
+    .area-table {
+        display: block;
+        width: 100%;
+    }
+    
+    th, td {
+        padding: 6px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+        margin: 15px 0;
+    }
+    
+    #backButton {
+        width: 40px;
+        height: 40px;
+        font-size: 0.8rem;
+    }
+}

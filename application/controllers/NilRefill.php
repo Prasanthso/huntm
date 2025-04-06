@@ -48,6 +48,8 @@ class NilRefill extends CI_Controller {
         if (empty($data['nillrefill'])) {
             $data['nillrefill'] = [];
         }
-        $this->load->view('nil_refill_view', $data);
+        $data['method'] = 'nillrefil';
+        $this->load->view('website_dashboard', $data);
+        // $this->load->view('nil_refill_view', $data);
     }
 }

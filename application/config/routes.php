@@ -102,8 +102,20 @@ $route['fundbalance_data'] = 'FundBalance/display_fundbalance';
 //Display customer strength
 $route['customer_strength'] = 'customer_strength/customer_strength_data';
 
+//Display SBC Data
+$route['SBC_data'] = 'SBC_data/sbc_data_report';
+
 //Display Nillfill data
 $route['nillfill'] = 'NilRefill/nill_fill_data';
 
 //Display KYC data
 $route['kycdata'] = 'Kyc_data/kyc_data';
+
+//Display MI Due data
+$route['midue'] = 'MI_due_data/midue_data';
+
+//Display hose due data
+$route['hosedue'] = 'Hosedue_data/hose_due_data';
+
+// Display Phone number not avaliable data
+$route['phonenumber'] = 'Phonenumber/phonenumber_data';

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBC Data Report</title>
+    <title>Phone Number Missing Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <style>
-        body {
+       body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
@@ -78,17 +78,17 @@
             font-size: 12px;
             font-weight: 500;
         }
-        .badge-domestic {
-            background-color: #17a2b8;
+        .badge-missing {
+            background-color: #dc3545;
             color: white;
             padding: 5px 10px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: 500;
         }
-        .badge-commercial {
-            background-color: #6c757d;
-            color: white;
+        .badge-due {
+            background-color: #ffc107;
+            color: black;
             padding: 5px 10px;
             border-radius: 12px;
             font-size: 12px;
@@ -127,14 +127,14 @@
 </head>
 <body>
     <div class="container">
-        <h2>SBC Data Report</h2>
+        <h2>Phone Number Missing Data</h2>
         
         <!-- Fixed Summary Section -->
         <div class="summary-section">
             <table class="custom-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>SBC</th>
+                        <th>Phone Missing</th>
                         <th>PMUY</th>
                         <th>Non PMUY</th>
                         <th>Total</th>
@@ -166,7 +166,7 @@
                     <thead>
                         <tr>
                             <th>Area Name</th>
-                            <th>Connection Count</th>
+                            <th>Missing Phone Count</th>
                         </tr>
                     </thead>
                     <tbody id="areaBreakdownBody"></tbody>
@@ -192,7 +192,6 @@
                             <th>Consumer Name</th>
                             <th>Phone Number</th>
                             <th>Scheme</th>
-                            <th>Consumer Type</th>
                         </tr>
                     </thead>
                     <tbody id="customerTableBody"></tbody>
@@ -219,7 +218,7 @@
             const recordsPerPage = 10;
             
             // Data variables
-            let allCustomers = <?= json_encode($sbc_data ?? []) ?>;
+            let allCustomers = <?= json_encode($phone_missing_data ?? []) ?>;
             let filteredCustomers = [];
             let areaBreakdownData = [];
             let currentScheme = null;
@@ -239,16 +238,7 @@
             }
 
             function processData() {
-                // No special processing needed for SBC data
-                // Just ensure all records are properly formatted
-                allCustomers.forEach(customer => {
-                    // Ensure scheme is properly set (PMUY/Non PMUY)
-                    if (customer.scheme_selected === 'Ujjwala') {
-                        customer.scheme_selected = 'PMUY';
-                    } else if (!customer.scheme_selected || customer.scheme_selected !== 'PMUY') {
-                        customer.scheme_selected = 'Non PMUY';
-                    }
-                });
+                // No additional processing needed for phone missing data
             }
 
             function showAreaBreakdown(scheme) {
@@ -259,10 +249,13 @@
                     if (scheme === 'PMUY') {
                         schemeMatch = customer.scheme_selected === 'PMUY';
                     } else if (scheme === 'Non PMUY') {
-                        schemeMatch = customer.scheme_selected !== 'PMUY';
+                        schemeMatch = customer.scheme_selected !== 'PMUY' && customer.scheme_selected !== '';
+                    } else if (scheme === 'Total') {
+                        schemeMatch = true; // Show all records for Total
                     }
                     
-                    return schemeMatch;
+                    // Only include customers with missing phone numbers
+                    return schemeMatch && (!customer.phone_number || customer.phone_number.trim() === '');
                 });
                 
                 const areaStats = {};
@@ -279,7 +272,7 @@
                     total: stats.total
                 })).sort((a, b) => b.total - a.total);
                 
-                $('#areaBreakdownTitle').text(`SBC Connections (${scheme}) by Area`);
+                $('#areaBreakdownTitle').text(`Customers with Missing Phone (${scheme}) by Area`);
                 
                 currentAreaPage = 1;
                 updateAreaBreakdownTable();
@@ -325,15 +318,16 @@
                     if (currentScheme === 'PMUY') {
                         schemeMatch = customer.scheme_selected === 'PMUY';
                     } else if (currentScheme === 'Non PMUY') {
-                        schemeMatch = customer.scheme_selected !== 'PMUY';
+                        schemeMatch = customer.scheme_selected !== 'PMUY' && customer.scheme_selected !== '';
                     }
                     
-                    return areaMatch && schemeMatch;
+                    // Only include customers with missing phone numbers
+                    return areaMatch && schemeMatch && (!customer.phone_number || customer.phone_number.trim() === '');
                 });
                 
                 currentPage = 1;
                 
-                $('#customerDetailsTitle').text(`SBC Connections (${currentScheme}) in ${area}`);
+                $('#customerDetailsTitle').text(`Customers with Missing Phone (${currentScheme}) in ${area}`);
                 
                 updateCustomerTable();
                 
@@ -352,26 +346,21 @@
                 tableBody.empty();
                 
                 if (pageRows.length === 0) {
-                    tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
+                    tableBody.html('<tr><td colspan="5" class="no-data">No data available</td></tr>');
                 } else {
                     pageRows.forEach(customer => {
-                        const consumerType = customer.consumer_type || 'domestic';
-                        const typeBadgeClass = consumerType === 'domestic' ? 'badge-domestic' : 'badge-commercial';
+                        let schemeClass = customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
+                        let schemeText = customer.scheme_selected || 'N/A';
                         
                         tableBody.append(`
                             <tr>
                                 <td>${customer.area_name || 'N/A'}</td>
                                 <td>${customer.consumer_number || 'N/A'}</td>
                                 <td>${customer.consumer_name || 'N/A'}</td>
-                                <td>${customer.phone_number || 'N/A'}</td>
+                                <td><span class="badge badge-missing">Missing</span></td>
                                 <td>
-                                    <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                        ${customer.scheme_selected || 'N/A'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge ${typeBadgeClass}">
-                                        ${consumerType}
+                                    <span class="badge ${schemeClass}">
+                                        ${schemeText}
                                     </span>
                                 </td>
                             </tr>

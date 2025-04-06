@@ -27,6 +27,8 @@ class MI_due_data extends CI_Controller {
         if (empty($data['mi_due'])) {
             $data['mi_due'] = [];
         }
-        $this->load->view('MI_due_view', $data);
+        // $this->load->view('MI_due_view', $data);
+        $data['method'] = 'midue';
+        $this->load->view('website_dashboard', $data);
     }
 }
