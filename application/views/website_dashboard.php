@@ -713,7 +713,6 @@
                         <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
                             <li><a class="dropdown-item" href="<?php echo base_url('invoiceorder'); ?>">Invoice Order Service Area </a></li>
                             <li><a class="dropdown-item" href="<?php echo base_url('open-process-order'); ?>">Process Order Service Area</a></li>
-                            <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Total</a></li>
                         </ul>  
                     </div>
                 </div>
@@ -732,7 +731,7 @@
                         id="websiteDropdown" 
                         data-bs-toggle="dropdown" 
                         aria-expanded="false">
-                            Website
+                            User Website
                         </a>
                         <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
                     <li><a class="dropdown-item" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
@@ -795,23 +794,9 @@
             <div class="card text-center dashboard-card card-8"  onclick="window.location.href='midue'">
                 <h6>📈 MI Due</h6>
                 <p class="fs-5">$8,000</p>
-            <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
-			<h6 class="fs-6 fs-md-5 fs-lg-4">📝 Nil Refill</h6>
-                <p>85</p>
             </div>
         </div>
-        <div class="col">
-            <div class="card text-center dashboard-card card-7"  onclick="showDetails('kyc')">
-			<h6 class="fs-6 fs-md-5 fs-lg-4">🔄  KYC</h6>
-                <p>20</p>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
-			<h6 class="fs-6 fs-md-5 fs-lg-4">📈 MI Due</h6>
-                <p>8,000</p>
-            </div>
-        </div>
+            
 
         <div class="col">
             <div class="card text-center dashboard-card card-9"  onclick="window.location.href='hosedue'">
