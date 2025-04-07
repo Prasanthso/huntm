@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -10,7 +10,649 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/css/report_page.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/css/dashboard.css">
     <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+			left:0;
+        }
 
+        h1 {
+            text-align: center; 
+            margin: 20px 250px; 
+            padding-left: 10px;
+        }
+
+        h3{
+            padding: 10px 20px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2C3E50;
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        
+        .huntmlogo {
+            width: 60px;
+            height: 60px;
+            margin-right: 10px;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        a:hover{
+            color: black;
+        }
+        .navbar-brand {
+            color: white;
+            font-size: 25px;
+            margin: 0;
+        }
+        
+        .main-container {
+            display: flex;
+            margin-top: 80px;
+        }
+        
+        #sidebar {
+            width: 250px;
+            height: calc(100vh - 80px);
+            background-color: #2C3E50;
+            padding-top: 20px;
+            position: fixed;
+            top: 80px;
+            left: 0;
+			
+        }
+        
+        .list-group-item {
+            border: none;
+            background-color: #2C3E50;
+            color: white;
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
+        
+        .list-group-item a:hover {
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+        .list-group-item:hover {
+            background-color: #f1f1f1; 
+            color: black; 
+            font-weight: bold;
+        }
+        
+        .form-check{
+            padding-top: 10px;
+            margin-left: 10px;
+        }
+
+        .form-check a{
+            color: white;
+        }
+
+        /* .form-check:hover {
+            background-color: #f1f1f1;
+            color: black;
+        } */
+        
+        .dropdown-toggle {
+            color: white;
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
+
+        .dropdown-toggle a:hover {
+            /* background-color: white;  */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* .dropdown-menu {
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            width: 100% !important;
+        } */
+
+        .dropdown-item {
+            color: black; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f1f1f1; 
+            color: #2C3E50;
+            font-weight: bold;
+        }
+        .dropdown-item {
+            display: block;
+            width: 100%; 
+            padding: 10px 15px;
+            transition: background-color 0.3s ease-in-out;
+            white-space: nowrap; 
+        }
+       
+        .navbar .nav-item .nav-link {
+            color: black; 
+            padding: 10px 15px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .navbar .nav-item .nav-link:hover,
+        .navbar .nav-item .nav-link:focus {
+            background: #007bff; 
+            color: #fff;
+            border-radius: 5px;
+        }
+
+    
+        .dropdown-menu {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            color: #333;
+            padding: 10px 15px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .dropdown-item:hover {
+            background: #007bff;
+            color: #fff;
+        }
+
+
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        .dropdown-item a:hover {
+            background-color: rgba(200, 200, 200, 0.4);
+            color: black;
+        }
+
+        .dropdown-toggle a:hover {
+            background-color: white; 
+            color: black; 
+            font-weight: bold; 
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
+
+        .dropdown:hover {
+            background-color: rgba(200, 200, 200, 0.4);
+            color: black;
+            font-weight: bold;
+        }
+
+        .backlogDropdown:hover{
+            color: black; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .suggest-form {
+            margin-left: 430px;
+            margin-top: 50px;
+            width: 70%;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-section { 
+            position: relative; 
+            width: 100%; 
+            height: 170px; 
+            margin-bottom: 15px; 
+        } 
+
+        .image-section img { 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 8px; 
+            object-fit: cover; 
+        } 
+
+        .image-text { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: white; 
+            font-size: 20px; 
+            font-weight: bold; 
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); 
+        } 
+
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-size: 14px; 
+        } 
+
+        textarea { 
+            height: 80px; 
+            resize: none; 
+        } 
+
+        .buttons { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 10px; 
+        } 
+
+        .recording-btn { 
+            background: green; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            transition: 0.3s; 
+            margin-top: 10px;
+        } 
+
+        .recording-btn1 { 
+            background: red; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            transition: 0.3s; 
+            margin-top: 10px;
+        } 
+
+        .submit-btn { 
+            width: 100%; 
+            background: #28a745; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin-top: 15px; 
+            transition: 0.3s; 
+        } 
+
+        .submit-btn:hover { 
+            background: #218838; 
+        } 
+
+        audio { 
+            display: block; 
+            margin-top: 10px; 
+        }
+
+        #timer {
+            color: red;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .back-btn {
+        background: none;
+        border: none;
+        color: black;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .back-btn i {
+        margin-right: 5px;
+        font-size: 15px;
+    }
+
+    .form-container {
+        width: 100%;
+        background: white;
+        margin-left: 450px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+    }
+
+    
+    .form-container:hover {
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .form-control:focus {
+        border-color: #6a11cb;
+        box-shadow: 0px 0px 5px rgba(106, 17, 203, 0.5);
+    }
+
+    .input-group-text {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: black;
+    }
+
+    .btn-primary {
+        background: #6a11cb;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: #2575fc;
+    }
+
+    .text-danger {
+        font-size: 0.875rem;
+        margin-top: 5px;
+        padding-left: 50px;
+    }
+
+    .container {
+        width: 100%;
+        background: white;
+        /* padding: 20px;
+        border-radius: 10px; */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-left: 300px;
+        margin-top: 50px;
+    }
+
+    .container1 {
+        width: 100%;
+        background: white;
+        /* padding: 20px;
+        border-radius: 10px; */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+        margin-left: 370px;
+        margin-top: 50px;
+    }
+    
+    h2 {
+        text-align: center;
+        color: #333;
+        font-weight: bold;
+    }
+     table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    } 
+    th, td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: center;
+        vertical-align: middle;
+    }
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .password-hidden {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #555;
+        }
+        .truncate-url {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .btn-copy {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
+            font-size: 14px;
+        }
+        .btn-copy:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+            top: 100%;
+            left: 0;
+            margin-top: -1px;
+        }
+
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+
+        .list-group-item.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa; 
+            color: black; 
+        }
+
+        .fileupload{
+            color: white;
+            background-color: #2C3E50; 
+        }
+
+        .fileupload:hover{
+            background-color: white; 
+            color: black; 
+            font-weight: bold; 
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
+	/* for dashboard styles */
+         .content {
+            margin-left: 260px; /* Push content to the right */
+            padding: 20px;
+        }
+		/* card{width:100%;} */
+		.dashboard-card {
+		
+            padding: 20px;
+			width: 200px;
+			height: 100px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .card-1 { background:rgb(200, 208, 216); color: #333; }
+        .card-2 { background: #e3f2fd; color: #01579b; }
+        .card-3 { background: #e8f5e9; color: #1b5e20; }
+        .card-4 { background: #fff3e0; color: #e65100; }
+        .card-5 { background: #fce4ec; color: #880e4f; }
+        .card-6 { background: #ede7f6; color: #4527a0; }
+        .card-7 { background: #ffebee; color: #b71c1c; }
+        .card-8 { background: #e0f7fa; color: #006064; }
+        .card-9 { background: #fff8e1; color: #ff8f00; }
+        .card-10 { background: #f1f8e9; color: #33691e; }
+        .card-11 { background: #ede7f6; color: #4a148c; }
+        .card-12 { background: #d7ccc8; color: #5d4037; }
+        .card-13 { background: #fbe9e7; color: #bf360c; }
+        .card-14 { background: #d1c4e9; color: #311b92; }
+        .card-15 { background:rgb(176, 229, 162); color: #283593; }
+        .card-16 { background: #b2dfdb; color: #004d40; }
+       
+        /* Responsive Styles */
+        /* Hide hamburger menu on large screens */
+        .hamburger {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute; 
+        right: 20px;
+        top: 50%; 
+        transform: translateY(-50%); 
+    }
+
+        /* Show hamburger menu on small screens */
+        @media (max-width: 768px) {
+
+			/* .table{
+				width: 50%;
+			
+			}  */
+			/* .table th{font-size: 12px;width:10%;} */
+			 .btnautologin {
+			font-size: 10px;
+			padding: 8px;
+		} 
+			body{margin:0;}
+            .hamburger {
+                display: block;
+            }
+
+            #sidebar{
+				top: 70px;
+                left: -250px;
+                width: 250px;
+                height: 100%;
+                z-index: 2000;
+                transition: left 0.3s ease-in-out;
+            }
+			.content{ margin-left: 0px;}
+			.dashboard-card{width: 100px; height: 110px;}
+            #sidebar.active {
+                left: 0;
+            }
+
+            .main-container {
+                margin-top: 60px;
+            }
+
+            .suggest-form {
+                margin-left: 30px;
+                margin-right: 20px;
+				width: calc(100% - 40px);
+                padding: 15px;
+            }
+
+            .form-container{
+                margin : 40px;
+				padding :10px;
+                width: calc(100% - 30px);
+            }
+
+            .container{
+                margin-left : 20px;
+				margin-right : -200px;
+				/* padding: 20px; */
+                width: calc(100% - 40px);
+				
+			}
+            header {
+                padding: 10px;
+            }
+
+            h1 {
+                margin: 20px 0;
+                text-align: center;
+            }
+
+			p{margin: top 2px;font-size:14px;}
+		
+        }
+
+		@media (max-width: 576px) {
+		.huntmlogo {
+			width: 50px;
+			height: 50px;
+		}
+
+		h1 {
+			font-size: 20px;
+			margin: 5px;
+		}
+
+		.list-group-item {
+			font-size: 14px;
+		}
+
+		.dropdown-item {
+			font-size: 14px;
+		}
+
+		.btn {
+			font-size: 14px;
+			padding: 8px;
+		}
+
+		input, select, textarea {
+			font-size: 14px;
+			padding: 8px;
+		}
+
+		.image-text {
+			font-size: 16px;
+		}
+
+		.submit-btn {
+			font-size: 14px;
+		}
+	
+
+	}
+            .image-section {
+                height: 120px;
+            }
+
+            .image-text {
+                font-size: 16px;
+            }
+        
     </style>
 </head>
 <body>
@@ -103,19 +745,18 @@
         
         <main>
             <?php if (isset($method)) { ?>
-				
-                <!-- Dashboard Section -->
+				<!-- Dashboard Section -->
                 <?php if ($method == 'dashboard') { ?>
 				<!-- <h1>Welcome to Dashboard</h1> -->
-				 
-<div class="content">
-<div class="container-sm mt-3">
-<div class="row row-cols-3 g-4 mr-0 pr-0">
+					
+	<div class="content">
+	<div class="container-sm mt-3">
+	<div class="row row-cols-3 g-4 mr-0 pr-0">
     
         <div class="col-md-4">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
-                <h6>👥 Backlog</h6>
-                <p class="fs-5">Areas:150</p>
+			<h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
+			<p>Areas: 150</p>
             </div>
         </div>
         <div class="col">
@@ -138,12 +779,6 @@
             </div>
         </div>
 
-        <!-- <div class="col">
-            <div class="card text-center dashboard-card card-5"  onclick="showDetails('employees')">
-                <h6>👨‍💼 Employees</h6>
-                <p class="fs-5">30</p>
-            </div>
-        </div> -->
         <div class="col">
         <div class="card text-center dashboard-card card-3" onclick="window.location.href='nillfill'">
                 <h6>📝 Nil Refill</h6>
@@ -160,6 +795,21 @@
             <div class="card text-center dashboard-card card-8"  onclick="window.location.href='midue'">
                 <h6>📈 MI Due</h6>
                 <p class="fs-5">$8,000</p>
+            <div class="card text-center dashboard-card card-6" onclick="showDetails('nilrefill')">
+			<h6 class="fs-6 fs-md-5 fs-lg-4">📝 Nil Refill</h6>
+                <p>85</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-7"  onclick="showDetails('kyc')">
+			<h6 class="fs-6 fs-md-5 fs-lg-4">🔄  KYC</h6>
+                <p>20</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center dashboard-card card-8"  onclick="showDetails('mi-due')">
+			<h6 class="fs-6 fs-md-5 fs-lg-4">📈 MI Due</h6>
+                <p>8,000</p>
             </div>
         </div>
 
@@ -187,31 +837,8 @@
                 <p class="fs-5">25</p>
             </div>
         </div>
+      
 
-        <!-- <div class="col-3">
-            <div class="card text-center dashboard-card card-13"  onclick="showDetails('shipped')">
-                <h6>📦 Shipped</h6>
-                <p class="fs-5">180</p>
-            </div>
-        </div> -
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-14" onclick="showDetails('canceled')">
-                <h6>❌ Canceled</h6>
-                <p class="fs-5">15</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-15" onclick="showDetails('reviews')">
-                <h6>⭐ Reviews</h6>
-                <p class="fs-5">300</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-16" onclick="showDetails('support')">
-                <h6>💬 Support Requests</h6>
-                <p class="fs-5">40</p>
-            </div>
-        </div> -->
     </div>
 	<!-- 🔽 Details Section Below the Cards -->
     <div id="details" class="mt-4" style="display: none;">
@@ -282,8 +909,8 @@
 
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
-                    <div class="container1">
-                        <div class="card shadow-lg p-4">
+                    <div class="container">
+                        <div class="card shadow p-4">
                             <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
                             
                             <?php if ($this->session->flashdata('success')): ?>
@@ -591,7 +1218,7 @@
                     <!-- Display and store website -->
                 <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
-                        <h2>Stored Websites</h2>
+                        <h2 class="text-center">Stored Websites</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -600,14 +1227,17 @@
                         <?php if ($this->session->flashdata('error')): ?>
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
-
+						<!-- <div class="d-flex justify-content-center"> -->
+						<div class="table-responsive">
                         <table class="table">
+						<thead class="table-primary">
                             <tr>
                                 <th>Website URL</th>
                                 <th>Username</th>
                                 <th>Password</th>
                                 <th>Login</th>
                             </tr>
+						</thead>
                             <?php foreach ($websites as $website): ?>
                                 <tr>
                                     <td>
@@ -621,12 +1251,14 @@
                                             <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
                                             <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
                                             <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                            <button type="submit">Auto-Login</button>
+                                            <button class="btnautologin" type="submit">Auto-Login</button>
                                         </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
+						</div>
+						<!-- </div> -->
                     </div>
                     
                     <!-- Display customer strength -->
@@ -2656,7 +3288,6 @@
                 $('#customerDetailsView').show();
                 $('html, body').animate({scrollTop: $('#customerDetailsView').offset().top - 150}, 200);
             });
-
             function updateCustomerTable(customers) {
                 const start = (currentPage - 1) * recordsPerPage;
                 const end = start + recordsPerPage;
