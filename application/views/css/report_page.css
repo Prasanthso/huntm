@@ -1,0 +1,402 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    margin: 40px 0;
+    color: #28a745;
+}
+
+.container4 {
+    width: 100%;
+    /* margin-left: 100%; */
+    margin: 10px 200px;
+    padding: 10px 50px;
+    /* padding-left: 100%; */
+    /* background-color: #fff; */
+    /* margin-left: 60px;
+    padding-left: 50px; */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container5 {
+    width: 100%;
+    /* margin-left: 60px; */
+    /* padding-left: 50px; */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* .parent_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh;  *
+    background-color: #f0f0f0; /* optional background *
+} */
+
+.kyc_container {
+    width: 80%;
+    /* max-width: 1000px; */
+    margin-left: 250px;
+    padding-left: 100px;
+    margin-top: 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* background-color: #fff; */
+}
+
+
+/* Table Styling
+.table_bi_report {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 20px 50px; 
+    /* margin-left: 50px; *
+    padding: 20px;
+} */
+
+.table_area {
+    width: 90%;
+    border-collapse: collapse;
+    /* margin: 20px 50px;  */
+    /* margin-left: 50px; */
+    /* padding: 20px; */
+    /* padding-left: 50px; */
+    table-layout: fixed;
+}
+
+th, td {
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+th {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 500;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+
+tr:hover td {
+    background-color: #e2f1ff;
+}
+
+/* Badge styling */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.badge-pmuy {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-non-pmuy {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-commercial {
+    background-color: #6c757d;
+    color: white;
+    padding: 5px 5px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+/* Summary Table */
+.summary-table th,
+.summary-table td {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+}
+
+.summary-table th {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+.summary-table td {
+    text-align: center;
+}
+
+/* No data message */
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+.pagination {
+    justify-content: center;
+}
+
+.page-link {
+    cursor: pointer;
+}
+
+.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.clickable:hover {
+    color: #0056b3;
+}
+
+.view-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #28a745;
+}
+
+.summary-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.customerstrength-summary {
+    width: 75%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 300px;
+    /* margin-right: 30px; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+.summary-table-customer {
+    width: 100%;
+    table-layout: fixed; /* Prevents the table from shrinking or adjusting dynamically */
+    border-collapse: collapse; /* Optional: Keeps borders clean and avoids extra spacing */
+}
+.kyc-summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 350px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.sbc_summary{
+    width: 75%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 300px;
+    /* margin-right: 30px; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+.nerefil-summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 350px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.midue-summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 100px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.hosedue_summary{
+    width: 80%;
+    background-color: white;
+    padding: 15px;
+    margin-left: 100px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.area-table{
+    width: 80% !important; /* or max-width */
+    table-layout: fixed; 
+    margin-left: 80px;
+}
+#mainContent {
+    margin-top: 20px;
+}
+
+#backButton {
+    display: none;
+}
+
+.nilrefil_summary_table {
+    width: 75%;
+    margin-left: 40px;
+    padding-left: 150px;
+    border-collapse: collapse; 
+}
+
+.customer-table {
+    width: 80%;
+    margin-left: 40px;
+    padding-left: 150px;
+    border-collapse: collapse; 
+}
+
+.custom-table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-bottom: 20px;
+   font-size: 0.9rem;
+    
+}
+.customer_area_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 300px;
+    width: 75%;
+}
+.sbc_area_details, .sbc_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 300px;
+    width: 75%;
+}
+.kyc-area-details, .kyc_customer_details {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 350px;
+    width: 81%;
+}
+.nilrefil_area_details, .nilrefil_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 350px;
+    width: 75%;
+}
+.midue-area-details, .midue_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 100px;
+    width: 75%;
+}
+.hosedue-area-details, .hosedue_customer_details{
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 100px;
+    width: 75%;
+}
+.custom-table th, .custom-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+.custom-table th {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 500;
+}
+.custom-table td {
+    background-color: #f9f9f9;
+}
+.custom-table tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+.custom-table tr:hover td {
+    background-color: #e2f1ff;
+}
+
+ /* Back button styling */
+ #backButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 101;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#backButton:hover {
+    background-color: #2980b9;
+}
+
+.badge-due {
+    background-color: #ffc107;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-missing {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-back-btn {
+    margin-bottom: 15px;
+    margin-left: 250px;
+    margin-top: 30px;
+}
+.table-responsive {
+    overflow-x: auto;
+}

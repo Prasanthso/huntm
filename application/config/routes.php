@@ -74,18 +74,48 @@ $route['auto-login'] = 'WebsiteDetails/auto_login'; //use for auto login
 $route['show'] = 'Dashboard/show';
 $route['login/authenticate'] = 'login/authenticate';
 
-//Invoiced Order routes
+//Invoiced Order upload file
 $route['WebScrapping'] = 'WebScrapping/webscrapping_data'; 
 $route['uploadfile'] = 'WebScrapping/upload_excel';
 
-//open Order routes
+//open Order upload file
 $route['OpenOrder'] = 'OpenOrder/openorder_data';  
 $route['uploadfile_openorder'] = 'OpenOrder/upload_excel';  
 
-
-//fund balance routes
+//fund balance upload file
 $route['fundbalance'] = 'FundBalance/fundbalance_data';
 $route['fundbalance_uploadfile'] = 'FundBalance/upload_excel';
 
+//Customer register upload file
+$route['customerregister'] = 'CustomerRegister/customerregister_data';
+$route['customerregister_uploadfile'] = 'CustomerRegister/upload_excel';
 
+//display invoice data in website
+$route['invoiceorder'] = 'WebScrapping/display_invoice_data';
 
+//display open process data in website
+$route['open-process-order'] = 'OpenOrder/display_open_data';
+
+//display fund balance data in website
+$route['fundbalance_data'] = 'FundBalance/display_fundbalance';
+
+//Display customer strength
+$route['customer_strength'] = 'customer_strength/customer_strength_data';
+
+//Display SBC Data
+$route['SBC_data'] = 'SBC_data/sbc_data_report';
+
+//Display Nillfill data
+$route['nillfill'] = 'NilRefill/nill_fill_data';
+
+//Display KYC data
+$route['kycdata'] = 'Kyc_data/kyc_data';
+
+//Display MI Due data
+$route['midue'] = 'MI_due_data/midue_data';
+
+//Display hose due data
+$route['hosedue'] = 'Hosedue_data/hose_due_data';
+
+// Display Phone number not avaliable data
+$route['phonenumber'] = 'Phonenumber/phonenumber_data';
