@@ -22,6 +22,7 @@ class CustomerRegister_model extends CI_Model {
     public function get_customer_strength_data() {
         $this->db->select("area_name, consumer_number, consumer_name,phone_number, scheme_selected, consumer_sub_status");
         $this->db->where('consumer_category', 'domestic'); 
+        $count = $this->db->count_all_results($this->table);
         $query = $this->db->get($this->table);
     
         if ($query->num_rows() > 0) {
