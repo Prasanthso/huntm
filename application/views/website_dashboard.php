@@ -497,7 +497,7 @@
 		
             padding: 20px;
 			width: 200px;
-			height: 100px;
+			height: 150px;
             border-radius: 20px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -750,7 +750,7 @@
 					
 	<div class="content">
 	<div class="container-sm mt-3">
-	<div class="row row-cols-3 g-4 mr-0 pr-0">
+	<div class="row row-cols-3 g-3 mr-0 pr-0">
     
         <div class="col-md-4">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
@@ -767,7 +767,8 @@
         <div class="col">
   <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
     <h6>💰 Customer Strength</h6>
-    <p class="fs-5">12,500</p>
+    <p class="fs-5">Qty : 10,303</p>
+    <p class="fs-5">Percent : 90%</p>
   </div>
 </div>
 
@@ -1247,19 +1248,18 @@
                     </div>
                     
                     <!-- Display customer strength -->
-                    <?php } elseif($method == 'customer_strenght') { ?>
+                    <?php } elseif($method == 'customer_strength') { ?>
                    <!-- Back to Dashboard Button (Always visible) -->
         <div class="dashboard-back-btn back_dashborad">
             <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
         </div>      
-    <div class="container5">
-       
-        <h2 style="color = #28a745">Customer Strength Data</h2>
+        <div class="customerstrength-summary">
+        <h2 class="text-center text-primary mb-4">Customer Strength Data</h2>
 
         <!-- Fixed Summary Table -->
-        <div class="customerstrength-summary">
+        <div class="fixed-summary">
             <div class="navigation-controls">
                 <button id="backButton" class="btn btn-outline-primary btn-sm" style="display: none;">
                     <i class="fas fa-arrow-left"></i> Back
@@ -1308,15 +1308,15 @@
                         </tr>
                         <tr>
                             <td>Percent</td>
-                            <td><?= round(($customer_data['active']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['active']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['suspended']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) ?>%</td>
+                            <td><?= $customer_data['total']['pmuy'] ? round(($customer_data['active']['pmuy']/$customer_data['total']['pmuy'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['non_pmuy'] ? round(($customer_data['active']['non_pmuy']/$customer_data['total']['non_pmuy'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['total']/$customer_data['total']['total'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['pmuy'] ? round(($customer_data['suspended']['pmuy']/$customer_data['total']['pmuy'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['non_pmuy'] ? round(($customer_data['suspended']['non_pmuy']/$customer_data['total']['non_pmuy'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total']/$customer_data['total']['total'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['pmuy'] ? round(($customer_data['deactivated']['pmuy']/$customer_data['total']['pmuy'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['non_pmuy'] ? round(($customer_data['deactivated']['non_pmuy']/$customer_data['total']['non_pmuy'])*100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total']/$customer_data['total']['total'])*100, 2) : 0 ?>%</td>
                             <td>100%</td>
                             <td>100%</td>
                             <td>100%</td>
@@ -1327,8 +1327,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div id="mainContent" class="customer_area_details">
-            <!-- Initial view - Area Breakdown -->
+        <div id="mainContent" class="main-content">
             <h4 class="view-title">Customer Distribution by Area</h4>
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -1345,20 +1344,13 @@
                             </tr>
                         <?php else: ?>
                             <?php 
-                            // Group customers by area for initial display
                             $area_counts = array();
                             foreach ($customers as $customer) {
                                 $area = $customer['area_name'] ?? 'Unknown Area';
-                                if (!isset($area_counts[$area])) {
-                                    $area_counts[$area] = 0;
-                                }
-                                $area_counts[$area]++;
+                                $area_counts[$area] = ($area_counts[$area] ?? 0) + 1;
                             }
-                            
-                            // Display first 10 areas by default
                             $display_areas = array_slice($area_counts, 0, 10, true);
                             ?>
-                            
                             <?php foreach ($display_areas as $area => $count): ?>
                                 <tr>
                                     <td class="clickable initial-area-click" data-area="<?= html_escape($area) ?>">
@@ -1401,10 +1393,6 @@
         // Initialize with all customer data from PHP
         let allCustomers = <?= json_encode($customers) ?>;
         let customerData = <?= json_encode($customer_data) ?>;
-        
-        // Debug output
-        console.log('Loaded customers:', allCustomers);
-        console.log('Customer data:', customerData);
         
         // If no customers, show message
         if (!allCustomers || allCustomers.length === 0) {
@@ -1711,8 +1699,7 @@
         loadInitialAreaBreakdown();
     });
     </script>
-</body>
-</html>
+
                         
                     <?php } elseif($method == 'sbc_data_display') { ?>
                          <!-- Back to Dashboard Button (Always visible) -->
@@ -1721,13 +1708,11 @@
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
         </div>
-                        <div class="container5">
-         
-        
+        <div class="container5">
         <!-- Fixed Summary Section -->
         <div class="sbc_summary">
             <table class="custom-table table_bi_report summary-table" id="summaryTable">
-            <h2>SBC Data Report</h2>
+                <h2>SBC Data Report</h2>
                 <thead>
                     <tr>
                         <th>SBC</th>
@@ -1739,9 +1724,9 @@
                 <tbody id="summaryTableBody">
                     <tr>
                         <td>Quantity</td>
-                        <td class="clickable" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                        <td class="clickable" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                        <td class="clickable" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
+                        <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
+                        <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
+                        <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
                     </tr>
                     <tr>
                         <td>Percentage</td>
@@ -1828,17 +1813,13 @@
                 $('#areaBreakdownView').hide();
                 $('#customerDetailsView').hide();
                 
-                // Process the data from the controller
                 if (allCustomers && allCustomers.length > 0) {
                     processData();
                 }
             }
 
             function processData() {
-                // No special processing needed for SBC data
-                // Just ensure all records are properly formatted
                 allCustomers.forEach(customer => {
-                    // Ensure scheme is properly set (PMUY/Non PMUY)
                     if (customer.scheme_selected === 'Ujjwala') {
                         customer.scheme_selected = 'PMUY';
                     } else if (!customer.scheme_selected || customer.scheme_selected !== 'PMUY') {
@@ -1857,7 +1838,6 @@
                     } else if (scheme === 'Non PMUY') {
                         schemeMatch = customer.scheme_selected !== 'PMUY';
                     }
-                    
                     return schemeMatch;
                 });
                 
@@ -1876,13 +1856,11 @@
                 })).sort((a, b) => b.total - a.total);
                 
                 $('#areaBreakdownTitle').text(`SBC Connections (${scheme}) by Area`);
-                
                 currentAreaPage = 1;
                 updateAreaBreakdownTable();
                 
                 $('#areaBreakdownView').show();
                 $('#customerDetailsView').hide();
-                
                 $('.content-section').scrollTop(0);
             }
 
@@ -1900,7 +1878,7 @@
                     pageAreas.forEach(({area, total}) => {
                         tableBody.append(`
                             <tr>
-                                <td class="clickable area-click" data-area="${area}">${area || 'N/A'}</td>
+                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
                                 <td>${total}</td>
                             </tr>
                         `);
@@ -1923,19 +1901,15 @@
                     } else if (currentScheme === 'Non PMUY') {
                         schemeMatch = customer.scheme_selected !== 'PMUY';
                     }
-                    
                     return areaMatch && schemeMatch;
                 });
                 
                 currentPage = 1;
-                
                 $('#customerDetailsTitle').text(`SBC Connections (${currentScheme}) in ${area}`);
-                
                 updateCustomerTable();
                 
                 $('#areaBreakdownView').hide();
                 $('#customerDetailsView').show();
-                
                 $('.content-section').scrollTop(0);
             }
 
@@ -1981,7 +1955,7 @@
             }
 
             // Event listeners
-            $(document).on('click', '.clickable[data-scheme]', function() {
+            $(document).on('click', '.clickabled[data-scheme]', function() {
                 const scheme = $(this).data('scheme');
                 showAreaBreakdown(scheme);
             });
@@ -2038,19 +2012,22 @@
             </a>
         </div>
         
-                        <div class="container5">
-        
-        <!-- Fixed Summary Table -->
-        <div class="nerefil-summary">
-            <table id="summaryTable  nilrefil_summary_table">
-            <h2>Nil Refill Data</h2>
+        <div class="report-container">
+        <!-- Summary Table -->
+        <div class="summary-table">
+            <table class="table table-bordered" id="summaryTable">
+                <h2>Nil Refill Report</h2>
                 <thead>
-                    <tr class="header-row">
-                        <th rowspan="2">Nil Refill</th>
-                        <th colspan="3">6 Months</th>
-                        <th colspan="3">1 Year</th>
+                    <tr class="table-primary">
+                        <th rowspan="2">Time Since Last Refill</th>
+                        <th colspan="3">> 3 Months</th>
+                        <th colspan="3">> 6 Months</th>
+                        <th colspan="3">> 1 Year</th>
                     </tr>
-                    <tr class="sub-header">
+                    <tr class="table-secondary">
+                        <th>PMUY</th>
+                        <th>Non PMUY</th>
+                        <th>Total</th>
                         <th>PMUY</th>
                         <th>Non PMUY</th>
                         <th>Total</th>
@@ -2061,137 +2038,135 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Qty</td>
-                        <td class="clickable" data-period="6_months" data-scheme="pmuy"><?php echo $table_data['greater_than_6_months']['pmuy']['qty'] ?? '0'; ?></td>
-                        <td class="clickable" data-period="6_months" data-scheme="non_pmuy"><?php echo $table_data['greater_than_6_months']['non_pmuy']['qty'] ?? '0'; ?></td>
-                        <td><?php echo $table_data['greater_than_6_months']['total']['qty'] ?? '0'; ?></td>
-                        <td class="clickable" data-period="1_year" data-scheme="pmuy"><?php echo $table_data['greater_than_1_year']['pmuy']['qty'] ?? '0'; ?></td>
-                        <td class="clickable" data-period="1_year" data-scheme="non_pmuy"><?php echo $table_data['greater_than_1_year']['non_pmuy']['qty'] ?? '0'; ?></td>
-                        <td><?php echo $table_data['greater_than_1_year']['total']['qty'] ?? '0'; ?></td>
+                        <td>Count</td>
+                        <td class="clickable" data-period="3_months" data-scheme="pmuy"><?php echo $stats['greater_than_3_months']['pmuy']['qty']; ?></td>
+                        <td class="clickable" data-period="3_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_3_months']['non_pmuy']['qty']; ?></td>
+                        <td><?php echo $stats['greater_than_3_months']['total']['qty']; ?></td>
+                        <td class="clickable" data-period="6_months" data-scheme="pmuy"><?php echo $stats['greater_than_6_months']['pmuy']['qty']; ?></td>
+                        <td class="clickable" data-period="6_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_6_months']['non_pmuy']['qty']; ?></td>
+                        <td><?php echo $stats['greater_than_6_months']['total']['qty']; ?></td>
+                        <td class="clickable" data-period="1_year" data-scheme="pmuy"><?php echo $stats['greater_than_1_year']['pmuy']['qty']; ?></td>
+                        <td class="clickable" data-period="1_year" data-scheme="non_pmuy"><?php echo $stats['greater_than_1_year']['non_pmuy']['qty']; ?></td>
+                        <td><?php echo $stats['greater_than_1_year']['total']['qty']; ?></td>
                     </tr>
                     <tr>
-                        <td>%</td>
-                        <td><?php echo $table_data['greater_than_6_months']['pmuy']['percent'] ?? '0'; ?>%</td>
-                        <td><?php echo $table_data['greater_than_6_months']['non_pmuy']['percent'] ?? '0'; ?>%</td>
-                        <td><?php echo $table_data['greater_than_6_months']['total']['percent'] ?? '0'; ?>%</td>
-                        <td><?php echo $table_data['greater_than_1_year']['pmuy']['percent'] ?? '0'; ?>%</td>
-                        <td><?php echo $table_data['greater_than_1_year']['non_pmuy']['percent'] ?? '0'; ?>%</td>
-                        <td><?php echo $table_data['greater_than_1_year']['total']['percent'] ?? '0'; ?>%</td>
+                        <td>Percentage</td>
+                        <td><?php echo $stats['greater_than_3_months']['pmuy']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_3_months']['non_pmuy']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_3_months']['total']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_6_months']['pmuy']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_6_months']['non_pmuy']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_6_months']['total']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_1_year']['pmuy']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_1_year']['non_pmuy']['percent']; ?>%</td>
+                        <td><?php echo $stats['greater_than_1_year']['total']['percent']; ?>%</td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="10" class="text-end"><small>Report generated on: <?php echo $report_date; ?></small></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         
-        <button id="backButton" class="btn btn-outline-primary btn-sm">Back</button>
-        <!-- Main Content Area -->
-        <div class="content-section">
-            
-
+        <button id="backButton" class="btn btn-outline-primary btn-sm mb-3" style="display: none;">Back</button>
+        
+        <!-- Details Sections -->
+        <div class="details-section">
             <!-- Area Breakdown View -->
-            <div id="areaBreakdownView" class="nilrefil_area_details">
+            <div id="areaBreakdownView" style="display: none;">
                 <h4 class="view-title" id="areaBreakdownTitle"></h4>
-                <table class="nilrefil_area_count">
+                <table class="table table-bordered area-table">
                     <thead class="table-success">
                         <tr>
                             <th>Area Name</th>
-                            <th>Count</th>
+                            <th>Customer Count</th>
                         </tr>
                     </thead>
                     <tbody id="areaBreakdownBody"></tbody>
                 </table>
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
+                <div class="d-flex justify-content-between">
+                    <button id="prevAreaPage" class="btn btn-sm btn-outline-secondary">Previous</button>
+                    <span>Page <span id="currentAreaPage">1</span></span>
+                    <button id="nextAreaPage" class="btn btn-sm btn-outline-secondary">Next</button>
+                </div>
             </div>
 
             <!-- Customer Details View -->
-            <div id="customerDetailsView" class="nilrefil_customer_details">
+            <div id="customerDetailsView" style="display: none;">
                 <h4 class="view-title" id="customerDetailsTitle"></h4>
                 <table class="table table-bordered">
                     <thead class="table-success">
                         <tr>
-                            <th>Area Name</th>
                             <th>Consumer Number</th>
-                            <th>Consumer Name</th>
-                            <th>Phone Number</th>
-                            <th>Scheme Selected</th>
-                            <th>Last Refill Date</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Scheme</th>
+                            <th>Last Refill</th>
+                            <th>Months Since Refill</th>
                         </tr>
                     </thead>
                     <tbody id="customerTableBody"></tbody>
                 </table>
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" id="prevCustomerPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentCustomerPage">1</a></li>
-                        <li class="page-item" id="nextCustomerPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
+                <div class="d-flex justify-content-between">
+                    <button id="prevCustomerPage" class="btn btn-sm btn-outline-secondary">Previous</button>
+                    <span>Page <span id="currentCustomerPage">1</span></span>
+                    <button id="nextCustomerPage" class="btn btn-sm btn-outline-secondary">Next</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-    $(document).ready(function () {
-        // View state management
-        let currentView = 'initial'; // 'initial', 'area', 'customer'
-        let viewStack = []; // Stack to track navigation history
-        
-        // Pagination
+    $(document).ready(function() {
+        // Configuration
         const recordsPerPage = 10;
-        let currentAreaPage = 1;
-        let currentCustomerPage = 1;
+        let currentView = 'summary';
+        let viewStack = [];
         
         // Data
-        let allCustomers = <?= json_encode($nillrefill ?? []) ?>;
+        const allCustomers = <?php echo json_encode($all_customers); ?>;
         let filteredCustomers = [];
         let areaBreakdownData = [];
-        let currentPeriod = null;
-        let currentScheme = null;
-        let currentArea = null;
+        let currentPeriod = '';
+        let currentScheme = '';
+        let currentArea = '';
+        let currentAreaPage = 1;
+        let currentCustomerPage = 1;
 
-        // Initialize view
+        // Initialize the view
         initView();
 
         function initView() {
-            // Show initial content
-            $('#initialContent').show();
             $('#areaBreakdownView').hide();
             $('#customerDetailsView').hide();
             $('#backButton').hide();
-            
-            // Clear navigation history
             viewStack = [];
-            currentView = 'initial';
+            currentView = 'summary';
         }
 
+        // Show area breakdown for selected period and scheme
         function showAreaBreakdown(period, scheme) {
             currentPeriod = period;
             currentScheme = scheme;
             
-            // Filter customers based on period and scheme
-            const now = new Date();
+            // Filter customers based on selection
             filteredCustomers = allCustomers.filter(customer => {
                 // Check scheme
                 const schemeMatch = (scheme === 'pmuy' && customer.scheme_selected === 'PMUY') || 
-                                  (scheme === 'non_pmuy' && customer.scheme_selected !== 'PMUY');
+                                  (scheme === 'non_pmuy' && customer.scheme_selected === 'Non PMUY');
                 
                 // Check period
                 if (!customer.last_refill_date) return false;
                 
-                const lastRefillDate = new Date(customer.last_refill_date);
-                const monthsDiff = (now.getFullYear() - lastRefillDate.getFullYear()) * 12 + 
-                                   (now.getMonth() - lastRefillDate.getMonth());
+                const monthsDiff = customer.months_since_refill || 0;
+                let periodMatch = false;
                 
-                const periodMatch = (period === '6_months' && monthsDiff >= 6) || 
-                                  (period === '1_year' && monthsDiff >= 12);
+                if (period === '3_months') periodMatch = monthsDiff >= 3;
+                else if (period === '6_months') periodMatch = monthsDiff >= 6;
+                else if (period === '1_year') periodMatch = monthsDiff >= 12;
                 
                 return schemeMatch && periodMatch;
             });
@@ -2199,132 +2174,162 @@
             // Group by area
             const areaCounts = {};
             filteredCustomers.forEach(customer => {
-                const area = customer.area_name || 'Unknown';
+                const area = customer.area_name;
                 areaCounts[area] = (areaCounts[area] || 0) + 1;
             });
             
-            // Convert to array for display and sort by count descending
+            // Convert to array and sort
             areaBreakdownData = Object.entries(areaCounts)
                 .map(([area, count]) => ({ area, count }))
                 .sort((a, b) => b.count - a.count);
             
-            // Update title
-            const periodText = period === '6_months' ? '6 Months' : '1 Year';
+            // Update view title
+            const periodText = getPeriodText(period);
             const schemeText = scheme === 'pmuy' ? 'PMUY' : 'Non-PMUY';
-            $('#areaBreakdownTitle').text(`Nil Refill Customers (${periodText} - ${schemeText}) by Area`);
+            $('#areaBreakdownTitle').text(`Customers (${periodText}, ${schemeText}) by Area`);
             
-            // Update view
+            // Show the first page
             currentAreaPage = 1;
-            updateAreaBreakdownTable();
+            updateAreaBreakdownView();
             
-            // Show area breakdown view
-            $('#initialContent').hide();
+            // Update view state
+            $('#summaryTable').hide();
             $('#areaBreakdownView').show();
             $('#customerDetailsView').hide();
             $('#backButton').show();
             
-            // Update navigation stack
             viewStack.push(currentView);
             currentView = 'area';
         }
 
-        function updateAreaBreakdownTable() {
-            const start = (currentAreaPage - 1) * recordsPerPage;
-            const end = start + recordsPerPage;
-            const pageAreas = areaBreakdownData.slice(start, end);
-            const tableBody = $("#areaBreakdownBody");
+        // Update the area breakdown table
+        function updateAreaBreakdownView() {
+            const startIdx = (currentAreaPage - 1) * recordsPerPage;
+            const endIdx = startIdx + recordsPerPage;
+            const pageData = areaBreakdownData.slice(startIdx, endIdx);
             
-            tableBody.empty();
+            const $tbody = $('#areaBreakdownBody');
+            $tbody.empty();
             
-            if (pageAreas.length === 0) {
-                tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
+            if (pageData.length === 0) {
+                $tbody.append('<tr><td colspan="2" class="no-data">No data available</td></tr>');
             } else {
-                pageAreas.forEach(({area, count}) => {
-                    const row = `<tr>
-                        <td class="clickable area-click" data-area="${escapeHtml(area)}">${escapeHtml(area) || 'N/A'}</td>
-                        <td>${count}</td>
-                    </tr>`;
-                    tableBody.append(row);
-                });
-                
-                // Add click handlers for area rows
-                $('.area-click').off('click').on('click', function() {
-                    const area = $(this).data('area');
-                    showCustomerDetails(area);
-                });
-            }
-            
-            $("#currentAreaPage").text(currentAreaPage);
-            $("#totalAreaPages").text(Math.ceil(areaBreakdownData.length / recordsPerPage));
-            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
-            $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
-        }
-
-        function showCustomerDetails(area) {
-            currentArea = area;
-            
-            // Filter customers for this area
-            const areaCustomers = filteredCustomers.filter(customer => 
-                (customer.area_name || 'Unknown') === area
-            );
-            
-            // Update title
-            const periodText = currentPeriod === '6_months' ? '6 Months' : '1 Year';
-            const schemeText = currentScheme === 'pmuy' ? 'PMUY' : 'Non-PMUY';
-            $('#customerDetailsTitle').text(`${escapeHtml(area)} - Nil Refill Customers (${periodText} - ${schemeText})`);
-            
-            // Update table
-            currentCustomerPage = 1;
-            updateCustomerDetailsTable(areaCustomers);
-            
-            // Show customer details view
-            $('#areaBreakdownView').hide();
-            $('#customerDetailsView').show();
-            $('#backButton').show();
-            
-            // Update navigation stack
-            viewStack.push(currentView);
-            currentView = 'customer';
-        }
-
-        function updateCustomerDetailsTable(customers) {
-            const start = (currentCustomerPage - 1) * recordsPerPage;
-            const end = start + recordsPerPage;
-            const pageRows = customers.slice(start, end);
-            const tableBody = $("#customerTableBody");
-            
-            tableBody.empty();
-            
-            if (pageRows.length === 0) {
-                tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
-            } else {
-                pageRows.forEach(customer => {
-                    const lastRefillDate = customer.last_refill_date ? 
-                        new Date(customer.last_refill_date).toLocaleDateString() : 'N/A';
-                    
-                    tableBody.append(`
+                pageData.forEach(item => {
+                    $tbody.append(`
                         <tr>
-                            <td>${escapeHtml(customer.area_name) || 'N/A'}</td>
-                            <td>${escapeHtml(customer.consumer_number) || 'N/A'}</td>
-                            <td>${escapeHtml(customer.consumer_name) || 'N/A'}</td>
-                            <td>${escapeHtml(customer.phone_number) || 'N/A'}</td>
-                            <td>
-                                <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                    ${escapeHtml(customer.scheme_selected) || 'N/A'}
-                                </span>
+                            <td class="clickable area-link" data-area="${escapeHtml(item.area)}">
+                                ${escapeHtml(item.area)}
                             </td>
-                            <td>${lastRefillDate}</td>
+                            <td>${item.count}</td>
                         </tr>
                     `);
                 });
             }
             
-            $("#currentCustomerPage").text(currentCustomerPage);
-            $("#totalCustomerPages").text(Math.ceil(customers.length / recordsPerPage));
-            $("#prevCustomerPage").toggleClass("disabled", currentCustomerPage === 1);
-            $("#nextCustomerPage").toggleClass("disabled", end >= customers.length);
+            // Update pagination controls
+            $('#currentAreaPage').text(currentAreaPage);
+            $('#prevAreaPage').prop('disabled', currentAreaPage === 1);
+            $('#nextAreaPage').prop('disabled', endIdx >= areaBreakdownData.length);
+            
+            // Add click handlers for area links
+            $('.area-link').on('click', function() {
+                const area = $(this).data('area');
+                showCustomerDetails(area);
+            });
         }
 
+        // Show customer details for selected area
+        function showCustomerDetails(area) {
+            currentArea = area;
+            
+            // Filter customers for this area
+            const areaCustomers = filteredCustomers
+                .filter(customer => customer.area_name === area)
+                .sort((a, b) => (b.months_since_refill || 0) - (a.months_since_refill || 0));
+            
+            // Update view title
+            const periodText = getPeriodText(currentPeriod);
+            const schemeText = currentScheme === 'pmuy' ? 'PMUY' : 'Non-PMUY';
+            $('#customerDetailsTitle').text(`${escapeHtml(area)} - ${periodText}, ${schemeText} (${areaCustomers.length} customers)`);
+            
+            // Show the first page
+            currentCustomerPage = 1;
+            updateCustomerDetailsView(areaCustomers);
+            
+            // Update view state
+            $('#areaBreakdownView').hide();
+            $('#customerDetailsView').show();
+            
+            viewStack.push(currentView);
+            currentView = 'customer';
+        }
+
+        // Update the customer details table
+        function updateCustomerDetailsView(customers) {
+            const startIdx = (currentCustomerPage - 1) * recordsPerPage;
+            const endIdx = startIdx + recordsPerPage;
+            const pageData = customers.slice(startIdx, endIdx);
+            
+            const $tbody = $('#customerTableBody');
+            $tbody.empty();
+            
+            if (pageData.length === 0) {
+                $tbody.append('<tr><td colspan="6" class="no-data">No data available</td></tr>');
+            } else {
+                pageData.forEach(customer => {
+                    const lastRefill = customer.last_refill_date 
+                        ? new Date(customer.last_refill_date).toLocaleDateString() 
+                        : 'Never';
+                    
+                    const monthsSince = customer.months_since_refill 
+                        ? `${customer.months_since_refill} months` 
+                        : 'N/A';
+                    
+                    $tbody.append(`
+                        <tr>
+                            <td>${escapeHtml(customer.consumer_number)}</td>
+                            <td>${escapeHtml(customer.consumer_name)}</td>
+                            <td>${escapeHtml(customer.phone_number)}</td>
+                            <td>
+                                <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
+                                    ${customer.scheme_selected}
+                                </span>
+                            </td>
+                            <td>${lastRefill}</td>
+                            <td>${monthsSince}</td>
+                        </tr>
+                    `);
+                });
+            }
+            
+            // Update pagination controls
+            $('#currentCustomerPage').text(currentCustomerPage);
+            $('#prevCustomerPage').prop('disabled', currentCustomerPage === 1);
+            $('#nextCustomerPage').prop('disabled', endIdx >= customers.length);
+        }
+
+        // Helper function to get period display text
+        function getPeriodText(period) {
+            switch(period) {
+                case '3_months': return '3+ Months';
+                case '6_months': return '6+ Months';
+                case '1_year': return '1+ Year';
+                default: return '';
+            }
+        }
+
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.toString()
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Navigation functions
         function goBack() {
             if (viewStack.length === 0) {
                 initView();
@@ -2333,82 +2338,57 @@
             
             const previousView = viewStack.pop();
             
-            if (previousView === 'initial') {
-                // Go back to initial view
+            if (previousView === 'summary') {
+                $('#summaryTable').show();
                 $('#areaBreakdownView').hide();
                 $('#customerDetailsView').hide();
-                $('#initialContent').show();
                 $('#backButton').hide();
-                currentView = 'initial';
-            } 
-            else if (previousView === 'area') {
-                // Go back to area breakdown view
-                $('#customerDetailsView').hide();
+                currentView = 'summary';
+            } else if (previousView === 'area') {
                 $('#areaBreakdownView').show();
-                $('#backButton').show();
+                $('#customerDetailsView').hide();
                 currentView = 'area';
             }
         }
 
-        // Helper function to escape HTML
-        function escapeHtml(unsafe) {
-            if (typeof unsafe !== 'string') return unsafe;
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        // Event listeners
+        // Event handlers
         $('.clickable[data-period][data-scheme]').on('click', function() {
             showAreaBreakdown($(this).data('period'), $(this).data('scheme'));
         });
         
         $('#backButton').on('click', goBack);
         
-        // Pagination controls for area breakdown
-        $("#prevAreaPage").on("click", function(e) {
-            e.preventDefault();
+        $('#prevAreaPage').on('click', function() {
             if (currentAreaPage > 1) {
                 currentAreaPage--;
-                updateAreaBreakdownTable();
+                updateAreaBreakdownView();
             }
         });
         
-        $("#nextAreaPage").on("click", function(e) {
-            e.preventDefault();
-            if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
+        $('#nextAreaPage').on('click', function() {
+            if (currentAreaPage * recordsPerPage < areaBreakdownData.length) {
                 currentAreaPage++;
-                updateAreaBreakdownTable();
+                updateAreaBreakdownView();
             }
         });
         
-        // Pagination controls for customer details
-        $("#prevCustomerPage").on("click", function(e) {
-            e.preventDefault();
+        $('#prevCustomerPage').on('click', function() {
             if (currentCustomerPage > 1) {
                 currentCustomerPage--;
-                const customers = filteredCustomers.filter(customer => 
-                    (customer.area_name || 'Unknown') === currentArea
-                );
-                updateCustomerDetailsTable(customers);
+                const customers = filteredCustomers.filter(c => c.area_name === currentArea);
+                updateCustomerDetailsView(customers);
             }
         });
         
-        $("#nextCustomerPage").on("click", function(e) {
-            e.preventDefault();
-            const customers = filteredCustomers.filter(customer => 
-                (customer.area_name || 'Unknown') === currentArea
-            );
-            if ((currentCustomerPage * recordsPerPage) < customers.length) {
+        $('#nextCustomerPage').on('click', function() {
+            const customers = filteredCustomers.filter(c => c.area_name === currentArea);
+            if (currentCustomerPage * recordsPerPage < customers.length) {
                 currentCustomerPage++;
-                updateCustomerDetailsTable(customers);
+                updateCustomerDetailsView(customers);
             }
         });
     });
-</script>
+    </script>
                     <?php } elseif($method == 'kyc_data') { ?>
                          <!-- Back to Dashboard Button (Always visible) -->
        <div class="dashboard-back-btn back_dashborad">
@@ -2429,9 +2409,9 @@
                         <th colspan="3">KYC Pending</th>
                     </tr>
                     <tr class="sub-header">
-                        <th class="clickable" data-scheme="PMUY">PMUY</th>
-                        <th class="clickable" data-scheme="Non PMUY">Non PMUY</th>
-                        <th class="clickable" data-scheme="Total">Total</th>
+                        <th class="clickabled" data-scheme="PMUY">PMUY</th>
+                        <th class="clickabled" data-scheme="Non PMUY">Non PMUY</th>
+                        <th class="clickabled" data-scheme="Total">Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2439,9 +2419,9 @@
                         <?php foreach ($kyc_data as $row) : ?>
                             <tr>
                                 <td>Qty</td>
-                                <td class="clickable" data-scheme="PMUY"><?= htmlspecialchars($row["PMUY"] ?? 0) ?></td>
-                                <td class="clickable" data-scheme="Non PMUY"><?= htmlspecialchars($row["Non_PMUY"] ?? 0) ?></td>
-                                <td class="clickable" data-scheme="Total"><?= htmlspecialchars($row["Total"] ?? 0) ?></td>
+                                <td class="clickabled" data-scheme="PMUY"><?= htmlspecialchars($row["PMUY"] ?? 0) ?></td>
+                                <td class="clickabled" data-scheme="Non PMUY"><?= htmlspecialchars($row["Non_PMUY"] ?? 0) ?></td>
+                                <td class="clickabled" data-scheme="Total"><?= htmlspecialchars($row["Total"] ?? 0) ?></td>
                             </tr>
                             <tr>
                                 <td>%</td>
@@ -2679,7 +2659,7 @@
                     pageAreas.forEach(({area, count}) => {
                         tableBody.append(`
                             <tr>
-                                <td class="clickable area-click" data-area="${area}">${area || 'N/A'}</td>
+                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
                                 <td>${count}</td>
                             </tr>
                         `);
@@ -2750,7 +2730,7 @@
             }
 
             // Event listeners
-            $('.clickable[data-scheme]').on('click', function() {
+            $('.clickabled[data-scheme]').on('click', function() {
                 showAreaBreakdown($(this).data('scheme'));
             });
             
@@ -2816,9 +2796,9 @@
                 <tbody id="summaryTableBody">
                     <tr>
                         <td>Quantity</td>
-                        <td class="clickable" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                        <td class="clickable" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                        <td class="clickable" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
+                        <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
+                        <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
+                        <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
                     </tr>
                     <tr>
                         <td>Percentage</td>
@@ -2984,7 +2964,7 @@
                     pageAreas.forEach(({area, total}) => {
                         tableBody.append(`
                             <tr>
-                                <td class="clickable area-click" data-area="${area}">${area || 'N/A'}</td>
+                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
                                 <td>${total}</td>
                             </tr>
                         `);
@@ -3061,7 +3041,7 @@
             }
 
             // Event listeners
-            $(document).on('click', '.clickable[data-scheme]', function() {
+            $(document).on('click', '.clickabled[data-scheme]', function() {
                 const scheme = $(this).data('scheme');
                 showAreaBreakdown(scheme);
             });
@@ -3133,9 +3113,9 @@
                 <tbody id="summaryTableBody">
                     <tr>
                         <td>Due Count</td>
-                        <td class="clickable" data-scheme="PMUY"><?= isset($table_data['rows']['Qty'][0]) ? $table_data['rows']['Qty'][0] : 0 ?></td>
-                        <td class="clickable" data-scheme="Non PMUY"><?= isset($table_data['rows']['Qty'][1]) ? $table_data['rows']['Qty'][1] : 0 ?></td>
-                        <td class="clickable" data-scheme="Total"><?= isset($table_data['rows']['Qty'][2]) ? $table_data['rows']['Qty'][2] : 0 ?></td>
+                        <td class="clickabled" data-scheme="PMUY"><?= isset($table_data['rows']['Qty'][0]) ? $table_data['rows']['Qty'][0] : 0 ?></td>
+                        <td class="clickabled" data-scheme="Non PMUY"><?= isset($table_data['rows']['Qty'][1]) ? $table_data['rows']['Qty'][1] : 0 ?></td>
+                        <td class="clickabled" data-scheme="Total"><?= isset($table_data['rows']['Qty'][2]) ? $table_data['rows']['Qty'][2] : 0 ?></td>
                     </tr>
                     <tr>
                         <td>Percentage</td>
@@ -3217,7 +3197,7 @@
                 }
             }
 
-            $(document).on('click', '.clickable[data-scheme]', function() {
+            $(document).on('click', '.clickabled[data-scheme]', function() {
                 currentScheme = $(this).data('scheme');
                 
                 filteredCustomers = allCustomers.filter(customer => {
@@ -3245,7 +3225,7 @@
                     Object.entries(areaCounts).forEach(([area, count]) => {
                         tableBody.append(`
                             <tr>
-                                <td class="clickable" data-area="${area}">${area}</td>
+                                <td class="clickabled" data-area="${area}">${area}</td>
                                 <td>${count}</td>
                             </tr>
                         `);
@@ -3258,7 +3238,7 @@
                 $('html, body').animate({scrollTop: $('#areaView').offset().top - 150}, 200);
             }
 
-            $(document).on('click', '.clickable[data-area]', function() {
+            $(document).on('click', '.clickabled[data-area]', function() {
                 currentArea = $(this).data('area');
                 currentPage = 1;
                 
@@ -3369,9 +3349,9 @@
                 <tbody id="summaryTableBody">
                     <tr>
                         <td>Quantity</td>
-                        <td class="clickable" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                        <td class="clickable" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                        <td class="clickable" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
+                        <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
+                        <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
+                        <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
                     </tr>
                     <tr>
                         <td>Percentage</td>
@@ -3523,7 +3503,7 @@
                     pageAreas.forEach(({area, total}) => {
                         tableBody.append(`
                             <tr>
-                                <td class="clickable area-click" data-area="${area}">${area || 'N/A'}</td>
+                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
                                 <td>${total}</td>
                             </tr>
                         `);
@@ -3600,7 +3580,7 @@
             }
 
             // Event listeners
-            $(document).on('click', '.clickable[data-scheme]', function() {
+            $(document).on('click', '.clickabled[data-scheme]', function() {
                 const scheme = $(this).data('scheme');
                 showAreaBreakdown(scheme);
             });

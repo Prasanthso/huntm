@@ -72,80 +72,6 @@
     </style>
 </head>
 <body>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Strength Data</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-        .fixed-summary {
-            position: sticky;
-            top: 0;
-            background-color: white;
-            z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 15px 0;
-            margin-bottom: 20px;
-        }
-        .main-content {
-            margin-top: 20px;
-        }
-        .summary-table-customer {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .summary-table-customer th, .summary-table-customer td {
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: center;
-        }
-        .summary-table-customer th {
-            background-color: #e9ecef;
-            font-weight: bold;
-        }
-        .header-row th {
-            background-color: #d1e7dd;
-        }
-        .clickable {
-            cursor: pointer;
-            color: #0d6efd;
-        }
-        .clickable:hover {
-            text-decoration: underline;
-            background-color: #f8f9fa;
-        }
-        .badge-pmuy {
-            background-color: #198754;
-            color: white;
-        }
-        .badge-non-pmuy {
-            background-color: #6c757d;
-            color: white;
-        }
-        .no-data {
-            text-align: center;
-            color: #6c757d;
-            font-style: italic;
-        }
-        .view-title {
-            margin-bottom: 20px;
-            color: #0d6efd;
-        }
-        .navigation-controls {
-            margin-bottom: 15px;
-        }
-        .table-responsive {
-            overflow-x: auto;
-        }
-    </style>
-</head>
-<body>
     <div class="container">
         <h2 class="text-center text-primary mb-4">Customer Strength Data</h2>
 
@@ -184,30 +110,30 @@
                     <tbody>
                         <tr>
                             <td>Qty</td>
-                            <td class="clickable" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?></td>
-                            <td class="clickable" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?></td>
-                            <td class="clickable" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?></td>
-                            <td class="clickable" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?></td>
-                            <td class="clickable" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?></td>
-                            <td class="clickable" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?></td>
-                            <td class="clickable" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?></td>
-                            <td class="clickable" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?></td>
-                            <td class="clickable" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?></td>
-                            <td class="clickable" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?></td>
-                            <td class="clickable" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?></td>
-                            <td class="clickable" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?></td>
+                            <td class="clickable" data-status="ACTIVE" data-scheme="PMUY"><?php echo $customer_data['active']['pmuy']; ?></td>
+                            <td class="clickable" data-status="ACTIVE" data-scheme="NON_PMUY"><?php echo $customer_data['active']['non_pmuy']; ?></td>
+                            <td class="clickable" data-status="ACTIVE" data-scheme="ALL"><?php echo $customer_data['active']['total']; ?></td>
+                            <td class="clickable" data-status="SUSPENDED" data-scheme="PMUY"><?php echo $customer_data['suspended']['pmuy']; ?></td>
+                            <td class="clickable" data-status="SUSPENDED" data-scheme="NON_PMUY"><?php echo $customer_data['suspended']['non_pmuy']; ?></td>
+                            <td class="clickable" data-status="SUSPENDED" data-scheme="ALL"><?php echo $customer_data['suspended']['total']; ?></td>
+                            <td class="clickable" data-status="DEACTIVATED" data-scheme="PMUY"><?php echo $customer_data['deactivated']['pmuy']; ?></td>
+                            <td class="clickable" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?php echo $customer_data['deactivated']['non_pmuy']; ?></td>
+                            <td class="clickable" data-status="DEACTIVATED" data-scheme="ALL"><?php echo $customer_data['deactivated']['total']; ?></td>
+                            <td class="clickable" data-status="ALL" data-scheme="PMUY"><?php echo $customer_data['total']['pmuy']; ?></td>
+                            <td class="clickable" data-status="ALL" data-scheme="NON_PMUY"><?php echo $customer_data['total']['non_pmuy']; ?></td>
+                            <td class="clickable" data-status="ALL" data-scheme="ALL"><?php echo $customer_data['total']['total']; ?></td>
                         </tr>
                         <tr>
                             <td>Percent</td>
-                            <td><?= round(($customer_data['active']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['active']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['suspended']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) ?>%</td>
-                            <td><?= round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) ?>%</td>
+                            <td><?php echo $customer_data['total']['pmuy'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['non_pmuy'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['pmuy'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['non_pmuy'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['pmuy'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['pmuy']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['non_pmuy'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) : 0; ?>%</td>
+                            <td><?php echo $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0; ?>%</td>
                             <td>100%</td>
                             <td>100%</td>
                             <td>100%</td>
@@ -219,7 +145,6 @@
 
         <!-- Main Content Area -->
         <div id="mainContent" class="main-content">
-            <!-- Initial view - Area Breakdown -->
             <h4 class="view-title">Customer Distribution by Area</h4>
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -236,26 +161,19 @@
                             </tr>
                         <?php else: ?>
                             <?php 
-                            // Group customers by area for initial display
                             $area_counts = array();
                             foreach ($customers as $customer) {
                                 $area = $customer['area_name'] ?? 'Unknown Area';
-                                if (!isset($area_counts[$area])) {
-                                    $area_counts[$area] = 0;
-                                }
-                                $area_counts[$area]++;
+                                $area_counts[$area] = ($area_counts[$area] ?? 0) + 1;
                             }
-                            
-                            // Display first 10 areas by default
                             $display_areas = array_slice($area_counts, 0, 10, true);
                             ?>
-                            
                             <?php foreach ($display_areas as $area => $count): ?>
                                 <tr>
-                                    <td class="clickable initial-area-click" data-area="<?= html_escape($area) ?>">
-                                        <?= html_escape($area) ?>
+                                    <td class="clickable initial-area-click" data-area="<?php echo html_escape($area); ?>">
+                                        <?php echo html_escape($area); ?>
                                     </td>
-                                    <td><?= $count ?></td>
+                                    <td><?php echo $count; ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -290,8 +208,8 @@
         let viewHistory = [];
         
         // Initialize with all customer data from PHP
-        let allCustomers = <?= json_encode($customers) ?>;
-        let customerData = <?= json_encode($customer_data) ?>;
+        let allCustomers = <?php echo json_encode($customers); ?>;
+        let customerData = <?php echo json_encode($customer_data); ?>;
         
         // Debug output
         console.log('Loaded customers:', allCustomers);
@@ -602,7 +520,5 @@
         loadInitialAreaBreakdown();
     });
     </script>
-</body>
-</html>
 </body>
 </html>
