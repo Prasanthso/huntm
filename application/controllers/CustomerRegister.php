@@ -44,6 +44,14 @@ class CustomerRegister extends CI_Controller {
         }
 
         try {
+            // First delete all existing data
+            $delete_result = $this->CustomerRegister_model->delete_all_data();
+            if (!$delete_result) {
+                $this->session->set_flashdata('error', 'Failed to clear existing data.');
+                redirect('customerregister');
+            }
+
+            // Process new file upload
             $spreadsheet = IOFactory::load($file_name);
             $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
@@ -115,7 +123,7 @@ class CustomerRegister extends CI_Controller {
             if (!empty($insert_data)) {
                 $result = $this->CustomerRegister_model->insert_data($insert_data);
                 if ($result) {
-                    $this->session->set_flashdata('success', 'Data imported successfully. Rows inserted: ' . count($insert_data));
+                    $this->session->set_flashdata('success', 'Data refreshed successfully. Rows inserted: ' . count($insert_data));
                 } else {
                     $this->session->set_flashdata('error', 'Failed to insert data into database.');
                 }
@@ -129,6 +137,4 @@ class CustomerRegister extends CI_Controller {
 
         redirect('customerregister');
     }
-
-    
 }

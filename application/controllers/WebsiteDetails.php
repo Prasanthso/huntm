@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class WebsiteDetails extends CI_Controller {
@@ -110,15 +110,27 @@ class WebsiteDetails extends CI_Controller {
         }
     }
 
-    public function websitedashboard() {
-        $this->load->view('website_dashboard');
-    }
+    // public function websitedashboard() {
+    //          // Get customer data from model
+    //          $customers = $this->CustomerRegister_model->get_customer_strength_data();
+    //          $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
+             
+    //          // Prepare data for view
+    //          $data = [
+    //              'customer_data' => $customer_data,
+    //              'customers' => $customers ?: [],
+    //              'method' => 'customer_strength'
+    //          ];
+     
+    //          // echo '<pre>';
+    //          // print_r($data);
+    //          // echo '</pre>';
+             
+    //          $this->load->view('website_dashboard', $data);
+    //     // $this->load->view('website_dashboard');
 
-    // public function store_website() {
-    //     $this->load->model('WebsiteModel'); 
-    //     $data['websites'] = $this->WebsiteModel->get_all_websites();
-    
-    //     $this->load->view('store_website', $data); // Only load the table, not the full page
     // }
+
+   
 }
-?> -->
+?> 

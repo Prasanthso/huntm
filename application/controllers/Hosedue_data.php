@@ -10,45 +10,38 @@ class Hosedue_data extends CI_Controller {
         $this->load->library('session');
     }
 
-    public function hose_due_data() {  // Changed from hosedue_data() to index()
-        // Get data from model
+    public function hose_due_data() {
+        // Get data from models
+        $stats = $this->CustomerRegister_model->get_hose_due_stats();
         $hose_due_customers = $this->CustomerRegister_model->get_hose_due_data();
         
-        // Prepare data for the view in the expected format
-        $data['hose_due'] = $hose_due_customers ?: []; // Customers data
+        // Filter only due customers for the detailed view
+        $due_customers = array_filter($hose_due_customers, function($customer) {
+            return $customer['hose_status'] === 'Due';
+        });
         
-        // Calculate summary data (example - adjust with your actual calculations)
-        $pmuy_count = 0;
-        $non_pmuy_count = 0;
-        
-        foreach ($hose_due_customers as $customer) {
-            if ($customer['scheme_selected'] === 'PMUY') {
-                $pmuy_count++;
-            } else {
-                $non_pmuy_count++;
-            }
-        }
-        
-        $total_count = $pmuy_count + $non_pmuy_count;
-        
-        $data['table_data'] = [
-            'rows' => [
-                'Qty' => [
-                    $pmuy_count,
-                    $non_pmuy_count,
-                    $total_count
-                ],
-                '%' => [
-                    $total_count > 0 ? round(($pmuy_count/$total_count)*100, 2) : 0,
-                    $total_count > 0 ? round(($non_pmuy_count/$total_count)*100, 2) : 0,
-                    100
+        // Prepare data for view
+        $data = [
+            'table_data' => [
+                'rows' => [
+                    'Qty' => [
+                        $stats['PMUY_Due'],
+                        $stats['Non_PMUY_Due'],
+                        $stats['Total_Due']
+                    ],
+                    '%' => [
+                        $stats['PMUY_Due_Percent'] . '%',
+                        $stats['Non_PMUY_Due_Percent'] . '%',
+                        $stats['Total_Due_Percent'] . '%'
+                    ]
                 ]
-            ]
+            ],
+            'hose_due' => array_values($due_customers), // Re-index array after filtering
+            'method' => 'hosedue',
+            'page_title' => 'Hose Due Report',
+            'report_date' => date('d-M-Y H:i:s')
         ];
-        
-        // Load the view with data
-        // $this->load->view('hosedue_data_view', $data);
-        $data['method'] = 'hosedue';
+
         $this->load->view('website_dashboard', $data);
     }
 }

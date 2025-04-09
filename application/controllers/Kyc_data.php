@@ -11,18 +11,15 @@ class Kyc_data extends CI_Controller {
     }
 
     public function kyc_data() {
-        $data['kyc_data'] = [
-            ["PMUY" => 0, "Non_PMUY" => 1184, "Total" => 1148, "PMUY_Pending" => 0, "Non_PMUY_Pending" => 11.75, "Total_Pending" => 11.75],
+        // Get all necessary data from models
+        $data = [
+            'kyc_stats' => $this->CustomerRegister_model->get_kyc_stats(),
+            'kyc_data' => $this->CustomerRegister_model->get_kyc_data(),
+            'method' => 'kyc_data',
+            'page_title' => 'KYC Status Report',
+            'report_date' => date('d-M-Y H:i:s')
         ];
 
-        $data['kycdata'] = $this->CustomerRegister_model->get_kyc_data();
-
-        if (empty($data['kycdata'])) {
-            $data['kycdata'] = [];
-        }
-        // $this->load->view('kyc_data_view', $data);
-        $data['method'] = 'kyc_data';
         $this->load->view('website_dashboard', $data);
     }
 }
-?>

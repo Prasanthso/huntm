@@ -21,6 +21,10 @@ class Customer_strength extends CI_Controller {
             'customers' => $customers ?: [],
             'method' => 'customer_strength'
         ];
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
         
         $this->load->view('website_dashboard', $data);
     }

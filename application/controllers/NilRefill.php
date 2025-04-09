@@ -6,23 +6,22 @@ class NilRefill extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('CustomerRegister_model');
-        $this->load->helper(array('form', 'url', 'date'));
+        $this->load->helper(['form', 'url']);
+        $this->load->library('session');
     }
 
     public function nill_fill_data() {
-        // Get all raw customer data
-        $raw_data = $this->CustomerRegister_model->get_nillrefill_data();
+        // Get all customers data
+        $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
         
         // Calculate statistics
-        $stats = $this->CustomerRegister_model->get_nillrefill_stats($raw_data);
+        $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
         
         // Prepare data for view
         $data = [
-            'all_customers' => $raw_data,
             'stats' => $stats,
-            'page_title' => 'Nil Refill Report',
-            'report_date' => date('d-M-Y H:i:s'),
-            'method' => 'nillrefil'
+            'all_customers' => $all_customers,
+            'method' => 'nil_refill_report' // This helps identify which view to load
         ];
         
         $this->load->view('website_dashboard', $data);
