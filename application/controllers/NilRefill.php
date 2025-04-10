@@ -6,50 +6,24 @@ class NilRefill extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('CustomerRegister_model');
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(['form', 'url']);
         $this->load->library('session');
     }
 
     public function nill_fill_data() {
-        // Sample data - replace with your actual data
-        $data['table_data'] = [
-            'greater_than_6_months' => [
-                'pmuy' => [
-                    'qty' => 30,
-                    'percent' => 0.29
-                ],
-                'non_pmuy' => [
-                    'qty' => 359,
-                    'percent' => 3.48
-                ],
-                'total' => [
-                    'qty' => 389,
-                    'percent' => 3.78
-                ]
-            ],
-            'greater_than_1_year' => [
-                'pmuy' => [
-                    'qty' => 73,
-                    'percent' => 0.7
-                ],
-                'non_pmuy' => [
-                    'qty' => 782,
-                    'percent' => 7.59
-                ],
-                'total' => [
-                    'qty' => 855,
-                    'percent' => 8.30
-                ]
-            ]
+        // Get all customers data
+        $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+        
+        // Calculate statistics
+        $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+        
+        // Prepare data for view
+        $data = [
+            'stats' => $stats,
+            'all_customers' => $all_customers,
+            'method' => 'nil_refill_report' // This helps identify which view to load
         ];
         
-        $data['nillrefill'] = $this->CustomerRegister_model->get_nillrefill_data();
-
-        if (empty($data['nillrefill'])) {
-            $data['nillrefill'] = [];
-        }
-        $data['method'] = 'nillrefil';
         $this->load->view('website_dashboard', $data);
-        // $this->load->view('nil_refill_view', $data);
     }
 }

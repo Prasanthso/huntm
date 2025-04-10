@@ -158,14 +158,24 @@ tr:hover td {
     cursor: pointer;
 }
 
-.clickable {
+.clickabled {
     cursor: pointer;
-    text-decoration: underline;
-    color: #007bff;
+    /* text-decoration: underline; */
+    color: black;
 }
 
-.clickable:hover {
+.clickabled:hover {
     color: #0056b3;
+}
+
+.back-bttn  {
+    cursor: pointer;
+    /* text-decoration: underline; */
+    color: #0056b3;
+}
+
+.back-bttn :hover {
+    color: #2980b9;
 }
 
 .view-title {
@@ -214,10 +224,9 @@ tr:hover td {
     table-layout: fixed;
 }
 .nerefil-summary{
-    width: 80%;
-    background-color: white;
+    width: 75%;
     padding: 15px;
-    margin-left: 350px;
+    margin-left: 300px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
@@ -250,12 +259,12 @@ tr:hover td {
     display: none;
 }
 
-.nilrefil_summary_table {
-    width: 75%;
+/* .nilrefil_summary_table {
+    width: 80%;
     margin-left: 40px;
-    padding-left: 150px;
+    padding-left: 100px;
     border-collapse: collapse; 
-}
+} */
 
 .customer-table {
     width: 80%;
@@ -304,7 +313,7 @@ tr:hover td {
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
-    margin-left: 350px;
+    margin-left: 300px;
     width: 75%;
 }
 .midue-area-details, .midue_customer_details{

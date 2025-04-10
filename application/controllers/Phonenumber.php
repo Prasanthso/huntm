@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Phonenumber extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
         $this->load->model('CustomerRegister_model');
@@ -11,25 +10,25 @@ class Phonenumber extends CI_Controller {
     }
 
     public function phonenumber_data() {
-        // Dummy data for SBC Data table
+        $stats = $this->CustomerRegister_model->get_phone_missing_stats();
+        
         $data['table_data'] = [
-            'main_header' => 'SBC Data',
+            'main_header' => 'Phone Missing',
             'sub_headers' => ['PMUY', 'Non PMUY', 'Total'],
             'rows' => [
-                'Qty' => ['648', '2759', '3407'],
-                '%' => ['28.81', '89.13', '56.21']
+                'Qty' => [$stats['PMUY'], $stats['Non_PMUY'], $stats['Total']],
+                '%' => [$stats['PMUY_Percent'] . '%', $stats['Non_PMUY_Percent'] . '%', '100%']
             ]
         ];
         
-        // Get phone number data from model
         $data['phone_missing_data'] = $this->CustomerRegister_model->get_phone_number_data();
-
-        if (empty($data['phone_missing_data'])) {
-            $data['phone_missing_data'] = [];
-        }
-        
-        // $this->load->view('phonenumber_view', $data);
         $data['method'] = 'phonenumber';
+        $data['page_title'] = 'Phone Number Missing Report';
+        $data['report_date'] = date('d-M-Y H:i:s');
+        
+        // Add debug data
+        $data['debug_count'] = count($data['phone_missing_data']);
+        
         $this->load->view('website_dashboard', $data);
     }
 }

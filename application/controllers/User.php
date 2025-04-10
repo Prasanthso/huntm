@@ -6,6 +6,7 @@ class User extends CI_Controller {
         $this->load->library(['form_validation', 'session']);
         $this->load->model('User_model'); //load model here
         $this->load->database();
+        $this->load->model('CustomerRegister_model');
 		// $this->load->model('WebsiteModel');
     }
 
@@ -139,8 +140,25 @@ class User extends CI_Controller {
     
 	public function dashboardview(){
 		// $this->load->view('website_dashboard');
+        // Get customer data from model
+        $customers = $this->CustomerRegister_model->get_customer_strength_data();
+        $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
+        
+        // Prepare data for view
+        $data = [
+            'customer_data' => $customer_data,
+            'customers' => $customers ?: [],
+            'method' => 'customer_strength'
+        ];
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
         $data['method'] = "dashboard";
         $this->load->view('website_dashboard', $data);
+   // $this->load->view('website_dashboard');
+       
+        // $this->load->view('website_dashboard', $data);
 	}
     
 }
