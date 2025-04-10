@@ -652,20 +652,42 @@
             .image-text {
                 font-size: 16px;
             }
-        
+		
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
+<?php 
+$userid = $this->session->userdata('id');
+?>
+<!-- <header>
         <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white">
             <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo">
             <span class="navbar-brand">Huntm</span>
+			<span class="text-end mt-2">Welcome, <?php echo $this->session->userdata('name'); ?></span>
         </a>
         <button class="hamburger" id="hamburger">
             <i class="fas fa-bars"></i>
         </button>
-    </header>
+    </header> -->
+
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center px-5 py-2 bg-dark text-white">
+    <div class="d-flex align-items-center">
+        <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white text-decoration-none">
+            <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo me-2">
+            <span class="navbar-brand mb-0">Huntm</span>
+        </a>
+    </div>
+
+    <div class="text-end">
+        <span>Welcome! <?php echo $this->session->userdata('username'); ?></span>
+    </div>
+	
+    <button class="hamburger btn btn-link text-white ms-3" id="hamburger">
+        <i class="fas fa-bars"></i>
+    </button>
+</header>
+
     
     <div class="main-container">
         <!-- Sidebar -->
@@ -718,8 +740,7 @@
                 </div>
 
                 <a class="dropdown-item fileupload list-group-item list-group-item-action w-100" href="<?php echo base_url('fundbalance_data'); ?>">Fund Balance</a>
-                        
-                  
+                    
 
                 <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
@@ -810,8 +831,7 @@
                 <p class="fs-6">Qty : 4,222</p>
                 <p class="fs-6">Percent : 100%</p>
             </div>
-        </div>
-            
+        </div>            
 
         <div class="col">
             <div class="card text-center dashboard-card card-9"  onclick="window.location.href='hosedue'">

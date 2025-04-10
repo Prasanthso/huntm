@@ -10,6 +10,7 @@ class Dashboard extends CI_Controller {
         // $this->load->model('User_model'); //load model here
         // $this->load->database();
 		// $this->load->model('WebsiteModel');
+		
     }
 
 	public function show()
