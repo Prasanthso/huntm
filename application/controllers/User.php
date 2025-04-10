@@ -145,30 +145,67 @@ class User extends CI_Controller {
         }
     }
     
-	public function dashboardview(){
-		// $this->load->view('website_dashboard');
-
-		// if (!$this->session->userdata('id')) {
-	    // Get customer data from model
-        $customers = $this->CustomerRegister_model->get_customer_strength_data();
+	public function dashboardview() {
+        $this->load->model('CustomerRegister_model');
+    
+        // Get total domestic customers (reused across stats)
+        $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
+    
+        // Customer Strength stats
         $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
-        
+        $customer_data['total']['percent'] = $total_customers > 0 ? round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
+    
+        // Phone Missing stats
+        $phone_stats_raw = $this->CustomerRegister_model->get_phone_missing_stats();
+        $phone_stats = [
+            'total' => [
+                'qty' => $phone_stats_raw['Total'],
+                'percent' => $total_customers > 0 ? round(($phone_stats_raw['Total'] / $total_customers) * 100, 2) : 0
+            ]
+        ];
+    
+        // Nil Refill stats
+        $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+        $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+    
+        // MI Due stats
+        $mi_due_summary = $this->CustomerRegister_model->get_mi_due_summary();
+        $total_mi_due = 0;
+        foreach ($mi_due_summary as $row) {
+            $total_mi_due += $row['count'];
+        }
+        $mi_stats = [
+            'total' => [
+                'qty' => $total_mi_due,
+                'percent' => $total_customers > 0 ? round(($total_mi_due / $total_customers) * 100, 2) : 0
+            ]
+        ];
+    
+        // Hose Due stats
+        $hose_stats_raw = $this->CustomerRegister_model->get_hose_due_stats();
+        $hose_stats = [
+            'total' => [
+                'qty' => $hose_stats_raw['Total_Due'],
+                'percent' => $hose_stats_raw['Total_Due_Percent']
+            ]
+        ];
+    
         // Prepare data for view
         $data = [
+            'method' => 'dashboard',
             'customer_data' => $customer_data,
-            'customers' => $customers ?: [],
-            'method' => 'customer_strength'
+            'sbc_counts' => $this->CustomerRegister_model->get_sbc_status_counts(),
+            'kyc_stats' => $this->CustomerRegister_model->get_kyc_stats(),
+            'stats' => $stats,              // Nil Refill
+            'all_customers' => $all_customers,
+            'mi_stats' => $mi_stats,
+            'hose_stats' => $hose_stats,
+            'phone_stats' => $phone_stats
         ];
-        // echo '<pre>';
-        // print_r($data);
-        // echo '</pre>';
-        $data['method'] = "dashboard";
+    
         $this->load->view('website_dashboard', $data);
-	// }
-   // $this->load->view('website_dashboard');
-       
-        // $this->load->view('website_dashboard', $data);
-	}
+    }
+    
     
 }
 ?>

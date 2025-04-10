@@ -20,6 +20,14 @@ class Hosedue_data extends CI_Controller {
             return $customer['hose_status'] === 'Due';
         });
         
+        // Simplified stats for the card
+        $hose_stats = [
+            'total' => [
+                'qty' => $stats['Total_Due'],
+                'percent' => $stats['Total_Due_Percent']
+            ]
+        ];
+    
         // Prepare data for view
         $data = [
             'table_data' => [
@@ -36,12 +44,13 @@ class Hosedue_data extends CI_Controller {
                     ]
                 ]
             ],
-            'hose_due' => array_values($due_customers), // Re-index array after filtering
+            'hose_due' => array_values($due_customers),
+            'hose_stats' => $hose_stats, // Add this for the card
             'method' => 'hosedue',
             'page_title' => 'Hose Due Report',
             'report_date' => date('d-M-Y H:i:s')
         ];
-
+    
         $this->load->view('website_dashboard', $data);
     }
 }

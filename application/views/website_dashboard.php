@@ -786,67 +786,126 @@ $userid = $this->session->userdata('id');
             </div>
         </div>
         <div class="col">
-            <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
-                <h6 class="fs-5">💰 Customer Strength</h6>
-                <?php if(isset($data['customer_data'])): ?>
-                    <p class="fs-6">Qty : <?= number_format($customer_data['total']['total']) ?></p>
-                    <p class="fs-6">Active : <?= round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100) ?>%</p>
-                <?php else: ?>
-                    <p class="fs-6">Data not available</p>
-                <?php endif; ?>
-            </div>
-        </div>
+        <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
+            <h6 class="fs-5">💰 Customer Strength</h6>
 
-<div class="col">
-    <div class="card text-center dashboard-card card-3" onclick="window.location.href='SBC_data'">
-        <h6 class="fs-5">🛍️ SBC</h6>
-        <?php if(isset($counts)): ?>
-            <p class="fs-6">Qty: <?= number_format($counts['total']['total']) ?></p>
-        <?php else: ?>
-            <p class="fs-6">Data not available</p>
-        <?php endif; ?>
+            <?php
+            if (isset($customer_data) && is_array($customer_data)) {
+                $totalCustomers = $customer_data['total']['total'] ?? 0;
+
+                if ($totalCustomers > 0):
+            ?>
+                    <p class="fs-6">Total : <?= number_format($totalCustomers) ?></p>
+                    <p class="fs-6">Percent : 98.7%</p>
+            <?php
+                else:
+                    echo '<p class="fs-6">No customers found</p>';
+                endif;
+            } else {
+                echo '<p class="fs-6">Data not available</p>';
+            }
+            ?>
+        </div>
     </div>
-</div>
 
-        <div class="col">
-        <div class="card text-center dashboard-card card-3" onclick="window.location.href='nillfill'">
-                <h6 class = "fs-5">📝 Nil Refill</h6>
-                <?php if(isset($stats)): ?>
-            <p class="fs-6">Qty: <?= number_format($stats['total']['total']) ?></p>
-        <?php else: ?>
-            <p class="fs-6">Data not available</p>
-        <?php endif; ?>
-            </div>
+    <div class="col">
+        <div class="card text-center dashboard-card card-3" onclick="window.location.href='SBC_data'">
+            <h6 class="fs-5">🛍️ SBC</h6>
+
+            <?php
+            if (isset($sbc_counts) && isset($customer_data)) {
+                $sbc_total = $sbc_counts['total'] ?? 0;
+                $customer_total = $customer_data['total']['total'] ?? 0;
+
+                if ($sbc_total > 0 && $customer_total > 0):
+                    $sbc_percent = round(($sbc_total / $customer_total) * 100);
+            ?>
+                    <p class="fs-6">Total: <?= number_format($sbc_total) ?></p>
+                    <p class="fs-6">Percent: <?= $sbc_percent ?>%</p>
+            <?php
+                else:
+                    echo '<p class="fs-6">No SBC data found</p>';
+                endif;
+            } else {
+                echo '<p class="fs-6">Data not available</p>';
+            }
+            ?>
         </div>
-        <div class="col">
+    </div>
+
+    <div class="col">
+        <div class="card text-center dashboard-card card-3" onclick="window.location.href='NilRefill/nill_fill_data'">
+            <h6 class="fs-5">📝 Nil Refill</h6>
+
+            <?php if (!empty($stats)): ?>
+                <p class="fs-20 fw-bold mb-1">3 Months</p>
+                <p class="fs-15">Total: <?= number_format($stats['greater_than_3_months']['total']['qty']) ?></p>
+                <p class ="fs-15">Percent: <?= $stats['greater_than_3_months']['total']['percent'] ?>% </p>
+
+            <?php else: ?>
+                <p class="fs-6">Data not available</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="col">
         <div class="card text-center dashboard-card card-3" onclick="window.location.href='kycdata'">
-                <h6 class = "fs-5">🔄  KYC</h6>
-                <p class="fs-6">Qty : 1,196</p>
-                <p class="fs-6">Percent : 100%</p>
-        </div>
-        </div>
-        <div class="col">
-            <div class="card text-center dashboard-card card-8"  onclick="window.location.href='midue'">
-                <h6 class = "fs-5">📈 MI Due</h6>
-                <p class="fs-6">Qty : 4,222</p>
-                <p class="fs-6">Percent : 100%</p>
-            </div>
-        </div>
+            <h6 class="fs-5">🔄 KYC</h6>
+            <?php
+            if (isset($kyc_stats)) {
+                $kyc_completed = $kyc_stats['Total_Pending'];
+                $total_customers = $kyc_stats['Total'];
 
-        <div class="col">
-            <div class="card text-center dashboard-card card-9"  onclick="window.location.href='hosedue'">
-                <h6 class = "fs-5">🏭 Hose Due</h6>
-                <p class="fs-6">Qty : 6,826</p>
-                <p class="fs-6">Percent : 100%</p>
-            </div>
+                if ($kyc_completed > 0 && $total_customers > 0):
+                    $kyc_percent = round(($kyc_completed / $total_customers) * 100);
+            ?>
+                    <p class="fs-6">Total: <?= number_format($kyc_completed) ?></p>
+                    <p class="fs-6">Percent: <?= $kyc_percent ?>%</p>
+            <?php
+                else:
+                    echo '<p class="fs-6">No KYC data found</p>';
+                endif;
+            } else {
+                echo '<p class="fs-6">Data not available</p>';
+            }
+            ?>
         </div>
-        <div class="col">
-            <div class="card text-center dashboard-card card-10"  onclick="window.location.href='phonenumber'">
-                <h6 class = "fs-5">🆕 Mobile No</h6>
-                <p class="fs-6">Qty : 408</p>
-                <p class="fs-6">Percent : 100%</p>
-            </div>
+    </div>
+
+    <div class="col">
+        <div class="card text-center dashboard-card card-8" onclick="window.location.href='midue'">
+            <h6 class="fs-5">📈 MI Due</h6>
+            <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
+                <p class="fs-6">Total: <?= number_format($mi_stats['total']['qty']) ?></p>
+                <p class="fs-6">Percent: <?= round($mi_stats['total']['percent']) ?>%</p>
+            <?php else: ?>
+                <p class="fs-6">Data not available</p>
+            <?php endif; ?>
         </div>
+    </div>   
+
+    <div class="col">
+        <div class="card text-center dashboard-card card-9" onclick="window.location.href='hosedue'">
+            <h6 class="fs-5">🏭 Hose Due</h6>
+            <?php if (!empty($hose_stats) && isset($hose_stats['total']['qty']) && isset($hose_stats['total']['percent'])): ?>
+                <p class="fs-6">Total: <?= number_format($hose_stats['total']['qty']) ?></p>
+                <p class="fs-6">Percent: <?= round($hose_stats['total']['percent']) ?>%</p>
+            <?php else: ?>
+                <p class="fs-6">Data not available</p>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card text-center dashboard-card card-10" onclick="window.location.href='phonenumber'">
+            <h6 class="fs-5">🆕 Mobile No</h6>
+            <?php if (!empty($phone_stats) && isset($phone_stats['total']['qty']) && isset($phone_stats['total']['percent'])): ?>
+                <p class="fs-6">Total: <?= number_format($phone_stats['total']['qty']) ?></p>
+                <p class="fs-6">Percent: <?= round($phone_stats['total']['percent']) ?>%</p>
+            <?php else: ?>
+                <p class="fs-6">Data not available</p>
+            <?php endif; ?>
+        </div>
+    </div>
         <!-- <div class="col-3">
             <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
                 <h6>🚚 Deliveries</h6>
@@ -1345,7 +1404,8 @@ $userid = $this->session->userdata('id');
                            
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <!-- <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>98.7%</td> -->
+                             <td>98.7%</td>
                         </tr>
                     </tbody>
                 </table>

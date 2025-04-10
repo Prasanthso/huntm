@@ -14,18 +14,18 @@ class Customer_strength extends CI_Controller {
         // Get customer data from model
         $customers = $this->CustomerRegister_model->get_customer_strength_data();
         $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
-        
+        $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
+    
+        // Add percentage to customer_data
+        $customer_data['total']['percent'] = $total_customers > 0 ? round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
+    
         // Prepare data for view
         $data = [
             'customer_data' => $customer_data,
             'customers' => $customers ?: [],
             'method' => 'customer_strength'
         ];
-
-        // echo '<pre>';
-        // print_r($data);
-        // echo '</pre>';
-        
+    
         $this->load->view('website_dashboard', $data);
     }
 }
