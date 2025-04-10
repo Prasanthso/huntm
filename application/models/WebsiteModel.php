@@ -43,7 +43,7 @@ class WebsiteModel extends CI_Model {
 		$loggeduserid = $this->session->userdata('id');
         $this->db->select('website_Id, website_userId, website_password, website_url');
         $this->db->from('website_table');
-		$this->db->where('user_id', $loggeduserid);
+		$this->db->where('userid', $loggeduserid);
         $query = $this->db->get();
         return $query->result_array();
     }

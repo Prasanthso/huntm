@@ -56,7 +56,7 @@ class WebsiteDetails extends CI_Controller {
                 'website_userId' => $userId,
                 'website_password' => $password,
                 'website_url' => $url,
-                'user_id' => $loggeduserid
+                'userid' => $loggeduserid
             ];
 
             if ($this->WebsiteModel->insert_website($insert_data)) {
@@ -71,7 +71,7 @@ class WebsiteDetails extends CI_Controller {
     
     // Show dashboard with saved websites
     public function stored_website() {
-		
+
         $data['websites'] = $this->WebsiteModel->get_all_websites();
         $data['method'] = 'store_website';
         $this->load->view('website_dashboard',$data); 

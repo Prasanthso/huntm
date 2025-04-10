@@ -574,10 +574,10 @@
             }
 
             .suggest-form {
-                margin-left: 30px;
+                margin-left: 40px;
                 margin-right: 20px;
-				width: calc(100% - 40px);
-                padding: 15px;
+				width: calc(100% - 30px);
+                padding: 20px;
             }
 
             .form-container{
@@ -588,7 +588,7 @@
 
             .container{
                 margin-left : 20px;
-				margin-right : -200px;
+				margin-right : -242px;
 				/* padding: 20px; */
                 width: calc(100% - 40px);
 				
@@ -990,7 +990,7 @@ $userid = $this->session->userdata('id');
 
                 <!-- display open process data in website -->
                 <?php } elseif ($method == 'display_invoice_data') { ?>
-                    <div class="container3">
+                    <div class="container">
                         <h2>Invoice Order Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
@@ -1031,7 +1031,7 @@ $userid = $this->session->userdata('id');
                     </div>
 
                     <?php } elseif ($method == 'display_open_data') {?>
-                        <div class="container3">
+                        <div class="container">
                         <h2>Open Process Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
@@ -1071,7 +1071,7 @@ $userid = $this->session->userdata('id');
                     </div>
 
                     <?php } elseif ($method == 'display_fundbalance') { ?>
-                        <div class="container3">
+                        <div class="container">
                         <h2>Fund Balance</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
