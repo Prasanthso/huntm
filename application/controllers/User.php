@@ -45,9 +45,14 @@ class User extends CI_Controller {
 		
         if ($user) {
             if (password_verify($password, $user->Password)) {  
-                $this->session->set_userdata('id', $user->id);
+                $userid = $this->session->set_userdata('id', $user->id);
+				$userid = $this->session->set_userdata('username', $user->Firstname);
                 $this->session->set_flashdata('login_success', true); // ✅ Set flashdata for success message
+				
                 redirect('dashboard'); // Redirect to Suggestion Form
+				echo '<pre>';
+				print_r($data);
+				echo '</pre>';
             } else {
                 $errors['password'] = 'Incorrect password.';
                 $this->session->set_flashdata('errors', $errors);
@@ -72,7 +77,8 @@ class User extends CI_Controller {
         $suggestion_type = $this->input->post('suggestion_type', true);
         $message = $this->input->post('message', true);
         $voice_message = $this->input->post('voice_message', true);
-    
+		$userid = $this->session->userdata('id');
+		    
         $errors = [];
     
         // Check validation of form
@@ -123,7 +129,8 @@ class User extends CI_Controller {
             'application' => $application,
             'suggestion_type' => $suggestion_type,
             'message' => $message,
-            'voice_message' => $audio_filename // Store unique filename in DB
+            'voice_message' => $audio_filename, // Store unique filename in DB
+			'userid' => $userid
         ];
     
         $inserted = $this->User_model->insert_suggestion($data);
@@ -198,7 +205,6 @@ class User extends CI_Controller {
     
         $this->load->view('website_dashboard', $data);
     }
-    
     
     
 }

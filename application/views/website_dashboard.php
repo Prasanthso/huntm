@@ -574,10 +574,10 @@
             }
 
             .suggest-form {
-                margin-left: 30px;
+                margin-left: 40px;
                 margin-right: 20px;
-				width: calc(100% - 40px);
-                padding: 15px;
+				width: calc(100% - 30px);
+                padding: 20px;
             }
 
             .form-container{
@@ -588,7 +588,7 @@
 
             .container{
                 margin-left : 20px;
-				margin-right : -200px;
+				margin-right : -242px;
 				/* padding: 20px; */
                 width: calc(100% - 40px);
 				
@@ -652,20 +652,42 @@
             .image-text {
                 font-size: 16px;
             }
-        
+		
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
+<?php 
+$userid = $this->session->userdata('id');
+?>
+<!-- <header>
         <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white">
             <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo">
             <span class="navbar-brand">Huntm</span>
+			<span class="text-end mt-2">Welcome, <?php echo $this->session->userdata('name'); ?></span>
         </a>
         <button class="hamburger" id="hamburger">
             <i class="fas fa-bars"></i>
         </button>
-    </header>
+    </header> -->
+
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center px-5 py-2 bg-dark text-white">
+    <div class="d-flex align-items-center">
+        <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white text-decoration-none">
+            <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo me-2">
+            <span class="navbar-brand mb-0">Huntm</span>
+        </a>
+    </div>
+
+    <div class="text-end">
+        <span>Welcome! <?php echo $this->session->userdata('username'); ?></span>
+    </div>
+	
+    <button class="hamburger btn btn-link text-white ms-3" id="hamburger">
+        <i class="fas fa-bars"></i>
+    </button>
+</header>
+
     
     <div class="main-container">
         <!-- Sidebar -->
@@ -718,8 +740,7 @@
                 </div>
 
                 <a class="dropdown-item fileupload list-group-item list-group-item-action w-100" href="<?php echo base_url('fundbalance_data'); ?>">Fund Balance</a>
-                        
-                  
+                    
 
                 <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
                 
@@ -850,10 +871,6 @@
             ?>
         </div>
     </div>
-
-
-
-
 
     <div class="col">
         <div class="card text-center dashboard-card card-8" onclick="window.location.href='midue'">
@@ -1032,7 +1049,7 @@
 
                 <!-- display open process data in website -->
                 <?php } elseif ($method == 'display_invoice_data') { ?>
-                    <div class="container3">
+                    <div class="container">
                         <h2>Invoice Order Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
@@ -1073,7 +1090,7 @@
                     </div>
 
                     <?php } elseif ($method == 'display_open_data') {?>
-                        <div class="container3">
+                        <div class="container">
                         <h2>Open Process Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
@@ -1113,7 +1130,7 @@
                     </div>
 
                     <?php } elseif ($method == 'display_fundbalance') { ?>
-                        <div class="container3">
+                        <div class="container">
                         <h2>Fund Balance</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
@@ -1234,7 +1251,7 @@
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-link"></i></span>
-                                    <input type="text" name="url" class="form-control" placeholder="Website URL" value="<?= set_value('url') ?>">
+                                    <input type="text" name="url" class="form-control" placeholder="Website URL" value="<?= set_value('url') ?>" required>
                                 </div>
                                 <?php if (!empty($errors['url'])): ?>
                                     <small class="text-danger"><?= $errors['url']; ?></small>
@@ -1244,7 +1261,7 @@
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                    <input type="text" name="userId" class="form-control" placeholder="UserId" value="<?= set_value('userId') ?>"> 
+                                    <input type="text" name="userId" class="form-control" placeholder="UserId" value="<?= set_value('userId') ?>" required> 
                                 </div>
                                 <?php if (!empty($errors['userId'])): ?>
                                     <small class="text-danger"><?= $errors['userId']; ?></small>
@@ -1254,7 +1271,7 @@
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                    <input type="password" name="password" class="form-control" placeholder="Password">
+                                    <input type="password" name="password" class="form-control" placeholder="Password" required>
                                 </div>
                                 <?php if (!empty($errors['password'])): ?>
                                     <small class="text-danger"><?= $errors['password']; ?></small>
