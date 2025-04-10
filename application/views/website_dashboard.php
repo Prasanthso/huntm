@@ -823,7 +823,7 @@ $userid = $this->session->userdata('id');
                 <h6 class = "fs-5">🔄  KYC</h6>
                 <p class="fs-6">Qty : 1,196</p>
                 <p class="fs-6">Percent : 100%</p>
-            </div>
+        </div>
         </div>
         <div class="col">
             <div class="card text-center dashboard-card card-8"  onclick="window.location.href='midue'">
@@ -831,7 +831,7 @@ $userid = $this->session->userdata('id');
                 <p class="fs-6">Qty : 4,222</p>
                 <p class="fs-6">Percent : 100%</p>
             </div>
-        </div>            
+        </div>
 
         <div class="col">
             <div class="card text-center dashboard-card card-9"  onclick="window.location.href='hosedue'">
@@ -1192,7 +1192,7 @@ $userid = $this->session->userdata('id');
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-link"></i></span>
-                                    <input type="text" name="url" class="form-control" placeholder="Website URL" value="<?= set_value('url') ?>">
+                                    <input type="text" name="url" class="form-control" placeholder="Website URL" value="<?= set_value('url') ?>" required>
                                 </div>
                                 <?php if (!empty($errors['url'])): ?>
                                     <small class="text-danger"><?= $errors['url']; ?></small>
@@ -1202,7 +1202,7 @@ $userid = $this->session->userdata('id');
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                    <input type="text" name="userId" class="form-control" placeholder="UserId" value="<?= set_value('userId') ?>"> 
+                                    <input type="text" name="userId" class="form-control" placeholder="UserId" value="<?= set_value('userId') ?>" required> 
                                 </div>
                                 <?php if (!empty($errors['userId'])): ?>
                                     <small class="text-danger"><?= $errors['userId']; ?></small>
@@ -1212,7 +1212,7 @@ $userid = $this->session->userdata('id');
                             <div class="mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                    <input type="password" name="password" class="form-control" placeholder="Password">
+                                    <input type="password" name="password" class="form-control" placeholder="Password" required>
                                 </div>
                                 <?php if (!empty($errors['password'])): ?>
                                     <small class="text-danger"><?= $errors['password']; ?></small>

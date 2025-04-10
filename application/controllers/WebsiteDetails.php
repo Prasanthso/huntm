@@ -34,7 +34,7 @@ class WebsiteDetails extends CI_Controller {
         $url = trim($this->input->post('url'));
         $userId = trim($this->input->post('userId'));
         $password = trim($this->input->post('password'));
-        $user_id = trim($this->input->post('user_id'));
+        $loggeduserid = $this->session->userdata('id');
 
         // Ensure URL starts with http:// or https://
         if (!empty($url) && !preg_match("~^(?:f|ht)tps?://~i", $url)) {
@@ -45,7 +45,7 @@ class WebsiteDetails extends CI_Controller {
         if (empty($url)) $data['errors']['url'] = 'Website URL is required.';
         if (empty($userId)) $data['errors']['userId'] = 'Username is required.';
         if (empty($password)) $data['errors']['password'] = 'Password is required.';
-        if (empty($user_id)) $data['errors']['user_id'] = 'Please select a user.';
+        if (empty($loggeduserid)) $data['errors'] = 'Not a valid logged in user.';
 
         if (!empty($data['errors'])) {
             $this->load->view('add_website', $data);
@@ -56,7 +56,7 @@ class WebsiteDetails extends CI_Controller {
                 'website_userId' => $userId,
                 'website_password' => $password,
                 'website_url' => $url,
-                'user_id' => $user_id
+                'user_id' => $loggeduserid
             ];
 
             if ($this->WebsiteModel->insert_website($insert_data)) {
@@ -71,6 +71,7 @@ class WebsiteDetails extends CI_Controller {
     
     // Show dashboard with saved websites
     public function stored_website() {
+		
         $data['websites'] = $this->WebsiteModel->get_all_websites();
         $data['method'] = 'store_website';
         $this->load->view('website_dashboard',$data); 
