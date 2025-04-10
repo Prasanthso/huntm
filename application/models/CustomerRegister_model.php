@@ -18,14 +18,18 @@ class CustomerRegister_model extends CI_Model {
         return $this->db->trans_status();
     }
 
-    public function delete_all_data() {
-        return $this->db->empty_table($this->table); 
+    public function delete_user_data($userid) {
+        $this->db->where('userid', $userid);
+        return $this->db->delete('customer_register');
     }
+    
 
     //Customer strength data
     public function get_customer_strength_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid); 
         $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
         $query = $this->db->get($this->table);
     
@@ -44,8 +48,10 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_customer_status_counts() {
+        $userid = $this->session->userdata('id');
         $this->db->select("scheme_selected, consumer_sub_status");
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid); 
         $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
         $query = $this->db->get($this->table);
         
@@ -88,6 +94,7 @@ class CustomerRegister_model extends CI_Model {
     // protected $table = 'customer_register'; // Replace with actual table name
 
     public function get_nillrefill_data() {
+        // $userid = $this->session->userdata('id');
         $this->db->select([
             'area_name', 
             'consumer_number', 
@@ -99,6 +106,7 @@ class CustomerRegister_model extends CI_Model {
         ]);
         
         $this->db->where('consumer_category', 'domestic');
+        // $this->db->where('userid', $userid);
         $this->db->order_by('last_refill_date', 'ASC');
         
         $query = $this->db->get($this->table);
@@ -133,6 +141,8 @@ class CustomerRegister_model extends CI_Model {
     }
 
     public function get_nillrefill_stats($customers) {
+        // $userid = $this->session->userdata('id');
+        // $this->db->where('userid', $userid);
         $counts = [
             'greater_than_3_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
             'greater_than_6_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
@@ -190,8 +200,10 @@ class CustomerRegister_model extends CI_Model {
 
     //KYC data
     public function get_kyc_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, kyc_number");
         $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('userid', $userid);
         $query = $this->db->get($this->table);
 
         if ($query->num_rows() > 0) {
@@ -307,6 +319,7 @@ class CustomerRegister_model extends CI_Model {
 
     //MI due data
     public function get_pending_mi_area_scheme_wise() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, 
                           CASE 
                               WHEN scheme_selected = 'Ujjwala' THEN 'PMUY'
@@ -314,8 +327,13 @@ class CustomerRegister_model extends CI_Model {
                           END AS scheme_type,
                           consumer_number, consumer_name, phone_number");
         $this->db->where('consumer_category', 'domestic');
-        $this->db->where('mandatory_inspection_date >=', date('Y-m-d', strtotime('-5 years')));
-        $this->db->where('mandatory_inspection_date <', date('Y-m-d'));
+        $this->db->where('userid', $userid);
+        // Convert MM/DD/YYYY format to date for comparison
+        $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+        $today = date('Y-m-d');
+        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%m/%d/%Y') >=", $fiveYearsAgo);
+        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%m/%d/%Y') <", $today);
+        
         $query = $this->db->get($this->table);
         
         $result = $query->result_array();
@@ -327,8 +345,9 @@ class CustomerRegister_model extends CI_Model {
         
         return $result;
     }
-
+    
     public function get_mi_due_summary() {
+        $userid = $this->session->userdata('id');
         $this->db->select("
             CASE 
                 WHEN scheme_selected = 'Ujjwala' THEN 'PMUY'
@@ -336,8 +355,13 @@ class CustomerRegister_model extends CI_Model {
             END AS scheme_type,
             COUNT(*) as count");
         $this->db->where('consumer_category', 'domestic');
-        $this->db->where('mandatory_inspection_date >=', date('Y-m-d', strtotime('-5 years')));
-        $this->db->where('mandatory_inspection_date <', date('Y-m-d'));
+        $this->db->where('userid', $userid);
+        // Convert MM/DD/YYYY format to date for comparison
+        $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+        $today = date('Y-m-d');
+        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%m/%d/%Y') >=", $fiveYearsAgo);
+        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%m/%d/%Y') <", $today);
+        
         $this->db->group_by('scheme_type');
         $query = $this->db->get($this->table);
         
@@ -349,8 +373,10 @@ class CustomerRegister_model extends CI_Model {
     }
 
     public function get_total_domestic_customers() {
+        $userid = $this->session->userdata('id');
         $this->db->select('COUNT(*) as total');
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
         $query = $this->db->get($this->table);
         
         $result = $query->row_array();
@@ -359,8 +385,10 @@ class CustomerRegister_model extends CI_Model {
 
     //Hose Due Data
     public function get_hose_due_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, tube_change_date, tube_change_due_date");
         $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('userid', $userid);
         $query = $this->db->get($this->table);
     
         if ($query->num_rows() > 0) {
@@ -443,8 +471,10 @@ class CustomerRegister_model extends CI_Model {
 
     //SBC Data
     public function get_sbc_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, consumer_type");
         $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('userid', $userid);
         $this->db->where('consumer_type', 'Single Bottle Connection'); 
         $query = $this->db->get($this->table);
     
@@ -463,8 +493,10 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_sbc_status_counts() {
+        $userid = $this->session->userdata('id');
         $this->db->select("scheme_selected");
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
         $this->db->where('consumer_type', 'Single Bottle Connection');
         $query = $this->db->get($this->table);
         
@@ -493,8 +525,10 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_phone_number_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected");
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
         $this->db->where("(phone_number IS NULL OR phone_number = '')", NULL, FALSE);
         $query = $this->db->get($this->table);
         

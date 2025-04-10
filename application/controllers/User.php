@@ -64,7 +64,14 @@ class User extends CI_Controller {
             redirect('loginform');
         }
     }
-	
+	public function logout() {
+        $this->session->unset_userdata('id');
+        $this->session->unset_userdata('username');
+        $this->session->sess_destroy();
+        $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
+        redirect('loginform'); 
+    }
+
 	//here suggestion page section
     public function suggestion_form() {
         $data['method'] = "suggestion";

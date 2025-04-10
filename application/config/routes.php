@@ -60,6 +60,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['loginform'] = 'User/login';
 $route['loginuser'] = 'User/login_user';
+$route['logout'] = 'User/logout';
 $route['signup'] = 'UserProfile/signupform';
 $route['signupsubmit'] = 'UserProfile/submit';
 $route['suggestionform'] = 'User/suggestion_form';

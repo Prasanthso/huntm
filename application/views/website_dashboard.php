@@ -506,6 +506,37 @@
             transform: translateY(-5px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+
+        /* Logout Button style */
+        /* Add this to your CSS file */
+        .logout-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px;
+            /* background: transparent; or your preferred background */
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white; 
+            text-decoration: none;
+            font-size: 17px;
+            transition: color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            color: #ff0000; 
+        }
+
+        .logout-btn img {
+            width: 20px; 
+            height: 20px;
+            color: white;
+        }
+
         .card-1 { background:rgb(200, 208, 216); color: #333; }
         .card-2 { background: #e3f2fd; color: #01579b; }
         .card-3 { background: #e8f5e9; color: #1b5e20; }
@@ -759,6 +790,12 @@ $userid = $this->session->userdata('id');
                     <li><a class="dropdown-item" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
                         </ul>
                     </div>
+                </div>
+
+                <div class="logout-container">
+                    <a href="<?php echo base_url('logout'); ?>" class="logout-btn">
+                        <img src="<?php echo base_url('/Image/logout1.png'); ?>" alt="Logout Icon"> Logout
+                    </a>
                 </div>
             </div>
         </div>
