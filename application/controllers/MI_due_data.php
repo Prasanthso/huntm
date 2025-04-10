@@ -14,7 +14,10 @@ class MI_due_data extends CI_Controller {
         // Get all pending MI data
         $pending_mi_data = $this->CustomerRegister_model->get_pending_mi_area_scheme_wise();
         
-        // Calculate actual counts from the detailed data
+        // Get total domestic customers
+        $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
+    
+        // Calculate actual counts
         $pmuy_count = 0;
         $non_pmuy_count = 0;
         
@@ -27,9 +30,18 @@ class MI_due_data extends CI_Controller {
         }
         
         $total = $pmuy_count + $non_pmuy_count;
-        $pmuy_percentage = $total > 0 ? round(($pmuy_count / $total) * 100, 2) : 0;
-        $non_pmuy_percentage = $total > 0 ? round(($non_pmuy_count / $total) * 100, 2) : 0;
-
+        $pmuy_percentage = $total > 0 ? round(($pmuy_count / $total) * 100, 2) : 0; // % of MI Due that are PMUY
+        $non_pmuy_percentage = $total > 0 ? round(($non_pmuy_count / $total) * 100, 2) : 0; // % of MI Due that are Non PMUY
+        $total_percentage = $total_customers > 0 ? round(($total / $total_customers) * 100, 2) : 0; // % of all customers that are MI Due
+    
+        // Simplified stats for the card
+        $mi_stats = [
+            'total' => [
+                'qty' => $total,
+                'percent' => $total_percentage
+            ]
+        ];
+    
         // Prepare data for view
         $data = [
             'table_data' => [
@@ -37,20 +49,22 @@ class MI_due_data extends CI_Controller {
                 'sub_headers' => ['PMUY', 'Non PMUY', 'Total'],
                 'rows' => [
                     'Qty' => [$pmuy_count, $non_pmuy_count, $total],
-                    '%' => [$pmuy_percentage . '%', $non_pmuy_percentage . '%', '100%']
+                    '%' => [$pmuy_percentage . '%', $non_pmuy_percentage . '%', $total_percentage . '%'] // Updated total %
                 ]
             ],
             'mi_due' => $pending_mi_data,
+            'mi_stats' => $mi_stats,
             'method' => 'midue',
             'page_title' => 'MI Due Report',
             'report_date' => date('d-M-Y H:i:s')
         ];
-
+    
+        log_message('debug', 'Total Customers: ' . $total_customers);
         log_message('debug', 'PMUY Count: ' . $pmuy_count);
         log_message('debug', 'Non PMUY Count: ' . $non_pmuy_count);
-        log_message('debug', 'Total Count: ' . $total);
-        log_message('debug', 'First MI Due Record: ' . json_encode($pending_mi_data[0] ?? 'No data'));
-
+        log_message('debug', 'Total MI Due: ' . $total);
+        log_message('debug', 'Total Percentage: ' . $total_percentage);
+    
         $this->load->view('website_dashboard', $data);
     }
 }

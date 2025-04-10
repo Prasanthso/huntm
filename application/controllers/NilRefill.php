@@ -17,12 +17,14 @@ class NilRefill extends CI_Controller {
         // Calculate statistics
         $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
         
+        
         // Prepare data for view
         $data = [
             'stats' => $stats,
             'all_customers' => $all_customers,
-            'method' => 'nil_refill_report' // This helps identify which view to load
+            'method' => 'nil_refill_report' 
         ];
+        
         
         $this->load->view('website_dashboard', $data);
     }
