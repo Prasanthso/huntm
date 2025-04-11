@@ -25,6 +25,7 @@ class OpenOrder extends CI_Controller {
     }
 
     public function upload_excel() {
+        $userid = $this->session->userdata('id');
         if (!isset($_FILES['excel_file']['name']) || empty($_FILES['excel_file']['name'])) {
             $this->session->set_flashdata('error', 'No file uploaded.');
             redirect('OpenOrder');
@@ -64,6 +65,7 @@ class OpenOrder extends CI_Controller {
 
                 if (count($row) >= 2 && !empty(trim($row[0]))) {
                     $insert_data[] = array(
+                        'userid' => $userid,
                         'area_name' => trim($row[0]),
                         'open_refill_orders' => trim($row[1])
                     );

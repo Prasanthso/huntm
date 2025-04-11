@@ -745,9 +745,8 @@ $userid = $this->session->userdata('id');
                                     <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
                                 </ul>
                             </li>
-
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('fundbalance'); ?>">Fund Balance</a></li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('customerregister'); ?>">Customer Strength</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('fundbalance'); ?>">Fund Balance File Upload</a></li>
+                            <li><a class="dropdown-item w-100" href="<?php echo base_url('customerregister'); ?>">Customer Register</a></li>
                         </ul>
                     </div>
                 </div>
@@ -770,7 +769,7 @@ $userid = $this->session->userdata('id');
                     </div>
                 </div>
 
-                <a class="dropdown-item fileupload list-group-item list-group-item-action w-100" href="<?php echo base_url('fundbalance_data'); ?>">Fund Balance</a>
+                <!-- <a class="dropdown-item fileupload list-group-item list-group-item-action w-100" href="<?php echo base_url('fundbalance_data'); ?>">Fund Balance</a> -->
                     
 
                 <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
@@ -823,27 +822,28 @@ $userid = $this->session->userdata('id');
             </div>
         </div>
         <div class="col">
-        <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
-            <h6 class="fs-5">💰 Customer Strength</h6>
+            <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
+                <h6 class="fs-5">💰 Customer Strength</h6>
 
-            <?php
-            if (isset($customer_data) && is_array($customer_data)) {
-                $totalCustomers = $customer_data['total']['total'] ?? 0;
+                <?php
+                if (isset($customer_data) && is_array($customer_data)) {
+                    $totalCustomers = $customer_data['total']['total'] ?? 0;
+                    $percent = $customer_data['total']['percent'] ?? 0; 
 
-                if ($totalCustomers > 0):
-            ?>
-                    <p class="fs-6">Total : <?= number_format($totalCustomers) ?></p>
-                    <p class="fs-6">Percent : 98.7%</p>
-            <?php
-                else:
-                    echo '<p class="fs-6">No customers found</p>';
-                endif;
-            } else {
-                echo '<p class="fs-6">Data not available</p>';
-            }
-            ?>
+                    if ($totalCustomers > 0):
+                ?>
+                        <p class="fs-6">Total : <?= number_format($totalCustomers) ?></p>
+                        <p class="fs-6">Percent : <?= round($percent, 2) ?>%</p> 
+                <?php
+                    else:
+                        echo '<p class="fs-6">No customers found</p>';
+                    endif;
+                } else {
+                    echo '<p class="fs-6">Data not available</p>';
+                }
+                ?>
+            </div>
         </div>
-    </div>
 
     <div class="col">
         <div class="card text-center dashboard-card card-3" onclick="window.location.href='SBC_data'">
@@ -877,7 +877,7 @@ $userid = $this->session->userdata('id');
             <?php if (!empty($stats)): ?>
                 <p class="fs-20 fw-bold mb-1">3 Months</p>
                 <p class="fs-15">Total: <?= number_format($stats['greater_than_3_months']['total']['qty']) ?></p>
-                <p class ="fs-15">Percent: <?= $stats['greater_than_3_months']['total']['percent'] ?>% </p>
+                <p class ="fs-15">Percent: <?=round ($stats['greater_than_3_months']['total']['percent'])?>% </p>
 
             <?php else: ?>
                 <p class="fs-6">Data not available</p>
@@ -909,17 +909,17 @@ $userid = $this->session->userdata('id');
         </div>
     </div>
 
-    <div class="col">
-        <div class="card text-center dashboard-card card-8" onclick="window.location.href='midue'">
+    <div class="col-md-3">
+        <div class="card text-center dashboard-card card-8" onclick="window.location.href='<?php echo base_url('mi_due_data/midue_data'); ?>'">
             <h6 class="fs-5">📈 MI Due</h6>
-            <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
-                <p class="fs-6">Total: <?= number_format($mi_stats['total']['qty']) ?></p>
-                <p class="fs-6">Percent: <?= round($mi_stats['total']['percent']) ?>%</p>
-            <?php else: ?>
-                <p class="fs-6">Data not available</p>
-            <?php endif; ?>
+                <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
+                    <p class="fs-6">Total: <?php echo number_format($mi_stats['total']['qty']); ?></p>
+                    <p class="fs-6">Percent: <?php echo round($mi_stats['total']['percent']); ?>%</p>
+                    <?php else: ?>
+                        <p class="fs-6">Data not available</p>
+                    <?php endif; ?>
         </div>
-    </div>   
+    </div>  
 
     <div class="col">
         <div class="card text-center dashboard-card card-9" onclick="window.location.href='hosedue'">
@@ -1166,7 +1166,7 @@ $userid = $this->session->userdata('id');
                         </table>
                     </div>
 
-                    <?php } elseif ($method == 'display_fundbalance') { ?>
+                    <!-- <?php } elseif ($method == 'display_fundbalance') { ?>
                         <div class="container">
                         <h2>Fund Balance</h2>
 
@@ -1186,7 +1186,7 @@ $userid = $this->session->userdata('id');
                                     <th>Balance</th>
                                     <th>Risk Category Code</th>
                                     <th>Risk Category Description</th>
-                                    <!-- <th>Status</th> -->
+                                    <!-- <th>Status</th> --
                                 </tr>
                             </thead>
                             <tbody>
@@ -1208,7 +1208,7 @@ $userid = $this->session->userdata('id');
                                 <?php endif; ?>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
 
                    
                     <!-- Suggestion Section -->
@@ -1372,7 +1372,7 @@ $userid = $this->session->userdata('id');
             </a>
         </div>      
         <div class="customerstrength-summary">
-        <h2 class="text-center text-primary mb-4">Customer Strength Data</h2>
+        <h2 class="text-center mb-4">Customer Strength Data</h2>
 
         <!-- Fixed Summary Table -->
         <div class="fixed-summary">
@@ -1617,7 +1617,7 @@ $userid = $this->session->userdata('id');
             const areaBreakdownHTML = `
                 <h4 class="view-title">${title}</h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="custom-table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -1708,7 +1708,7 @@ $userid = $this->session->userdata('id');
             const customerDetailsHTML = `
                 <h4 class="view-title">${title}</h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="custom-table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -3052,51 +3052,54 @@ $(document).ready(function () {
     function initView() {
         $('#areaBreakdownView').hide();
         $('#customerDetailsView').hide();
+        $('.fixed-summary').show();
         currentView = 'summary';
         viewHistory = [];
     }
 
     function showAreaBreakdown(scheme) {
-        currentScheme = scheme;
-        console.log('Showing area breakdown for scheme:', scheme);
-        
-        // Filter customers based on scheme
-        filteredCustomers = allCustomers.filter(customer => {
-            if (scheme === 'Total') return true;
-            return customer.scheme_type === scheme;
-        });
-        
-        console.log('Filtered customers count:', filteredCustomers.length, 'for scheme:', scheme);
-        
-        // Group by area
-        const areaCounts = {};
-        filteredCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
-            areaCounts[area] = (areaCounts[area] || 0) + 1;
-        });
-        
-        // Convert to array and sort
-        areaBreakdownData = Object.entries(areaCounts)
-            .map(([area, count]) => ({ area, count }))
-            .sort((a, b) => b.count - a.count);
-        
-        console.log('Area breakdown data:', areaBreakdownData);
-        
-        // Update view
-        const title = scheme === 'Total' ? 'Due MI Customers (All Schemes) by Area' : `Due MI Customers (${scheme}) by Area`;
-        $('#areaBreakdownTitle').text(title);
-        
-        currentAreaPage = 1;
-        updateAreaBreakdownTable();
-        
-        // Show the correct view
-        $('#areaBreakdownView').show();
-        $('#customerDetailsView').hide();
-        
-        // Update navigation
-        viewHistory.push(currentView);
-        currentView = 'area';
-    }
+    currentScheme = scheme;
+    console.log('Showing area breakdown for scheme:', scheme);
+    
+    // Filter customers based on scheme
+    filteredCustomers = allCustomers.filter(customer => {
+        if (scheme === 'Total') return true;
+        return customer.scheme_type === scheme;
+    });
+    
+    console.log('Filtered customers count:', filteredCustomers.length, 'for scheme:', scheme);
+    console.log('Sample filtered customers:', filteredCustomers.slice(0, 5));
+    
+    // Group by area
+    const areaCounts = {};
+    filteredCustomers.forEach(customer => {
+        const area = customer.area_name;
+        areaCounts[area] = (areaCounts[area] || 0) + 1;
+    });
+    
+    // Convert to array and sort
+    areaBreakdownData = Object.entries(areaCounts)
+        .map(([area, count]) => ({ area, count }))
+        .sort((a, b) => b.count - a.count);
+    
+    console.log('Area breakdown data:', areaBreakdownData);
+    
+    // Update view
+    const title = scheme === 'Total' ? 'Due MI Customers (All Schemes) by Area' : `Due MI Customers (${scheme}) by Area`;
+    $('#areaBreakdownTitle').text(title);
+    
+    currentAreaPage = 1;
+    updateAreaBreakdownTable();
+    
+    // Show the correct view
+    $('#areaBreakdownView').show();
+    $('#customerDetailsView').hide();
+    $('.fixed-summary').hide();
+    
+    // Update navigation
+    viewHistory.push(currentView);
+    currentView = 'area';
+}
 
     function updateAreaBreakdownTable() {
         const startIdx = (currentAreaPage - 1) * recordsPerPage;
@@ -3139,7 +3142,7 @@ $(document).ready(function () {
         
         // Filter customers for this area and scheme
         filteredCustomers = allCustomers.filter(customer => {
-            const customerArea = customer.area_name || 'Unknown';
+            const customerArea = customer.area_name;
             return customerArea === area && 
                   (currentScheme === 'Total' || customer.scheme_type === currentScheme);
         });
@@ -3156,6 +3159,7 @@ $(document).ready(function () {
         // Show the correct view
         $('#areaBreakdownView').hide();
         $('#customerDetailsView').show();
+        $('.fixed-summary').hide();
         
         // Update navigation
         viewHistory.push(currentView);
@@ -3170,12 +3174,12 @@ $(document).ready(function () {
         $tbody.empty();
         
         if (pageData.length === 0) {
-            $tbody.append('<tr><td colspan="6" class="no-data">No data available</td></tr>');
+            $tbody.append('<tr><td colspan="7" class="no-data">No data available</td></tr>');
         } else {
             pageData.forEach(customer => {
                 $tbody.append(`
                     <tr>
-                        <td>${escapeHtml(customer.area_name || 'Unknown')}</td>
+                        <td>${escapeHtml(customer.area_name)}</td>
                         <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
                         <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
                         <td>${escapeHtml(customer.phone_number || 'N/A')}</td>
@@ -3216,12 +3220,11 @@ $(document).ready(function () {
         const previousView = viewHistory.pop();
         
         if (previousView === 'summary') {
-            $('#areaBreakdownView').hide();
-            $('#customerDetailsView').hide();
-            currentView = 'summary';
+            initView();
         } else if (previousView === 'area') {
             $('#areaBreakdownView').show();
             $('#customerDetailsView').hide();
+            $('.fixed-summary').hide();
             currentView = 'area';
         }
     }

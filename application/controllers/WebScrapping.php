@@ -25,6 +25,7 @@ class WebScrapping extends CI_Controller {
     }
 
     public function upload_excel() {
+        $userid = $this->session->userdata('id');
         if (!isset($_FILES['excel_file']['name']) || empty($_FILES['excel_file']['name'])) {
             $this->session->set_flashdata('error', 'No file uploaded.');
             redirect('WebScrapping');
@@ -58,6 +59,7 @@ class WebScrapping extends CI_Controller {
 
                 if (count($row) >= 3 && !empty($row[0])) {
                     $insert_data[] = array(
+                        'userid' => $userid,
                         'area_name' => $row[0],
                         'cashmemo_generated' => $row[1],
                         'status' => $row[2]

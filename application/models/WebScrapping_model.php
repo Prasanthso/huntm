@@ -17,8 +17,10 @@ class WebScrapping_model extends CI_Model {
     // }
 
     public function get_all_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select('area_name, cashmemo_generated, status');
         $this->db->from('invoiced_orders');
+        $this->db->where('userid', $userid);
         $query = $this->db->get();
         log_message('debug', 'Query Result: ' . print_r($query->result_array(), true)); 
         return $query->result_array();
