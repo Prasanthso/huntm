@@ -152,7 +152,9 @@ class User extends CI_Controller {
         }
     }
     
-	public function dashboardview() {
+    public function dashboardview() {
+      
+      
         // Get total domestic customers
         $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
 
@@ -224,12 +226,12 @@ class User extends CI_Controller {
             'hose_stats' => $hose_stats,
             'phone_stats' => $phone_stats,
             'page_title' => 'Dashboard',
-            'report_date' => date('d-M-Y H:i:s')
+            'report_date' => date('d-M-Y H:i:s'),
+            'total_customers' => $total_customers
         ];
 
         $this->load->view('website_dashboard', $data);
-    }
-    
+    }    
     
 }
 ?>

@@ -807,20 +807,29 @@ $userid = $this->session->userdata('id');
 					
 	<div class="content">
 	<div class="container-sm mt-3">
-	<div class="row cols-4 row-2 g-3 mr-0 pr-0">
+	<div class="row row-cols-4 g-3 mr-0 pr-0">
     
         <div class="col">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
-			<h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
-			<p>Areas: 150</p>
+                <h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
+                <p>Areas: 150</p>
             </div>
         </div>
+
         <div class="col">
             <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
                 <h6>📦 Fund Balance</h6>
                 <p class="fs-6">Rs:760,461.17</p>
             </div>
         </div>
+
+        <div class="col">
+            <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
+                <h6>📦 Remark</h6>
+                <p class="fs-6">IOCL</p>
+            </div>
+        </div>
+
         <div class="col">
             <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
                 <h6 class="fs-5">💰 Customer Strength</h6>
@@ -913,11 +922,11 @@ $userid = $this->session->userdata('id');
         <div class="card text-center dashboard-card card-8" onclick="window.location.href='<?php echo base_url('mi_due_data/midue_data'); ?>'">
             <h6 class="fs-5">📈 MI Due</h6>
                 <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
-                    <p class="fs-6">Total: <?php echo number_format($mi_stats['total']['qty']); ?></p>
-                    <p class="fs-6">Percent: <?php echo round($mi_stats['total']['percent']); ?>%</p>
-                    <?php else: ?>
-                        <p class="fs-6">Data not available</p>
-                    <?php endif; ?>
+                <p class="fs-6">Total: <?php echo number_format($mi_stats['total']['qty']); ?></p>
+                <p class="fs-6">Percent: <?php echo round($mi_stats['total']['percent']); ?>%</p>
+                <?php else: ?>
+                    <p class="fs-6">Data not available</p>
+                <?php endif; ?>
         </div>
     </div>  
 
@@ -932,6 +941,7 @@ $userid = $this->session->userdata('id');
             <?php endif; ?>
         </div>
     </div>
+
     <div class="col">
         <div class="card text-center dashboard-card card-10" onclick="window.location.href='phonenumber'">
             <h6 class="fs-5">🆕 Mobile No</h6>
@@ -943,6 +953,7 @@ $userid = $this->session->userdata('id');
             <?php endif; ?>
         </div>
     </div>
+    
         <!-- <div class="col-3">
             <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
                 <h6>🚚 Deliveries</h6>
@@ -957,7 +968,7 @@ $userid = $this->session->userdata('id');
         </div>
       
 
-    </div>
+    </div>-->
 	<!--' 🔽 Details Section Below the Cards -->
     <div id="details" class="mt-4" style="display: none;">
         <h4 id="details-title"></h4>

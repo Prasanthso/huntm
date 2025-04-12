@@ -109,9 +109,116 @@ class CustomerRegister_model extends CI_Model {
     
     // protected $table = 'customer_register'; // Replace with actual table name
 
+    // public function get_nillrefill_data() {
+    //     $userid = $this->session->userdata('id');
+    //     $this->db->select([
+    //         'area_name', 
+    //         'consumer_number', 
+    //         'consumer_name', 
+    //         'phone_number',
+    //         'scheme_selected',
+    //         'last_refill_date',
+    //         'consumer_category'
+    //     ]);
+        
+    //     $this->db->where('consumer_category', 'domestic');
+    //     $this->db->where('userid', $userid);
+    //     $this->db->order_by('last_refill_date', 'ASC');
+    //     $this->db->group_by('consumer_id'); 
+        
+    //     $query = $this->db->get($this->table);
+        
+    //     if ($query->num_rows() > 0) {
+    //         $result = $query->result_array();
+            
+    //         foreach ($result as &$row) {
+    //             // Standardize scheme names
+    //             $row['scheme_selected'] = ($row['scheme_selected'] == 'Ujjwala') ? 'PMUY' : 'Non PMUY';
+                
+    //             // Calculate time since last refill
+    //             if (!empty($row['last_refill_date'])) {
+    //                 $last_refill = new DateTime($row['last_refill_date']);
+    //                 $current_date = new DateTime();
+    //                 $interval = $current_date->diff($last_refill);
+    //                 $row['days_since_refill'] = $interval->days;
+    //                 $row['months_since_refill'] = $interval->y * 12 + $interval->m;
+    //             } else {
+    //                 $row['days_since_refill'] = null;
+    //                 $row['months_since_refill'] = null;
+    //             }
+                
+    //             // Ensure area_name is not null
+    //             $row['area_name'] = $row['area_name'] ?: 'Unknown';
+    //         }
+            
+    //         return $result;
+    //     }
+        
+    //     return [];
+    // }
+
+    // public function get_nillrefill_stats($customers) {
+    //     $userid = $this->session->userdata('id');
+    //     $this->db->where('userid', $userid);
+    //     $this->db->group_by('consumer_id'); 
+    //     $counts = [
+    //         'greater_than_3_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
+    //         'greater_than_6_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
+    //         'greater_than_1_year' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
+    //         'total_consumers' => count($customers)
+    //     ];
+    
+    //     foreach ($customers as $row) {
+    //         if (!empty($row['days_since_refill'])) {
+    //             $is_pmuy = ($row['scheme_selected'] === 'PMUY');
+    //             $days = $row['days_since_refill'];
+    
+    //             // Count for > 1 year
+    //             if ($days > 365) {
+    //                 $counts['greater_than_1_year'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+    //                 $counts['greater_than_1_year']['total']++;
+    //             }
+    //             // Count for > 6 months (includes > 1 year)
+    //             if ($days > 180) {
+    //                 $counts['greater_than_6_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+    //                 $counts['greater_than_6_months']['total']++;
+    //             }
+    //             // Count for > 3 months (includes > 6 months and > 1 year)
+    //             if ($days > 90) {
+    //                 $counts['greater_than_3_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+    //                 $counts['greater_than_3_months']['total']++;
+    //             }
+    //         }
+    //     }
+    
+    //     // Calculate percentages
+    //     $stats = [];
+    //     foreach ($counts as $period => $data) {
+    //         if ($period === 'total_consumers') continue;
+            
+    //         $stats[$period] = [
+    //             'pmuy' => [
+    //                 'qty' => $data['pmuy'],
+    //                 'percent' => $counts['total_consumers'] > 0 ? round(($data['pmuy'] / $counts['total_consumers']) * 100, 2) : 0
+    //             ],
+    //             'non_pmuy' => [
+    //                 'qty' => $data['non_pmuy'],
+    //                 'percent' => $counts['total_consumers'] > 0 ? round(($data['non_pmuy'] / $counts['total_consumers']) * 100, 2) : 0
+    //             ],
+    //             'total' => [
+    //                 'qty' => $data['total'],
+    //                 'percent' => $counts['total_consumers'] > 0 ? round(($data['total'] / $counts['total_consumers']) * 100, 2) : 0
+    //             ]
+    //         ];
+    //     }
+        
+    //     return $stats;
+    // }
+
     public function get_nillrefill_data() {
         $userid = $this->session->userdata('id');
         $this->db->select([
+            'consumer_id',
             'area_name', 
             'consumer_number', 
             'consumer_name', 
@@ -123,8 +230,8 @@ class CustomerRegister_model extends CI_Model {
         
         $this->db->where('consumer_category', 'domestic');
         $this->db->where('userid', $userid);
+        $this->db->where('last_refill_date IS NOT NULL');
         $this->db->order_by('last_refill_date', 'ASC');
-        $this->db->group_by('consumer_id'); 
         
         $query = $this->db->get($this->table);
         
@@ -156,11 +263,8 @@ class CustomerRegister_model extends CI_Model {
         
         return [];
     }
-
+    
     public function get_nillrefill_stats($customers) {
-        $userid = $this->session->userdata('id');
-        $this->db->where('userid', $userid);
-        $this->db->group_by('consumer_id'); 
         $counts = [
             'greater_than_3_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
             'greater_than_6_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
@@ -173,20 +277,20 @@ class CustomerRegister_model extends CI_Model {
                 $is_pmuy = ($row['scheme_selected'] === 'PMUY');
                 $days = $row['days_since_refill'];
     
-                // Count for > 1 year
-                if ($days > 365) {
-                    $counts['greater_than_1_year'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
-                    $counts['greater_than_1_year']['total']++;
+                // Count for > 3 months
+                if ($days > 90) {
+                    $counts['greater_than_3_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+                    $counts['greater_than_3_months']['total']++;
                 }
-                // Count for > 6 months (includes > 1 year)
+                // Count for > 6 months
                 if ($days > 180) {
                     $counts['greater_than_6_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
                     $counts['greater_than_6_months']['total']++;
                 }
-                // Count for > 3 months (includes > 6 months and > 1 year)
-                if ($days > 90) {
-                    $counts['greater_than_3_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
-                    $counts['greater_than_3_months']['total']++;
+                // Count for > 1 year
+                if ($days > 365) {
+                    $counts['greater_than_1_year'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+                    $counts['greater_than_1_year']['total']++;
                 }
             }
         }
@@ -223,6 +327,7 @@ class CustomerRegister_model extends CI_Model {
         $this->db->where('consumer_category', 'domestic'); 
         $this->db->where('userid', $userid);
         $this->db->group_by('consumer_id'); 
+        $this->db->where('kyc_number', '');
         $query = $this->db->get($this->table);
 
         if ($query->num_rows() > 0) {
@@ -240,48 +345,67 @@ class CustomerRegister_model extends CI_Model {
     }
 
     public function get_kyc_stats() {
-        $kyc_data = $this->get_kyc_data();
+        $userid = $this->session->userdata('id');
         
-        // Initialize statistics array
+        // Get total domestic customers count
+        $total_domestic = $this->get_total_domestic_customers();
+        
+        // Get PMUY and Non-PMUY pending counts
+        $this->db->select("CASE WHEN scheme_selected = 'Ujjwala' THEN 'PMUY' ELSE 'Non_PMUY' END AS category, COUNT(DISTINCT consumer_id) AS count");
+        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('kyc_number', '');
+        $this->db->where('userid', $userid);
+        $this->db->group_by('category');
+        $query = $this->db->get($this->table);
+        $result = $query->result_array();
+        
+        // Initialize stats array
         $stats = [
             'PMUY' => 0,
             'Non_PMUY' => 0,
-            'Total' => count($kyc_data),
+            'Total' => $total_domestic,
             'PMUY_Pending' => 0,
             'Non_PMUY_Pending' => 0,
             'Total_Pending' => 0
         ];
-
-        foreach ($kyc_data as $row) {
-            if ($row['scheme_selected'] === 'PMUY') {
-                $stats['PMUY']++;
-                if ($row['kyc_status'] === 'Pending') {
-                    $stats['PMUY_Pending']++;
-                }
+        
+        // Process query results
+        foreach ($result as $row) {
+            if ($row['category'] === 'PMUY') {
+                $stats['PMUY_Pending'] = $row['count'];
+                $stats['PMUY'] = $this->get_scheme_count('Ujjwala'); // Get total PMUY count
             } else {
-                $stats['Non_PMUY']++;
-                if ($row['kyc_status'] === 'Pending') {
-                    $stats['Non_PMUY_Pending']++;
-                }
+                $stats['Non_PMUY_Pending'] = $row['count'];
+                $stats['Non_PMUY'] = $total_domestic - $stats['PMUY']; // Non-PMUY is total minus PMUY
             }
-            
-            if ($row['kyc_status'] === 'Pending') {
-                $stats['Total_Pending']++;
-            }
+            $stats['Total_Pending'] += $row['count'];
         }
-
+        
         // Calculate percentages
         $stats['PMUY_Pending_Percent'] = $stats['PMUY'] > 0 ? round(($stats['PMUY_Pending'] / $stats['PMUY']) * 100, 2) : 0;
         $stats['Non_PMUY_Pending_Percent'] = $stats['Non_PMUY'] > 0 ? round(($stats['Non_PMUY_Pending'] / $stats['Non_PMUY']) * 100, 2) : 0;
-        $stats['Total_Pending_Percent'] = $stats['Total'] > 0 ? round(($stats['Total_Pending'] / $stats['Total']) * 100, 2) : 0;
-
+        $stats['Total_Pending_Percent'] = $total_domestic > 0 ? round(($stats['Total_Pending'] / $total_domestic) * 100, 2) : 0;
+        
+        // Add additional percentage for dashboard view
+        $stats['Pending_Percent_Of_Total'] = $total_domestic > 0 ? round(($stats['Total_Pending'] / $total_domestic) * 100, 2) : 0;
+        
         return $stats;
     }
+    
+    // Helper function to get total count for a scheme
+    // private function get_scheme_count($scheme) {
+    //     $userid = $this->session->userdata('id');
+    //     $this->db->where('consumer_category', 'domestic');
+    //     $this->db->where('userid', $userid);
+    //     $this->db->where('scheme_selected', $scheme);
+    //     return $this->db->count_all_results($this->table);
+    // }
 
     public function get_area_breakdown($scheme = 'Total') {
         $kyc_data = $this->get_kyc_data();
         $area_counts = [];
-
+        $userid = $this->session->userdata('id');
+        $this->db->group_by('consumer_id'); 
         foreach ($kyc_data as $row) {
             // Skip if KYC is completed
             if ($row['kyc_status'] === 'Completed') continue;
@@ -312,6 +436,8 @@ class CustomerRegister_model extends CI_Model {
 
     public function get_customers_by_area($area, $scheme = 'Total') {
         $kyc_data = $this->get_kyc_data();
+        $userid = $this->session->userdata('id');
+        $this->db->group_by('consumer_id'); 
         $filtered = [];
 
         foreach ($kyc_data as $row) {
