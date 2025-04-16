@@ -10,6 +10,22 @@ class NilRefill extends CI_Controller {
         $this->load->library('session');
     }
 
+    // public function nill_fill_data() {
+    //     // Get all customers data
+    //     $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+        
+    //     // Calculate statistics
+    //     $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+        
+    //     // Prepare data for view
+    //     $data = [
+    //         'stats' => $stats,
+    //         'all_customers' => $all_customers,
+    //         'method' => 'nil_refill_report'
+    //     ];
+        
+    //     $this->load->view('website_dashboard', $data);
+    // }
     public function nill_fill_data() {
         // Get all customers data
         $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
@@ -17,14 +33,14 @@ class NilRefill extends CI_Controller {
         // Calculate statistics
         $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
         
-        
         // Prepare data for view
         $data = [
             'stats' => $stats,
             'all_customers' => $all_customers,
-            'method' => 'nil_refill_report' 
+            'method' => 'nil_refill_report',
+            'page_title' => 'Nil Refill Report',
+            'report_date' => date('d-M-Y H:i:s')
         ];
-        
         
         $this->load->view('website_dashboard', $data);
     }

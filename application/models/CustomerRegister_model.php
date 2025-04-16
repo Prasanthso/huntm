@@ -8,6 +8,7 @@ class CustomerRegister_model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->load->library('session');
     }
 
     public function insert_data($data) {
@@ -18,15 +19,31 @@ class CustomerRegister_model extends CI_Model {
         return $this->db->trans_status();
     }
 
-    public function delete_all_data() {
-        return $this->db->empty_table($this->table); 
+    public function delete_user_data($userid) {
+        $this->db->where('userid', $userid);
+        return $this->db->delete('customer_register');
+    }
+    
+    //Total Customer details
+    public function get_total_domestic_customers() {
+        $userid = $this->session->userdata('id');
+        $this->db->select('COUNT(*) as total');
+        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
+        $query = $this->db->get($this->table);
+        
+        $result = $query->row_array();
+        return $result['total'] ?? 0;
     }
 
     //Customer strength data
     public function get_customer_strength_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid); 
         $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('consumer_id'); 
         $query = $this->db->get($this->table);
     
         if ($query->num_rows() > 0) {
@@ -44,9 +61,14 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_customer_status_counts() {
-        $this->db->select("scheme_selected, consumer_sub_status");
+        $userid = $this->session->userdata('id');
+        
+        // First get distinct consumer_ids to avoid counting duplicates
+        $this->db->select('consumer_id, scheme_selected, consumer_sub_status');
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
         $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('consumer_id'); // Group by consumer_id to remove duplicates
         $query = $this->db->get($this->table);
         
         if ($query->num_rows() > 0) {
@@ -80,15 +102,14 @@ class CustomerRegister_model extends CI_Model {
             'deactivated' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
             'total' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0]
         ];
-    } 
+    }
     
     //Nill fill data
     
-    
-    // protected $table = 'customer_register'; // Replace with actual table name
-
     public function get_nillrefill_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select([
+            'consumer_id',
             'area_name', 
             'consumer_number', 
             'consumer_name', 
@@ -99,6 +120,8 @@ class CustomerRegister_model extends CI_Model {
         ]);
         
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
+        $this->db->where('last_refill_date IS NOT NULL');
         $this->db->order_by('last_refill_date', 'ASC');
         
         $query = $this->db->get($this->table);
@@ -131,7 +154,7 @@ class CustomerRegister_model extends CI_Model {
         
         return [];
     }
-
+    
     public function get_nillrefill_stats($customers) {
         $counts = [
             'greater_than_3_months' => ['pmuy' => 0, 'non_pmuy' => 0, 'total' => 0],
@@ -145,20 +168,20 @@ class CustomerRegister_model extends CI_Model {
                 $is_pmuy = ($row['scheme_selected'] === 'PMUY');
                 $days = $row['days_since_refill'];
     
-                // Count for > 1 year
-                if ($days > 365) {
-                    $counts['greater_than_1_year'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
-                    $counts['greater_than_1_year']['total']++;
+                // Count for > 3 months
+                if ($days > 90) {
+                    $counts['greater_than_3_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+                    $counts['greater_than_3_months']['total']++;
                 }
-                // Count for > 6 months (includes > 1 year)
+                // Count for > 6 months
                 if ($days > 180) {
                     $counts['greater_than_6_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
                     $counts['greater_than_6_months']['total']++;
                 }
-                // Count for > 3 months (includes > 6 months and > 1 year)
-                if ($days > 90) {
-                    $counts['greater_than_3_months'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
-                    $counts['greater_than_3_months']['total']++;
+                // Count for > 1 year
+                if ($days > 365) {
+                    $counts['greater_than_1_year'][$is_pmuy ? 'pmuy' : 'non_pmuy']++;
+                    $counts['greater_than_1_year']['total']++;
                 }
             }
         }
@@ -190,8 +213,12 @@ class CustomerRegister_model extends CI_Model {
 
     //KYC data
     public function get_kyc_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, kyc_number");
         $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('userid', $userid);
+        $this->db->group_by('consumer_id'); 
+        $this->db->where('kyc_number', '');
         $query = $this->db->get($this->table);
 
         if ($query->num_rows() > 0) {
@@ -209,48 +236,67 @@ class CustomerRegister_model extends CI_Model {
     }
 
     public function get_kyc_stats() {
-        $kyc_data = $this->get_kyc_data();
+        $userid = $this->session->userdata('id');
         
-        // Initialize statistics array
+        // Get total domestic customers count
+        $total_domestic = $this->get_total_domestic_customers();
+        
+        // Get PMUY and Non-PMUY pending counts
+        $this->db->select("CASE WHEN scheme_selected = 'Ujjwala' THEN 'PMUY' ELSE 'Non_PMUY' END AS category, COUNT(DISTINCT consumer_id) AS count");
+        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('kyc_number', '');
+        $this->db->where('userid', $userid);
+        $this->db->group_by('category');
+        $query = $this->db->get($this->table);
+        $result = $query->result_array();
+        
+        // Initialize stats array
         $stats = [
             'PMUY' => 0,
             'Non_PMUY' => 0,
-            'Total' => count($kyc_data),
+            'Total' => $total_domestic,
             'PMUY_Pending' => 0,
             'Non_PMUY_Pending' => 0,
             'Total_Pending' => 0
         ];
-
-        foreach ($kyc_data as $row) {
-            if ($row['scheme_selected'] === 'PMUY') {
-                $stats['PMUY']++;
-                if ($row['kyc_status'] === 'Pending') {
-                    $stats['PMUY_Pending']++;
-                }
+        
+        // Process query results
+        foreach ($result as $row) {
+            if ($row['category'] === 'PMUY') {
+                $stats['PMUY_Pending'] = $row['count'];
+                $stats['PMUY'] = $this->get_scheme_count('Ujjwala'); // Get total PMUY count
             } else {
-                $stats['Non_PMUY']++;
-                if ($row['kyc_status'] === 'Pending') {
-                    $stats['Non_PMUY_Pending']++;
-                }
+                $stats['Non_PMUY_Pending'] = $row['count'];
+                $stats['Non_PMUY'] = $total_domestic - $stats['PMUY']; // Non-PMUY is total minus PMUY
             }
-            
-            if ($row['kyc_status'] === 'Pending') {
-                $stats['Total_Pending']++;
-            }
+            $stats['Total_Pending'] += $row['count'];
         }
-
+        
         // Calculate percentages
         $stats['PMUY_Pending_Percent'] = $stats['PMUY'] > 0 ? round(($stats['PMUY_Pending'] / $stats['PMUY']) * 100, 2) : 0;
         $stats['Non_PMUY_Pending_Percent'] = $stats['Non_PMUY'] > 0 ? round(($stats['Non_PMUY_Pending'] / $stats['Non_PMUY']) * 100, 2) : 0;
-        $stats['Total_Pending_Percent'] = $stats['Total'] > 0 ? round(($stats['Total_Pending'] / $stats['Total']) * 100, 2) : 0;
-
+        $stats['Total_Pending_Percent'] = $total_domestic > 0 ? round(($stats['Total_Pending'] / $total_domestic) * 100, 2) : 0;
+        
+        // Add additional percentage for dashboard view
+        $stats['Pending_Percent_Of_Total'] = $total_domestic > 0 ? round(($stats['Total_Pending'] / $total_domestic) * 100, 2) : 0;
+        
         return $stats;
     }
+    
+    // Helper function to get total count for a scheme
+    // private function get_scheme_count($scheme) {
+    //     $userid = $this->session->userdata('id');
+    //     $this->db->where('consumer_category', 'domestic');
+    //     $this->db->where('userid', $userid);
+    //     $this->db->where('scheme_selected', $scheme);
+    //     return $this->db->count_all_results($this->table);
+    // }
 
     public function get_area_breakdown($scheme = 'Total') {
         $kyc_data = $this->get_kyc_data();
         $area_counts = [];
-
+        $userid = $this->session->userdata('id');
+        $this->db->group_by('consumer_id'); 
         foreach ($kyc_data as $row) {
             // Skip if KYC is completed
             if ($row['kyc_status'] === 'Completed') continue;
@@ -281,6 +327,8 @@ class CustomerRegister_model extends CI_Model {
 
     public function get_customers_by_area($area, $scheme = 'Total') {
         $kyc_data = $this->get_kyc_data();
+        $userid = $this->session->userdata('id');
+        $this->db->group_by('consumer_id'); 
         $filtered = [];
 
         foreach ($kyc_data as $row) {
@@ -307,60 +355,64 @@ class CustomerRegister_model extends CI_Model {
 
     //MI due data
     public function get_pending_mi_area_scheme_wise() {
-        $this->db->select("area_name, 
+        $userid = $this->session->userdata('id');
+        $this->db->select("COALESCE(area_name, 'Unknown') AS area_name, 
                           CASE 
-                              WHEN scheme_selected = 'Ujjwala' THEN 'PMUY'
+                              WHEN LOWER(TRIM(scheme_selected)) = 'ujjwala' THEN 'PMUY'
                               ELSE 'Non PMUY'
                           END AS scheme_type,
                           consumer_number, consumer_name, phone_number");
         $this->db->where('consumer_category', 'domestic');
-        $this->db->where('mandatory_inspection_date >=', date('Y-m-d', strtotime('-5 years')));
-        $this->db->where('mandatory_inspection_date <', date('Y-m-d'));
+        $this->db->where('userid', $userid);
+        $this->db->group_by('consumer_id'); 
+        
+        $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+        $today = date('Y-m-d');
+        
+        $this->db->group_start();
+        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->group_end();
+        
         $query = $this->db->get($this->table);
-        
-        $result = $query->result_array();
-        
-        log_message('debug', 'Pending MI Raw Data Count: ' . count($result));
-        if (count($result) > 0) {
-            log_message('debug', 'First Pending MI Record: ' . json_encode($result[0]));
-        }
-        
-        return $result;
+        return $query->result_array();
     }
-
+    
     public function get_mi_due_summary() {
+        $userid = $this->session->userdata('id');
         $this->db->select("
             CASE 
-                WHEN scheme_selected = 'Ujjwala' THEN 'PMUY'
+                WHEN LOWER(TRIM(scheme_selected)) = 'ujjwala' THEN 'PMUY'
                 ELSE 'Non PMUY'
             END AS scheme_type,
             COUNT(*) as count");
         $this->db->where('consumer_category', 'domestic');
-        $this->db->where('mandatory_inspection_date >=', date('Y-m-d', strtotime('-5 years')));
-        $this->db->where('mandatory_inspection_date <', date('Y-m-d'));
+        $this->db->where('userid', $userid);
+        $this->db->group_by('consumer_id'); 
+        
+        $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+        $today = date('Y-m-d');
+        
+        $this->db->group_start();
+        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->group_end();
+        
         $this->db->group_by('scheme_type');
         $query = $this->db->get($this->table);
         
-        $result = $query->result_array();
-        
-        log_message('debug', 'MI Due Summary Data: ' . json_encode($result));
-        
-        return $result;
+        return $query->result_array();
     }
-
-    public function get_total_domestic_customers() {
-        $this->db->select('COUNT(*) as total');
-        $this->db->where('consumer_category', 'domestic');
-        $query = $this->db->get($this->table);
-        
-        $result = $query->row_array();
-        return $result['total'] ?? 0;
-    }
-
+    
     //Hose Due Data
     public function get_hose_due_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, tube_change_date, tube_change_due_date");
         $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('userid', $userid);
+        $this->db->group_by('consumer_id'); 
         $query = $this->db->get($this->table);
     
         if ($query->num_rows() > 0) {
@@ -443,9 +495,12 @@ class CustomerRegister_model extends CI_Model {
 
     //SBC Data
     public function get_sbc_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, consumer_type");
         $this->db->where('consumer_category', 'domestic'); 
+        $this->db->where('userid', $userid);
         $this->db->where('consumer_type', 'Single Bottle Connection'); 
+        $this->db->group_by('consumer_id'); 
         $query = $this->db->get($this->table);
     
         if ($query->num_rows() > 0) {
@@ -463,9 +518,12 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_sbc_status_counts() {
+        $userid = $this->session->userdata('id');
         $this->db->select("scheme_selected");
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
         $this->db->where('consumer_type', 'Single Bottle Connection');
+        $this->db->group_by('consumer_id'); 
         $query = $this->db->get($this->table);
         
         if ($query->num_rows() > 0) {
@@ -493,9 +551,12 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_phone_number_data() {
+        $userid = $this->session->userdata('id');
         $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected");
         $this->db->where('consumer_category', 'domestic');
+        $this->db->where('userid', $userid);
         $this->db->where("(phone_number IS NULL OR phone_number = '')", NULL, FALSE);
+        $this->db->group_by('consumer_id'); 
         $query = $this->db->get($this->table);
         
         if ($query->num_rows() > 0) {

@@ -10,11 +10,16 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class CustomerRegister extends CI_Controller {
 
-    public function __construct() {
+    public function __construct() { 
         parent::__construct();
         $this->load->model('CustomerRegister_model');
         $this->load->helper(array('form', 'url'));
         $this->load->library('session');
+        
+        // Check if user is logged in for all methods except customerregister_data
+        // if (!$this->session->userdata('logged_in') && $this->router->fetch_method() != 'customerregister_data') {
+        //     redirect('login');
+        // }
     }
 
     public function customerregister_data() {
@@ -24,6 +29,9 @@ class CustomerRegister extends CI_Controller {
     }
 
     public function upload_excel() {
+        // Get logged-in user's ID
+        $userid = $this->session->userdata('id');
+        
         if (!isset($_FILES['excel_file']['name']) || empty($_FILES['excel_file']['name'])) {
             $this->session->set_flashdata('error', 'No file uploaded.');
             redirect('customerregister');
@@ -44,8 +52,8 @@ class CustomerRegister extends CI_Controller {
         }
 
         try {
-            // First delete all existing data
-            $delete_result = $this->CustomerRegister_model->delete_all_data();
+            // Delete only records belonging to this user
+            $delete_result = $this->CustomerRegister_model->delete_user_data($userid);
             if (!$delete_result) {
                 $this->session->set_flashdata('error', 'Failed to clear existing data.');
                 redirect('customerregister');
@@ -71,6 +79,7 @@ class CustomerRegister extends CI_Controller {
 
                 if (!empty(trim($row[0]))) {
                     $insert_data[] = array(
+                        'userid' => $userid, // Add the user ID to each record
                         'district_name' => isset($row[0]) ? trim($row[0]) : '',
                         'distributor_code' => isset($row[1]) ? trim($row[1]) : '',
                         'distributor_name' => isset($row[2]) ? trim($row[2]) : '',
@@ -123,7 +132,7 @@ class CustomerRegister extends CI_Controller {
             if (!empty($insert_data)) {
                 $result = $this->CustomerRegister_model->insert_data($insert_data);
                 if ($result) {
-                    $this->session->set_flashdata('success', 'Data refreshed successfully. Rows inserted: ' . count($insert_data));
+                    $this->session->set_flashdata('success', 'Data uploaded successfully. Rows inserted: ' . count($insert_data));
                 } else {
                     $this->session->set_flashdata('error', 'Failed to insert data into database.');
                 }
