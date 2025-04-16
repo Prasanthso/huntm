@@ -2251,9 +2251,10 @@ $userid = $this->session->userdata('id');
                     <tr>
                         <th>Area Name</th>
                         <th>Consumer Number</th>
-                        <th>Name</th>
-                        <th>Phone</th>
+                        <th>Consumer Name</th>
+                        <th>Phone Number</th>
                         <th>Scheme</th>
+                        <th>Nil Refill Status</th>
                     </tr>
                 </thead>
                 <tbody id="customerTableBody"></tbody>
@@ -2461,8 +2462,9 @@ $(document).ready(function() {
                         <td>${escapeHtml(customer.area_name)}</td>
                         <td>${escapeHtml(customer.consumer_number)}</td>
                         <td>${escapeHtml(customer.consumer_name)}</td>
-                        <td>${escapeHtml(customer.phone_number)}</td>
+                        <td>${escapeHtml(customer.phone_number) || 'N\A'}</td>
                         <td><span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">${customer.scheme_selected}</span></td>
+                        <td><span class="badge badge-due">Due</span></td>
                     </tr>
                 `);
             });
@@ -3646,7 +3648,7 @@ $(document).ready(function () {
                         <th>Area Name</th>
                         <th>Consumer Number</th>
                         <th>Consumer Name</th>
-                        <th>Phone Status</th>
+                        <th>Phone Number Status</th>
                         <th>Scheme</th>
                     </tr>
                 </thead>
