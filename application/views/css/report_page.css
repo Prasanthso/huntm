@@ -409,3 +409,99 @@ tr:hover td {
 .table-responsive {
     overflow-x: auto;
 }
+
+/* Responsive Table Styles */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+table th {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+table td {
+    padding: 12px;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+    text-align: center;
+}
+
+/* Striped rows for better readability */
+table tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Hover effect for rows */
+table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        width: 100%;
+    }
+    
+    table thead {
+        display: none; /* Hide headers on small screens */
+    }
+    
+    table tbody {
+        display: block;
+        width: 100%;
+    }
+    
+    table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    table td {
+        display: block;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-bottom: 1px solid #eee;
+        border-right: none;
+    }
+    
+    table td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        font-weight: bold;
+        text-align: left;
+    }
+    
+    /* Add data-label attributes to your table cells in HTML */
+}
+
+/* For tables that need horizontal scrolling */
+.scrollable-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}

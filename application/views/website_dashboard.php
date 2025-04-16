@@ -880,7 +880,7 @@ $userid = $this->session->userdata('id');
     </div>
 
     <div class="col">
-        <div class="card text-center dashboard-card card-3" onclick="window.location.href='NilRefill/nill_fill_data'">
+        <div class="card text-center dashboard-card card-3" onclick="window.location.href='nillfill'">
             <h6 class="fs-5">📝 Nil Refill</h6>
 
             <?php if (!empty($stats)): ?>
@@ -919,7 +919,7 @@ $userid = $this->session->userdata('id');
     </div>
 
     <div class="col-md-3">
-        <div class="card text-center dashboard-card card-8" onclick="window.location.href='<?php echo base_url('mi_due_data/midue_data'); ?>'">
+        <div class="card text-center dashboard-card card-8" onclick="window.location.href='<?php echo base_url('midue'); ?>'">
             <h6 class="fs-5">📈 MI Due</h6>
                 <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
                 <p class="fs-6">Total: <?php echo number_format($mi_stats['total']['qty']); ?></p>
@@ -1382,7 +1382,7 @@ $userid = $this->session->userdata('id');
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
         </div>      
-        <div class="customerstrength-summary">
+        <div class="customerstrength-summary table-responsive scrollable-table">
         <h2 class="text-center mb-4">Customer Strength Data</h2>
 
         <!-- Fixed Summary Table -->
