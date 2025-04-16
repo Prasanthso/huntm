@@ -123,6 +123,7 @@ class CustomerRegister_model extends CI_Model {
         $this->db->where('userid', $userid);
         $this->db->where('last_refill_date IS NOT NULL');
         $this->db->order_by('last_refill_date', 'ASC');
+        $this->db->group_by('consumer_id');
         
         $query = $this->db->get($this->table);
         
