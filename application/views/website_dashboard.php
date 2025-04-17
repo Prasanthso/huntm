@@ -812,7 +812,7 @@ $userid = $this->session->userdata('id');
         <div class="col">
             <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
                 <h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
-                <p>Areas: 150</p>
+                <p>Areas: 20</p>
             </div>
         </div>
 
@@ -2165,7 +2165,7 @@ $userid = $this->session->userdata('id');
             </a>
         </div>
         
-        <div class="container5">
+        <div class="container4">
     <!-- Fixed Summary Table -->
     <div class="nerefil-summary">
         <table class="custom-table table-bordered nilrefil_summary_table" id="summaryTable">
