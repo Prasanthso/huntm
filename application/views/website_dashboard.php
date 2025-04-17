@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/css/report_page.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/css/dashboard.css">
     <style>
@@ -72,8 +74,12 @@
             position: fixed;
             top: 80px;
             left: 0;
-			
+            overflow: hidden; /* Prevent logout from spilling out */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+
         
         .list-group-item {
             border: none;
@@ -568,7 +574,11 @@
         top: 50%; 
         transform: translateY(-50%); 
     }
-
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+}
         /* Show hamburger menu on small screens */
         @media (max-width: 768px) {
 
@@ -595,7 +605,7 @@
                 transition: left 0.3s ease-in-out;
             }
 			.content{ margin-left: 0px;}
-			.dashboard-card{width: 100px; height: 110px;}
+			/* .dashboard-card{width: 100px; height: 110px;} */
             #sidebar.active {
                 left: 0;
             }
@@ -714,7 +724,7 @@ $userid = $this->session->userdata('id');
         <span>Welcome! <?php echo $this->session->userdata('username'); ?></span>
     </div>
 	
-    <button class="hamburger btn btn-link text-white ms-3" id="hamburger">
+    <button class="menu-toggle" id="hamburger">
         <i class="fas fa-bars"></i>
     </button>
 </header>
@@ -791,11 +801,11 @@ $userid = $this->session->userdata('id');
                     </div>
                 </div>
 
-                <div class="logout-container">
+                
                     <a href="<?php echo base_url('logout'); ?>" class="logout-btn">
                         <img src="<?php echo base_url('/Image/logout1.png'); ?>" alt="Logout Icon"> Logout
                     </a>
-                </div>
+               
             </div>
         </div>
         
@@ -810,7 +820,7 @@ $userid = $this->session->userdata('id');
 	<div class="row row-cols-4 g-3 mr-0 pr-0">
     
         <div class="col">
-            <div class="card text-center dashboard-card card-1"  onclick="showDetails('backlog')">
+            <div class="card text-center dashboard-card card-1 "  onclick="showDetails('backlog')">
                 <h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
                 <p>Areas: 150</p>
             </div>
@@ -1107,8 +1117,8 @@ $userid = $this->session->userdata('id');
                         <?php if ($this->session->flashdata('error')): ?>
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
-
-                        <table class="table table-bordered">
+                        <div class="table-responsive">
+                        <table class="custom-table table-bordered">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
@@ -1135,6 +1145,7 @@ $userid = $this->session->userdata('id');
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                                </div>
                     </div>
 
                     <?php } elseif ($method == 'display_open_data') {?>
@@ -1148,8 +1159,8 @@ $userid = $this->session->userdata('id');
                         <?php if ($this->session->flashdata('error')): ?>
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
-
-                        <table class="table table-bordered">
+                        <div class="table-responsive">
+                        <table class="custom-table table-bordered">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
@@ -1175,52 +1186,8 @@ $userid = $this->session->userdata('id');
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                                </div>
                     </div>
-
-                    <!-- <?php } elseif ($method == 'display_fundbalance') { ?>
-                        <div class="container">
-                        <h2>Fund Balance</h2>
-
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
-                        <?php endif; ?>
-
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
-                        <?php endif; ?>
-
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>CCA</th>
-                                    <th>Balance</th>
-                                    <th>Risk Category Code</th>
-                                    <th>Risk Category Description</th>
-                                    <!-- <th>Status</th> --
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($fundbalances)): ?>
-                                    <?php $serial_no = 1;  ?>
-                                    <?php foreach ($fundbalances as $fundbalance): ?>
-                                        <tr>
-                                            <td><?php echo $serial_no++; ?></td> 
-                                            <td><?php echo $fundbalance['cca']; ?></td>
-                                            <td><?php echo $fundbalance['balance']; ?></td>
-                                            <td><?php echo $fundbalance['risk_category_code']; ?></td>
-                                            <td><?php echo $fundbalance['risk_category_description']; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="5">No records found.</td> 
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div> -->
-
                    
                     <!-- Suggestion Section -->
                 <?php } elseif ($method == 'suggestion') { ?>
@@ -1382,18 +1349,14 @@ $userid = $this->session->userdata('id');
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
         </div>      
-        <div class="customerstrength-summary table-responsive scrollable-table">
-        <h2 class="text-center mb-4">Customer Strength Data</h2>
+        <div class="container4">
+        
 
         <!-- Fixed Summary Table -->
-        <div class="fixed-summary">
-            <div class="navigation-controls">
-                <button id="backButton" class="btn btn-outline-primary btn-sm" style="display: none;">
-                    <i class="fas fa-arrow-left"></i> Back
-                </button>
-            </div>
+        <div class="summary-section">
+        <h2 class="text-center mb-4">Customer Strength Data</h2>
             <div class="table-responsive">
-                <table class="summary-table-customer">
+                <table class="custom-table table table-bordered">
                     <thead>
                         <tr class="header-row">
                             <th rowspan="2">Quantity/Percent</th>
@@ -1420,40 +1383,33 @@ $userid = $this->session->userdata('id');
                     <tbody>
                         <tr>
                             <td>Quantity</td>
-                            <td class="clickabled" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?></td>
-                            <td class="clickabled" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?></td>
-                            <td class="clickabled" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?></td>
-                            <td class="clickabled" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?></td>
-                            <td class="clickabled" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?></td>
-                            <td class="clickabled" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?></td>
-                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?></td>
-                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?></td>
-                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?></td>
-                            <td class="clickabled" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?></td>
-                            <td class="clickabled" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?></td>
-                            <td class="clickabled" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?></td>
+                            <td class="clickabled" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                            <td class="clickabled" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
                         </tr>
                         <tr>
                             <td>Percent</td>
-                            
-                            <td><?= $customer_data['active']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['active']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['active']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['non_pmuy']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['active']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-
-
-                            <td><?= $customer_data['suspended']['total'] ? round(($customer_data['suspended']['pmuy']/$customer_data['total']['pmuy'])*100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['suspended']['total'] ? round(($customer_data['suspended']['non_pmuy']/$customer_data['suspended']['non_pmuy'])*100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['suspended']['total'] ? round(($customer_data['suspended']['total']/$customer_data['total']['total'])*100, 2) : 0 ?>%</td>
-
-                            <td><?= $customer_data['deactivated']['total'] ? round(($customer_data['deactivated']['pmuy']/$customer_data['total']['pmuy'])*100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['deactivated']['total'] ? round(($customer_data['deactivated']['non_pmuy']/$customer_data['deactivated']['non_pmuy'])*100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['deactivated']['total'] ? round(($customer_data['deactivated']['total']/$customer_data['total']['total'])*100, 2) : 0 ?>%</td>
-
-                           
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <!-- <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>98.7%</td> -->
-                             <td>98.7%</td>
+                            <td>97.36%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1461,11 +1417,10 @@ $userid = $this->session->userdata('id');
         </div>
 
         <!-- Main Content Area -->
-        <div id="mainContent" class="main-content">
+        <div id="mainContent" class="customer_area_details">
             <h4 class="view-title">Customer Distribution by Area</h4>
             <div class="table-responsive">
-            <!-- <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a> -->
-                <table class="custom-table table-bordered">
+                <table class="custom-table table table-bordered">
                     <thead class="table-success">
                         <tr>
                             <th>Area Name</th>
@@ -1479,7 +1434,7 @@ $userid = $this->session->userdata('id');
                             </tr>
                         <?php else: ?>
                             <?php 
-                            $area_counts = array();
+                            $area_counts = [];
                             foreach ($customers as $customer) {
                                 $area = $customer['area_name'] ?? 'Unknown Area';
                                 $area_counts[$area] = ($area_counts[$area] ?? 0) + 1;
@@ -1488,8 +1443,8 @@ $userid = $this->session->userdata('id');
                             ?>
                             <?php foreach ($display_areas as $area => $count): ?>
                                 <tr>
-                                    <td class="clickabled initial-area-click" data-area="<?= html_escape($area) ?>">
-                                        <?= html_escape($area) ?>
+                                    <td class="clickabled initial-area-click" data-area="<?= htmlspecialchars($area, ENT_QUOTES, 'UTF-8') ?>">
+                                        <?= htmlspecialchars($area, ENT_QUOTES, 'UTF-8') ?>
                                     </td>
                                     <td><?= $count ?></td>
                                 </tr>
@@ -1498,10 +1453,9 @@ $userid = $this->session->userdata('id');
                     </tbody>
                 </table>
             </div>
-            
             <?php if (!empty($customers) && count($area_counts) > 10): ?>
                 <nav>
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center mt-3">
                         <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
                         <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
                         <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
@@ -1511,9 +1465,12 @@ $userid = $this->session->userdata('id');
         </div>
     </div>
 
+    <!-- Back Button -->
+    <button id="backButton" title="Back to Summary">↑</button>
+
+    <!-- JavaScript Dependencies -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     $(document).ready(function () {
         let currentPage = 1;
@@ -1523,36 +1480,30 @@ $userid = $this->session->userdata('id');
         let currentStatus = null;
         let currentScheme = null;
         let currentArea = null;
-        let viewHistory = [];
-        
+        let viewHistory = ['initial'];
+
         // Initialize with all customer data from PHP
-        let allCustomers = <?= json_encode($customers) ?>;
-        let customerData = <?= json_encode($customer_data) ?>;
-        
-        // If no customers, show message
-        if (!allCustomers || allCustomers.length === 0) {
-            $('#initialAreaBreakdown').html('<tr><td colspan="2" class="no-data">No customer data available</td></tr>');
-        }
+        const allCustomers = <?= json_encode($customers) ?>;
+        const customerData = <?= json_encode($customer_data) ?>;
 
         // Load initial area breakdown
         function loadInitialAreaBreakdown() {
             viewHistory = ['initial'];
             $('#backButton').hide();
-            
+            currentStatus = null;
+            currentScheme = null;
+            currentArea = null;
+
             // Group customers by area
             const areaCounts = {};
             allCustomers.forEach(customer => {
                 const area = customer.area_name || 'Unknown Area';
-                if (!areaCounts[area]) {
-                    areaCounts[area] = 0;
-                }
-                areaCounts[area]++;
+                areaCounts[area] = (areaCounts[area] || 0) + 1;
             });
-            
+
             // Convert to array for pagination
             allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
-            
-            // Update table with current page
+            currentPage = 1;
             updateAreaTable();
         }
 
@@ -1560,13 +1511,12 @@ $userid = $this->session->userdata('id');
             const start = (currentPage - 1) * recordsPerPage;
             const end = start + recordsPerPage;
             const pageAreas = allAreas.slice(start, end);
-            
+
             let areaRows = '';
-            
             if (pageAreas.length === 0) {
                 areaRows = '<tr><td colspan="2" class="no-data">No areas found</td></tr>';
             } else {
-                pageAreas.forEach(({area, count}) => {
+                pageAreas.forEach(({ area, count }) => {
                     areaRows += `
                         <tr>
                             <td class="clickabled initial-area-click" data-area="${area}">${area}</td>
@@ -1575,60 +1525,53 @@ $userid = $this->session->userdata('id');
                     `;
                 });
             }
-            
+
             $('#initialAreaBreakdown').html(areaRows);
             $('#currentPage').text(currentPage);
-            
-            // Update pagination buttons
-            $('#prevPage').toggleClass("disabled", currentPage === 1);
-            $('#nextPage').toggleClass("disabled", end >= allAreas.length);
-            
+            $('#prevPage').toggleClass('disabled', currentPage === 1);
+            $('#nextPage').toggleClass('disabled', end >= allAreas.length);
+
             // Add click handlers for area rows
-            $('.initial-area-click').off('click').on('click', function() {
-                const area = $(this).data('area');
-                currentArea = area;
-                filteredCustomers = allCustomers.filter(customer => {
-                    const customerArea = customer.area_name || 'Unknown Area';
-                    return customerArea === area;
-                });
-                loadCustomerDetailsView(null, null, area);
+            $('.initial-area-click').off('click').on('click', function () {
+                currentArea = $(this).data('area');
+                filteredCustomers = allCustomers.filter(customer => 
+                    (customer.area_name || 'Unknown Area') === currentArea
+                );
+                loadCustomerDetailsView(null, null, currentArea);
             });
         }
-        
+
         function loadAreaBreakdownView(status, scheme) {
             viewHistory.push('areaBreakdown');
             $('#backButton').show();
-            
             currentStatus = status;
             currentScheme = scheme;
-            const title = `${status === 'ALL' ? 'ALL STATUSES' : status} - ${scheme === 'ALL' ? 'ALL SCHEMES' : scheme.replace('_', ' ')} Customers by Area`;
-            
+
+            const title = `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers by Area`;
+
             // Filter customers by status and scheme
             filteredCustomers = allCustomers.filter(customer => {
                 const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
                 const schemeMatch = scheme === 'ALL' ? true : 
-                                    (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
+                    (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
                 return statusMatch && schemeMatch;
             });
-            
+
             // Group by area
             const areaCounts = {};
             filteredCustomers.forEach(customer => {
                 const area = customer.area_name || 'Unknown Area';
-                if (!areaCounts[area]) {
-                    areaCounts[area] = 0;
-                }
-                areaCounts[area]++;
+                areaCounts[area] = (areaCounts[area] || 0) + 1;
             });
-            
+
             // Convert to array for pagination
             allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
             currentPage = 1;
-            
+
             const areaBreakdownHTML = `
                 <h4 class="view-title">${title}</h4>
                 <div class="table-responsive">
-                    <table class="custom-table table-bordered">
+                    <table class="custom-table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -1639,29 +1582,28 @@ $userid = $this->session->userdata('id');
                     </table>
                 </div>
                 <nav>
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center mt-3">
                         <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
                         <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
                         <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
                     </ul>
                 </nav>
             `;
-            
+
             $('#mainContent').html(areaBreakdownHTML);
             updateAreaBreakdownTable();
         }
-        
+
         function updateAreaBreakdownTable() {
             const start = (currentPage - 1) * recordsPerPage;
             const end = start + recordsPerPage;
             const pageAreas = allAreas.slice(start, end);
-            
+
             let areaRows = '';
-            
             if (pageAreas.length === 0) {
                 areaRows = '<tr><td colspan="2" class="no-data">No data available</td></tr>';
             } else {
-                pageAreas.forEach(({area, count}) => {
+                pageAreas.forEach(({ area, count }) => {
                     areaRows += `
                         <tr>
                             <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
@@ -1670,56 +1612,44 @@ $userid = $this->session->userdata('id');
                     `;
                 });
             }
-            
+
             $('#areaBreakdownBody').html(areaRows);
             $('#currentPage').text(currentPage);
-            
-            // Update pagination buttons
-            $('#prevPage').toggleClass("disabled", currentPage === 1);
-            $('#nextPage').toggleClass("disabled", end >= allAreas.length);
-            
+            $('#prevPage').toggleClass('disabled', currentPage === 1);
+            $('#nextPage').toggleClass('disabled', end >= allAreas.length);
+
             // Add click handlers for area rows
-            $('.area-click').off('click').on('click', function() {
-                const area = $(this).data('area');
-                currentArea = area;
-                const areaCustomers = filteredCustomers.filter(customer => {
-                    const customerArea = customer.area_name || 'Unknown Area';
-                    return customerArea === area;
-                });
-                loadCustomerDetailsView(currentStatus, currentScheme, area);
+            $('.area-click').off('click').on('click', function () {
+                currentArea = $(this).data('area');
+                const areaCustomers = filteredCustomers.filter(customer => 
+                    (customer.area_name || 'Unknown Area') === currentArea
+                );
+                loadCustomerDetailsView(currentStatus, currentScheme, currentArea);
             });
         }
-        
+
         function loadCustomerDetailsView(status, scheme, area) {
             viewHistory.push('customerDetails');
             $('#backButton').show();
-            
-            let title = '';
-            let customersToShow = [];
-            
-            if (status && scheme) {
-                title = `${status === 'ALL' ? 'ALL STATUSES' : status} - ${scheme === 'ALL' ? 'ALL SCHEMES' : scheme.replace('_', ' ')} Customers in ${area || 'N/A'}`;
-                customersToShow = allCustomers.filter(customer => {
-                    const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
-                    const schemeMatch = scheme === 'ALL' ? true : 
-                                      (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
-                    const areaMatch = (customer.area_name || 'Unknown Area') === area;
-                    return statusMatch && schemeMatch && areaMatch;
-                });
-            } else {
-                title = `All Customers in ${area || 'N/A'}`;
-                customersToShow = allCustomers.filter(customer => {
-                    return (customer.area_name || 'Unknown Area') === area;
-                });
-            }
-            
-            filteredCustomers = customersToShow;
+
+            let title = status && scheme 
+                ? `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers in ${area || 'N/A'}`
+                : `All Customers in ${area || 'N/A'}`;
+
+            filteredCustomers = allCustomers.filter(customer => {
+                const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
+                const schemeMatch = scheme === 'ALL' ? true : 
+                    (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
+                const areaMatch = (customer.area_name || 'Unknown Area') === area;
+                return (!status || statusMatch) && (!scheme || schemeMatch) && areaMatch;
+            });
+
             currentPage = 1;
-            
+
             const customerDetailsHTML = `
                 <h4 class="view-title">${title}</h4>
                 <div class="table-responsive">
-                    <table class="custom-table table-bordered">
+                    <table class="custom-table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -1734,76 +1664,76 @@ $userid = $this->session->userdata('id');
                     </table>
                 </div>
                 <nav>
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center mt-3">
                         <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
                         <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
                         <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
                     </ul>
                 </nav>
             `;
-            
+
             $('#mainContent').html(customerDetailsHTML);
             updateCustomerTable();
         }
-        
+
         function updateCustomerTable() {
             const start = (currentPage - 1) * recordsPerPage;
             const end = start + recordsPerPage;
             const pageRows = filteredCustomers.slice(start, end);
-            const tableBody = document.getElementById("customerTableBody");
-            
-            tableBody.innerHTML = "";
-            
+
+            let tableBody = '';
             if (pageRows.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" class="no-data">No data available</td></tr>';
+                tableBody = '<tr><td colspan="6" class="no-data">No data available</td></tr>';
             } else {
                 pageRows.forEach(customer => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${customer.area_name || 'N/A'}</td>
-                        <td>${customer.consumer_number || 'N/A'}</td>
-                        <td>${customer.consumer_name || 'N/A'}</td>
-                        <td>${customer.phone_number || 'N/A'}</td>
-                        <td>
-                            <span class="badge ${customer.scheme_selected == 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                ${customer.scheme_selected || 'N/A'}
-                            </span>
-                        </td>
-                        <td>${customer.consumer_sub_status || 'N/A'}</td>
+                    const schemeClass = customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
+                    tableBody += `
+                        <tr>
+                            <td>${customer.area_name || 'N/A'}</td>
+                            <td>${customer.consumer_number || 'N/A'}</td>
+                            <td>${customer.consumer_name || 'N/A'}</td>
+                            <td>${customer.phone_number || 'N/A'}</td>
+                            <td><span class="badge ${schemeClass}">${customer.scheme_selected || 'N/A'}</span></td>
+                            <td>${customer.consumer_sub_status || 'N/A'}</td>
+                        </tr>
                     `;
-                    tableBody.appendChild(row);
                 });
             }
-            
+
+            $('#customerTableBody').html(tableBody);
             $('#currentPage').text(currentPage);
-            $('#prevPage').toggleClass("disabled", currentPage === 1);
-            $('#nextPage').toggleClass("disabled", end >= filteredCustomers.length);
+            $('#prevPage').toggleClass('disabled', currentPage === 1);
+            $('#nextPage').toggleClass('disabled', end >= filteredCustomers.length);
         }
 
         // Event listeners
-        $('.summary-table-customer .clickabled').on('click', function() {
-            loadAreaBreakdownView($(this).data('status'), $(this).data('scheme'));
+        $('.custom-table .clickabled').on('click', function () {
+            const status = $(this).data('status');
+            const scheme = $(this).data('scheme');
+            if (status && scheme) {
+                loadAreaBreakdownView(status, scheme);
+            }
         });
-        
-        $('#backButton').on('click', function() {
+
+        $('#backButton').on('click', function () {
             if (viewHistory.length <= 1) return;
-            
-            viewHistory.pop(); // Remove current view
+
+            viewHistory.pop();
             const previousView = viewHistory[viewHistory.length - 1];
-            
+
             if (previousView === 'initial') {
                 loadInitialAreaBreakdown();
             } else if (previousView === 'areaBreakdown') {
                 loadAreaBreakdownView(currentStatus, currentScheme);
             }
-            
+
             if (viewHistory.length <= 1) {
                 $('#backButton').hide();
             }
         });
 
         // Pagination handlers
-        $(document).on('click', '#prevPage:not(.disabled)', () => {
+        $(document).on('click', '#prevPage:not(.disabled)', function () {
             if (currentPage > 1) {
                 currentPage--;
                 if ($('#areaBreakdownBody').length) {
@@ -1815,8 +1745,8 @@ $userid = $this->session->userdata('id');
                 }
             }
         });
-        
-        $(document).on('click', '#nextPage:not(.disabled)', () => {
+
+        $(document).on('click', '#nextPage:not(.disabled)', function () {
             const end = currentPage * recordsPerPage;
             if ($('#areaBreakdownBody').length && end < allAreas.length) {
                 currentPage++;
@@ -1829,17 +1759,6 @@ $userid = $this->session->userdata('id');
                 updateAreaTable();
             }
         });
-
-        $("#backToSummary").on("click", function(e) {
-        e.preventDefault();
-        $('#areaView').hide();
-        $('#customerDetailsView').hide();
-    });
-    
-    $("#backToAreas").on("click", function(e) {
-        e.preventDefault();
-        showAreaBreakdown(currentScheme);
-    });
 
         // Initialize the view
         loadInitialAreaBreakdown();
@@ -1854,52 +1773,55 @@ $userid = $this->session->userdata('id');
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
         </div>
-        <div class="container5">
+        <div class="container4">
         <!-- Fixed Summary Section -->
         <div class="sbc_summary">
-            <table class="custom-table table_bi_report summary-table" id="summaryTable">
-                <h2>SBC Data Report</h2>
-                <thead>
-                    <tr>
-                        <th>SBC</th>
-                        <th>PMUY</th>
-                        <th>Non PMUY</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryTableBody">
-                    <tr>
-                        <td>Quantity</td>
-                        <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                        <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                        <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Percentage</td>
-                        <td><?= $table_data['rows']['%'][0] ?>%</td>
-                        <td><?= $table_data['rows']['%'][1] ?>%</td>
-                        <td><?= $table_data['rows']['%'][2] ?>%</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 class="text-center mb-4">SBC Data Report</h2>
+            <div class="table-responsive">
+                <table class="custom-table table table-bordered summary-table" id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>SBC</th>
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+                        <tr>
+                            <td>Quantity</td>
+                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Percentage</td>
+                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
                     
         <!-- Scrollable Content Section -->
         <div class="content-section">
             <!-- Area Breakdown Table -->
             <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
-            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
                 <h4 class="view-title" id="areaBreakdownTitle"></h4>
-                
-                <table class="custom-table area-table">
-                    <thead>
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Connection Count</th>
-                        </tr>
-                    </thead>
-                    <tbody id="areaBreakdownBody"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered area-table">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Connection Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="areaBreakdownBody"></tbody>
+                    </table>
+                </div>
                 <nav>
                     <ul class="pagination justify-content-center mt-3">
                         <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
@@ -1911,21 +1833,23 @@ $userid = $this->session->userdata('id');
 
             <!-- Customer Details Table -->
             <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
-            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
                 <h4 class="view-title" id="customerDetailsTitle"></h4>
-                <table class="custom-table table_area">
-                    <thead>
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Consumer Number</th>
-                            <th>Consumer Name</th>
-                            <th>Phone Number</th>
-                            <th>Scheme</th>
-                            <th>Consumer Type</th>
-                        </tr>
-                    </thead>
-                    <tbody id="customerTableBody"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered table_area">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Consumer Number</th>
+                                <th>Consumer Name</th>
+                                <th>Phone Number</th>
+                                <th>Scheme</th>
+                                <th>Consumer Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody"></tbody>
+                    </table>
+                </div>
                 <nav>
                     <ul class="pagination justify-content-center mt-3">
                         <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
@@ -2165,110 +2089,116 @@ $userid = $this->session->userdata('id');
             </a>
         </div>
         
-        <div class="container5">
-    <!-- Fixed Summary Table -->
-    <div class="nerefil-summary">
-        <table class="custom-table table-bordered nilrefil_summary_table" id="summaryTable">
-            <h2>Nil Refill Report</h2>
-            <thead>
-                <tr class="table-primary">
-                    <th rowspan="2">Time Since Last Refill</th>
-                    <th colspan="3"> 3 Months</th>
-                    <th colspan="3"> 6 Months</th>
-                    <th colspan="3"> 1 Year</th>
-                </tr>
-                <tr class="table-secondary">
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Quantity</td>
-                    <td class="clickabled" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo $stats['greater_than_3_months']['pmuy']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_3_months']['non_pmuy']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_3_months" data-scheme="total"><?php echo $stats['greater_than_3_months']['total']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo $stats['greater_than_6_months']['pmuy']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_6_months']['non_pmuy']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_6_months" data-scheme="total"><?php echo $stats['greater_than_6_months']['total']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo $stats['greater_than_1_year']['pmuy']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo $stats['greater_than_1_year']['non_pmuy']['qty']; ?></td>
-                    <td class="clickabled" data-period="greater_than_1_year" data-scheme="total"><?php echo $stats['greater_than_1_year']['total']['qty']; ?></td>
-                </tr>
-                <tr>
-                    <td>Percentage</td>
-                    <td><?php echo $stats['greater_than_3_months']['pmuy']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_3_months']['non_pmuy']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_3_months']['total']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_6_months']['pmuy']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_6_months']['non_pmuy']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_6_months']['total']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_1_year']['pmuy']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_1_year']['non_pmuy']['percent']; ?>%</td>
-                    <td><?php echo $stats['greater_than_1_year']['total']['percent']; ?>%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Details Sections -->
-    <div class="content-section">
-        <!-- Area Breakdown View -->
-        <div id="areaBreakdownView" style="display: none;" class="nilrefil_area_details">
-        <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-            <h4 class="view-title" id="areaBreakdownTitle"></h4>
-            <table class="custom-table table-bordered area-table">
-                <thead class="table-success">
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Customer Count</th>
-                    </tr>
-                </thead>
-                <tbody id="areaBreakdownBody"></tbody>
-            </table>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><span class="page-link" id="currentAreaPage">1</span></li>
-                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+        <div class="container4">
+        <!-- Fixed Summary Table -->
+        <div class="nerefil-summary">
+            <h2 class="text-center mb-4">Nil Refill Report</h2>
+            <div class="table-responsive">
+                <table class="custom-table table table-bordered nilrefil_summary_table" id="summaryTable">
+                    <thead>
+                        <tr class="table-primary">
+                            <th rowspan="2">Time Since Last Refill</th>
+                            <th colspan="3">3 Months</th>
+                            <th colspan="3">6 Months</th>
+                            <th colspan="3">1 Year</th>
+                        </tr>
+                        <tr class="table-secondary">
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Quantity</td>
+                            <td class="clickabled" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo $stats['greater_than_3_months']['pmuy']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_3_months']['non_pmuy']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_3_months" data-scheme="total"><?php echo $stats['greater_than_3_months']['total']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo $stats['greater_than_6_months']['pmuy']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_6_months']['non_pmuy']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_6_months" data-scheme="total"><?php echo $stats['greater_than_6_months']['total']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo $stats['greater_than_1_year']['pmuy']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo $stats['greater_than_1_year']['non_pmuy']['qty'] ?? 0; ?></td>
+                            <td class="clickabled" data-period="greater_than_1_year" data-scheme="total"><?php echo $stats['greater_than_1_year']['total']['qty'] ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Percentage</td>
+                            <td><?php echo $stats['greater_than_3_months']['pmuy']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_3_months']['non_pmuy']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_3_months']['total']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_6_months']['pmuy']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_6_months']['non_pmuy']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_6_months']['total']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_1_year']['pmuy']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_1_year']['non_pmuy']['percent'] ?? 0; ?>%</td>
+                            <td><?php echo $stats['greater_than_1_year']['total']['percent'] ?? 0; ?>%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Customer Details View -->
-        <div id="customerDetailsView" style="display: none;" class="nilrefil_customer_details">
-        <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-            <h4 class="view-title" id="customerDetailsTitle"></h4>
-            <table class="custom-table table-bordered">
-                <thead class="table-success">
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Consumer Number</th>
-                        <th>Consumer Name</th>
-                        <th>Phone Number</th>
-                        <th>Scheme</th>
-                        <th>Nil Refill Status</th>
-                    </tr>
-                </thead>
-                <tbody id="customerTableBody"></tbody>
-            </table>
-            <nav>
+        <!-- Details Sections -->
+        <div class="content-section">
+            <!-- Area Breakdown View -->
+            <div id="areaBreakdownView" style="display: none;" class="nilrefil_area_details">
+                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered area-table">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Customer Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="areaBreakdownBody"></tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><span class="page-link" id="currentAreaPage">1</span></li>
+                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Customer Details View -->
+            <div id="customerDetailsView" style="display: none;" class="nilrefil_customer_details">
+                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Consumer Number</th>
+                                <th>Consumer Name</th>
+                                <th>Phone Number</th>
+                                <th>Scheme</th>
+                                <th>Nil Refill Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody"></tbody>
+                    </table>
+                </div>
+                <nav>
                     <ul class="pagination justify-content-center mt-3">
                         <li class="page-item" id="prevCustomerPage"><a class="page-link" href="#">Previous</a></li>
                         <li class="page-item"><a class="page-link" id="currentCustomerPage">1</a></li>
                         <li class="page-item" id="nextCustomerPage"><a class="page-link" href="#">Next</a></li>
                     </ul>
                 </nav>
+            </div>
         </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -2582,112 +2512,115 @@ $(document).ready(function() {
             </a>
         </div>
         <div class="container5">
-    <!-- Fixed Summary Table -->
-    <div class="kyc-summary" id="summaryTableContainer">
-        <table class="custom-table table_summary_kyc" id="summaryTable">
-            <h2>KYC Data Table</h2>
-            <thead>
-                <tr class="head-row">
-                    <th rowspan="2">KYC Data</th>
-                    <th colspan="3">KYC Pending</th>
-                </tr>
-                <tr class="sub-header">
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Quantity</td>
-                    <td class="clickabled" data-scheme="PMUY"><?= $kyc_stats['PMUY_Pending'] ?? 0 ?></td>
-                    <td class="clickabled" data-scheme="Non PMUY"><?= $kyc_stats['Non_PMUY_Pending'] ?? 0 ?></td>
-                    <td class="clickabled" data-scheme="Total"><?= $kyc_stats['Total_Pending'] ?? 0 ?></td>
-                </tr>
-                <tr>
-                    <td>Percentage</td>
-                    <td><?= $kyc_stats['PMUY_Pending_Percent'] ?? 0 ?>%</td>
-                    <td><?= $kyc_stats['Non_PMUY_Pending_Percent'] ?? 0 ?>%</td>
-                    <td><?= $kyc_stats['Total_Pending_Percent'] ?? 0 ?>%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- <button id="backButton" class="btn btn-outline-primary btn-sm" style="display: none;">Back</button> -->
+        <!-- Fixed Summary Table -->
+        <div class="kyc-summary" id="summaryTableContainer">
+            <h2 class="text-center mb-4">KYC Data Table</h2>
+            <div class="table-responsive">
+                <table class="custom-table table table-bordered table_summary_kyc" id="summaryTable">
+                    <thead>
+                        <tr class="head-row">
+                            <th rowspan="2">KYC Data</th>
+                            <th colspan="3">KYC Pending</th>
+                        </tr>
+                        <tr class="sub-header">
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Quantity</td>
+                            <td class="clickabled" data-scheme="PMUY"><?php echo $kyc_stats['PMUY_Pending'] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $kyc_stats['Non_PMUY_Pending'] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Total"><?php echo $kyc_stats['Total_Pending'] ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Percentage</td>
+                            <td><?php echo $kyc_stats['PMUY_Pending_Percent'] ?? 0; ?>%</td>
+                            <td><?php echo $kyc_stats['Non_PMUY_Pending_Percent'] ?? 0; ?>%</td>
+                            <td><?php echo $kyc_stats['Total_Pending_Percent'] ?? 0; ?>%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     
-    <!-- Main Content Area -->
-    <div id="mainContent">
-        <!-- Area Breakdown View -->
-        <div id="areaBreakdownView" style="display: none;" class="kyc-area-details">
-        <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-            <h4 class="view-title" id="areaBreakdownTitle"></h4>
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Pending KYC Count</th>
-                    </tr>
-                </thead>
-                <tbody id="areaBreakdownBody"></tbody>
-            </table>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <!-- Customer Details View -->
-        <div id="customerDetailsView" style="display: none;" class="kyc_customer_details">
-        <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-            <h4 class="view-title" id="customerDetailsTitle"></h4>
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Consumer Number</th>
-                        <th>Consumer Name</th>
-                        <th>Phone Number</th>
-                        <th>Scheme</th>
-                        <th>KYC Status</th>
-                    </tr>
-                </thead>
-                <tbody id="customerTableBody">
-                    <!-- Initial data loaded from server -->
-                    <?php foreach ($kyc_data as $customer): ?>
-                        <?php if (empty($customer['kyc_number'])): ?>
-                            <tr data-area="<?= htmlspecialchars($customer['area_name'] ?? 'Unknown') ?>" 
-                                data-scheme="<?= htmlspecialchars($customer['scheme_selected']) ?>">
-                                <td><?= htmlspecialchars($customer['area_name'] ?? 'Unknown') ?></td>
-                                <td><?= htmlspecialchars($customer['consumer_number']) ?></td>
-                                <td><?= htmlspecialchars($customer['consumer_name']) ?></td>
-                                <td><?= htmlspecialchars($customer['phone_number']) ?></td>
-                                <td>
-                                    <span class="badge <?= ($customer['scheme_selected'] === 'PMUY') ? 'badge-pmuy' : 'badge-non-pmuy' ?>">
-                                        <?= htmlspecialchars($customer['scheme_selected']) ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-non-pmuy">Pending</span>
-                                </td>
+        <!-- Main Content Area -->
+        <div id="mainContent">
+            <!-- Area Breakdown View -->
+            <div id="areaBreakdownView" style="display: none;" class="kyc-area-details">
+                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Pending KYC Count</th>
                             </tr>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+                        </thead>
+                        <tbody id="areaBreakdownBody"></tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
+                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Customer Details View -->
+            <div id="customerDetailsView" style="display: none;" class="kyc_customer_details">
+                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Consumer Number</th>
+                                <th>Consumer Name</th>
+                                <th>Phone Number</th>
+                                <th>Scheme</th>
+                                <th>KYC Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <?php foreach ($kyc_data as $customer): ?>
+                                <?php if (empty($customer['kyc_number'])): ?>
+                                    <tr data-area="<?php echo htmlspecialchars($customer['area_name'] ?? 'Unknown', ENT_QUOTES, 'UTF-8'); ?>" 
+                                        data-scheme="<?php echo htmlspecialchars($customer['scheme_selected'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <td><?php echo htmlspecialchars($customer['area_name'] ?? 'Unknown', ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td><?php echo htmlspecialchars($customer['consumer_number'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td><?php echo htmlspecialchars($customer['consumer_name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td><?php echo htmlspecialchars($customer['phone_number'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td>
+                                            <span class="badge <?php echo ($customer['scheme_selected'] === 'PMUY') ? 'badge-pmuy' : 'badge-non-pmuy'; ?>">
+                                                <?php echo htmlspecialchars($customer['scheme_selected'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-non-pmuy">Pending</span>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -2958,31 +2891,33 @@ $(document).ready(function() {
         <div class="container4">
         <!-- Fixed Summary Section -->
         <div class="midue-summary">
-            <table class="custom-table table-bordered" id="summaryTable">
-                <h2>MI Due Data Table</h2>
-                <thead>
-                    <tr class="table-primary">
-                        <th>MI Due</th>
-                        <th>PMUY</th>
-                        <th>Non PMUY</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryTableBody">
-                    <tr>
-                        <td>Quantity</td>
-                        <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                        <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                        <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Percentage</td>
-                        <td><?= $table_data['rows']['%'][0] ?></td>
-                        <td><?= $table_data['rows']['%'][1] ?></td>
-                        <td><?= $table_data['rows']['%'][2] ?></td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 class="text-center mb-4">MI Due Data Table</h2>
+            <div class="table-responsive">
+                <table class="custom-table table table-bordered" id="summaryTable">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>MI Due</th>
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+                        <tr>
+                            <td>Quantity</td>
+                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Percentage</td>
+                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Scrollable Content Section -->
@@ -2991,15 +2926,17 @@ $(document).ready(function() {
             <div id="areaBreakdownView" style="display: none;" class="midue-area-details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
                 <h4 class="view-title" id="areaBreakdownTitle"></h4>
-                <table class="custom-table table-bordered">
-                    <thead class="table-success">
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Due Count</th>
-                        </tr>
-                    </thead>
-                    <tbody id="areaBreakdownBody"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Due Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="areaBreakdownBody"></tbody>
+                    </table>
+                </div>
                 <nav>
                     <ul class="pagination justify-content-center mt-3">
                         <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
@@ -3013,19 +2950,21 @@ $(document).ready(function() {
             <div id="customerDetailsView" style="display: none;" class="midue_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
                 <h4 class="view-title" id="customerDetailsTitle"></h4>
-                <table class="custom-table table-bordered">
-                    <thead class="table-success">
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Consumer Number</th>
-                            <th>Consumer Name</th>
-                            <th>Phone Number</th>
-                            <th>Scheme</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="customerTableBody"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Consumer Number</th>
+                                <th>Consumer Name</th>
+                                <th>Phone Number</th>
+                                <th>Scheme</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody"></tbody>
+                    </table>
+                </div>
                 <nav>
                     <ul class="pagination justify-content-center mt-3">
                         <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
@@ -3302,80 +3241,92 @@ $(document).ready(function() {
             </a>
         </div>
         <div class="container4">
-    <div class="hosedue_summary">
-        <h2>Hose Due Report</h2>
-        <table class="custom-table" id="summaryTable">
-            <thead>
-                <tr>
-                    <th>Hose Status</th>
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="summaryTableBody">
-                <tr>
-                    <td>Quantity</td>
-                    <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                    <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                    <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
-                </tr>
-                <tr>
-                    <td>Percentage</td>
-                    <td><?= $table_data['rows']['%'][0] ?></td>
-                    <td><?= $table_data['rows']['%'][1] ?></td>
-                    <td><?= $table_data['rows']['%'][2] ?></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="container">
-    <div class="content-section">
-        <!-- Area View -->
-        <div id="areaView" style="display: none;" class="hosedue-area-details">
-            <h4 class="view-title" id="areaViewTitle"></h4>
-            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Due Count</th>
-                    </tr>
-                </thead>
-                <tbody id="areaTableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Customer Details View -->
-        <div id="customerDetailsView" style="display: none;" class="hosedue_customer_details">
-        <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-            <h4 class="view-title" id="customerDetailsTitle"></h4>
-            
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Consumer Number</th>
-                        <th>Consumer Name</th>
-                        <th>Phone Number</th>
-                        <th>Scheme</th>
-                        <th>Hose Due</th>
-                    </tr>
-                </thead>
-                <tbody id="customerTableBody"></tbody>
-            </table>
-            <nav class="pagination">
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+        <div class="hosedue_summary">
+            <h2 class="text-center mb-4">Hose Due Report</h2>
+            <div class="table-responsive">
+                <table class="custom-table table table-bordered" id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>Hose Status</th>
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+                        <tr>
+                            <td>Quantity</td>
+                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Percentage</td>
+                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
         </div>
     </div>
-</div>
+
+    <div class="container">
+        <div class="content-section">
+            <!-- Area View -->
+            <div id="areaView" style="display: none;" class="hosedue-area-details">
+                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                <h4 class="view-title" id="areaViewTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Due Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="areaTableBody"></tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
+                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Customer Details View -->
+            <div id="customerDetailsView" style="display: none;" class="hosedue_customer_details">
+                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Consumer Number</th>
+                                <th>Consumer Name</th>
+                                <th>Phone Number</th>
+                                <th>Scheme</th>
+                                <th>Hose Due</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody"></tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -3585,85 +3536,94 @@ $(document).ready(function () {
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
         </div>
-        <div class="container">
-    <h2>Phone Number Missing Data</h2>
-    
-    <!-- Fixed Summary Section -->
-    <div class="summary-section">
-        <table class="custom-table" id="summaryTable">
-            <thead>
-                <tr>
-                    <th>Phone Missing</th>
-                    <th>PMUY</th>
-                    <th>Non PMUY</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="summaryTableBody">
-                <tr>
-                    <td>Quantity</td>
-                    <td class="clickabled" data-scheme="PMUY"><?= $table_data['rows']['Qty'][0] ?></td>
-                    <td class="clickabled" data-scheme="Non PMUY"><?= $table_data['rows']['Qty'][1] ?></td>
-                    <td class="clickabled" data-scheme="Total"><?= $table_data['rows']['Qty'][2] ?></td>
-                </tr>
-                <tr>
-                    <td>Percentage</td>
-                    <td><?= $table_data['rows']['%'][0] ?></td>
-                    <td><?= $table_data['rows']['%'][1] ?></td>
-                    <td><?= $table_data['rows']['%'][2] ?></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Scrollable Content Section -->
-    <div class="content-section">
-        <div id="areaBreakdownView" style="display: none;">
-        <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-            <h4 class="view-title" id="areaBreakdownTitle"></h4>
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Missing Phone Count</th>
-                    </tr>
-                </thead>
-                <tbody id="areaBreakdownBody"></tbody>
-            </table>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+        <div class="container4">
+        
+        
+        <!-- Fixed Summary Section -->
+        <div class="summary-section">
+        <h2 class="text-center mb-4">Phone Number Missing Data</h2>
+            <div class="table-responsive">
+                <table class="custom-table table table-bordered" id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>Phone Missing</th>
+                            <th>PMUY</th>
+                            <th>Non PMUY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+                        <tr>
+                            <td>Quantity</td>
+                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
+                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Percentage</td>
+                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
+                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div id="customerDetailsView" style="display: none;">
-        <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-            <h4 class="view-title" id="customerDetailsTitle"></h4>
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Area Name</th>
-                        <th>Consumer Number</th>
-                        <th>Consumer Name</th>
-                        <th>Phone Number Status</th>
-                        <th>Scheme</th>
-                    </tr>
-                </thead>
-                <tbody id="customerTableBody"></tbody>
-            </table>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+        <!-- Scrollable Content Section -->
+        <div class="content-section">
+            <!-- Area Breakdown View -->
+            <div id="areaBreakdownView" style="display: none;" class="phone_missing_area_details">
+                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Missing Phone Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="areaBreakdownBody"></tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
+                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Customer Details View -->
+            <div id="customerDetailsView" style="display: none;" class="phone_missing_customer_details">
+                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <div class="table-responsive">
+                    <table class="custom-table table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Area Name</th>
+                                <th>Consumer Number</th>
+                                <th>Consumer Name</th>
+                                <th>Phone Number Status</th>
+                                <th>Scheme</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody"></tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
