@@ -2,1050 +2,640 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/css/report_page.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/css/dashboard.css">
     <style>
+        :root {
+            --sidebar-width: 250px;
+            --header-height: 70px;
+            --primary-color: #2C3E50;
+            --secondary-color: #1a252f;
+            --accent-color: #3498db;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+
         body {
-            font-family: 'Georgia', serif;
-            margin: 0;
-            padding: 0;
+            font-family: 'Roboto', sans-serif;
             background-color: #f9f9f9;
             color: #333;
-			left:0;
+            padding-top: var(--header-height);
         }
 
-        h1 {
-            text-align: center; 
-            margin: 20px 250px; 
-            padding-left: 10px;
-        }
-
-        h3{
-            padding: 10px 20px;
-        }
-
+        /* Header Styles */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: #2C3E50;
-            padding: 10px 20px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-        }
-        
-        .huntmlogo {
-            width: 60px;
-            height: 60px;
-            margin-right: 10px;
-        }
-        
-        a {
-            text-decoration: none;
-        }
-        a:hover{
-            color: black;
-        }
-        .navbar-brand {
-            color: white;
-            font-size: 25px;
-            margin: 0;
-        }
-        
-        .main-container {
-            display: flex;
-            margin-top: 80px;
-        }
-        
-        #sidebar {
-            width: 250px;
-            height: calc(100vh - 80px);
-            background-color: #2C3E50;
-            padding-top: 20px;
-            position: fixed;
-            top: 80px;
-            left: 0;
-            overflow: hidden; /* Prevent logout from spilling out */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            height: var(--header-height);
+            background-color: var(--primary-color);
+            z-index: 1030;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 0 20px;
         }
 
-        
+        .navbar-brand {
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+
+        .huntmlogo {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background-color: var(--primary-color);
+            transition: all 0.3s;
+            z-index: 1020;
+            overflow-y: auto;
+        }
+
+        #sidebar.collapsed {
+            left: calc(-1 * var(--sidebar-width));
+        }
+
         .list-group-item {
             border: none;
-            background-color: #2C3E50;
+            border-radius: 0;
+            background-color: transparent;
             color: white;
-            transition: background-color 0.3s ease, color 0.3s ease; 
-        }
-        
-        .list-group-item a:hover {
-            background-color: #f1f1f1;
-            color: black;
+            padding: 12px 20px;
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
         }
 
-        .list-group-item:hover {
-            background-color: #f1f1f1; 
-            color: black; 
-            font-weight: bold;
-        }
-        
-        .form-check{
-            padding-top: 10px;
-            margin-left: 10px;
-        }
-
-        .form-check a{
+        .list-group-item:hover, 
+        .list-group-item:focus {
+            background-color: rgba(255,255,255,0.1);
+            border-left-color: var(--accent-color);
             color: white;
-        }
-
-        /* .form-check:hover {
-            background-color: #f1f1f1;
-            color: black;
-        } */
-        
-        .dropdown-toggle {
-            color: white;
-            transition: background-color 0.3s ease, color 0.3s ease; 
-        }
-
-        .dropdown-toggle a:hover {
-            /* background-color: white;  */
-            transition: background-color 0.3s ease, color 0.3s ease;
-            color: black;
-            font-weight: bold;
-        }
-
-        /* .dropdown-menu {
-            background-color: #f1f1f1;
-            border: 1px solid #ddd;
-            width: 100% !important;
-        } */
-
-        .dropdown-item {
-            color: black; 
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f1f1f1; 
-            color: #2C3E50;
-            font-weight: bold;
-        }
-        .dropdown-item {
-            display: block;
-            width: 100%; 
-            padding: 10px 15px;
-            transition: background-color 0.3s ease-in-out;
-            white-space: nowrap; 
-        }
-       
-        .navbar .nav-item .nav-link {
-            color: black; 
-            padding: 10px 15px;
-            transition: background 0.3s ease-in-out;
-        }
-
-        .navbar .nav-item .nav-link:hover,
-        .navbar .nav-item .nav-link:focus {
-            background: #007bff; 
-            color: #fff;
-            border-radius: 5px;
-        }
-
-    
-        .dropdown-menu {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .dropdown-item {
-            color: #333;
-            padding: 10px 15px;
-            transition: background 0.3s ease-in-out;
-        }
-
-        .dropdown-item:hover {
-            background: #007bff;
-            color: #fff;
-        }
-
-
-        .nav-item.dropdown:hover .dropdown-menu {
-            display: block;
-            margin-top: 0;
-        }
-
-        .dropdown-item a:hover {
-            background-color: rgba(200, 200, 200, 0.4);
-            color: black;
-        }
-
-        .dropdown-toggle a:hover {
-            background-color: white; 
-            color: black; 
-            font-weight: bold; 
-            transition: background-color 0.3s ease, color 0.3s ease; 
-        }
-
-        .dropdown:hover {
-            background-color: rgba(200, 200, 200, 0.4);
-            color: black;
-            font-weight: bold;
-        }
-
-        .backlogDropdown:hover{
-            color: black; 
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .suggest-form {
-            margin-left: 430px;
-            margin-top: 50px;
-            width: 70%;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .image-section { 
-            position: relative; 
-            width: 100%; 
-            height: 170px; 
-            margin-bottom: 15px; 
-        } 
-
-        .image-section img { 
-            width: 100%; 
-            height: 100%; 
-            border-radius: 8px; 
-            object-fit: cover; 
-        } 
-
-        .image-text { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            color: white; 
-            font-size: 20px; 
-            font-weight: bold; 
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); 
-        } 
-
-        input, select, textarea { 
-            width: 100%; 
-            padding: 10px; 
-            margin-top: 10px; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-            font-size: 14px; 
-        } 
-
-        textarea { 
-            height: 80px; 
-            resize: none; 
-        } 
-
-        .buttons { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 10px; 
-        } 
-
-        .recording-btn { 
-            background: green; 
-            color: white; 
-            border: none; 
-            padding: 10px; 
-            border-radius: 4px; 
-            cursor: pointer;
-            transition: 0.3s; 
-            margin-top: 10px;
-        } 
-
-        .recording-btn1 { 
-            background: red; 
-            color: white; 
-            border: none; 
-            padding: 10px; 
-            border-radius: 4px; 
-            cursor: pointer;
-            transition: 0.3s; 
-            margin-top: 10px;
-        } 
-
-        .submit-btn { 
-            width: 100%; 
-            background: #28a745; 
-            color: white; 
-            border: none; 
-            padding: 10px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            margin-top: 15px; 
-            transition: 0.3s; 
-        } 
-
-        .submit-btn:hover { 
-            background: #218838; 
-        } 
-
-        audio { 
-            display: block; 
-            margin-top: 10px; 
-        }
-
-        #timer {
-            color: red;
-            font-size: 16px;
-            font-weight: bold;
-            display: none;
-        }
-
-        .error {
-            color: red;
-            font-size: 14px;
-        }
-
-        .back-btn {
-        background: none;
-        border: none;
-        color: black;
-        font-size: 16px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
-
-    .back-btn i {
-        margin-right: 5px;
-        font-size: 15px;
-    }
-
-    .form-container {
-        width: 100%;
-        background: white;
-        margin-left: 450px;
-        margin-top: 50px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        transition: 0.3s;
-    }
-
-    
-    .form-container:hover {
-        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .form-control {
-        border-radius: 8px;
-    }
-
-    .form-control:focus {
-        border-color: #6a11cb;
-        box-shadow: 0px 0px 5px rgba(106, 17, 203, 0.5);
-    }
-
-    .input-group-text {
-        background: none;
-        border: none;
-        font-size: 1.2rem;
-        color: black;
-    }
-
-    .btn-primary {
-        background: #6a11cb;
-        border: none;
-        transition: 0.3s;
-    }
-
-    .btn-primary:hover {
-        background: #2575fc;
-    }
-
-    .text-danger {
-        font-size: 0.875rem;
-        margin-top: 5px;
-        padding-left: 50px;
-    }
-
-    .container {
-        width: 100%;
-        background: white;
-        /* padding: 20px;
-        border-radius: 10px; */
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        margin-left: 300px;
-        margin-top: 50px;
-    }
-
-    .container1 {
-        width: 100%;
-        background: white;
-        /* padding: 20px;
-        border-radius: 10px; */
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
-        margin-left: 370px;
-        margin-top: 50px;
-    }
-    
-    h2 {
-        text-align: center;
-        color: #333;
-        font-weight: bold;
-    }
-     table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    } 
-    th, td {
-        padding: 12px;
-        border: 1px solid #ddd;
-        text-align: center;
-        vertical-align: middle;
-    }
-        .table th {
-            background-color: #007bff;
-            color: white;
-        }
-        .password-hidden {
-            font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 5px;
-            color: #555;
-        }
-        .truncate-url {
-            max-width: 250px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .btn-copy {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #007bff;
-            font-size: 14px;
-        }
-        .btn-copy:hover {
-            text-decoration: underline;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 5px;
-        }
-
-        .dropdown-submenu {
-            position: relative;
-        }
-
-        .dropdown-submenu .dropdown-menu {
-            top: 100%;
-            left: 0;
-            margin-top: -1px;
-        }
-
-        .dropdown-submenu:hover > .dropdown-menu {
-            display: block;
         }
 
         .list-group-item.active {
-            background-color: #007bff;
+            background-color: rgba(255,255,255,0.2);
+            border-left-color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .dropdown-menu {
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 0;
+        }
+
+        .dropdown-item {
+            color: white;
+            padding: 8px 20px;
+        }
+
+        .dropdown-item:hover, 
+        .dropdown-item:focus {
+            background-color: var(--accent-color);
             color: white;
         }
 
-        .list-group-item:hover {
-            background-color: #f8f9fa; 
-            color: black; 
+        .dropdown-toggle::after {
+            float: right;
+            margin-top: 8px;
         }
 
-        .fileupload{
-            color: white;
-            background-color: #2C3E50; 
+        /* Main Content Styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s;
         }
 
-        .fileupload:hover{
-            background-color: white; 
-            color: black; 
-            font-weight: bold; 
-            transition: background-color 0.3s ease, color 0.3s ease; 
+        .main-content.expanded {
+            margin-left: 0;
         }
-	/* for dashboard styles */
-         .content {
-            margin-left: 260px; /* Push content to the right */
-            padding: 20px;
-        }
-		/* card{width:100%;} */
-		.dashboard-card {
-		
-            padding: 20px;
-			width: 200px;
-			height: 150px;
-            border-radius: 20px;
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            height: 100%;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .dashboard-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
-        /* Logout Button style */
-        /* Add this to your CSS file */
-        .logout-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 10px;
-            /* background: transparent; or your preferred background */
+        .dashboard-card .card-body {
+            padding: 1.5rem;
         }
 
+        .dashboard-card h6 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-container h2, 
+        .form-container h3 {
+            color: var( --success-color);
+            margin-bottom: 20px;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            margin-bottom: 20px;
+        }
+
+        .table th {
+            background-color: var( --success-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .table tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover td {
+            background-color: #e2f1ff;
+        }
+
+        /* Badges */
+        .badge-pmuy {
+            background-color: #28a745;
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 12px;
+        }
+
+        .badge-non-pmuy {
+            background-color: #6c757d;
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 12px;
+        }
+
+        .badge-due {
+            background-color: var(--danger-color);
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 12px;
+        }
+
+        .badge-missing {
+            background-color: var(--warning-color);
+            color: var(--dark-color);
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 12px;
+        }
+
+        .badge_sbc{
+            background-color: #6c757d;
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 12px;
+        }
+
+        /* Back button */
+        .back-btn {
+            margin-top: 20px;
+        }
+
+        .clickabled{
+            cursor: pointer;
+            color: black;
+        }
+
+        .clickabled:hover{
+            color: #0056b3;
+        }
+
+        /* Logout button */
         .logout-btn {
+            color: white;
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
-            color: white; 
-            text-decoration: none;
-            font-size: 17px;
-            transition: color 0.3s ease;
+            padding: 10px 20px;
+            transition: all 0.3s;
         }
 
         .logout-btn:hover {
-            color: #ff0000; 
+            color: #ff6b6b;
         }
 
-        .logout-btn img {
-            width: 20px; 
-            height: 20px;
+        /* Hamburger menu */
+        .hamburger-btn {
             color: white;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            display: none;
         }
 
-        .card-1 { background:rgb(200, 208, 216); color: #333; }
-        .card-2 { background: #e3f2fd; color: #01579b; }
-        .card-3 { background: #e8f5e9; color: #1b5e20; }
-        .card-4 { background: #fff3e0; color: #e65100; }
-        .card-5 { background: #fce4ec; color: #880e4f; }
-        .card-6 { background: #ede7f6; color: #4527a0; }
-        .card-7 { background: #ffebee; color: #b71c1c; }
-        .card-8 { background: #e0f7fa; color: #006064; }
-        .card-9 { background: #fff8e1; color: #ff8f00; }
-        .card-10 { background: #f1f8e9; color: #33691e; }
-        .card-11 { background: #ede7f6; color: #4a148c; }
-        .card-12 { background: #d7ccc8; color: #5d4037; }
-        .card-13 { background: #fbe9e7; color: #bf360c; }
-        .card-14 { background: #d1c4e9; color: #311b92; }
-        .card-15 { background:rgb(176, 229, 162); color: #283593; }
-        .card-16 { background: #b2dfdb; color: #004d40; }
-       
-        /* Responsive Styles */
-        /* Hide hamburger menu on large screens */
-        .hamburger {
-        display: none;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-        position: absolute; 
-        right: 20px;
-        top: 50%; 
-        transform: translateY(-50%); 
-    }
-.table-responsive {
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
-}
-        /* Show hamburger menu on small screens */
-        @media (max-width: 768px) {
-
-			/* .table{
-				width: 50%;
-			
-			}  */
-			/* .table th{font-size: 12px;width:10%;} */
-			 .btnautologin {
-			font-size: 10px;
-			padding: 8px;
-		} 
-			body{margin:0;}
-            .hamburger {
-                display: block;
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            #sidebar {
+                left: calc(-1 * var(--sidebar-width));
             }
 
-            #sidebar{
-				top: 70px;
-                left: -250px;
-                width: 250px;
-                height: 100%;
-                z-index: 2000;
-                transition: left 0.3s ease-in-out;
-            }
-			.content{ margin-left: 0px;}
-			/* .dashboard-card{width: 100px; height: 110px;} */
-            #sidebar.active {
+            #sidebar.show {
                 left: 0;
             }
 
-            .main-container {
-                margin-top: 60px;
+            .main-content {
+                margin-left: 0;
             }
 
-            .suggest-form {
-                margin-left: 40px;
-                margin-right: 20px;
-				width: calc(100% - 30px);
-                padding: 20px;
+            .hamburger-btn {
+                display: block;
             }
 
-            .form-container{
-                margin : 40px;
-				padding :10px;
-                width: calc(100% - 30px);
+            .dashboard-card {
+                margin-bottom: 15px;
             }
-
-            .container{
-                margin-left : 20px;
-				margin-right : -242px;
-				/* padding: 20px; */
-                width: calc(100% - 40px);
-				
-			}
-            header {
-                padding: 10px;
-            }
-
-            h1 {
-                margin: 20px 0;
-                text-align: center;
-            }
-
-			p{margin: top 2px;font-size:14px;}
-		
         }
 
-		@media (max-width: 576px) {
-		.huntmlogo {
-			width: 50px;
-			height: 50px;
-		}
-
-		h1 {
-			font-size: 20px;
-			margin: 5px;
-		}
-
-		.list-group-item {
-			font-size: 14px;
-		}
-
-		.dropdown-item {
-			font-size: 14px;
-		}
-
-		.btn {
-			font-size: 14px;
-			padding: 8px;
-		}
-
-		input, select, textarea {
-			font-size: 14px;
-			padding: 8px;
-		}
-
-		.image-text {
-			font-size: 16px;
-		}
-
-		.submit-btn {
-			font-size: 14px;
-		}
-	
-
-	}
-            .image-section {
-                height: 120px;
+        @media (max-width: 768px) {
+            .dashboard-card h6 {
+                font-size: 0.9rem;
             }
 
-            .image-text {
-                font-size: 16px;
+            .dashboard-card p {
+                font-size: 0.8rem;
             }
-		
+        }
+
+        /* Animation for sidebar */
+        @keyframes slideIn {
+            from { left: calc(-1 * var(--sidebar-width))); }
+            to { left: 0; }
+        }
+
+        @keyframes slideOut {
+            from { left: 0; }
+            to { left: calc(-1 * var(--sidebar-width))); }
+        }
     </style>
 </head>
 <body>
-<?php 
-$userid = $this->session->userdata('id');
-?>
-<!-- <header>
-        <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white">
-            <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo">
-            <span class="navbar-brand">Huntm</span>
-			<span class="text-end mt-2">Welcome, <?php echo $this->session->userdata('name'); ?></span>
-        </a>
-        <button class="hamburger" id="hamburger">
-            <i class="fas fa-bars"></i>
-        </button>
-    </header> -->
+    <?php 
+    $userid = $this->session->userdata('id');
+    ?>
 
     <!-- Header -->
-    <header class="d-flex justify-content-between align-items-center px-5 py-2 bg-dark text-white">
-    <div class="d-flex align-items-center">
-        <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white text-decoration-none">
-            <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo me-2">
-            <span class="navbar-brand mb-0">Huntm</span>
-        </a>
-    </div>
+    <header class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <button class="hamburger-btn me-3" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="<?php echo base_url('dashboard'); ?>" class="d-flex align-items-center text-white text-decoration-none">
+                <img src="<?php echo base_url('/Image/Huntm-logo.svg'); ?>" alt="Huntm Logo" class="huntmlogo me-2">
+                <span class="navbar-brand">Huntm</span>
+            </a>
+        </div>
 
-    <div class="text-end">
-        <span>Welcome! <?php echo $this->session->userdata('username'); ?></span>
-    </div>
-	
-    <button class="menu-toggle" id="hamburger">
-        <i class="fas fa-bars"></i>
-    </button>
-</header>
+        <div class="text-end text-white">
+            Welcome! <?php echo $this->session->userdata('username'); ?>
+        </div>
+    </header>
 
-    
-    <div class="main-container">
-        <!-- Sidebar -->
-        <div id="sidebar" class="border-end">
-            <div class="list-group list-group-flush">
-                <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action">Dashboard</a>
-                <div class="list-group-item p-0"> 
-                    <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
-                            href="#" 
-                            role="button" 
-                            id="fileUploadDropdown" 
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false">
-                                File Upload
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="list-group list-group-flush">
+            <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'dashboard') ? 'active' : ''; ?>">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            
+            <div class="list-group-item p-0 dropdown">
+                <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="fileUploadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-upload me-2"></i>File Upload
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="fileUploadDropdown">
+                    <li class="dropdown-submenu">
+                        <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-layer-group me-2"></i>Backlog
                         </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
-                            <li class="dropdown-submenu">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Backlog
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
-                                    <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
-                                    <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
-                                </ul>
-                            </li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('fundbalance'); ?>">Fund Balance File Upload</a></li>
-                            <li><a class="dropdown-item w-100" href="<?php echo base_url('customerregister'); ?>">Customer Register</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
+                            <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
+                            <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
                         </ul>
-                    </div>
-                </div>
+                    </li>
+                    <li><a class="dropdown-item" href="<?php echo base_url('fundbalance'); ?>"><i class="fas fa-wallet me-2"></i>Fund Balance</a></li>
+                    <li><a class="dropdown-item" href="<?php echo base_url('customerregister'); ?>"><i class="fas fa-users me-2"></i>Customer Register</a></li>
+                </ul>
+            </div>
 
-                <div class="list-group-item p-0"> 
-                    <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
-                            href="#" 
-                            role="button" 
-                            id="fileUploadDropdown" 
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false" 
-                            aria-haspopup="true">
-                            Backlog
-                        </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="fileUploadDropdown">
-                            <li><a class="dropdown-item" href="<?php echo base_url('invoiceorder'); ?>">Invoice Order Service Area </a></li>
-                            <li><a class="dropdown-item" href="<?php echo base_url('open-process-order'); ?>">Process Order Service Area</a></li>
-                        </ul>  
-                    </div>
-                </div>
+            <div class="list-group-item p-0 dropdown">
+                <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="backlogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-layer-group me-2"></i>Backlog
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="backlogDropdown">
+                    <li><a class="dropdown-item" href="<?php echo base_url('invoiceorder'); ?>">Invoice Order Service Area</a></li>
+                    <li><a class="dropdown-item" href="<?php echo base_url('open-process-order'); ?>">Process Order Service Area</a></li>
+                </ul>
+            </div>
 
-                <!-- <a class="dropdown-item fileupload list-group-item list-group-item-action w-100" href="<?php echo base_url('fundbalance_data'); ?>">Fund Balance</a> -->
-                    
-
-                <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action">Suggestion</a>
-                
-                <div class="list-group-item p-0"> 
-                    <div class="dropdown w-100"> 
-                        <a class="dropdown-toggle fileupload text-decoration-none d-block px-3 py-2" 
-                        href="#" 
-                        role="button" 
-                        id="websiteDropdown" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                            User Website
-                        </a>
-                        <ul class="dropdown-menu w-100" aria-labelledby="websiteDropdown">
+            <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'suggestion') ? 'active' : ''; ?>">
+                <i class="fas fa-lightbulb me-2"></i>Suggestion
+            </a>
+            
+            <div class="list-group-item p-0 dropdown">
+                <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="websiteDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-globe me-2"></i>User Website
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="websiteDropdown">
                     <li><a class="dropdown-item" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
                     <li><a class="dropdown-item" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
-                        </ul>
+                </ul>
+            </div>
+            
+            <div class="logout-container mt-auto p-3">
+                <a href="<?php echo base_url('loginform'); ?>" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <?php if (isset($method)) { ?>
+            <!-- Dashboard Section -->
+            <?php if ($method == 'dashboard') { ?>
+                <div class="container-fluid">
+                    <h1 class="mb-4">Dashboard Overview</h1>
+                    
+                    <div class="row g-4">
+                        <!-- Backlog Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-light" onclick="window.location.href='invoiceorder'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-users me-2"></i> Backlog</h6>
+                                    <p>Areas: 150</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Fund Balance Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-info bg-opacity-10" onclick="window.location.href='fundbalance_data'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-wallet me-2"></i> Fund Balance</h6>
+                                    <p>Rs:760,461.17</p>
+                                    <p>IOCL</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Customer Strength Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-success bg-opacity-10" onclick="window.location.href='customer_strength'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-chart-line me-2"></i> Customer Strength</h6>
+                                    <?php
+                                    if (isset($customer_data) && is_array($customer_data)) {
+                                        $totalCustomers = $customer_data['total']['total'] ?? 0;
+                                        $percent = $customer_data['total']['percent'] ?? 0; 
+
+                                        if ($totalCustomers > 0):
+                                    ?>
+                                            <p>Total: <?= number_format($totalCustomers) ?></p>
+                                            <p>Percent: <?= round($percent, 2) ?>%</p> 
+                                    <?php
+                                        else:
+                                            echo '<p>No customers found</p>';
+                                        endif;
+                                    } else {
+                                        echo '<p>Data not available</p>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SBC Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-warning bg-opacity-10" onclick="window.location.href='SBC_data'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-gas-pump me-2"></i> SBC</h6>
+                                    <?php
+                                    if (isset($sbc_counts) && isset($customer_data)) {
+                                        $sbc_total = $sbc_counts['total'] ?? 0;
+                                        $customer_total = $customer_data['total']['total'] ?? 0;
+
+                                        if ($sbc_total > 0 && $customer_total > 0):
+                                            $sbc_percent = round(($sbc_total / $customer_total) * 100);
+                                    ?>
+                                            <p>Total: <?= number_format($sbc_total) ?></p>
+                                            <p>Percent: <?= $sbc_percent ?>%</p>
+                                    <?php
+                                        else:
+                                            echo '<p>No SBC data found</p>';
+                                        endif;
+                                    } else {
+                                        echo '<p>Data not available</p>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nil Refill Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-danger bg-opacity-10" onclick="window.location.href='nillfill'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-calendar-times me-2"></i> Nil Refill</h6>
+                                    <?php if (!empty($stats)): ?>
+                                        <p>3 Months</p>
+                                        <p>Total: <?= number_format($stats['greater_than_3_months']['total']['qty']) ?></p>
+                                        <p>Percent: <?=round ($stats['greater_than_3_months']['total']['percent'])?>% </p>
+                                    <?php else: ?>
+                                        <p>Data not available</p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- KYC Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-primary bg-opacity-10" onclick="window.location.href='kycdata'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-id-card me-2"></i> KYC</h6>
+                                    <?php
+                                    if (isset($kyc_stats)) {
+                                        $kyc_completed = $kyc_stats['Total_Pending'];
+                                        $total_customers = $kyc_stats['Total'];
+
+                                        if ($kyc_completed > 0 && $total_customers > 0):
+                                            $kyc_percent = round(($kyc_completed / $total_customers) * 100);
+                                    ?>
+                                            <p>Total: <?= number_format($kyc_completed) ?></p>
+                                            <p>Percent: <?= $kyc_percent ?>%</p>
+                                    <?php
+                                        else:
+                                            echo '<p>No KYC data found</p>';
+                                        endif;
+                                    } else {
+                                        echo '<p>Data not available</p>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- MI Due Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-secondary bg-opacity-10" onclick="window.location.href='midue'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-calendar-check me-2"></i> MI Due</h6>
+                                    <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
+                                    <p>Total: <?php echo number_format($mi_stats['total']['qty']); ?></p>
+                                    <p>Percent: <?php echo round($mi_stats['total']['percent']); ?>%</p>
+                                    <?php else: ?>
+                                        <p>Data not available</p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hose Due Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-purple bg-opacity-10" onclick="window.location.href='hosedue'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-fire-extinguisher me-2"></i> Hose Due</h6>
+                                    <?php if (!empty($hose_stats) && isset($hose_stats['total']['qty']) && isset($hose_stats['total']['percent'])): ?>
+                                        <p>Total: <?= number_format($hose_stats['total']['qty']) ?></p>
+                                        <p>Percent: <?= round($hose_stats['total']['percent']) ?>%</p>
+                                    <?php else: ?>
+                                        <p>Data not available</p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone Number Card -->
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-teal bg-opacity-10" onclick="window.location.href='phonenumber'">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-phone me-2"></i> Mobile No</h6>
+                                    <?php if (!empty($phone_stats) && isset($phone_stats['total']['qty']) && isset($phone_stats['total']['percent'])): ?>
+                                        <p>Total: <?= number_format($phone_stats['total']['qty']) ?></p>
+                                        <p>Percent: <?= round($phone_stats['total']['percent']) ?>%</p>
+                                    <?php else: ?>
+                                        <p>Data not available</p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                
-                    <a href="<?php echo base_url('logout'); ?>" class="logout-btn">
-                        <img src="<?php echo base_url('/Image/logout1.png'); ?>" alt="Logout Icon"> Logout
-                    </a>
-               
-            </div>
-        </div>
-        
-        <main>
-            <?php if (isset($method)) { ?>
-				<!-- Dashboard Section -->
-                <?php if ($method == 'dashboard') { ?>
-				<!-- <h1>Welcome to Dashboard</h1> -->
-					
-	<div class="content">
-	<div class="container-sm mt-3">
-	<div class="row row-cols-4 g-3 mr-0 pr-0">
-    
-        <div class="col">
-            <div class="card text-center dashboard-card card-1 "  onclick="showDetails('backlog')">
-                <h6 class="fs-6 fs-md-5 fs-lg-4">👥 Backlog</h6>
-                <p>Areas: 150</p>
-            </div>
-        </div>
+            <!-- Other sections would follow the same responsive pattern -->
+            <?php } elseif ($method == 'invoice_order') { ?>
+                <div class="container">
+                    <div class="form-container">
+                        <h2 class="text-center mb-4">Upload Invoice Order Data</h2>
 
-        <div class="col">
-            <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
-                <h6>📦 Fund Balance</h6>
-                <p class="fs-6">Rs:760,461.17</p>
-            </div>
-        </div>
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
+                        <?php endif; ?>
 
-        <div class="col">
-            <div class="card text-center dashboard-card card-2" onclick="showDetails('fundbalance')">
-                <h6>📦 Remark</h6>
-                <p class="fs-6">IOCL</p>
-            </div>
-        </div>
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                        <?php endif; ?>
 
-        <div class="col">
-            <div class="card text-center dashboard-card card-3" onclick="window.location.href='customer_strength'">
-                <h6 class="fs-5">💰 Customer Strength</h6>
+                        <form action="<?php echo site_url('uploadfile'); ?>" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label">Choose an Excel file:</label>
+                                <input type="file" name="excel_file" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+                    </div>
+                </div>
 
-                <?php
-                if (isset($customer_data) && is_array($customer_data)) {
-                    $totalCustomers = $customer_data['total']['total'] ?? 0;
-                    $percent = $customer_data['total']['percent'] ?? 0; 
-
-                    if ($totalCustomers > 0):
-                ?>
-                        <p class="fs-6">Total : <?= number_format($totalCustomers) ?></p>
-                        <p class="fs-6">Percent : <?= round($percent, 2) ?>%</p> 
-                <?php
-                    else:
-                        echo '<p class="fs-6">No customers found</p>';
-                    endif;
-                } else {
-                    echo '<p class="fs-6">Data not available</p>';
-                }
-                ?>
-            </div>
-        </div>
-
-    <div class="col">
-        <div class="card text-center dashboard-card card-3" onclick="window.location.href='SBC_data'">
-            <h6 class="fs-5">🛍️ SBC</h6>
-
-            <?php
-            if (isset($sbc_counts) && isset($customer_data)) {
-                $sbc_total = $sbc_counts['total'] ?? 0;
-                $customer_total = $customer_data['total']['total'] ?? 0;
-
-                if ($sbc_total > 0 && $customer_total > 0):
-                    $sbc_percent = round(($sbc_total / $customer_total) * 100);
-            ?>
-                    <p class="fs-6">Total: <?= number_format($sbc_total) ?></p>
-                    <p class="fs-6">Percent: <?= $sbc_percent ?>%</p>
-            <?php
-                else:
-                    echo '<p class="fs-6">No SBC data found</p>';
-                endif;
-            } else {
-                echo '<p class="fs-6">Data not available</p>';
-            }
-            ?>
-        </div>
-    </div>
-
-    <div class="col">
-        <div class="card text-center dashboard-card card-3" onclick="window.location.href='nillfill'">
-            <h6 class="fs-5">📝 Nil Refill</h6>
-
-            <?php if (!empty($stats)): ?>
-                <p class="fs-20 fw-bold mb-1">3 Months</p>
-                <p class="fs-15">Total: <?= number_format($stats['greater_than_3_months']['total']['qty']) ?></p>
-                <p class ="fs-15">Percent: <?=round ($stats['greater_than_3_months']['total']['percent'])?>% </p>
-
-            <?php else: ?>
-                <p class="fs-6">Data not available</p>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <div class="col">
-        <div class="card text-center dashboard-card card-3" onclick="window.location.href='kycdata'">
-            <h6 class="fs-5">🔄 KYC</h6>
-            <?php
-            if (isset($kyc_stats)) {
-                $kyc_completed = $kyc_stats['Total_Pending'];
-                $total_customers = $kyc_stats['Total'];
-
-                if ($kyc_completed > 0 && $total_customers > 0):
-                    $kyc_percent = round(($kyc_completed / $total_customers) * 100);
-            ?>
-                    <p class="fs-6">Total: <?= number_format($kyc_completed) ?></p>
-                    <p class="fs-6">Percent: <?= $kyc_percent ?>%</p>
-            <?php
-                else:
-                    echo '<p class="fs-6">No KYC data found</p>';
-                endif;
-            } else {
-                echo '<p class="fs-6">Data not available</p>';
-            }
-            ?>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card text-center dashboard-card card-8" onclick="window.location.href='<?php echo base_url('midue'); ?>'">
-            <h6 class="fs-5">📈 MI Due</h6>
-                <?php if (!empty($mi_stats) && isset($mi_stats['total']['qty']) && isset($mi_stats['total']['percent'])): ?>
-                <p class="fs-6">Total: <?php echo number_format($mi_stats['total']['qty']); ?></p>
-                <p class="fs-6">Percent: <?php echo round($mi_stats['total']['percent']); ?>%</p>
-                <?php else: ?>
-                    <p class="fs-6">Data not available</p>
-                <?php endif; ?>
-        </div>
-    </div>  
-
-    <div class="col">
-        <div class="card text-center dashboard-card card-9" onclick="window.location.href='hosedue'">
-            <h6 class="fs-5">🏭 Hose Due</h6>
-            <?php if (!empty($hose_stats) && isset($hose_stats['total']['qty']) && isset($hose_stats['total']['percent'])): ?>
-                <p class="fs-6">Total: <?= number_format($hose_stats['total']['qty']) ?></p>
-                <p class="fs-6">Percent: <?= round($hose_stats['total']['percent']) ?>%</p>
-            <?php else: ?>
-                <p class="fs-6">Data not available</p>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <div class="col">
-        <div class="card text-center dashboard-card card-10" onclick="window.location.href='phonenumber'">
-            <h6 class="fs-5">🆕 Mobile No</h6>
-            <?php if (!empty($phone_stats) && isset($phone_stats['total']['qty']) && isset($phone_stats['total']['percent'])): ?>
-                <p class="fs-6">Total: <?= number_format($phone_stats['total']['qty']) ?></p>
-                <p class="fs-6">Percent: <?= round($phone_stats['total']['percent']) ?>%</p>
-            <?php else: ?>
-                <p class="fs-6">Data not available</p>
-            <?php endif; ?>
-        </div>
-    </div>
-    
-        <!-- <div class="col-3">
-            <div class="card text-center dashboard-card card-11" onclick="showDetails('deliveries')">
-                <h6>🚚 Deliveries</h6>
-                <p class="fs-5">200</p>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card text-center dashboard-card card-12"  onclick="showDetails('pending')">
-                <h6>⏳ Pending</h6>
-                <p class="fs-5">25</p>
-            </div>
-        </div>
-      
-
-    </div>-->
-	<!--' 🔽 Details Section Below the Cards -->
-    <div id="details" class="mt-4" style="display: none;">
-        <h4 id="details-title"></h4>
-        <ul id="details-list" class="list-group"></ul>
-    </div>
-</div>
-</div>
-                <!-- Invoice Order sevice area -->
-                <?php } elseif ($method == 'invoice_order') { ?>
-                    <div class="container1">
-                        <div class="card shadow p-4">
-                            <h2 class="text-center mb-4">Upload Invoice Order Data</h2>
-
-                            <?php if ($this->session->flashdata('error')): ?>
-                                <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
-                            <?php endif; ?>
-
-                            <?php if ($this->session->flashdata('success')): ?>
-                                <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
-                            <?php endif; ?>
-
-                            <form action="<?php echo site_url('uploadfile'); ?>" method="POST" enctype="multipart/form-data">
-                                <div class="mb-3">
-                                    <label class="form-label">Choose an Excel file:</label>
-                                    <input type="file" name="excel_file" class="form-control" required>
-                                </div>
+            <?php } elseif ($method == 'open_order') { ?>
+                <div class="container">
+                    <div class="form-container">
+                        <h2 class="text-center mb-4">Upload Open Order Data</h2>
+                        
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <?php echo $this->session->flashdata('success'); ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <?php echo $this->session->flashdata('error'); ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                        
+                        <form action="<?php echo base_url('uploadfile_openorder'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="excel_file" class="form-label">Select Excel File</label>
+                                <input type="file" name="excel_file" id="excel_file" class="form-control" required>
+                                <div class="invalid-feedback">Please select a valid Excel file.</div>
+                            </div>
+                            <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Upload</button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-
-                     <!-- Open Order sevice area -->
-                <?php } elseif ($method == 'open_order') { ?>
-                    <div class="container2">
-                        <div class="card shadow-lg p-4 ">
-                            <h2 class="text-center mb-4">Upload Open Order Data</h2>
-                            
-                            <!-- Display success or error messages -->
-                            <?php if ($this->session->flashdata('success')): ?>
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <?php echo $this->session->flashdata('success'); ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($this->session->flashdata('error')): ?>
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <?php echo $this->session->flashdata('error'); ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <p class="text-muted text-center"> <?php echo $message; ?> </p>
-                            
-                            <form action="<?php echo base_url('uploadfile_openorder'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                <div class="mb-3">
-                                    <label for="excel_file" class="form-label">Select Excel File</label>
-                                    <input type="file" name="excel_file" id="excel_file" class="form-control" required>
-                                    <div class="invalid-feedback">Please select a valid Excel file.</div>
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Upload</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
+                </div>
                 <!-- Fund Balance section -->
                 <?php } elseif ($method == 'fund_balance') { ?>
                     <div class="container">
@@ -1082,8 +672,8 @@ $userid = $this->session->userdata('id');
                     </div>
                 
                 <?php } elseif ($method == 'customer_register') { ?>
-                    <div class="container1">
-                        <h2>Customer Register Upload Data</h2>
+                    <!-- <div class="container1">
+                        <h2 class="text-center mb-4">Customer Register Upload Data</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <div class="message success"><?php echo $this->session->flashdata('success'); ?></div>
@@ -1102,13 +692,45 @@ $userid = $this->session->userdata('id');
         <br>
         <input type="submit" value="Upload Excel">
     </form>
-</div>
+</div> --
+                    </div> -->
+                    <div class="container">
+                        <div class="card shadow p-4">
+                            <h2 class="text-center mb-4">Customer Register Upload Data</h2>
+                            
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <?php echo $this->session->flashdata('success'); ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <?php echo $this->session->flashdata('error'); ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                            
+                            <form action="<?php echo site_url('customerregister_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="excel_file" class="form-label">Select Excel File</label>
+                                    <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                                    <div class="invalid-feedback">Please select a valid Excel file.</div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Upload File</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
 
                 <!-- display open process data in website -->
                 <?php } elseif ($method == 'display_invoice_data') { ?>
                     <div class="container">
-                        <h2>Invoice Order Service Area</h2>
+                        <h2 class="text-center mb-4">Invoice Order Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -1118,7 +740,7 @@ $userid = $this->session->userdata('id');
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
                         <div class="table-responsive">
-                        <table class="custom-table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
@@ -1150,7 +772,7 @@ $userid = $this->session->userdata('id');
 
                     <?php } elseif ($method == 'display_open_data') {?>
                         <div class="container">
-                        <h2>Open Process Service Area</h2>
+                        <h2 class="text-center mb-4">Open Process Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -1160,7 +782,7 @@ $userid = $this->session->userdata('id');
                             <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
                         <?php endif; ?>
                         <div class="table-responsive">
-                        <table class="custom-table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
@@ -1261,7 +883,7 @@ $userid = $this->session->userdata('id');
 
                     <?php } elseif ($method == 'add_website') { ?>
                         <div class="form-container">
-                        <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
+                        <h2 class="text-center mb-3"><i class="fas fa-globe"></i> Add Website</h>
                         <form action="<?= base_url('submitaddwebite'); ?>" method="POST">
                             <div class="mb-3">
                                 <div class="input-group">
@@ -1298,7 +920,7 @@ $userid = $this->session->userdata('id');
                     <!-- Display and store website -->
                 <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
-                        <h2 class="text-center">Stored Websites</h2>
+                        <h2 class="text-center mb-4">Stored Websites</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -1356,7 +978,7 @@ $userid = $this->session->userdata('id');
         <div class="summary-section">
         <h2 class="text-center mb-4">Customer Strength Data</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered">
+                <table class="table table table-bordered">
                     <thead>
                         <tr class="header-row">
                             <th rowspan="2">Quantity/Percent</th>
@@ -1418,9 +1040,9 @@ $userid = $this->session->userdata('id');
 
         <!-- Main Content Area -->
         <div id="mainContent" class="customer_area_details">
-            <h4 class="view-title">Customer Distribution by Area</h4>
+            <h4 class="text-center mb-4">Customer Distribution by Area</h4>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered">
+                <table class="table table table-bordered">
                     <thead class="table-success">
                         <tr>
                             <th>Area Name</th>
@@ -1569,9 +1191,9 @@ $userid = $this->session->userdata('id');
             currentPage = 1;
 
             const areaBreakdownHTML = `
-                <h4 class="view-title">${title}</h4>
+                <h4 class="text-center mb-4">${title}</h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -1647,9 +1269,9 @@ $userid = $this->session->userdata('id');
             currentPage = 1;
 
             const customerDetailsHTML = `
-                <h4 class="view-title">${title}</h4>
+                <h4 class="text-center mb-4">${title}</h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -1707,7 +1329,7 @@ $userid = $this->session->userdata('id');
         }
 
         // Event listeners
-        $('.custom-table .clickabled').on('click', function () {
+        $('.table .clickabled').on('click', function () {
             const status = $(this).data('status');
             const scheme = $(this).data('scheme');
             if (status && scheme) {
@@ -1778,7 +1400,7 @@ $userid = $this->session->userdata('id');
         <div class="sbc_summary">
             <h2 class="text-center mb-4">SBC Data Report</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered summary-table" id="summaryTable">
+                <table class="table table table-bordered summary-table" id="summaryTable">
                     <thead>
                         <tr>
                             <th>SBC</th>
@@ -1810,9 +1432,9 @@ $userid = $this->session->userdata('id');
             <!-- Area Breakdown Table -->
             <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered area-table">
+                    <table class="table table table-bordered area-table">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -1834,9 +1456,9 @@ $userid = $this->session->userdata('id');
             <!-- Customer Details Table -->
             <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered table_area">
+                    <table class="table table table-bordered table_area">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -2012,7 +1634,7 @@ $userid = $this->session->userdata('id');
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge ${typeBadgeClass}">
+                                    <span class="badge_sbc ${typeBadgeClass}">
                                         ${customer.consumer_type}
                                     </span>
                                 </td>
@@ -2094,7 +1716,7 @@ $userid = $this->session->userdata('id');
         <div class="nerefil-summary">
             <h2 class="text-center mb-4">Nil Refill Report</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered nilrefil_summary_table" id="summaryTable">
+                <table class="table table table-bordered nilrefil_summary_table" id="summaryTable">
                     <thead>
                         <tr class="table-primary">
                             <th rowspan="2">Time Since Last Refill</th>
@@ -2149,9 +1771,9 @@ $userid = $this->session->userdata('id');
             <!-- Area Breakdown View -->
             <div id="areaBreakdownView" style="display: none;" class="nilrefil_area_details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered area-table">
+                    <table class="table table table-bordered area-table">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -2173,9 +1795,9 @@ $userid = $this->session->userdata('id');
             <!-- Customer Details View -->
             <div id="customerDetailsView" style="display: none;" class="nilrefil_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -2516,7 +2138,7 @@ $(document).ready(function() {
         <div class="kyc-summary" id="summaryTableContainer">
             <h2 class="text-center mb-4">KYC Data Table</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered table_summary_kyc" id="summaryTable">
+                <table class="table table table-bordered table_summary_kyc" id="summaryTable">
                     <thead>
                         <tr class="head-row">
                             <th rowspan="2">KYC Data</th>
@@ -2551,9 +2173,9 @@ $(document).ready(function() {
             <!-- Area Breakdown View -->
             <div id="areaBreakdownView" style="display: none;" class="kyc-area-details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -2575,9 +2197,9 @@ $(document).ready(function() {
             <!-- Customer Details View -->
             <div id="customerDetailsView" style="display: none;" class="kyc_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -2893,7 +2515,7 @@ $(document).ready(function() {
         <div class="midue-summary">
             <h2 class="text-center mb-4">MI Due Data Table</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered" id="summaryTable">
+                <table class="table table table-bordered" id="summaryTable">
                     <thead>
                         <tr class="table-primary">
                             <th>MI Due</th>
@@ -2925,9 +2547,9 @@ $(document).ready(function() {
             <!-- Area Breakdown Table -->
             <div id="areaBreakdownView" style="display: none;" class="midue-area-details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -2949,9 +2571,9 @@ $(document).ready(function() {
             <!-- Customer Details Table -->
             <div id="customerDetailsView" style="display: none;" class="midue_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead class="table-success">
                             <tr>
                                 <th>Area Name</th>
@@ -3244,7 +2866,7 @@ $(document).ready(function() {
         <div class="hosedue_summary">
             <h2 class="text-center mb-4">Hose Due Report</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered" id="summaryTable">
+                <table class="table table table-bordered" id="summaryTable">
                     <thead>
                         <tr>
                             <th>Hose Status</th>
@@ -3277,9 +2899,9 @@ $(document).ready(function() {
             <!-- Area View -->
             <div id="areaView" style="display: none;" class="hosedue-area-details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="view-title" id="areaViewTitle"></h4>
+                <h4 class="text-center mb-4" id="areaViewTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -3301,9 +2923,9 @@ $(document).ready(function() {
             <!-- Customer Details View -->
             <div id="customerDetailsView" style="display: none;" class="hosedue_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -3543,7 +3165,7 @@ $(document).ready(function () {
         <div class="summary-section">
         <h2 class="text-center mb-4">Phone Number Missing Data</h2>
             <div class="table-responsive">
-                <table class="custom-table table table-bordered" id="summaryTable">
+                <table class="table table table-bordered" id="summaryTable">
                     <thead>
                         <tr>
                             <th>Phone Missing</th>
@@ -3575,9 +3197,9 @@ $(document).ready(function () {
             <!-- Area Breakdown View -->
             <div id="areaBreakdownView" style="display: none;" class="phone_missing_area_details">
                 <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="view-title" id="areaBreakdownTitle"></h4>
+                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -3599,9 +3221,9 @@ $(document).ready(function () {
             <!-- Customer Details View -->
             <div id="customerDetailsView" style="display: none;" class="phone_missing_customer_details">
                 <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="view-title" id="customerDetailsTitle"></h4>
+                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
                 <div class="table-responsive">
-                    <table class="custom-table table table-bordered">
+                    <table class="table table table-bordered">
                         <thead>
                             <tr>
                                 <th>Area Name</th>
@@ -3860,20 +3482,70 @@ $(document).ready(function () {
 </script>
 
 
-                    <?php } else { ?>
-                    <h1>Invalid Request</h1>
-                <?php } ?>
+            <!-- Other sections would follow similar responsive patterns -->
             <?php } else { ?>
-                <h1>Invalid Request</h1>
+                <div class="container">
+                    <div class="alert alert-warning">
+                        <h1>Invalid Request</h1>
+                    </div>
+                </div>
             <?php } ?>
-        </main>
+        <?php } else { ?>
+            <div class="container">
+                <div class="alert alert-warning">
+                    <h1>Invalid Request</h1>
+                </div>
+            </div>
+        <?php } ?>
     </div>
-    <script src= "<?php echo base_url(); ?>application/views/javascript /dashboard.js"></script>
-    
-    <!-- Include SweetAlert2 -->
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-	
+        // Toggle sidebar on mobile
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('show');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Initialize dropdown submenus
+        document.querySelectorAll('.dropdown-submenu a.dropdown-toggle').forEach(function(element) {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const submenu = this.nextElementSibling;
+                const isShowing = submenu.classList.contains('show');
+                
+                // Close all other open submenus
+                document.querySelectorAll('.dropdown-submenu .dropdown-menu').forEach(function(menu) {
+                    if (menu !== submenu) {
+                        menu.classList.remove('show');
+                    }
+                });
+                
+                // Toggle this submenu
+                if (!isShowing) {
+                    submenu.classList.add('show');
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('.dropdown-toggle') && !e.target.closest('.dropdown-menu')) {
+                document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+
+        // Show alerts if any flash messages exist
         document.addEventListener("DOMContentLoaded", function () {
             <?php if ($this->session->flashdata('success')): ?>
                 Swal.fire({
@@ -3892,34 +3564,11 @@ $(document).ready(function () {
             <?php endif; ?>
         });
 
-	
-        // Add expand/collapse effect to icons into dashboard
-        document.querySelectorAll(".dashboard-card").forEach(card => {
-            card.addEventListener("click", function() {
-                let icon = this.querySelector(".expand-icon");
-                icon.classList.toggle("expand");
-            });
-        });
-  
-        document.addEventListener('DOMContentLoaded', function () {
-            const fileUploadDropdown = document.getElementById('fileUploadDropdown');
-            const backlogDropdown = document.getElementById('backlogDropdown');
-            const fundBalanceLink = document.querySelector('a[href*=fundbalance_uploadfile"]');
-
-            fileUploadDropdown.addEventListener('click', function () {
-                this.classList.add('active');
-            });
-
-            backlogDropdown.addEventListener('click', function () {
-                fileUploadDropdown.classList.add('active');
-            });
-
-            fundBalanceLink.addEventListener('click', function () {
-                fileUploadDropdown.classList.add('active');
-            });
-        });
-        
+        // Function to handle dashboard card clicks
+        function showDetails(section) {
+            // You can implement navigation logic here
+            console.log('Navigating to:', section);
+        }
     </script>
-    
 </body>
 </html>
