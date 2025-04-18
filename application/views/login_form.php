@@ -202,7 +202,7 @@
                 <button type="submit" class="btn btn-primary w-100">Login</button>
 
                 <a href="#" class="d-block mt-2 text-primary">Forgot Password?</a>
-                <p class="mt-2">New to Huntm.in? <a href = "<?php echo base_url('signup'); ?>" class="text-primary fw-bold">Register</a></p>
+                <p class="mt-2">New to amudhu.in? <a href = "<?php echo base_url('signup'); ?>" class="text-primary fw-bold">Register</a></p>
             </form>
         </div>
     </div>
