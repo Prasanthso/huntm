@@ -605,7 +605,6 @@
                                 <div class="card-body">
                                     <h6><i class="fas fa-wallet me-2"></i> Fund Balance</h6>
                                     <p>Rs:760,461.17</p>
-                                    <p>IOCL</p>
                                 </div>
                             </div>
                         </div>
@@ -613,7 +612,7 @@
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-wallet me-2"></i> Remark</h6>
+                                    <h6>Remark</h6>
                                     <p>IOCL</p>
                                 </div>
                             </div>
