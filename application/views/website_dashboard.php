@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -44,7 +46,9 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 0 20px;
         }
-
+        /* h2{
+            color: var(--secondary-color)
+        } */
         .navbar-brand {
             font-weight: 500;
             font-size: 1.5rem;
@@ -247,7 +251,30 @@
         .back-btn {
             margin-top: 20px;
         }
-
+        .save_btn{
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .save_btn:hover {
+            background-color: #218838;
+        }
+        .save_btn:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(40,167,69,0.5);
+        }
+        .save_btn:active {
+            transform: scale(0.98);
+        }
+        .save_btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
         .clickabled{
             cursor: pointer;
             color: black;
@@ -281,6 +308,153 @@
             display: none;
         }
 
+        /* Suggestion Form Styles */
+        .suggest-form {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .image-section img {
+            max-width: 50%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .submit-btn {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+
+        .back-btn:hover {
+            background-color: #5c636a;
+            transform: translateY(-2px);
+        }
+
+        .recording-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        .recording-btn1 {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        #timer {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        #status {
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        
+        /* Store Website style */
+        .password-hidden {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #555;
+        }
+        .password-visible {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #28a745;
+        }
+        .password-icon {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #555;
+        }
+        .password-icon:hover {
+            color: #28a745;
+        }
+        .password-icon:active {
+            transform: scale(0.9);
+        }   
+        .password-icon:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(40,167,69,0.5);
+        }
+
+        .truncate-url {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .btnautologin{
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btnautologin:hover {
+            background-color: #218838;
+        }
+
+        
         /* Responsive adjustments */
         @media (max-width: 992px) {
             #sidebar {
@@ -427,10 +601,19 @@
                         
                         <!-- Fund Balance Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="card dashboard-card bg-info bg-opacity-10" onclick="window.location.href='fundbalance_data'">
+                            <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
                                     <h6><i class="fas fa-wallet me-2"></i> Fund Balance</h6>
                                     <p>Rs:760,461.17</p>
+                                    <p>IOCL</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card dashboard-card bg-info bg-opacity-10">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-wallet me-2"></i> Remark</h6>
                                     <p>IOCL</p>
                                 </div>
                             </div>
@@ -583,7 +766,7 @@
             <?php } elseif ($method == 'invoice_order') { ?>
                 <div class="container">
                     <div class="form-container">
-                        <h2 class="text-center mb-4">Upload Invoice Order Data</h2>
+                        <h2 class="text-center text-dark mb-4">Upload Invoice Order Data</h2>
 
                         <?php if ($this->session->flashdata('error')): ?>
                             <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
@@ -598,7 +781,7 @@
                                 <label class="form-label">Choose an Excel file:</label>
                                 <input type="file" name="excel_file" class="form-control" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Upload</button>
+                            <button type="submit" class="btn btn-primary save_btn">Upload</button>
                         </form>
                     </div>
                 </div>
@@ -606,7 +789,7 @@
             <?php } elseif ($method == 'open_order') { ?>
                 <div class="container">
                     <div class="form-container">
-                        <h2 class="text-center mb-4">Upload Open Order Data</h2>
+                        <h2 class="text-center text-dark mb-4">Upload Open Order Data</h2>
                         
                         <?php if ($this->session->flashdata('success')): ?>
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -630,9 +813,10 @@
                                 <input type="file" name="excel_file" id="excel_file" class="form-control" required>
                                 <div class="invalid-feedback">Please select a valid Excel file.</div>
                             </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Upload</button>
-                            </div>
+                            <!-- <div class="d-grid">
+                                <button type="submit" class="btn btn-primary save_btn w-20">Upload</button>
+                            </div> -->
+                            <button type="submit" class="btn btn-primary save_btn">Upload</button>
                         </form>
                     </div>
                 </div>
@@ -664,9 +848,10 @@
                                     <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
                                     <div class="invalid-feedback">Please select a valid Excel file.</div>
                                 </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Upload File</button>
-                                </div>
+                                <!-- <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary save_btn">Upload File</button>
+                                </div> -->
+                                <button type="submit" class="btn btn-primary save_btn">Upload</button>
                             </form>
                         </div>
                     </div>
@@ -720,9 +905,10 @@
                                     <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
                                     <div class="invalid-feedback">Please select a valid Excel file.</div>
                                 </div>
-                                <div class="d-grid">
+                                <!-- <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">Upload File</button>
-                                </div>
+                                </div> -->
+                                <button type="submit" class="btn btn-primary save_btn">Upload</button>
                             </form>
                         </div>
                     </div>
@@ -813,77 +999,75 @@
                    
                     <!-- Suggestion Section -->
                 <?php } elseif ($method == 'suggestion') { ?>
-                    <div class="suggest-form">
-                        <div class="image-section"> 
-                            <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
+                    <div class="container">
+                        <div class="suggest-form">
+                            <div class="image-section"> 
+                                <img src="Image/suggestion-image.jpg" alt="Suggestion" class="img-fluid"> 
+                            </div>
+                            <form id="suggestionForm" method="post" action="<?= base_url('submitsuggetions'); ?>">
+                                <h2 class="text-center mb-4">Submit Your Suggestion</h2>
+                                
+                                <div class="form-group form-check">
+                                    <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous">
+                                    <label class="form-check-label" for="anonymous">Submit Anonymously</label>
+                                </div>
+
+                                <div id="alertContainer"></div>
+                                
+                                <div class="form-group">
+                                    <select name="application" class="form-control validate" id="application" required>
+                                        <option value="">Application</option>
+                                        <option value="SDMS">SDMS</option>
+                                        <option value="BI Report">BI Report</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span class="error" id="applicationError"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <select name="suggestion_type" class="form-control validate" id="suggestion_type" required>
+                                        <option value="">Suggestion Type</option>
+                                        <option value="Change">Change</option>
+                                        <option value="Suggestion">Suggestion</option>
+                                    </select>
+                                    <span class="error" id="suggestionTypeError"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <textarea name="message" class="form-control validate" id="message" rows="5" placeholder="Enter your message" required></textarea>
+                                    <span class="error" id="messageError"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="d-flex flex-wrap align-items-center mb-2">
+                                        <button type="button" onclick="startRecording()" class="recording-btn">
+                                            <i class="fas fa-microphone"></i> Start Recording
+                                        </button>
+                                        <button type="button" onclick="stopRecording()" class="recording-btn1">
+                                            <i class="fas fa-stop"></i> Stop Recording
+                                        </button>
+                                        <span id="status" class="ms-2">Ready to record</span>
+                                    </div>
+                                    <div id="timer">00:00</div>
+                                    <audio id="audioPlayback" controls style="display:none; width: 100%; margin-top: 10px;"></audio>
+                                    <input type="hidden" id="audioData" name="audioData">
+                                    <span class="error" id="voiceMessageError"></span>
+                                </div>
+
+                                <div id="generalError" class="alert alert-danger" style="display: none;"></div>
+
+                                <div class="d-flex flex-wrap">
+                                    <button type="submit" class="submit-btn">
+                                        <i class="fas fa-save"></i> Save
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <form id="suggestionForm" method="post" action="<?= base_url('submitsuggetions'); ?>">
-                            
-                            <div class="form-group">
-                                <input class="form-check-input me-2" type="checkbox" id="anonymous" name="anonymous">
-                                <label class="form-check-label" for="anonymous">Submit Anonymously</label>
-                            </div>
-
-                            <?php if ($this->session->flashdata('success')): ?>
-                                <script>
-                                    window.onload = function() {
-                                        showAlert("<?php echo $this->session->flashdata('success'); ?>", "success");
-                                    };
-                                </script>
-                            <?php elseif ($this->session->flashdata('error')): ?>
-                                <script>
-                                    window.onload = function() {
-                                        showAlert("<?php echo $this->session->flashdata('error'); ?>", "error");
-                                    };
-                                </script>
-                            <?php endif; ?>
-                            <div class="form-group">
-                                <select name="application" class="form-control validate" id="application">
-                                    <option value="">Application</option>
-                                    <option value="SDMS">SDMS</option>
-                                    <option value="BI Report">BI Report</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <span class="error"><?php echo isset($errors['application']) ? $errors['application'] : ''; ?></span>
-                            </div>
-
-                            <div class="form-group">
-                                <select name="suggestion_type" class="form-control validate" id="suggestion_type">
-                                    <option value="">Suggestion Type</option>
-                                    <option value="Change">Change</option>
-                                    <option value="Suggestion">Suggestion</option>
-                                </select>
-                                <span class="error"><?php echo isset($errors['suggestion_type']) ? $errors['suggestion_type'] : ''; ?></span>
-                            </div>
-
-                            <div class="form-group">
-                                <textarea name="message" class="form-control validate" id="message" placeholder="Enter your message"></textarea>
-                                <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span>
-                            </div>
-
-                            <div class="form-group">
-                                <button type="button" onclick="startRecording()" class="recording-btn">Start Recording</button>
-                                <button type="button" onclick="stopRecording()" class="recording-btn1">Stop Recording</button>
-                                <span id="status"></span>
-                                <div id="timer"></div>
-                                <audio id="audioPlayback" controls style="display:none;"></audio>
-                                <span class="error"><?php echo isset($errors['voice_message']) ? $errors['voice_message'] : ''; ?></span>
-                            </div>
-
-                            <?php if (isset($errors['general'])): ?>
-                                <div class="alert alert-danger"><?php echo $errors['general']; ?></div>
-                            <?php endif; ?>
-
-                            <button type="submit" class="submit-btn">Save</button>
-                            <button type="button" class="back-btn" onclick="goBack()">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
-                        </form>
                     </div>
 
                     <?php } elseif ($method == 'add_website') { ?>
                         <div class="form-container">
-                        <h2 class="text-center mb-3"><i class="fas fa-globe"></i> Add Website</h>
+                        <h2 class="text-center text-dark mb-3"><i class="fas fa-globe"></i> Add Website</h>
                         <form action="<?= base_url('submitaddwebite'); ?>" method="POST">
                             <div class="mb-3">
                                 <div class="input-group">
@@ -914,13 +1098,13 @@
                                     <small class="text-danger"><?= $errors['password']; ?></small>
                                 <?php endif; ?>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Save</button>
+                            <button type="submit" class="btn btn-primary save_btn">Save</button>
                         </form>
                     </div>
                     <!-- Display and store website -->
                 <?php } elseif ($method == 'store_website') { ?>
                     <div class="container">
-                        <h2 class="text-center mb-4">Stored Websites</h2>
+                        <h2 class="text-center mb-4"><i class="bi bi-shop me-2"></i>Stored Websites</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
                             <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
@@ -966,19 +1150,18 @@
                     <!-- Display customer strength -->
                     <?php } elseif($method == 'customer_strength') { ?>
                    <!-- Back to Dashboard Button (Always visible) -->
-        <div class="dashboard-back-btn back_dashborad">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>      
-        <div class="container4">
-        
+                   <div class="dashboard-back-btn back_dashborad">
+        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
 
+    <div class="container-fluid">
         <!-- Fixed Summary Table -->
-        <div class="summary-section">
-        <h2 class="text-center mb-4">Customer Strength Data</h2>
+        <div class="summary-section sticky-top bg-white py-3 shadow-sm">
+            <h2 class="text-center mb-4">Customer Strength Data</h2>
             <div class="table-responsive">
-                <table class="table table table-bordered">
+                <table class="table table-bordered mb-0">
                     <thead>
                         <tr class="header-row">
                             <th rowspan="2">Quantity/Percent</th>
@@ -1031,7 +1214,7 @@
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td>97.36%</td>
+                            <td>100%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1039,10 +1222,11 @@
         </div>
 
         <!-- Main Content Area -->
-        <div id="mainContent" class="customer_area_details">
+        <div id="mainContent" class="customer_area_details mt-4">
+        <!-- <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a> -->
             <h4 class="text-center mb-4">Customer Distribution by Area</h4>
             <div class="table-responsive">
-                <table class="table table table-bordered">
+                <table class="table table-bordered">
                     <thead class="table-success">
                         <tr>
                             <th>Area Name</th>
@@ -1087,304 +1271,339 @@
         </div>
     </div>
 
-    <!-- Back Button -->
-    <button id="backButton" title="Back to Summary">↑</button>
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <button id="backButton" class="btn btn-primary rounded-circle shadow" title="Back to Previous View" style="display: none;" aria-label="Back to Previous View">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <button id="backToAreaButton" class="btn rounded-circle shadow" title="Back to Area Breakdown" style="display: none;" aria-label="Back to Area Breakdown">
+            <i class="fas fa-map-marker-alt"></i>
+        </button>
+    </div>
 
     <!-- JavaScript Dependencies -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <script>
-    $(document).ready(function () {
-        let currentPage = 1;
-        const recordsPerPage = 10;
-        let allAreas = [];
-        let filteredCustomers = [];
-        let currentStatus = null;
-        let currentScheme = null;
-        let currentArea = null;
-        let viewHistory = ['initial'];
+        $(document).ready(function () {
+            let currentPage = 1;
+            const recordsPerPage = 10;
+            let allAreas = [];
+            let filteredCustomers = [];
+            let currentStatus = null;
+            let currentScheme = null;
+            let currentArea = null;
+            let viewHistory = ['initial'];
 
-        // Initialize with all customer data from PHP
-        const allCustomers = <?= json_encode($customers) ?>;
-        const customerData = <?= json_encode($customer_data) ?>;
+            // Initialize with all customer data from PHP
+            const allCustomers = <?= json_encode($customers) ?>;
+            const customerData = <?= json_encode($customer_data) ?>;
 
-        // Load initial area breakdown
-        function loadInitialAreaBreakdown() {
-            viewHistory = ['initial'];
-            $('#backButton').hide();
-            currentStatus = null;
-            currentScheme = null;
-            currentArea = null;
-
-            // Group customers by area
-            const areaCounts = {};
-            allCustomers.forEach(customer => {
-                const area = customer.area_name || 'Unknown Area';
-                areaCounts[area] = (areaCounts[area] || 0) + 1;
-            });
-
-            // Convert to array for pagination
-            allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
-            currentPage = 1;
-            updateAreaTable();
-        }
-
-        function updateAreaTable() {
-            const start = (currentPage - 1) * recordsPerPage;
-            const end = start + recordsPerPage;
-            const pageAreas = allAreas.slice(start, end);
-
-            let areaRows = '';
-            if (pageAreas.length === 0) {
-                areaRows = '<tr><td colspan="2" class="no-data">No areas found</td></tr>';
-            } else {
-                pageAreas.forEach(({ area, count }) => {
-                    areaRows += `
-                        <tr>
-                            <td class="clickabled initial-area-click" data-area="${area}">${area}</td>
-                            <td>${count}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            $('#initialAreaBreakdown').html(areaRows);
-            $('#currentPage').text(currentPage);
-            $('#prevPage').toggleClass('disabled', currentPage === 1);
-            $('#nextPage').toggleClass('disabled', end >= allAreas.length);
-
-            // Add click handlers for area rows
-            $('.initial-area-click').off('click').on('click', function () {
-                currentArea = $(this).data('area');
-                filteredCustomers = allCustomers.filter(customer => 
-                    (customer.area_name || 'Unknown Area') === currentArea
-                );
-                loadCustomerDetailsView(null, null, currentArea);
-            });
-        }
-
-        function loadAreaBreakdownView(status, scheme) {
-            viewHistory.push('areaBreakdown');
-            $('#backButton').show();
-            currentStatus = status;
-            currentScheme = scheme;
-
-            const title = `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers by Area`;
-
-            // Filter customers by status and scheme
-            filteredCustomers = allCustomers.filter(customer => {
-                const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
-                const schemeMatch = scheme === 'ALL' ? true : 
-                    (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
-                return statusMatch && schemeMatch;
-            });
-
-            // Group by area
-            const areaCounts = {};
-            filteredCustomers.forEach(customer => {
-                const area = customer.area_name || 'Unknown Area';
-                areaCounts[area] = (areaCounts[area] || 0) + 1;
-            });
-
-            // Convert to array for pagination
-            allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
-            currentPage = 1;
-
-            const areaBreakdownHTML = `
-                <h4 class="text-center mb-4">${title}</h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaBreakdownBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
-                    </ul>
-                </nav>
-            `;
-
-            $('#mainContent').html(areaBreakdownHTML);
-            updateAreaBreakdownTable();
-        }
-
-        function updateAreaBreakdownTable() {
-            const start = (currentPage - 1) * recordsPerPage;
-            const end = start + recordsPerPage;
-            const pageAreas = allAreas.slice(start, end);
-
-            let areaRows = '';
-            if (pageAreas.length === 0) {
-                areaRows = '<tr><td colspan="2" class="no-data">No data available</td></tr>';
-            } else {
-                pageAreas.forEach(({ area, count }) => {
-                    areaRows += `
-                        <tr>
-                            <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
-                            <td>${count}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            $('#areaBreakdownBody').html(areaRows);
-            $('#currentPage').text(currentPage);
-            $('#prevPage').toggleClass('disabled', currentPage === 1);
-            $('#nextPage').toggleClass('disabled', end >= allAreas.length);
-
-            // Add click handlers for area rows
-            $('.area-click').off('click').on('click', function () {
-                currentArea = $(this).data('area');
-                const areaCustomers = filteredCustomers.filter(customer => 
-                    (customer.area_name || 'Unknown Area') === currentArea
-                );
-                loadCustomerDetailsView(currentStatus, currentScheme, currentArea);
-            });
-        }
-
-        function loadCustomerDetailsView(status, scheme, area) {
-            viewHistory.push('customerDetails');
-            $('#backButton').show();
-
-            let title = status && scheme 
-                ? `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers in ${area || 'N/A'}`
-                : `All Customers in ${area || 'N/A'}`;
-
-            filteredCustomers = allCustomers.filter(customer => {
-                const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
-                const schemeMatch = scheme === 'ALL' ? true : 
-                    (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
-                const areaMatch = (customer.area_name || 'Unknown Area') === area;
-                return (!status || statusMatch) && (!scheme || schemeMatch) && areaMatch;
-            });
-
-            currentPage = 1;
-
-            const customerDetailsHTML = `
-                <h4 class="text-center mb-4">${title}</h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number</th>
-                                <th>Scheme Selected</th>
-                                <th>Consumer Sub Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
-                    </ul>
-                </nav>
-            `;
-
-            $('#mainContent').html(customerDetailsHTML);
-            updateCustomerTable();
-        }
-
-        function updateCustomerTable() {
-            const start = (currentPage - 1) * recordsPerPage;
-            const end = start + recordsPerPage;
-            const pageRows = filteredCustomers.slice(start, end);
-
-            let tableBody = '';
-            if (pageRows.length === 0) {
-                tableBody = '<tr><td colspan="6" class="no-data">No data available</td></tr>';
-            } else {
-                pageRows.forEach(customer => {
-                    const schemeClass = customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
-                    tableBody += `
-                        <tr>
-                            <td>${customer.area_name || 'N/A'}</td>
-                            <td>${customer.consumer_number || 'N/A'}</td>
-                            <td>${customer.consumer_name || 'N/A'}</td>
-                            <td>${customer.phone_number || 'N/A'}</td>
-                            <td><span class="badge ${schemeClass}">${customer.scheme_selected || 'N/A'}</span></td>
-                            <td>${customer.consumer_sub_status || 'N/A'}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            $('#customerTableBody').html(tableBody);
-            $('#currentPage').text(currentPage);
-            $('#prevPage').toggleClass('disabled', currentPage === 1);
-            $('#nextPage').toggleClass('disabled', end >= filteredCustomers.length);
-        }
-
-        // Event listeners
-        $('.table .clickabled').on('click', function () {
-            const status = $(this).data('status');
-            const scheme = $(this).data('scheme');
-            if (status && scheme) {
-                loadAreaBreakdownView(status, scheme);
-            }
-        });
-
-        $('#backButton').on('click', function () {
-            if (viewHistory.length <= 1) return;
-
-            viewHistory.pop();
-            const previousView = viewHistory[viewHistory.length - 1];
-
-            if (previousView === 'initial') {
-                loadInitialAreaBreakdown();
-            } else if (previousView === 'areaBreakdown') {
-                loadAreaBreakdownView(currentStatus, currentScheme);
-            }
-
-            if (viewHistory.length <= 1) {
+            // Load initial area breakdown
+            function loadInitialAreaBreakdown() {
+                viewHistory = ['initial'];
                 $('#backButton').hide();
-            }
-        });
+                $('#backToAreaButton').hide();
+                currentStatus = null;
+                currentScheme = null;
+                currentArea = null;
 
-        // Pagination handlers
-        $(document).on('click', '#prevPage:not(.disabled)', function () {
-            if (currentPage > 1) {
-                currentPage--;
-                if ($('#areaBreakdownBody').length) {
-                    updateAreaBreakdownTable();
-                } else if ($('#customerTableBody').length) {
-                    updateCustomerTable();
-                } else {
-                    updateAreaTable();
-                }
-            }
-        });
+                // Group customers by area
+                const areaCounts = {};
+                allCustomers.forEach(customer => {
+                    const area = customer.area_name || 'Unknown Area';
+                    areaCounts[area] = (areaCounts[area] || 0) + 1;
+                });
 
-        $(document).on('click', '#nextPage:not(.disabled)', function () {
-            const end = currentPage * recordsPerPage;
-            if ($('#areaBreakdownBody').length && end < allAreas.length) {
-                currentPage++;
-                updateAreaBreakdownTable();
-            } else if ($('#customerTableBody').length && end < filteredCustomers.length) {
-                currentPage++;
-                updateCustomerTable();
-            } else if ($('#initialAreaBreakdown').length && end < allAreas.length) {
-                currentPage++;
+                // Convert to array for pagination
+                allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
+                currentPage = 1;
                 updateAreaTable();
             }
-        });
 
-        // Initialize the view
-        loadInitialAreaBreakdown();
-    });
+            function updateAreaTable() {
+                const start = (currentPage - 1) * recordsPerPage;
+                const end = start + recordsPerPage;
+                const pageAreas = allAreas.slice(start, end);
+
+                let areaRows = '';
+                if (pageAreas.length === 0) {
+                    areaRows = '<tr><td colspan="2" class="no-data">No areas found</td></tr>';
+                } else {
+                    pageAreas.forEach(({ area, count }) => {
+                        areaRows += `
+                            <tr>
+                                <td class="clickabled initial-area-click" data-area="${area}">${area}</td>
+                                <td>${count}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                $('#initialAreaBreakdown').html(areaRows);
+                $('#currentPage').text(currentPage);
+                $('#prevPage').toggleClass('disabled', currentPage === 1);
+                $('#nextPage').toggleClass('disabled', end >= allAreas.length);
+
+                // Add click handlers for area rows
+                $('.initial-area-click').off('click').on('click', function () {
+                    currentArea = $(this).data('area');
+                    filteredCustomers = allCustomers.filter(customer => 
+                        (customer.area_name || 'Unknown Area') === currentArea
+                    );
+                    loadCustomerDetailsView(null, null, currentArea);
+                });
+            }
+
+            function loadAreaBreakdownView(status, scheme) {
+                viewHistory.push('areaBreakdown');
+                $('#backButton').show();
+                $('#backToAreaButton').hide();
+                currentStatus = status;
+                currentScheme = scheme;
+
+                const title = `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers by Area`;
+
+                // Filter customers by status and scheme
+                filteredCustomers = allCustomers.filter(customer => {
+                    const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
+                    const schemeMatch = scheme === 'ALL' ? true : 
+                        (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
+                    return statusMatch && schemeMatch;
+                });
+
+                // Group by area
+                const areaCounts = {};
+                filteredCustomers.forEach(customer => {
+                    const area = customer.area_name || 'Unknown Area';
+                    areaCounts[area] = (areaCounts[area] || 0) + 1;
+                });
+
+                // Convert to array for pagination
+                allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
+                currentPage = 1;
+
+                const areaBreakdownHTML = `
+                    <h4 class="text-center mb-4">${title}</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>Area Name</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody id="areaBreakdownBody"></tbody>
+                        </table>
+                    </div>
+                    <nav>
+                        <ul class="pagination justify-content-center mt-3">
+                            <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
+                            <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                            <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
+                        </ul>
+                    </nav>
+                `;
+
+                $('#mainContent').html(areaBreakdownHTML);
+                updateAreaBreakdownTable();
+            }
+
+            function updateAreaBreakdownTable() {
+                const start = (currentPage - 1) * recordsPerPage;
+                const end = start + recordsPerPage;
+                const pageAreas = allAreas.slice(start, end);
+
+                let areaRows = '';
+                if (pageAreas.length === 0) {
+                    areaRows = '<tr><td colspan="2" class="no-data">No data available</td></tr>';
+                } else {
+                    pageAreas.forEach(({ area, count }) => {
+                        areaRows += `
+                            <tr>
+                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
+                                <td>${count}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                $('#areaBreakdownBody').html(areaRows);
+                $('#currentPage').text(currentPage);
+                $('#prevPage').toggleClass('disabled', currentPage === 1);
+                $('#nextPage').toggleClass('disabled', end >= allAreas.length);
+
+                // Add click handlers for area rows
+                $('.area-click').off('click').on('click', function () {
+                    currentArea = $(this).data('area');
+                    const areaCustomers = filteredCustomers.filter(customer => 
+                        (customer.area_name || 'Unknown Area') === currentArea
+                    );
+                    loadCustomerDetailsView(currentStatus, currentScheme, currentArea);
+                });
+            }
+
+            function loadCustomerDetailsView(status, scheme, area) {
+                viewHistory.push('customerDetails');
+                $('#backButton').show();
+                $('#backToAreaButton').show();
+
+                let title = status && scheme 
+                    ? `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers in ${area || 'N/A'}`
+                    : `All Customers in ${area || 'N/A'}`;
+
+                filteredCustomers = allCustomers.filter(customer => {
+                    const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
+                    const schemeMatch = scheme === 'ALL' ? true : 
+                        (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
+                    const areaMatch = (customer.area_name || 'Unknown Area') === area;
+                    return (!status || statusMatch) && (!scheme || schemeMatch) && areaMatch;
+                });
+
+                currentPage = 1;
+
+                const customerDetailsHTML = `
+                    <h4 class="text-center mb-4">${title}</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>Area Name</th>
+                                    <th>Consumer Number</th>
+                                    <th>Consumer Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Scheme Selected</th>
+                                    <th>Consumer Sub Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerTableBody"></tbody>
+                        </table>
+                    </div>
+                    <nav>
+                        <ul class="pagination justify-content-center mt-3">
+                            <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
+                            <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                            <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
+                        </ul>
+                    </nav>
+                `;
+
+                $('#mainContent').html(customerDetailsHTML);
+                updateCustomerTable();
+            }
+
+            function updateCustomerTable() {
+                const start = (currentPage - 1) * recordsPerPage;
+                const end = start + recordsPerPage;
+                const pageRows = filteredCustomers.slice(start, end);
+
+                let tableBody = '';
+                if (pageRows.length === 0) {
+                    tableBody = '<tr><td colspan="6" class="no-data">No data available</td></tr>';
+                } else {
+                    pageRows.forEach(customer => {
+                        const schemeClass = customer.scheme_selected === 'PMUY' ? 'badge bg-success' : 'badge bg-primary';
+                        tableBody += `
+                            <tr>
+                                <td>${customer.area_name || 'N/A'}</td>
+                                <td>${customer.consumer_number || 'N/A'}</td>
+                                <td>${customer.consumer_name || 'N/A'}</td>
+                                <td>${customer.phone_number || 'N/A'}</td>
+                                <td><span class="badge ${schemeClass}">${customer.scheme_selected || 'N/A'}</span></td>
+                                <td>${customer.consumer_sub_status || 'N/A'}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                $('#customerTableBody').html(tableBody);
+                $('#currentPage').text(currentPage);
+                $('#prevPage').toggleClass('disabled', currentPage === 1);
+                $('#nextPage').toggleClass('disabled', end >= filteredCustomers.length);
+            }
+
+            // Event listeners
+            $('.table .clickabled').on('click', function () {
+                const status = $(this).data('status');
+                const scheme = $(this).data('scheme');
+                if (status && scheme) {
+                    loadAreaBreakdownView(status, scheme);
+                }
+            });
+
+            $('#backButton').on('click', function () {
+                if (viewHistory.length <= 1) return;
+
+                viewHistory.pop();
+                const previousView = viewHistory[viewHistory.length - 1];
+
+                if (previousView === 'initial') {
+                    loadInitialAreaBreakdown();
+                } else if (previousView === 'areaBreakdown') {
+                    loadAreaBreakdownView(currentStatus, currentScheme);
+                }
+
+                if (viewHistory.length <= 1) {
+                    $('#backButton').hide();
+                    $('#backToAreaButton').hide();
+                }
+            });
+
+            $('#backToAreaButton').on('click', function () {
+                if (currentStatus && currentScheme) {
+                    // Navigate to filtered area breakdown
+                    viewHistory = ['initial', 'areaBreakdown'];
+                    loadAreaBreakdownView(currentStatus, currentScheme);
+                } else {
+                    // Navigate to initial area breakdown
+                    viewHistory = ['initial'];
+                    loadInitialAreaBreakdown();
+                }
+            });
+
+            // Pagination handlers
+            $(document).on('click', '#prevPage:not(.disabled)', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    if ($('#areaBreakdownBody').length) {
+                        updateAreaBreakdownTable();
+                    } else if ($('#customerTableBody').length) {
+                        updateCustomerTable();
+                    } else {
+                        updateAreaTable();
+                    }
+                }
+            });
+
+            $(document).on('click', '#nextPage:not(.disabled)', function () {
+                const end = currentPage * recordsPerPage;
+                if ($('#areaBreakdownBody').length && end < allAreas.length) {
+                    currentPage++;
+                    updateAreaBreakdownTable();
+                } else if ($('#customerTableBody').length && end < filteredCustomers.length) {
+                    currentPage++;
+                    updateCustomerTable();
+                } else if ($('#initialAreaBreakdown').length && end < allAreas.length) {
+                    currentPage++;
+                    updateAreaTable();
+                }
+            });
+
+            
+            $("#backToSummary").on("click", function(e) {
+            e.preventDefault();
+            $('#mainContent').hide();
+            $('#customerDetailsHTML').hide();
+        });
+        
+        $("#backToAreas").on("click", function(e) {
+            e.preventDefault();
+            showAreaBreakdown(currentScheme);
+        });
+            // Initialize the view
+            loadInitialAreaBreakdown();
+        });
     </script>
 
                         
@@ -2142,7 +2361,7 @@ $(document).ready(function() {
                     <thead>
                         <tr class="head-row">
                             <th rowspan="2">KYC Data</th>
-                            <th colspan="3">KYC Pending</th>
+                            <!-- <th colspan="3">KYC Pending</th> -->
                         </tr>
                         <tr class="sub-header">
                             <th>PMUY</th>
@@ -3499,6 +3718,8 @@ $(document).ready(function () {
         <?php } ?>
     </div>
 
+    <!-- Form validation script -->
+    <script src= "<?php echo base_url(); ?>application/views/javascript /dashboard.js"></script>
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 -->
