@@ -84,7 +84,7 @@ class UserProfile extends CI_Controller {
 	if (!empty($errors)) {
 		$this->session->set_flashdata('errors', $errors);
 		$this->session->set_flashdata('old_data', $data);
-		redirect('user/signup');
+		redirect('signup');
 	}
 
 	$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);

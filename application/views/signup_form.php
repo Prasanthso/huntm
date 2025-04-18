@@ -138,7 +138,7 @@
         <div class="col-lg-6 d-flex align-items-center justify-content-center">
             <div class="reg-container">
                 <h2>CREATE ACCOUNT</h2>
-                <form method="POST" action="">
+                <form method="POST" action="<?= base_url('signupsubmit') ?>">
                     <?php 
                         $errors = $this->session->flashdata('errors') ?? [];
                         $old_data = $this->session->flashdata('old_data') ?? [];
