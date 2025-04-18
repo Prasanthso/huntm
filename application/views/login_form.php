@@ -163,7 +163,8 @@
 <body>
     <header>
 	<a href="#" class="text-white text-decoration-none d-flex align-items-center">
-        <img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo me-2"> 
+        <img src="<?php echo base_url(); ?>Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo me-2"> 
+        <!-- <img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo me-2">  -->
         <h1 class="h4 m-0">Huntm</h1>
     </a>
     </header>

@@ -476,6 +476,15 @@
             .dashboard-card {
                 margin-bottom: 15px;
             }
+
+            .recording-controls{
+                display: grid;
+                grid-template-rows: repeat(2, 1fr);
+                /* justify-content: center;
+                align-items: center; */
+                margin-top: 20px;
+                gap: 10px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -485,6 +494,14 @@
 
             .dashboard-card p {
                 font-size: 0.8rem;
+            }
+            .recording-controls{
+                display: grid;
+                grid-template-rows: repeat(2, 1fr);
+                /* justify-content: center;
+                align-items: center; */
+                margin-top: 20px;
+                gap: 10px;
             }
         }
 
@@ -1001,7 +1018,8 @@
                     <div class="container">
                         <div class="suggest-form">
                             <div class="image-section"> 
-                                <img src="Image/suggestion-image.jpg" alt="Suggestion" class="img-fluid"> 
+                                <img src="<?php echo base_url(); ?>Image/suggestion-image.jpg" alt="Suggestion" class="img-fluid">
+                                <!-- <img src="Image/suggestion-image.jpg" alt="Suggestion" class="img-fluid">  -->
                             </div>
                             <form id="suggestionForm" method="post" action="<?= base_url('submitsuggetions'); ?>">
                                 <h2 class="text-center mb-4">Submit Your Suggestion</h2>
@@ -1038,7 +1056,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="d-flex flex-wrap align-items-center mb-2">
+                                    <div class="d-flex flex-wrap align-items-center mb-2 recording-controls">
                                         <button type="button" onclick="startRecording()" class="recording-btn">
                                             <i class="fas fa-microphone"></i> Start Recording
                                         </button>

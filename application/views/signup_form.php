@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- <link rel="stylesheet" href="<?= base_url('/Huntm/assets/css/registrationform.css'); ?>"> -->
 
-    <title>Create Account</title>
+    <title>Signup Form</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif; 
@@ -163,7 +163,7 @@
 </head>
 <body>
 <header>
-        <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
+        <a href="#"><h1 style="font-size:25px; color:white;"><img src="<?php echo base_url(); ?>Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
 </header>
 <div class="container">
     
