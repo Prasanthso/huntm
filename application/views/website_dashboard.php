@@ -3736,7 +3736,7 @@ $(document).ready(function () {
     </div>
 
     <!-- Form validation script -->
-    <script src= "<?php echo base_url(); ?>application/views/javascript /dashboard.js"></script>
+    <script src= "<?php echo base_url(); ?>application/views/javascript/dashboard.js"></script>
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 -->
