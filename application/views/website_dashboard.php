@@ -1214,7 +1214,7 @@
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
                             <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td>100%</td>
+                            <td>97.36%</td>
                         </tr>
                     </tbody>
                 </table>
