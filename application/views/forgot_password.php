@@ -32,10 +32,10 @@
             border: none;
             border-radius: 8px;
             margin-top: 5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for elegance */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
         }
         .card-header {
-            background-color: #007bff; /* Maintain original blue */
+            background-color: #007bff; 
             border-radius: 8px 8px 0 0;
             padding: 1.5rem;
             color: #ffffff;
@@ -52,7 +52,7 @@
         }
         .btn-primary:hover {
             background-color: #0056b3;
-            transform: translateY(-2px); /* Subtle lift effect */
+            transform: translateY(-2px); 
         }
         .form-control {
             border-radius: 5px;
@@ -89,7 +89,7 @@
         }
 
         .save_button {
-            background-color: #28a745; /* Professional green */
+            background-color: #28a745; 
             border: none;
             padding: 0.75rem;
             border-radius: 5px;

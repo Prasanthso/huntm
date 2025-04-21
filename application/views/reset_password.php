@@ -9,16 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #eceff1; /* Soft gray for a professional look */
+            background-color: #eceff1;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            font-family: 'Roboto Slab', serif; /* Classic, professional font */
+            font-family: 'Roboto Slab', serif; 
         }
         .navbar {
-            background-color: #2c3e50; /* Maintain original dark navy */
+            background-color: #2c3e50; 
             padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
         }
         .huntmlogo {
             height: 40px;
@@ -32,10 +32,10 @@
             border: none;
             border-radius: 8px;
             margin-top: 5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for elegance */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
         }
         .card-header {
-            background-color: #007bff; /* Maintain original blue */
+            background-color: #007bff; 
             border-radius: 8px 8px 0 0;
             padding: 1.5rem;
             color: #ffffff;
@@ -50,7 +50,7 @@
         }
         .btn-primary:hover {
             background-color: #0056b3;
-            transform: translateY(-2px); /* Subtle lift effect */
+            transform: translateY(-2px); 
         }
         .form-control {
             border-radius: 5px;
@@ -77,7 +77,7 @@
             text-decoration: underline;
         }
         .save_button {
-            background-color: #28a745; /* Professional green */
+            background-color: #28a745; 
             border: none;
             padding: 0.75rem;
             border-radius: 5px;
