@@ -234,7 +234,104 @@ class User extends CI_Controller {
         ];
 
         $this->load->view('website_dashboard', $data);
-    }    
+    }   
+    
+    
+      // Forgot Password Page
+public function forgot_password() {
+    $this->load->view('forgot_password');
+}
+
+// Handle Forgot Password Submission
+public function send_reset_link() {
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->session->set_flashdata('errors', validation_errors());
+        redirect('forgot-password');
+    }
+
+    $email = $this->input->post('email', true);
+    $user = $this->User_model->getUserByEmail($email);
+
+    if (!$user) {
+        $this->session->set_flashdata('errors', 'No account exists with this email.');
+        redirect('forgot-password');
+    }
+
+    // Generate reset link (using user ID for simplicity)
+    $reset_link = base_url('reset-password/' . $user->id);
+
+    // Email configuration
+    $this->load->library('email');
+    $config['mailtype'] = 'html';
+    $this->email->initialize($config);
+    
+    $this->email->from('no-reply@yourdomain.com', 'Your App Name');
+    $this->email->to($email);
+    $this->email->subject('Password Reset Request');
+    
+    $message = '<p>Click the following link to reset your password:</p>';
+    $message .= '<p><a href="'.$reset_link.'">'.$reset_link.'</a></p>';
+    $message .= '<p>If you didn\'t request this, please ignore this email.</p>';
+    
+    $this->email->message($message);
+
+    if ($this->email->send()) {
+        $this->session->set_flashdata('success', 'A password reset link has been sent to your email.');
+    } else {
+        log_message('error', 'Email sending failed: ' . $this->email->print_debugger());
+        $this->session->set_flashdata('errors', 'Failed to send email. Please try again.');
+    }
+    
+    redirect('forgot-password');
+}
+
+// Reset Password Page
+public function reset_password($user_id = null) {
+    if (!$user_id) {
+        $this->session->set_flashdata('errors', 'Invalid reset link.');
+        redirect('forgot-password');
+    }
+
+    $user = $this->db->where('id', $user_id)->get('user')->row();
+    
+    if (!$user) {
+        $this->session->set_flashdata('errors', 'Invalid reset link.');
+        redirect('forgot-password');
+    }
+
+    $data['user_id'] = $user_id;
+    $this->load->view('reset_password', $data);
+}
+
+// Handle Password Reset Submission
+public function update_password() {
+    $user_id = $this->input->post('user_id', true);
+    
+    // Verify user exists
+    $user = $this->db->where('id', $user_id)->get('user')->row();
+    if (!$user) {
+        $this->session->set_flashdata('errors', 'Invalid user account.');
+        redirect('forgot-password');
+    }
+
+    $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
+    $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[new_password]');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->session->set_flashdata('errors', validation_errors());
+        $data['user_id'] = $user_id;
+        $this->load->view('reset_password', $data);
+        return;
+    }
+
+    $new_password = password_hash($this->input->post('new_password', true), PASSWORD_BCRYPT);
+    $this->User_model->changeUserPassword($user_id, $new_password);
+
+    $this->session->set_flashdata('success', 'Password updated successfully. Please login.');
+    redirect('loginform');
+}
     
 }
 ?>
