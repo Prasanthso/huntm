@@ -1,3 +1,4 @@
+
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -11,7 +12,7 @@ $config['smtp_port'] = 465;
 // $config['smtp_pass'] = 'password';
 
 $config['smtp_user'] = 'arasu5070go@gmail.com';
-$config['smtp_pass'] = 'jcsa xdtc skfu mhju';
+$config['smtp_pass'] = 'kzfj ntxs ibwa jhun';
 
 $config['mailtype'] = 'html';
 $config['charset'] = 'utf-8';
