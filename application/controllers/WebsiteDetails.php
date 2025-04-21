@@ -78,14 +78,52 @@ class WebsiteDetails extends CI_Controller {
     }
 
     // Auto-login using cURL and open in a new tab
+    // public function auto_login() {
+    //     $url = $this->input->post('url');
+    //     $userId = $this->input->post('userId');
+    //     $password = $this->input->post('password');
+
+    //     $cookie_file = tempnam(sys_get_temp_dir(), 'cookie'); // Store cookies
+
+    //     // Initialize cURL session
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, $url);
+    //     curl_setopt($ch, CURLOPT_POST, 1);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+    //         'username' => $userId,
+    //         'password' => $password
+    //     ]));
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    //     curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
+    //     curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
+    //     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+
+    //     $response = curl_exec($ch);
+    //     $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL); // Get final redirected URL
+    //     curl_close($ch);
+
+    //     // Open login page in a new tab using JavaScript
+    //     if (!empty($final_url)) {
+    //         echo "<script>window.open('$final_url');</script>";
+    //     } else {
+    //         echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
+    //     }
+    // }
+
     public function auto_login() {
         $url = $this->input->post('url');
         $userId = $this->input->post('userId');
         $password = $this->input->post('password');
-
-        $cookie_file = tempnam(sys_get_temp_dir(), 'cookie'); // Store cookies
-
-        // Initialize cURL session
+    
+        // Validate inputs
+        if (empty($url) || empty($userId) || empty($password)) {
+            echo "<script>alert('⚠️ All fields are required!'); window.location.href='".site_url('storewebsite')."';</script>";
+            return;
+        }
+    
+        $cookie_file = tempnam(sys_get_temp_dir(), 'cookie');
+    
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -98,19 +136,54 @@ class WebsiteDetails extends CI_Controller {
         curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-
+        
+        // SSL settings - adjust for your environment
+        if ($this->isLiveServer()) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        } else {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        }
+    
         $response = curl_exec($ch);
-        $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL); // Get final redirected URL
+        
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            curl_close($ch);
+            echo "<script>alert('⚠️ cURL Error: ".addslashes($error_msg)."'); window.location.href='".site_url('storewebsite')."';</script>";
+            return;
+        }
+    
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
-
-        // Open login page in a new tab using JavaScript
-        if (!empty($final_url)) {
-            echo "<script>window.open('$final_url');</script>";
+    
+        // Clean up cookie file
+        if (file_exists($cookie_file)) {
+            unlink($cookie_file);
+        }
+    
+        if (!empty($final_url) && $httpCode < 400) {
+            // Solution for opening in new tab that works with popup blockers
+            echo "<script>
+                var newWindow = window.open('about:blank', '_blank');
+                if (newWindow) {
+                    newWindow.location.href = '$final_url';
+                } else {
+                    // Fallback if popup is blocked
+                    alert('Please allow popups for this site');
+                    window.location.href = '$final_url';
+                }
+            </script>";
         } else {
             echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
         }
     }
-
+    
+    private function isLiveServer() {
+        return ($_SERVER['HTTP_HOST'] != 'localhost' && $_SERVER['HTTP_HOST'] != '127.0.0.1');
+    }
     // public function websitedashboard() {
     //          // Get customer data from model
     //          $customers = $this->CustomerRegister_model->get_customer_strength_data();
