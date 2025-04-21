@@ -120,3 +120,12 @@ $route['hosedue'] = 'Hosedue_data/hose_due_data';
 
 // Display Phone number not avaliable data
 $route['phonenumber'] = 'Phonenumber/phonenumber_data';
+
+//Forgot password
+$route['forgot-password'] = 'User/forgot_password';
+$route['send-reset-link'] = 'User/send_reset_link';
+// $route['reset-password/(:any)'] = 'User/reset_password/$1'; 
+$route['reset-password/(:num)'] = 'User/reset_password/$1';
+$route['update-password'] = 'User/update_password';
+// $route['update_password'] = 'User/update_password'; //for update password
+
