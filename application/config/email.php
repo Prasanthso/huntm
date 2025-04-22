@@ -1,4 +1,3 @@
-
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -12,7 +11,7 @@ $config['smtp_port'] = 465;
 // $config['smtp_pass'] = 'password';
 
 $config['smtp_user'] = 'arasu5070go@gmail.com';
-$config['smtp_pass'] = 'kzfj ntxs ibwa jhun';
+$config['smtp_pass'] = 'cwjp qzmy caie sskz';
 
 $config['mailtype'] = 'html';
 $config['charset'] = 'utf-8';
@@ -22,6 +21,6 @@ $config['newline'] = "\r\n";
 $config['crlf'] = "\r\n";
 $config['smtp_timeout'] = 30;
 
-$config['smtp_crypto'] = 'ssl';
+$config['smtp_crypto'] = 'ssl'; // Use 'tls' for TLS encryption
 $config['validate'] = TRUE;
 $config['priority'] = 3;
