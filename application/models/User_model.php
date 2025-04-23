@@ -9,10 +9,10 @@
 			return $this->db->where('email',$email)->get('user')->row();
 		}
 
-		public function changeUserPassword($id,$new_password){
-			$this->db->set('password',$new_password)->where('id',$id)->update('user');
+		// public function changeUserPassword($id,$new_password){
+		// 	$this->db->set('password',$new_password)->where('id',$id)->update('user');
 		
-		}
+		// }
 
 		public function oldPasswordMatches($id,$old_password){
 			$query = $this->db->where('id',$id)->where('password',$old_password)->get('user');
@@ -22,8 +22,19 @@
 			return false;
 		}
 
-		public function getUserByEmail($email){
-			return $this->db->where('email',$email)->get('user')->row();
+		// public function getUserByEmail($email){
+		// 	return $this->db->where('email',$email)->get('user')->row();
+		// }
+
+		 // Get user by email
+		 public function getUserByEmail($email) {
+			return $this->db->where('email', $email)->get('user')->row();
+		}
+
+		// Update user password
+		public function changeUserPassword($user_id, $new_password) {
+			$this->db->where('id', $user_id)->update('user', ['password' => $new_password]);
+			return $this->db->affected_rows() > 0;
 		}
 		
 		//Suggestion Data

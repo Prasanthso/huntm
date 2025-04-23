@@ -1,26 +1,27 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['protocol'] = 'smtp';
+$config['protocol']     = 'smtp';
+$config['smtp_host']    = 'smtp.gmail.com';
+$config['smtp_port']    = 587;
+$config['smtp_user']    = 'arasu5070go@gmail.com';
+$config['smtp_pass']    = 'mvjs krhj gkdb bjkg'; // App password from Gmail
+$config['smtp_crypto']  = 'tls';
+$config['mailtype']     = 'html';
+$config['charset']      = 'utf-8';
+$config['wordwrap']     = TRUE;
+$config['newline']      = "\r\n";
+$config['crlf']         = "\r\n";
+$config['smtp_timeout'] = 10;
+$config['validate']     = TRUE;
 
-// $config['smtp_host'] = 'mail.domain.com';
-$config['smtp_host'] = 'smtp.gmail.com';
+// Optional: Bypass verify (use this only if cacert doesn't fix it)
+$config['smtp_conn_options'] = array(
+    'ssl' => array(
+        'verify_peer'      => false,
+        'verify_peer_name' => false,
+        'allow_self_signed'=> true
+    )
+);
 
-$config['smtp_port'] = 465;
-// $config['smtp_user'] = 'example@domain.com';
-// $config['smtp_pass'] = 'password';
 
-$config['smtp_user'] = 'arasu5070go@gmail.com';
-$config['smtp_pass'] = 'cwjp qzmy caie sskz';
-
-$config['mailtype'] = 'html';
-$config['charset'] = 'utf-8';
-$config['wordwrap'] = TRUE;
-
-$config['newline'] = "\r\n";
-$config['crlf'] = "\r\n";
-$config['smtp_timeout'] = 30;
-
-$config['smtp_crypto'] = 'ssl'; // Use 'tls' for TLS encryption
-$config['validate'] = TRUE;
-$config['priority'] = 3;
