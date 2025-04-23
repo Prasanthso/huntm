@@ -111,39 +111,44 @@ class WebsiteDetails extends CI_Controller {
     //     }
     // }
 
+    <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class AutoLogin extends CI_Controller {
+
     public function auto_login() {
-        // Start logging
-        echo "<script>console.log('=== AUTO LOGIN PROCESS STARTED ===');</script>";
-        
-        // Get form inputs
+        $step = 1;
+        $this->log_step($step++, "AUTO LOGIN PROCESS STARTED");
+
+        // Get form data
         $url = $this->input->post('url');
         $userId = $this->input->post('userId');
         $password = $this->input->post('password');
-        
-        echo "<script>console.log('1. Received form inputs:');</script>";
-        echo "<script>console.log('   - URL: ' + ".json_encode($url).");</script>";
-        echo "<script>console.log('   - User ID: ' + ".json_encode($userId).");</script>";
-        echo "<script>console.log('   - Password: [HIDDEN FOR SECURITY]');</script>";
-        
+
+        $this->log_step($step++, "Received form inputs");
+        $this->log("   - URL: $url");
+        $this->log("   - User ID: $userId");
+        $this->log("   - Password: [HIDDEN]");
+
         // Validate inputs
         if (empty($url) || empty($userId) || empty($password)) {
-            echo "<script>console.log('2. Validation Failed: All fields are required!');</script>";
+            $this->log_step($step++, "Validation Failed: Missing fields");
             echo "<script>alert('⚠️ All fields are required!'); window.location.href='".site_url('storewebsite')."';</script>";
             return;
         }
-        echo "<script>console.log('2. Validation Passed: All fields are present');</script>";
-        
+        $this->log_step($step++, "Validation Passed");
+
         // Create cookie file
         $cookie_file = tempnam(sys_get_temp_dir(), 'cookie');
-        echo "<script>console.log('3. Created temporary cookie file at: ' + ".json_encode($cookie_file).");</script>";
-        
+        $this->log_step($step++, "Created cookie file: $cookie_file");
+
         // Initialize cURL
         $ch = curl_init();
-        echo "<script>console.log('4. cURL session initialized');</script>";
-        
+        $this->log_step($step++, "Initialized cURL");
+
         // Set cURL options
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
             'username' => $userId,
             'password' => $password
@@ -152,81 +157,97 @@ class WebsiteDetails extends CI_Controller {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-        
-        echo "<script>console.log('5. cURL options set:');</script>";
-        echo "<script>console.log('   - Target URL: ' + ".json_encode($url).");</script>";
-        echo "<script>console.log('   - POST data: username=' + ".json_encode($userId)." + '&password=[HIDDEN]');</script>";
-        echo "<script>console.log('   - Following redirects: true');</script>";
-        echo "<script>console.log('   - Using cookie file: ' + ".json_encode($cookie_file).");</script>";
-        
-        // SSL settings
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
+
+        // Handle SSL depending on environment
         if ($this->isLiveServer()) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            echo "<script>console.log('6. SSL verification ENABLED (production server)');</script>";
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For debugging: set to true when SSL is valid
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);     // Set to 2 when SSL is valid
+            $this->log_step($step++, "SSL verification DISABLED for now (LIVE SERVER)");
         } else {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            echo "<script>console.log('6. SSL verification DISABLED (local server)');</script>";
+            $this->log_step($step++, "SSL verification DISABLED (LOCAL SERVER)");
         }
-        
-        // Execute cURL request
-        echo "<script>console.log('7. Sending login request to server...');</script>";
+
+        // Execute login request
+        $this->log_step($step++, "Sending login request to server...");
         $response = curl_exec($ch);
-        
+
+        // Handle cURL errors
         if (curl_errno($ch)) {
             $error_msg = curl_error($ch);
-            echo "<script>console.log('8. cURL ERROR: ' + ".json_encode($error_msg).");</script>";
+            $this->log_step($step++, "cURL ERROR: $error_msg");
             curl_close($ch);
             echo "<script>alert('⚠️ cURL Error: ".addslashes($error_msg)."'); window.location.href='".site_url('storewebsite')."';</script>";
             return;
         }
-        echo "<script>console.log('8. Request completed successfully');</script>";
-        
+
+        $this->log_step($step++, "Request completed successfully");
+
         // Get response info
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
-        
-        echo "<script>console.log('9. Response details:');</script>";
-        echo "<script>console.log('   - HTTP Status Code: ' + ".json_encode($httpCode).");</script>";
-        echo "<script>console.log('   - Final URL after redirects: ' + ".json_encode($final_url).");</script>";
-        
-        // Clean up cookie file
+
+        $this->log_step($step++, "Response received");
+        $this->log("   - HTTP Status: $httpCode");
+        $this->log("   - Final URL: $final_url");
+
+        // Optional response preview for debugging
+        $this->log("   - Response Preview: " . substr(strip_tags($response), 0, 500));
+
+        // Cleanup
         if (file_exists($cookie_file)) {
             unlink($cookie_file);
-            echo "<script>console.log('10. Temporary cookie file deleted');</script>";
+            $this->log_step($step++, "Deleted temporary cookie file");
         }
-        
-        // Check if login was successful
+
+        // Decide outcome
         if (!empty($final_url) && $httpCode < 400) {
-            echo "<script>console.log('11. Login SUCCESS - Redirecting to target page');</script>";
+            $this->log_step($step++, "Login SUCCESS - Redirecting...");
             echo "<script>
-                console.log('12. Attempting to open new tab with the final URL');
-                var newWindow = window.open('about:blank', '_blank');
-                if (newWindow) {
-                    newWindow.location.href = '$final_url';
-                    console.log('13. New tab successfully opened with the final URL');
+                var win = window.open('about:blank', '_blank');
+                if (win) {
+                    win.location.href = '$final_url';
                 } else {
-                    console.log('13. Popup blocked - Falling back to same tab');
-                    alert('Please allow popups for this site');
+                    alert('Popup blocked. Please allow popups.');
                     window.location.href = '$final_url';
                 }
             </script>";
         } else {
-            echo "<script>console.log('11. Login FAILED - Invalid credentials or server error');</script>";
+            $this->log_step($step++, "Login FAILED - Invalid credentials or server error");
             echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
         }
-        
-        echo "<script>console.log('=== AUTO LOGIN PROCESS COMPLETED ===');</script>";
+
+        $this->log_step($step++, "AUTO LOGIN PROCESS COMPLETED");
     }
-    
+
+    // Helper to print log with step and time
+    private function log_step($step, $message) {
+        $time = date("H:i:s");
+        echo "<script>console.log('[$time] [$step] $message');</script>";
+        error_log("[$time] [$step] $message");
+        print("[$time] [$step] $message<br>");
+    }
+
+    // Helper to print additional debug info
+    private function log($message) {
+        $time = date("H:i:s");
+        echo "<script>console.log('   $message');</script>";
+        error_log("[$time] $message");
+        print("   $message<br>");
+    }
+
+    // Check if running on live server
     private function isLiveServer() {
-        $isLive = ($_SERVER['HTTP_HOST'] != 'localhost' && $_SERVER['HTTP_HOST'] != '127.0.0.1');
-        echo "<script>console.log('Server check: Is live server? ' + ".json_encode($isLive ? 'Yes' : 'No').");</script>";
+        $host = $_SERVER['HTTP_HOST'];
+        $isLive = ($host !== 'localhost' && $host !== '127.0.0.1');
+        $this->log("Server check: Is live server? " . ($isLive ? 'Yes' : 'No'));
         return $isLive;
     }
+}
+
 
 
     // public function websitedashboard() {
