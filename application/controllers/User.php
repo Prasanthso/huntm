@@ -7,6 +7,7 @@ class User extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
         $this->load->library(['form_validation', 'session']);
+        $this->load->library('email'); // Load email library
         $this->load->model('User_model'); //load model here
         $this->load->database();
         $this->load->model('CustomerRegister_model');
@@ -236,250 +237,123 @@ class User extends CI_Controller {
         $this->load->view('website_dashboard', $data);
     }   
     
+
     
-      // Forgot Password Page
-// public function forgot_password() {
-//     $this->load->view('forgot_password');
-// }
-
-// // Handle Forgot Password Submission
-// public function send_reset_link() {
-//     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
-
-//     if ($this->form_validation->run() == FALSE) {
-//         $this->session->set_flashdata('errors', validation_errors());
-//         redirect('forgot-password');
-//     }
-
-//     $email = $this->input->post('email', true);
-//     $user = $this->User_model->getUserByEmail($email);
-
-//     if (!$user) {
-//         $this->session->set_flashdata('errors', 'No account exists with this email.');
-//         redirect('forgot-password');
-//     }
-
-//     // Generate reset link (using user ID for simplicity)
-//     $reset_link = base_url('reset-password/' . $user->id);
-
-//     // Email configuration
-//     $this->load->library('email');
-//     $config['mailtype'] = 'html';
-//     $this->email->initialize($config);
+    // Display Forgot Password Page
     
-//     $this->email->from('no-reply@yourdomain.com', 'Your App Name');
-//     $this->email->to($email);
-//     $this->email->subject('Password Reset Request');
-    
-//     $message = '<p>Click the following link to reset your password:</p>';
-//     $message .= '<p><a href="'.$reset_link.'">'.$reset_link.'</a></p>';
-//     $message .= '<p>If you didn\'t request this, please ignore this email.</p>';
-    
-//     $this->email->message($message);
-
-//     if ($this->email->send()) {
-//         $this->session->set_flashdata('success', 'A password reset link has been sent to your email.');
-//     } else {
-//         log_message('error', 'Email sending failed: ' . $this->email->print_debugger());
-//         $this->session->set_flashdata('errors', 'Failed to send email. Please try again.');
-//     }
-    
-//     redirect('forgot-password');
-// }
-
-// // Reset Password Page
-// public function reset_password($user_id = null) {
-//     if (!$user_id) {
-//         $this->session->set_flashdata('errors', 'Invalid reset link.');
-//         redirect('forgot-password');
-//     }
-
-//     $user = $this->db->where('id', $user_id)->get('user')->row();
-    
-//     if (!$user) {
-//         $this->session->set_flashdata('errors', 'Invalid reset link.');
-//         redirect('forgot-password');
-//     }
-
-//     $data['user_id'] = $user_id;
-//     $this->load->view('reset_password', $data);
-// }
-
-// // Handle Password Reset Submission
-// public function update_password() {
-//     $user_id = $this->input->post('user_id', true);
-    
-//     // Verify user exists
-//     $user = $this->db->where('id', $user_id)->get('user')->row();
-//     if (!$user) {
-//         $this->session->set_flashdata('errors', 'Invalid user account.');
-//         redirect('forgot-password');
-//     }
-
-//     $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
-//     $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[new_password]');
-
-//     if ($this->form_validation->run() == FALSE) {
-//         $this->session->set_flashdata('errors', validation_errors());
-//         $data['user_id'] = $user_id;
-//         $this->load->view('reset_password', $data);
-//         return;
-//     }
-
-//     $new_password = password_hash($this->input->post('new_password', true), PASSWORD_BCRYPT);
-//     $this->User_model->changeUserPassword($user_id, $new_password);
-
-//     $this->session->set_flashdata('success', 'Password updated successfully. Please login.');
-//     redirect('loginform');
-// }
-
-
-    //Display Forgot Password Page
-    // public function forgot_password() {
-    //     $this->load->view('forgot_password');
-    // }
-
-    // // Handle Forgot Password Submission
-    // public function send_reset_link() {
-    //     // Set form validation rules
-    //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
-
-    //     if ($this->form_validation->run() == FALSE) {
-    //         $this->session->set_flashdata('errors', validation_errors());
-    //         redirect('forgot-password');
-    //     }
-
-    //     $email = $this->input->post('email', TRUE);
-    //     $user = $this->User_model->getUserByEmail($email);
-
-    //     if (!$user) {
-    //         $this->session->set_flashdata('errors', 'No account exists with this email.');
-    //         redirect('forgot-password');
-    //     }
-
-    //     // Generate reset link using user ID
-    //     $reset_link = base_url('reset-password/' . $user->id);
-
-    //     // Initialize email with config from email.php
-    //     // $this->email->initialize($this->config->item('email'));
-
-    //     $this->email->from('arasu5070go@gmail.com', 'Your App Name');
-    //     $this->email->to($email);
-    //     $this->email->subject('Password Reset Request');
-
-    //     $message = '<p>Click the following link to reset your password:</p>';
-    //     $message .= '<p><a href="' . $reset_link . '">' . $reset_link . '</a></p>';
-    //     $message .= '<p>If you didn\'t request this, please ignore this email.</p>';
-
-    //     $this->email->message($message);
-
-    //     if ($this->email->send()) {
-    //         $this->session->set_flashdata('success', 'A password reset link has been sent to your email.');
-    //     } else {
-    //         $error = $this->email->print_debugger(['headers', 'subject', 'body']);
-    //         log_message('error', 'Email sending failed: ' . $error);
-    //         $this->session->set_flashdata('errors', 'Failed to send email: ' . $error);
-    //     }
-
-    //     redirect('forgot-password');
-    // }
-
-    // // Reset Password Page
-    // public function reset_password($user_id = null) {
-    //     if (!$user_id) {
-    //         $this->session->set_flashdata('errors', 'Invalid reset link.');
-    //         redirect('forgot-password');
-    //     }
-
-    //     $user = $this->db->where('id', $user_id)->get('user')->row();
-
-    //     if (!$user) {
-    //         $this->session->set_flashdata('errors', 'Invalid reset link.');
-    //         redirect('forgot-password');
-    //     }
-
-    //     $data['user_id'] = $user_id;
-    //     $this->load->view('reset_password', $data);
-    // }
-
-    // // Handle Password Reset Submission
-    // public function update_password() {
-    //     $user_id = $this->input->post('user_id', TRUE);
-
-    //     // Verify user exists
-    //     $user = $this->db->where('id', $user_id)->get('user')->row();
-    //     if (!$user) {
-    //         $this->session->set_flashdata('errors', 'Invalid user account.');
-    //         redirect('forgot-password');
-    //     }
-
-    //     // Set form validation rules
-    //     $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
-    //     $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[new_password]');
-
-    //     if ($this->form_validation->run() == FALSE) {
-    //         $this->session->set_flashdata('errors', validation_errors());
-    //         $data['user_id'] = $user_id;
-    //         $this->load->view('reset_password', $data);
-    //         return;
-    //     }
-
-    //     // Update password
-    //     $new_password = password_hash($this->input->post('new_password', TRUE), PASSWORD_BCRYPT);
-    //     $this->User_model->changeUserPassword($user_id, $new_password);
-
-    //     $this->session->set_flashdata('success', 'Password updated successfully. Please login.');
-    //     redirect('loginform');
-    // }
-
-    // Test Email Function (for debugging)
-    public function send_email()
-    {
-        $this->load->library('email');
-        // $this->config->load('email', TRUE); // Ensure the email config is loaded
-        $config = $this->config->item('email');
-        if (!$config) {
-        // Configuration array
-        $config = [
-            'protocol'    => 'smtp',
-            'smtp_host'   => 'smtp.gmail.com',
-            'smtp_port'   => 587,
-            'smtp_user'   => 'arasu5070go@gmail.com',
-            'smtp_pass'   => 'mvjs krhj gkdb bjkg',
-            'smtp_crypto' => 'tls',
-            'mailtype'    => 'html',
-            'charset'     => 'utf-8',
-            'wordwrap'    => TRUE,
-            'newline'     => "\r\n",
-            'smtp_timeout' => 30,
-            'smtp_options' => [
-                'ssl' => [
-                    'verify_peer'       => false,
-                    'verify_peer_name'  => false,
-                    'allow_self_signed' => true
-                ]
-            ]
-        ];
-    }
-        $this->email->initialize($config);
+        // Show forgot password form
+        // public function forgot_password() {
+        //     $this->load->view('forgot_password');
+        // }
         
-        $this->email->from('arasu5070go@gmail.com', 'Poovarasan');
-        $this->email->to('ceit35poovarasan24@gmail.com');
-        $this->email->subject('Email Test');
-        $this->email->message('<p>This is a test email.</p>');
+        // // Handle forgot password submission
+        // public function send_reset_link() {
+        //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|trim');
         
-        if ($this->email->send()) {
-            echo 'Email sent successfully!';
-        } else {
-            echo 'Email failed: ';
-            echo $this->email->print_debugger();
+        //     if ($this->form_validation->run() == FALSE) {
+        //         $this->session->set_flashdata('error', validation_errors());
+        //         redirect('forgot-password');
+        //     }
+        
+        //     $email = $this->input->post('email', true);
+        //     $user = $this->User_model->getUserByEmail($email);
+        
+        //     if (!$user) {
+        //         // Don't reveal whether email exists or not
+        //         $this->session->set_flashdata('success', 'If this email exists in our system, you will receive a reset link.');
+        //         redirect('forgot-password');
+        //     }
+        
+        //     // Create a simple reset link with user ID (not recommended for production)
+        //     // $reset_link = base_url('auth/reset_password/' . $user->id);
+        //     $reset_link = base_url('reset-password/' . $user->id);
+
+        //     // Configure email
+        //     $this->email->from('noreply@yourdomain.com', 'Your App Name');
+        //     $this->email->to($email);
+        //     $this->email->subject('Password Reset Request');
+        
+        //     $message = '<p>Hello,</p>';
+        //     $message .= '<p>You requested to reset your password. Click the link below to proceed:</p>';
+        //     $message .= '<p><a href="' . $reset_link . '">Reset Password</a></p>';
+        //     $message .= '<p>If you didn\'t request this, please ignore this email.</p>';
+            
+        //     $this->email->message($message);
+        
+        //     if ($this->email->send()) {
+        //         $this->session->set_flashdata('success', 'A password reset link has been sent to your email.');
+        //     } else {
+        //         log_message('error', 'Email sending failed: ' . $this->email->print_debugger());
+        //         $this->session->set_flashdata('error', 'Failed to send email. Please try again later.');
+        //     }
+        
+        //     redirect('forgot-password');
+        // }
+        
+        // // Show reset password form
+        // public function reset_password($user_id = null) {
+        //     if (!$user_id) {
+        //         $this->session->set_flashdata('error', 'Invalid reset link.');
+        //         redirect('forgot-password');
+        //     }
+        
+        //     $user = $this->User_model->getUserById($user_id);
+        //     if (!$user) {
+        //         $this->session->set_flashdata('error', 'Invalid reset link.');
+        //         redirect('forgot-password');
+        //     }
+        
+        //     $data['user_id'] = $user_id;
+        //     $this->load->view('reset_password', $data);
+        // }
+        
+        // // Handle password reset submission
+        // public function update_password() {
+        //     $user_id = $this->input->post('user_id', true);
+            
+        //     $user = $this->User_model->getUserById($user_id);
+        //     if (!$user) {
+        //         $this->session->set_flashdata('error', 'Invalid user account.');
+        //         redirect('forgot-password');
+        //     }
+        
+        //     $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
+        //     $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[new_password]');
+        
+        //     if ($this->form_validation->run() == FALSE) {
+        //         $data['user_id'] = $user_id;
+        //         $this->load->view('reset_password', $data);
+        //         return;
+        //     }
+        
+        //     $new_password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
+        //     $this->User_model->updatePassword($user_id, $new_password);
+        
+        //     $this->session->set_flashdata('success', 'Password updated successfully. Please login.');
+        //     redirect('loginform');
+        // }
+
+        public function send_test_email() {
+            $this->load->library('email');
+            $this->config->load('email');
+            $this->email->initialize($this->config->config);
+        
+            $this->email->from('arasu5070go@gmail.com', 'Your App');
+            $this->email->to('your-valid-email@gmail.com');
+            $this->email->subject('Testing Gmail SMTP');
+            $this->email->message('<p>This is a test email using Gmail SMTP from XAMPP.</p>');
+        
+            if ($this->email->send()) {
+                echo "✅ Email sent successfully!";
+            } else {
+                echo "❌ Email failed:<br><pre>";
+                print_r($this->email->print_debugger());
+                echo "</pre>";
+            }
         }
+        
+        
+        
     }
-    
-
-    
-    
-
-    
-}
+        
 ?>
