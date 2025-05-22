@@ -621,7 +621,7 @@
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
                                     <h6><i class="fas fa-wallet me-2"></i> Fund Balance</h6>
-                                    <p>Rs:760,461.17</p>
+                                    <p>Rs:873,415.81</p>
                                 </div>
                             </div>
                         </div>
@@ -629,7 +629,7 @@
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
-                                    <h6>Remark</h6>
+                                    <h6><i class="bi bi-pencil-square me-2"></i> Remark</h6>
                                     <p>IOCL</p>
                                 </div>
                             </div>
@@ -931,18 +931,19 @@
 
                 <!-- display open process data in website -->
                 <?php } elseif ($method == 'display_invoice_data') { ?>
-                    <div class="container">
-                        <h2 class="text-center mb-4">Invoice Order Service Area</h2>
+                <div class="container">
+                    <h2 class="text-center mb-4">Invoice Order Service Area</h2>
 
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
-                        <?php endif; ?>
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                    <?php endif; ?>
 
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
-                        <?php endif; ?>
-                        <div class="table-responsive">
-                        <table class="table table-bordered">
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
+                    <?php endif; ?>
+                    
+                    <div class="table-responsive">
+                        <table id="invoiceTable" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
@@ -953,25 +954,94 @@
                             </thead>
                             <tbody>
                                 <?php if (!empty($orders)): ?>
-                                    <?php $serial_no = 1; ?>
-                                    <?php foreach ($orders as $order): ?>
+                                    <?php foreach ($orders as $index => $order): ?>
                                         <tr>
-                                            <td><?php echo $serial_no++; ?></td>
-                                            <td><?php echo $order['area_name']; ?></td>
-                                            <td><?php echo $order['cashmemo_generated']; ?></td>
-                                            <td><?php echo $order['status']; ?></td>
+                                            <td><?php echo $index + 1; ?></td>
+                                            <td><?php echo htmlspecialchars($order['area_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($order['cashmemo_generated']); ?></td>
+                                            <td><?php echo htmlspecialchars($order['status']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="4">No records found.</td>
+                                        <td colspan="4" class="text-center">No records found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
-                                </div>
                     </div>
+                    
+                    <!-- Pagination - Exactly as you requested -->
+                    <nav>
+                        <ul class="pagination justify-content-center mt-3">
+                            <li class="page-item" id="prevPage"><a class="page-link" href="javascript:void(0)">Previous</a></li>
+                            <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
+                            <li class="page-item" id="nextPage"><a class="page-link" href="javascript:void(0)">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
 
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const table = document.getElementById('invoiceTable');
+                    const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    const rowsPerPage = 10;
+                    let currentPage = 1;
+                    const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
+                    
+                    // Pagination elements
+                    const currentPageElement = document.getElementById('currentPage');
+                    const prevButton = document.getElementById('prevPage');
+                    const nextButton = document.getElementById('nextPage');
+                    
+                    function updatePagination() {
+                        // Update current page display
+                        currentPageElement.textContent = currentPage;
+                        
+                        // Toggle disabled state
+                        if (currentPage === 1) {
+                            prevButton.classList.add('disabled');
+                        } else {
+                            prevButton.classList.remove('disabled');
+                        }
+                        
+                        if (currentPage === totalPages) {
+                            nextButton.classList.add('disabled');
+                        } else {
+                            nextButton.classList.remove('disabled');
+                        }
+                        
+                        // Calculate range to show
+                        const start = (currentPage - 1) * rowsPerPage;
+                        const end = start + rowsPerPage;
+                        
+                        // Show/hide rows
+                        rows.forEach((row, index) => {
+                            row.style.display = (index >= start && index < end) ? '' : 'none';
+                        });
+                    }
+                    
+                    // Event listeners
+                    prevButton.addEventListener('click', function() {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            updatePagination();
+                        }
+                    });
+                    
+                    nextButton.addEventListener('click', function() {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            updatePagination();
+                        }
+                    });
+                    
+                    // Initialize
+                    updatePagination();
+                });
+                </script>
+
+                <!-- display open process data in website -->
                     <?php } elseif ($method == 'display_open_data') {?>
                         <div class="container">
                         <h2 class="text-center mb-4">Open Process Service Area</h2>
@@ -1005,7 +1075,7 @@
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="3">No records found.</td> <!-- Adjust colspan to 3 due to new column -->
+                                        <td colspan="3" class="text-center">No records found.</td> <!-- Adjust colspan to 3 due to new column -->
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -1119,50 +1189,157 @@
                         </form>
                     </div>
                     <!-- Display and store website -->
-                <?php } elseif ($method == 'store_website') { ?>
-                    <div class="container">
-                        <h2 class="text-center mb-4"><i class="bi bi-shop me-2"></i>Stored Websites</h2>
+               <?php } elseif ($method == 'store_website') { ?>
+                <div class="container">
+                    <h2 class="text-center mb-4"><i class="bi bi-shop me-2"></i>Stored Websites</h2>
 
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
-                        <?php endif; ?>
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
+                    <?php endif; ?>
 
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
-                        <?php endif; ?>
-						<!-- <div class="d-flex justify-content-center"> -->
-						<div class="table-responsive">
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
+                    <?php endif; ?>
+
+                    <div class="table-responsive">
                         <table class="table">
-						<thead class="table-primary">
-                            <tr>
-                                <th>Website URL</th>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Login</th>
-                            </tr>
-						</thead>
-                            <?php foreach ($websites as $website): ?>
+                            <thead class="table-primary">
                                 <tr>
-                                    <td>
-                                        <span class="truncate-url"><?php echo htmlspecialchars($website['website_url']); ?></span>
-                                        <button class="btn-copy" onclick="copyToClipboard('<?php echo htmlspecialchars($website['website_url']); ?>')">📋</button>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
-                                    <td class="password-hidden">******</td>
-                                    <td>
-                                        <form action="<?php echo site_url('auto-login'); ?>" method="POST">
-                                            <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
-                                            <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
-                                            <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                            <button class="btnautologin" type="submit">Auto-Login</button>
-                                        </form>
-                                    </td>
+                                    <th>Website URL</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Login</th>
                                 </tr>
-                            <?php endforeach; ?>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($websites)): ?>
+                                    <?php foreach ($websites as $website): ?>
+                                        <tr>
+                                            <td>
+                                                <span class="truncate-url"><?php echo htmlspecialchars($website['website_url']); ?></span>
+                                                <button class="btn-copy" onclick="copyToClipboard('<?php echo htmlspecialchars($website['website_url']); ?>')">📋</button>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
+                                            <td class="password-hidden">******</td>
+                                            <td>
+                                                <form action="<?php echo site_url('auto-login'); ?>" method="POST">
+                                                    <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
+                                                    <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
+                                                    <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
+                                                    <button class="btnautologin" type="submit">Auto-Login</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4" class="text-center">No records found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
                         </table>
-						</div>
-						<!-- </div> -->
                     </div>
+                </div>
+
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text).then(function() {
+                    alert('URL copied to clipboard!');
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+
+            function checkScrapeStatus(jobId) {
+                $.getJSON('<?php echo site_url("WebsiteDetails/check_scrape_status"); ?>?job_id=' + jobId, function(response) {
+                    if (response.status === 'completed') {
+                        displayScrapeResults(response.result);
+                    } else if (response.status === 'error') {
+                        alert('Scraping failed: ' + response.error);
+                    } else if (response.status === 'not_found') {
+                        alert('Scraping job not found.');
+                    } else {
+                        setTimeout(function() { checkScrapeStatus(jobId); }, 5000);
+                    }
+                }).fail(function() {
+                    alert('Failed to check scraping status. Please try again later.');
+                });
+            }
+
+            function displayScrapeResults(result) {
+                $('#invoiced-orders-table thead').empty();
+                $('#invoiced-orders-table tbody').empty();
+                $('#open-orders-table thead').empty();
+                $('#open-orders-table tbody').empty();
+
+                if (result.invoiced_orders && result.invoiced_orders.length > 0) {
+                    const invoicedOrders = result.invoiced_orders;
+                    const headers = Object.keys(invoicedOrders[0]);
+
+                    let headerRow = '<tr>';
+                    headers.forEach(header => {
+                        headerRow += `<th>${header}</th>`;
+                    });
+                    headerRow += '</tr>';
+                    $('#invoiced-orders-table thead').append(headerRow);
+
+                    invoicedOrders.forEach(order => {
+                        let row = '<tr>';
+                        headers.forEach(header => {
+                            row += `<td>${order[header] || 'N/A'}</td>`;
+                        });
+                        row += '</tr>';
+                        $('#invoiced-orders-table tbody').append(row);
+                    });
+
+                    $('#invoiced-orders').show();
+                } else {
+                    $('#invoiced-orders-table tbody').append('<tr><td colspan="3">No invoice orders found.</td></tr>');
+                    $('#invoiced-orders').show();
+                }
+
+                if (result.open_orders && result.open_orders.length > 0) {
+                    const openOrders = result.open_orders;
+                    const headers = Object.keys(openOrders[0]);
+
+                    let headerRow = '<tr>';
+                    headers.forEach(header => {
+                        headerRow += `<th>${header}</th>`;
+                    });
+                    headerRow += '</tr>';
+                    $('#open-orders-table thead').append(headerRow);
+
+                    openOrders.forEach(order => {
+                        let row = '<tr>';
+                        headers.forEach(header => {
+                            row += `<td>${order[header] || 'N/A'}</td>`;
+                        });
+                        row += '</tr>';
+                        $('#open-orders-table tbody').append(row);
+                    });
+
+                    $('#open-orders').show();
+                } else {
+                    $('#open-orders-table tbody').append('<tr><td colspan="2">No open orders found.</td></tr>');
+                    $('#open-orders').show();
+                }
+
+                $('#scraped-data').show();
+            }
+
+            $(document).ready(function() {
+                $('#scraped-data').hide();
+                $('#invoiced-orders').hide();
+                $('#open-orders').hide();
+
+                var jobId = '<?php echo $this->session->flashdata("job_id"); ?>';
+                if (jobId) {
+                    checkScrapeStatus(jobId);
+                }
+            });
+        </script>
                     
                     <!-- Display customer strength -->
                     <?php } elseif($method == 'customer_strength') { ?>

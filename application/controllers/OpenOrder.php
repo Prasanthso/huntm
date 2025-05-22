@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Load PhpSpreadsheet library manually (Without Composer)
 require_once APPPATH . 'libraries/PhpSpreadsheet/autoload.php';
 require_once APPPATH . 'libraries/Psr/SimpleCache/CacheInterface.php';
 require_once APPPATH . 'libraries/Composer/Pcre/Preg.php';
@@ -15,7 +14,7 @@ class OpenOrder extends CI_Controller {
         parent::__construct();
         $this->load->model('OpenOrder_model');
         $this->load->helper(array('form', 'url'));
-        $this->load->library('session');  // Ensure session is loaded
+        $this->load->library('session');
     }
 
     public function openorder_data() {
@@ -90,10 +89,10 @@ class OpenOrder extends CI_Controller {
         redirect('OpenOrder');
     }
 
-     //Display data from open order data in website
-     public function display_open_data(){
+    public function display_open_data() {
         $data['method'] = 'display_open_data';
-        $data['excel_orders'] = $this->OpenOrder_model->get_all_data(); 
+        $data['excel_orders'] = $this->OpenOrder_model->get_all_data();
         $this->load->view('website_dashboard', $data);
     }
 }
+?>

@@ -70,7 +70,7 @@ $route['store'] = 'User/store';
 $route['addwebsite'] = 'WebsiteDetails/addwebsite';
 $route['submitaddwebite'] = 'WebsiteDetails/store';
 $route['storewebsite'] = 'WebsiteDetails/stored_website';  //Display the stored webite
-$route['auto-login'] = 'WebsiteDetails/auto_login'; //use for auto login 
+$route['auto-login'] = 'WebsiteDetails/scrape_data'; //use for auto login 
 
 $route['show'] = 'Dashboard/show';
 $route['login/authenticate'] = 'login/authenticate';
@@ -92,10 +92,10 @@ $route['customerregister'] = 'CustomerRegister/customerregister_data';
 $route['customerregister_uploadfile'] = 'CustomerRegister/upload_excel';
 
 //display invoice data in website
-$route['invoiceorder'] = 'WebScrapping/display_invoice_data';
+$route['invoiceorder'] = 'WebsiteDetails/display_invoice_data';
 
 //display open process data in website
-$route['open-process-order'] = 'OpenOrder/display_open_data';
+$route['open-process-order'] = 'WebsiteDetails/display_open_data';
 
 //display fund balance data in website
 $route['fundbalance_data'] = 'FundBalance/display_fundbalance';

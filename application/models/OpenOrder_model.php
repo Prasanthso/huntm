@@ -5,20 +5,33 @@ class OpenOrder_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-        $this->load->database(); // Ensure the database is loaded
+        $this->load->database();
     }
 
-    public function insert_data($data) {
-        return $this->db->insert_batch('open_orders', $data); // Bulk insert
+      public function insert_data($data) {
+        // Clear old data for this user first
+        $this->db->where('userid', $this->session->userdata('id'));
+        $this->db->truncate('open_orders');
+        
+        // Insert new data
+        return $this->db->insert_batch('open_orders', $data);
     }
 
     public function get_all_data() {
         $userid = $this->session->userdata('id');
-        $this->db->select('area_name, open_refill_orders');
-        $this->db->from('open_orders');
-        $this->db->where('userid',$userid);
-        $query = $this->db->get();
-        log_message('debug', 'Query Result: ' . print_r($query->result_array(), true)); 
-        return $query->result_array();
+        return $this->db
+            ->select('area_name, open_refill_orders')
+            ->from('open_orders')
+            ->where('userid', $userid)
+            // ->order_by('created_at', 'DESC')
+            ->get()
+            ->result_array();
+    }
+
+    public function clear_user_data($user_id) {
+        $this->db->where('userid', $user_id);
+        $this->db->delete('open_orders'); 
+        return $this->db->affected_rows();
     }
 }
+?>

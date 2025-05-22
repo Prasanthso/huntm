@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Load PhpSpreadsheet library manually (Without Composer)
 require_once APPPATH . 'libraries/PhpSpreadsheet/autoload.php';
 require_once APPPATH . 'libraries/Psr/SimpleCache/CacheInterface.php';
 require_once APPPATH . 'libraries/Composer/Pcre/Preg.php';
@@ -42,7 +41,6 @@ class WebScrapping extends CI_Controller {
             $spreadsheet = IOFactory::load($file_name);
             $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
-            // Debug: Log the raw sheet data
             error_log('Sheet Data: ' . print_r($sheetData, true));
 
             $insert_data = array();
@@ -54,7 +52,6 @@ class WebScrapping extends CI_Controller {
                     continue;
                 }
 
-                // Debug: Log each row
                 error_log('Processing Row: ' . print_r($row, true));
 
                 if (count($row) >= 3 && !empty($row[0])) {
@@ -67,7 +64,6 @@ class WebScrapping extends CI_Controller {
                 }
             }
 
-            // Debug: Log the final insert data
             error_log('Insert Data: ' . print_r($insert_data, true));
 
             if (!empty($insert_data)) {
@@ -88,10 +84,10 @@ class WebScrapping extends CI_Controller {
         redirect('WebScrapping');
     }
 
-    //Display data from invoice order data in website
-    public function display_invoice_data(){
+    public function display_invoice_data() {
         $data['method'] = 'display_invoice_data';
-        $data['orders'] = $this->WebScrapping_model->get_all_data(); 
+        $data['orders'] = $this->WebScrapping_model->get_all_data();
         $this->load->view('website_dashboard', $data);
     }
 }
+?>
