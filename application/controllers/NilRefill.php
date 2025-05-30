@@ -26,16 +26,63 @@ class NilRefill extends CI_Controller {
         
     //     $this->load->view('website_dashboard', $data);
     // }
-    public function nill_fill_data() {
-        // Get all customers data
+    // public function nill_fill_data() {
+    //     // Get all customers data
+    //     $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+        
+    //     // Calculate statistics
+    //     $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+        
+    //     // Prepare data for view
+    //     $data = [
+    //         'stats' => $stats,
+    //         'all_customers' => $all_customers,
+    //         'method' => 'nil_refill_report',
+    //         'page_title' => 'Nil Refill Report',
+    //         'report_date' => date('d-M-Y H:i:s')
+    //     ];
+        
+    //     $this->load->view('website_dashboard', $data);
+    // }
+
+    // public function nill_fill_data() {
+    //         // Get all customers data
+    //         $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+            
+    //         // Initialize data array with defaults
+    //         $data = [
+    //             'stats' => [],
+    //             'all_customers' => [],
+    //             'method' => 'nil_refill_report',
+    //             'page_title' => 'Nil Refill Report',
+    //             'report_date' => date('d-M-Y H:i:s'),
+    //             'error' => null
+    //         ];
+
+    //         // Check if data is valid
+    //         if (empty($all_customers)) {
+    //             $data['error'] = 'No customer data found';
+    //             $this->load->view('website_dashboard', $data);
+    //             return;
+    //         }
+            
+    //         // Calculate statistics
+    //         $data['all_customers'] = $all_customers;
+    //         $data['stats'] = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+            
+    //         $this->load->view('website_dashboard', $data);
+    // }
+   public function nill_fill_data() {
+        if (!$this->session->userdata('id')) {
+            redirect('login'); // Adjust redirect as per your auth system
+        }
+
         $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
-        
-        // Calculate statistics
         $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
-        
-        // Prepare data for view
+
         $data = [
-            'stats' => $stats,
+            'stats' => $stats['data'],
+            'total_consumers' => $stats['total_consumers'] ?? 0,
             'all_customers' => $all_customers,
             'method' => 'nil_refill_report',
             'page_title' => 'Nil Refill Report',

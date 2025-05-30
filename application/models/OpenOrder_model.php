@@ -8,7 +8,7 @@ class OpenOrder_model extends CI_Model {
         $this->load->database();
     }
 
-      public function insert_data($data) {
+    public function insert_data($data) {
         // Clear old data for this user first
         $this->db->where('userid', $this->session->userdata('id'));
         $this->db->truncate('open_orders');

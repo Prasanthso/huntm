@@ -11,7 +11,9 @@ class User extends CI_Controller {
         $this->load->model('User_model'); //load model here
         $this->load->database();
         $this->load->model('CustomerRegister_model');
-		// $this->load->model('WebsiteModel');
+		$this->load->model('WebsiteModel');
+        $this->load->model('WebScrapping_model');
+        $this->load->model('OpenOrder_model');
     }
 
     public function index()
@@ -155,23 +157,239 @@ class User extends CI_Controller {
             redirect('suggestionform');
         }
     }
+  
+//    public function dashboardview() {
+//     // Get total domestic customers
+//     $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
+
+//     // Customer Strength stats
+//     $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
+//     $customer_data['total']['percent'] = $total_customers > 0 ? 
+//         round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
+
+//     // Phone Missing stats
+//     $phone_stats_raw = $this->CustomerRegister_model->get_phone_missing_stats();
+//     $phone_stats = [
+//         'total' => [
+//             'qty' => $phone_stats_raw['Total'] ?? 0,
+//             'percent' => $total_customers > 0 ? 
+//                 round((($phone_stats_raw['Total'] ?? 0) / $total_customers) * 100, 2) : 0
+//         ]
+//     ];
+
+//     // Nil Refill stats
+//     $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+//     $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+
+//     // MI Due stats
+//     $mi_due_summary = $this->CustomerRegister_model->get_mi_due_summary();
+//     $total_mi_due = 0;
+//     $pmuy_count = 0;
+//     $non_pmuy_count = 0;
+
+//     foreach ($mi_due_summary as $row) {
+//         if ($row['scheme_type'] === 'PMUY') {
+//             $pmuy_count += $row['count'];
+//         } else {
+//             $non_pmuy_count += $row['count'];
+//         }
+//         $total_mi_due += $row['count'];
+//     }
+
+//     $mi_stats = [
+//         'total' => [
+//             'qty' => $total_mi_due,
+//             'percent' => $total_customers > 0 ? round(($total_mi_due / $total_customers) * 100, 2) : 0
+//         ],
+//         'pmuy' => [
+//             'qty' => $pmuy_count,
+//             'percent' => $total_mi_due > 0 ? round(($pmuy_count / $total_mi_due) * 100, 2) : 0
+//         ],
+//         'non_pmuy' => [
+//             'qty' => $non_pmuy_count,
+//             'percent' => $total_mi_due > 0 ? round(($non_pmuy_count / $total_mi_due) * 100, 2) : 0
+//         ]
+//     ];
+
+//     // Hose Due stats
+//     $hose_stats_raw = $this->CustomerRegister_model->get_hose_due_stats('dashboard');
     
+//     $hose_stats = [
+//         'Total' => $hose_stats_raw['Total'],
+//         'total' => [
+//             'qty' => $hose_stats_raw['Total_Due'],
+//             'percent' => $hose_stats_raw['Total_Due_Percent']
+//         ],
+//         'pmuy' => [
+//             'qty' => $hose_stats_raw['PMUY_Due'],
+//             'percent' => $hose_stats_raw['PMUY_Due_Percent']
+//         ],
+//         'non_pmuy' => [
+//             'qty' => $hose_stats_raw['Non_PMUY_Due'],
+//             'percent' => $hose_stats_raw['Non_PMUY_Due_Percent']
+//         ]
+//     ];
+
+//     $data = [
+//         'method' => 'dashboard',
+//         'customer_data' => $customer_data,
+//         'sbc_counts' => $this->CustomerRegister_model->get_sbc_status_counts(),
+//         'kyc_stats' => $this->CustomerRegister_model->get_kyc_stats(),
+//         'stats' => $stats,
+//         'all_customers' => $all_customers,
+//         'mi_stats' => $mi_stats,
+//         'hose_stats' => $hose_stats,
+//         'phone_stats' => $phone_stats,
+//         'page_title' => 'Dashboard',
+//         'report_date' => date('d-M-Y H:i:s'),
+//         'total_customers' => $total_customers
+//     ];
+
+//     $this->load->view('website_dashboard', $data); 
+// }
+
+    // public function dashboardview() {
+    //     // Get user ID from session
+    //     $userid = $this->session->userdata('id');
+    //     if (empty($userid)) {
+    //         redirect('login');
+    //     }
+
+    //     // Get total domestic customers
+    //     $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
+
+    //     // Customer Strength stats
+    //     $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
+    //     $customer_data['total']['percent'] = $total_customers > 0 ? 
+    //         round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
+
+    //     // Phone Missing stats
+    //     $phone_stats_raw = $this->CustomerRegister_model->get_phone_missing_stats();
+    //     $phone_stats = [
+    //         'total' => [
+    //             'qty' => $phone_stats_raw['total']['total'] ?? 0,
+    //             'percent' => $phone_stats_raw['total']['total_percent'] ?? 0
+    //         ],
+    //         'pmuy' => [
+    //             'qty' => $phone_stats_raw['total']['pmuy'] ?? 0,
+    //             'percent' => $phone_stats_raw['total']['pmuy_percent'] ?? 0
+    //         ],
+    //         'non_pmuy' => [
+    //             'qty' => $phone_stats_raw['total']['non_pmuy'] ?? 0,
+    //             'percent' => $phone_stats_raw['total']['non_pmuy_percent'] ?? 0
+    //         ],
+    //         'active' => [
+    //             'qty' => $phone_stats_raw['active']['total'] ?? 0,
+    //             'percent' => $phone_stats_raw['active']['total_percent'] ?? 0
+    //         ],
+    //         'suspended' => [
+    //             'qty' => $phone_stats_raw['suspended']['total'] ?? 0,
+    //             'percent' => $phone_stats_raw['suspended']['total_percent'] ?? 0
+    //         ],
+    //         'deactivated' => [
+    //             'qty' => $phone_stats_raw['deactivated']['total'] ?? 0,
+    //             'percent' => $phone_stats_raw['deactivated']['total_percent'] ?? 0
+    //         ]
+    //     ];
+
+    //     // Nil Refill stats
+    //     $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
+    //     $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
+
+    //     // MI Due stats
+    //     $mi_due_summary = $this->CustomerRegister_model->get_mi_due_summary();
+    //     $total_mi_due = 0;
+    //     $pmuy_count = 0;
+    //     $non_pmuy_count = 0;
+
+    //     foreach ($mi_due_summary as $row) {
+    //         if ($row['scheme_type'] === 'PMUY') {
+    //             $pmuy_count += $row['count'];
+    //         } else {
+    //             $non_pmuy_count += $row['count'];
+    //         }
+    //         $total_mi_due += $row['count'];
+    //     }
+
+    //     $mi_stats = [
+    //         'total' => [
+    //             'qty' => $total_mi_due,
+    //             'percent' => $total_customers > 0 ? round(($total_mi_due / $total_customers) * 100, 2) : 0
+    //         ],
+    //         'pmuy' => [
+    //             'qty' => $pmuy_count,
+    //             'percent' => $total_mi_due > 0 ? round(($pmuy_count / $total_mi_due) * 100, 2) : 0
+    //         ],
+    //         'non_pmuy' => [
+    //             'qty' => $non_pmuy_count,
+    //             'percent' => $total_mi_due > 0 ? round(($non_pmuy_count / $total_mi_due) * 100, 2) : 0
+    //         ]
+    //     ];
+
+    //     // Hose Due stats
+    //     $hose_stats_raw = $this->CustomerRegister_model->get_hose_due_stats('dashboard');
+        
+    //     $hose_stats = [
+    //         'Total' => $hose_stats_raw['Total'] ?? 0,
+    //         'total' => [
+    //             'qty' => $hose_stats_raw['Total_Due'] ?? 0,
+    //             'percent' => $hose_stats_raw['Total_Due_Percent'] ?? 0
+    //         ],
+    //         'pmuy' => [
+    //             'qty' => $hose_stats_raw['PMUY_Due'] ?? 0,
+    //             'percent' => $hose_stats_raw['PMUY_Due_Percent'] ?? 0
+    //         ],
+    //         'non_pmuy' => [
+    //             'qty' => $hose_stats_raw['Non_PMUY_Due'] ?? 0,
+    //             'percent' => $hose_stats_raw['Non_PMUY_Due_Percent'] ?? 0
+    //         ]
+    //     ];
+
+    //     $data = [
+    //         'method' => 'dashboard',
+    //         'customer_data' => $customer_data,
+    //         'sbc_counts' => $this->CustomerRegister_model->get_sbc_status_counts(),
+    //         'kyc_stats' => $this->CustomerRegister_model->get_kyc_stats(),
+    //         'stats' => $stats,
+    //         'all_customers' => $all_customers,
+    //         'mi_stats' => $mi_stats,
+    //         'hose_stats' => $hose_stats,
+    //         'phone_stats' => $phone_stats,
+    //         'page_title' => 'Dashboard',
+    //         'report_date' => date('d-M-Y H:i:s'),
+    //         'total_customers' => $total_customers
+    //     ];
+
+    //     $this->load->view('website_dashboard', $data); 
+    // }
     public function dashboardview() {
-      
-      
         // Get total domestic customers
         $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
 
         // Customer Strength stats
         $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
-        $customer_data['total']['percent'] = $total_customers > 0 ? round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
+        $customer_data['total']['percent'] = $total_customers > 0 ? 
+            round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
 
         // Phone Missing stats
         $phone_stats_raw = $this->CustomerRegister_model->get_phone_missing_stats();
         $phone_stats = [
             'total' => [
-                'qty' => $phone_stats_raw['Total'],
-                'percent' => $total_customers > 0 ? round(($phone_stats_raw['Total'] / $total_customers) * 100, 2) : 0
+                'qty' => $phone_stats_raw['total']['total'] ?? 0,
+                'percent' =>round(($phone_stats_raw['total']['total'] / $total_customers) * 100, 2),
+                'detailed' => $phone_stats_raw
+            ],
+            'active' => [
+                'qty' => $phone_stats_raw['active']['total'] ?? 0,
+                'percent' => $phone_stats_raw['active']['total_percent'] ?? 0
+            ],
+            'suspended' => [
+                'qty' => $phone_stats_raw['suspended']['total'] ?? 0,
+                'percent' => $phone_stats_raw['suspended']['total_percent'] ?? 0
+            ],
+            'deactivated' => [
+                'qty' => $phone_stats_raw['deactivated']['total'] ?? 0,
+                'percent' => $phone_stats_raw['deactivated']['total_percent'] ?? 0
             ]
         ];
 
@@ -210,21 +428,30 @@ class User extends CI_Controller {
         ];
 
         // Hose Due stats
-        $hose_stats_raw = $this->CustomerRegister_model->get_hose_due_stats();
+        $hose_stats_raw = $this->CustomerRegister_model->get_hose_due_stats('dashboard');
+        
         $hose_stats = [
+            'Total' => $hose_stats_raw['Total'],
             'total' => [
                 'qty' => $hose_stats_raw['Total_Due'],
                 'percent' => $hose_stats_raw['Total_Due_Percent']
+            ],
+            'pmuy' => [
+                'qty' => $hose_stats_raw['PMUY_Due'],
+                'percent' => $hose_stats_raw['PMUY_Due_Percent']
+            ],
+            'non_pmuy' => [
+                'qty' => $hose_stats_raw['Non_PMUY_Due'],
+                'percent' => $hose_stats_raw['Non_PMUY_Due_Percent']
             ]
         ];
 
-        // Prepare data for view
         $data = [
             'method' => 'dashboard',
             'customer_data' => $customer_data,
             'sbc_counts' => $this->CustomerRegister_model->get_sbc_status_counts(),
             'kyc_stats' => $this->CustomerRegister_model->get_kyc_stats(),
-            'stats' => $stats, // Nil Refill
+            'stats' => $stats,
             'all_customers' => $all_customers,
             'mi_stats' => $mi_stats,
             'hose_stats' => $hose_stats,
@@ -232,10 +459,154 @@ class User extends CI_Controller {
             'page_title' => 'Dashboard',
             'report_date' => date('d-M-Y H:i:s'),
             'total_customers' => $total_customers
+            
+        ];
+         $data['websites'] = $this->WebsiteModel->get_all_websites();
+        $this->load->view('website_dashboard', $data); 
+    }
+
+    public function stored_website() {
+        $data['websites'] = $this->WebsiteModel->get_all_websites();
+        $data['method'] = 'store_website';
+        $this->load->view('website_dashboard', $data);
+        
+    }
+
+    //Scrape data from the website
+    public function scrape_data() {
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('userId', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('dashboard');
+        }
+
+        $userId = $this->input->post('userId');
+        $password = $this->input->post('password');
+
+        // API request
+        $api_url = 'http://127.0.0.1:5000/scrape';
+        $post_data = [
+            'username' => $userId,
+            'password' => $password
         ];
 
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $api_url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($post_data),
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            CURLOPT_TIMEOUT => 300,
+            CURLOPT_SSL_VERIFYPEER => false
+        ]);
+
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (curl_errno($ch)) {
+            $this->session->set_flashdata('error', 'API Connection Error: ' . curl_error($ch));
+            curl_close($ch);
+            redirect('dashboard');
+        }
+
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->session->set_flashdata('error', 'Invalid API response format');
+            redirect('dashboard');
+        }
+
+        if ($result['status'] === 'success') {
+            try {
+                $user_id = $this->session->userdata('id');
+
+                // Process invoiced orders
+                $insert1 = true;
+                if (!empty($result['data']['invoiced_process_order'])) {
+                    $invoiced_data = array_map(function ($item) use ($user_id) {
+                        return [
+                            'area_name' => $item['Area Name'] ?? '',
+                            'cashmemo_generated' => $item['CashMemo Generated'] ?? '',
+                            'status' => $item['Status'] ?? '',
+                            'userid' => $user_id
+                        ];
+                    }, $result['data']['invoiced_process_order']);
+
+                    $insert1 = $this->WebScrapping_model->invoice_order_data($invoiced_data);
+                }
+
+                // Process open orders
+                $insert2 = true;
+                if (!empty($result['data']['open_orders'])) {
+                    $open_data = array_map(function ($item) use ($user_id) {
+                        return [
+                            'area_name' => $item['Area Name'] ?? '',
+                            'open_refill_orders' => $item['Open Refill Orders'] ?? '',
+                            'userid' => $user_id
+                        ];
+                    }, $result['data']['open_orders']);
+
+                    $insert2 = $this->WebScrapping_model->open_order_data($open_data);
+                }
+
+                if ($insert1 && $insert2) {
+                    $this->session->set_flashdata('success', 'Data scraped and stored successfully!');
+                    // $this->save_raw_data($result); // Optional for logging
+                } else {
+                    $this->session->set_flashdata('error', 'Data scraping succeeded but insertion failed.');
+                }
+
+            } catch (Exception $e) {
+                $this->session->set_flashdata('error', 'Database error: ' . $e->getMessage());
+                log_message('error', 'Storage error: ' . $e->getMessage());
+            }
+        } else {
+            $error_message = $result['message'] ?? 'Unknown error occurred';
+            $this->session->set_flashdata('error', 'Scraping failed: ' . $error_message);
+        }
+
+        redirect('dashboard');
+    }
+
+
+    private function save_raw_data($result) {
+        $data_dir = FCPATH . 'data/';
+        if (!is_dir($data_dir)) {
+            mkdir($data_dir, 0755, true);
+        }
+        
+        $filename = $data_dir . 'scraped_data_' . date('Ymd_His') . '.json';
+        file_put_contents($filename, json_encode($result, JSON_PRETTY_PRINT));
+    }
+
+     //Display invoice data in website
+    public function display_invoice_data() {
+        $data['method'] = 'display_invoice_data';
+        $data['orders'] = $this->WebScrapping_model->get_all_invoice_order_data();
         $this->load->view('website_dashboard', $data);
-    }   
+    }
+
+    //Display open process data in website
+    public function display_open_data() {
+        $data['method'] = 'display_open_data';
+        $data['excel_orders'] = $this->WebScrapping_model->get_all_open_order_data();
+        $this->load->view('website_dashboard', $data);
+    }
+
+    //Display merged data
+    public function merged_data() {
+        $userid = $this->session->userdata('id');
+        $data['method'] = 'sdms_report';
+        $data['orders'] = $this->WebScrapping_model->get_merged_order_data();
+        $this->load->view('website_dashboard', $data);
+    }
     
 
     

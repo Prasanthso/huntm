@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # Constants
 LOGIN_URL = "https://access.ex.indianoil.in/oam/server/obrareq.cgi?encquery%3D8JDuX7m5GTn0urPrhrLB7tpfhXlEzsMc3yZM5JbHQ5F2izqIPDQ2Tf9C0kQ27MVzpl2OYxMkTYtahUOSQpKrLvF%2BKcMciJjPzE9fvAVoZIHp2rQ%2FpNf5B%2BjY17WvXUWVvTkQbQczhGFCJtdhtXDnIkD8IEf67yhWEb7XvDFBHhNvbhK%2F3HgdJB0lQkEdysKjfD5OnO2JnVeH6BaghQcrjcrFlncBACfC3fciZs%2BFKgMaNjSL%2FGLxHwi5W6PYUdUUTqSuknwP4oa%2FBC1GhcHinKrC1cGJJo2nzncPNZ%2B0vGLID1HVq69idpsNeT%2FovRti%2BAX4EXkLiXAziP2Xb4QImw%3D%3D%20agentid%3DSIEBEL_IP24%20ver%3D1%20crmethod%3D2%26cksum%3D86f442ca9b932cd15421d389231acc8c698cde25&ECID-Context=1.006BxESH%5EAIBl3o5oV5EiY00EY2Y00Szi5%3BkXjE"
 TARGET_URL = "https://sdms.px.indianoil.in/siebel/app/edealer/enu/?SWECmd=GotoView&SWEView=EPIC+Order+Summary+View"
-TIMEOUT = 60  # seconds
+TIMEOUT = 120  # seconds
 
 def setup_driver():
     """Configure Chrome WebDriver with anti-detection settings"""
@@ -122,28 +122,31 @@ def scrape_tables(driver):
 
         # Function to extract table data from BeautifulSoup
         def extract_table(soup, table_id, columns):
-            # logger.info(f"scrapped data: {invoiced_data}")
             table = soup.find('table', {'id': table_id})
             if not table:
+                logger.warning(f"Table with ID '{table_id}' not found.")
                 return []
-            rows = []
+
+            rows_data = []
             for row in table.find_all('tr')[1:]:  # Skip header
                 cells = row.find_all('td')
                 # logger.info("Row cells: %s", [cell.get_text(strip=True) for cell in cells])
-                if len(cells) != (len(columns) + 1):
-                    logger.warning(f"Row length mismatch: expected {len(columns)}, got {len(cells)}")
-                    continue
+        
                 row_data = {}
                 for i, col in enumerate(columns):
-                    # logger.info(f"Extracting {col}: {cells[i+1].get_text(strip=True)}")
-                    row_data[col] = cells[i+1].get_text(strip=True)
-                if(table_id == "s_3_1"):
-                    if(row_data not in invoiced_data):
-                        rows.append(row_data)
-                if(table_id == "s_4_1"):
-                    if(row_data not in open_orders_data):
-                        rows.append(row_data)
-            return rows
+                    try:
+                        row_data[col] = cells[i+1].get_text(strip=True)
+                        # logger.info(f"Extracting {col}: {row_data[col]}")
+                    except IndexError:
+                        logger.warning(f"Missing data for column '{col}' in row")
+                        continue
+
+                if table_id == "s_3_l" and row_data not in invoiced_data:
+                    rows_data.append(row_data)
+                elif table_id == "s_4_l" and row_data not in open_orders_data:
+                    rows_data.append(row_data)
+
+            return rows_data
 
         # Scrape s_3_l with pagination
         while True:
@@ -247,7 +250,32 @@ def api_scrape():
         }), 500
     finally:
         if driver:
-            driver.quit()
+            try:
+                logger.info("Attempting to sign out...")
+                # Ensure we're not in an iframe
+                driver.switch_to.default_content()
+                
+                # Try to find and click sign out button
+                try:
+                    signout_button = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//a[contains(translate(., 'SIGNOUT', 'signout'), 'signout') or contains(., 'Sign Out')]"))
+                    )
+                    signout_button.click()
+                    logger.info("Signed out successfully")
+                    # Wait for signout to complete
+                    WebDriverWait(driver, 10).until(
+                        lambda d: "login" in d.current_url.lower() or "signout" in d.current_url.lower()
+                    )
+                except Exception as e:
+                    logger.warning(f"Sign out link not found or sign out failed: {str(e)}")
+                
+                # Close the browser
+                driver.quit()
+                logger.info("Browser closed")
+            except Exception as e:
+                logger.error(f"Error during cleanup: {str(e)}")
+                if driver:
+                    driver.quit()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
