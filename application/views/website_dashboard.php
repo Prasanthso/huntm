@@ -581,12 +581,12 @@
                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
             </a>
             
-            <!-- <div class="list-group-item p-0 dropdown">
+             <div class="list-group-item p-0 dropdown">
                 <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="fileUploadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-upload me-2"></i>File Upload
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="fileUploadDropdown">
-                    <li class="dropdown-submenu">
+                    <!-- <li class="dropdown-submenu">
                         <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-layer-group me-2"></i>Backlog
                         </a>
@@ -594,13 +594,13 @@
                             <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
                             <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
                         </ul>
-                    </li>
-                    <li><a class="dropdown-item" href="<?php echo base_url('fundbalance'); ?>"><i class="fas fa-wallet me-2"></i>Fund Balance</a></li>
+                    </li> -->
+                    <!-- <li><a class="dropdown-item" href="<?php echo base_url('fundbalance'); ?>"><i class="fas fa-wallet me-2"></i>Fund Balance</a></li> -->
                     <li><a class="dropdown-item" href="<?php echo base_url('customerregister'); ?>"><i class="fas fa-users me-2"></i>Customer Register</a></li>
                 </ul>
             </div>
 
-            <div class="list-group-item p-0 dropdown">
+             <!-- <div class="list-group-item p-0 dropdown">
                 <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="backlogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-layer-group me-2"></i>Backlog
                 </a>
@@ -608,7 +608,7 @@
                     <li><a class="dropdown-item" href="<?php echo base_url('invoiceorder'); ?>">Invoice Order Service Area</a></li>
                     <li><a class="dropdown-item" href="<?php echo base_url('open-process-order'); ?>">Process Order Service Area</a></li>
                 </ul>
-            </div> -->
+            </div>  -->
 
             <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'suggestion') ? 'active' : ''; ?>">
                 <i class="fas fa-lightbulb me-2"></i>Suggestion
@@ -634,60 +634,168 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        
-       
 
         <?php if (isset($method)) { ?>
             <!-- Dashboard Section -->
             <?php if ($method == 'dashboard') { ?>
-                 <div class="container mt-4">
-                    <div class="d-flex justify-content-end">
-                        <?php foreach ($websites as $website): ?>
-                            <form action="<?php echo site_url('auto-login'); ?>" method="POST">
-                                <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
-                                <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
-                                <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                <button class="btn btn-primary" type="submit" onclick="updateRefreshTime()">SDMS Report</button>
-                            </form> 
-                        <?php endforeach; ?>
-                    </div>
-                    <div id="lastRefresh" class="text-end mt-2" style="display: none;">
-                        Last refreshed: <span id="refreshTime"></span>
+                <div class="container mt-1">
+                    <div class="row">
+                        <!-- BI Report Button Column -->
+                        <div class="col-md-6">
+                            <?php if (!empty($websites)): ?>
+                                <?php $website = reset($websites); ?>
+                                <div class="mb-4 p-3 d-flex justify-content-end">
+                                    <form class="scrape-form" action="<?php echo site_url('upload_bireport_file'); ?>" method="POST">
+                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
+                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
+                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
+                                        <button class="btn btn-primary" type="submit">BI Report</button>
+                                        <div class="last-refresh text-muted small mt-2" style="display: none;">Last refreshed: <span class="refresh-time"></span></div>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <!-- SDMS Report Button Column -->
+                        <div class="col-md-6">
+                            <?php if (!empty($websites)): ?>
+                                <?php $website = reset($websites); ?>
+                                <div class="mb-4 p-3 d-flex justify-content-end">
+                                    <form class="scrape-form" action="<?php echo site_url('auto-login'); ?>" method="POST">
+                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
+                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
+                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
+                                        <button class="btn btn-primary" type="submit">SDMS Report</button>
+                                        <div class="last-refresh text-muted small mt-2" style="display: none;">Last refreshed: <span class="refresh-time"></span></div>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Include SweetAlert2 CSS and JS -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
                 <script>
-                    function updateRefreshTime() {
-                        // Get current date and time
+                    function getFormattedDateTime() {
                         const now = new Date();
-                        const dateTimeString = now.toLocaleString('en-US', {
+                        return now.toLocaleString('en-US', {
                             year: 'numeric',
-                            month: 'long',
+                            month: 'short',
                             day: 'numeric',
                             hour: '2-digit',
                             minute: '2-digit',
                             second: '2-digit',
                             hour12: true
                         });
-                        
-                        // Update the refresh time text
-                        document.getElementById('refreshTime').textContent = dateTimeString;
-                        
-                        // Show the lastRefresh div
-                        document.getElementById('lastRefresh').style.display = 'block';
                     }
+
+                    document.querySelectorAll('.scrape-form').forEach(form => {
+                        // Determine which form this is (BI or SDMS)
+                        const isBiReport = form.action.includes('upload_bireport_file');
+                        const storageKey = isBiReport ? 'lastRefreshTimeBI' : 'lastRefreshTimeSDMS';
+                        
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            const wrapper = form.closest('.mb-4');
+                            const refreshDiv = wrapper.querySelector('.last-refresh');
+                            const refreshTimeSpan = wrapper.querySelector('.refresh-time');
+
+                            // Show loading popup
+                            Swal.fire({
+                                title: 'Processing',
+                                text: 'Scraping data, please wait...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            const formData = new FormData(form);
+
+                            try {
+                                const response = await fetch(form.action, {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    }
+                                });
+
+                                const contentType = response.headers.get("content-type") || "";
+                                if (!contentType.includes("application/json")) {
+                                    const text = await response.text();
+                                    throw new Error("Invalid response format (not JSON): " + text.slice(0, 100));
+                                }
+
+                                const result = await response.json();
+
+                                Swal.close(); // Close loading popup
+
+                                if (result.status === 'success') {
+                                    const now = getFormattedDateTime();
+                                    refreshTimeSpan.textContent = now;
+                                    refreshDiv.style.display = 'block';
+                                    localStorage.setItem(storageKey, now);
+                                    
+                                    // Show success popup
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: result.message,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        showConfirmButton: false
+                                    });
+                                } else {
+                                    // Show error popup
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: result.message
+                                    });
+                                }
+                            } catch (error) {
+                                Swal.close(); // Close loading popup
+                                // Show error popup
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: error.message
+                                });
+                            }
+                        });
+
+                        // Load last refresh time if available
+                        const wrapper = form.closest('.mb-4');
+                        const refreshDiv = wrapper.querySelector('.last-refresh');
+                        const refreshTimeSpan = wrapper.querySelector('.refresh-time');
+                        const lastRefresh = localStorage.getItem(storageKey);
+                        if(lastRefresh) {
+                            refreshTimeSpan.textContent = lastRefresh;
+                            refreshDiv.style.display = 'block';
+                        }
+                    });
                 </script>
-                    
+                                        
                 <div class="container-fluid">
                     <h1 class="mb-4">Dashboard Overview</h1>
-                    
+
                     <div class="row g-4">
                         <!-- Backlog Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card dashboard-card bg-light" onclick="window.location.href='invoiceorder'">
                                 <div class="card-body">
                                     <h6><i class="fas fa-users me-2"></i> Backlog</h6>
-                                    <p>Areas: 150</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p>Total Area : <?php echo $sdsms_stats['total'] ?? 0; ?></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -697,19 +805,20 @@
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
                                     <h6><i class="fas fa-wallet me-2"></i> Fund Balance</h6>
-                                    <p>Rs:873,415.81</p>
+                                    <p>Rs:(363,010.10)</p>
+                                    <p>Remark : Risk category-IOCL</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
                                     <h6><i class="bi bi-pencil-square me-2"></i> Remark</h6>
                                     <p>IOCL</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         
                         <!-- Customer Strength Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -2186,7 +2295,7 @@ $(document).ready(function () {
             <table class="table table-bordered nilrefil_summary_table" id="summaryTable">
                 <thead>
                     <tr class="header-row">
-                        <th rowspan="2" class="text-center">Metric</th>
+                        <th rowspan="2" class="text-center">Quantity/Percent</th>
                         <th colspan="9" class="text-center">Active</th>
                         <th colspan="9" class="text-center">Suspended</th>
                         <th colspan="9" class="text-center">Deactivated</th>
@@ -2206,7 +2315,7 @@ $(document).ready(function () {
                         <th colspan="3" class="text-center">6+ Months</th>
                         <th colspan="3" class="text-center">1+ Year</th>
                     </tr>
-                    <tr>
+                    <tr class="table-secondary">
                         <th class="text-center"></th>
                         <th class="text-center">PMUY</th>
                         <th class="text-center">Non PMUY</th>
@@ -2249,81 +2358,81 @@ $(document).ready(function () {
                 <tbody>
                     <tr>
                         <td class="text-center">Quantity</td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['active']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['active']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="active" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['active']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="suspended" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="deactivated" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['total']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
-                        <td class="clickabled" data-status="overall_total" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['active']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['active']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="active" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['active']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['total']['qty']) : 0; ?></td>
                     </tr>
                     <tr>
                         <td class="text-center">Percentage</td>
-                        <td><?php echo isset($stats['active']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['active']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['suspended']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['deactivated']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
-                        <td><?php echo isset($stats['overall_total']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['active']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
                     </tr>
                 </tbody>
             </table>

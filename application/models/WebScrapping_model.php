@@ -8,26 +8,41 @@ class WebScrapping_model extends CI_Model {
         $this->load->database();
     }
 
+    // Handle invoiced orders: delete old and insert new
     public function invoice_order_data($data) {
         $userid = $this->session->userdata('id');
 
-        // Delete existing user data
+        // Delete existing data for the user
         $this->db->where('userid', $userid);
         $this->db->delete('invoiced_process_order');
 
-        // Insert new batch
-        return $this->db->insert_batch('invoiced_process_order', $data);
+        // Insert new data only if it's not empty
+        if (!empty($data)) {
+            return $this->db->insert_batch('invoiced_process_order', $data);
+        } else {
+            log_message('error', 'invoice_order_data received empty array');
+            return false;
+        }
     }
 
+    // Handle open orders: delete old and insert new
     public function open_order_data($data) {
         $userid = $this->session->userdata('id');
 
+        // Delete existing data for the user
         $this->db->where('userid', $userid);
-         $this->db->delete('open_orders');
+        $this->db->delete('open_orders');
 
-        return $this->db->insert_batch('open_orders', $data);
+        // Insert new data only if it's not empty
+        if (!empty($data)) {
+            return $this->db->insert_batch('open_orders', $data);
+        } else {
+            log_message('error', 'open_order_data received empty array');
+            return false;
+        }
     }
 
+    // Get invoiced order data (used in views)
     public function get_all_invoice_order_data() {
         $userid = $this->session->userdata('id');
         return $this->db
@@ -39,6 +54,7 @@ class WebScrapping_model extends CI_Model {
             ->result_array();
     }
 
+    // Get open order data (used in views)
     public function get_all_open_order_data() {
         $userid = $this->session->userdata('id');
         return $this->db
@@ -49,6 +65,7 @@ class WebScrapping_model extends CI_Model {
             ->result_array();
     }
 
+    // Merge both invoiced + open order data by area
     public function get_merged_order_data($userid = null) {
         if ($userid === null) {
             $userid = $this->session->userdata('id');

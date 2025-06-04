@@ -74,6 +74,10 @@ $route['submitaddwebite'] = 'WebsiteDetails/store';
 $route['storewebsite'] = 'User/stored_website'; 
 $route['auto-login'] = 'User/scrape_data'; 
 
+//display bireport data
+// $route['store_bireport_data'] = 'User/bireport_store_data';
+$route['upload_bireport_file'] = 'User/bireport_scrape_data';
+
 $route['show'] = 'Dashboard/show';
 $route['login/authenticate'] = 'login/authenticate';
 
