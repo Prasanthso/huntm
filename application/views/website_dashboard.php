@@ -643,34 +643,35 @@
                         <!-- BI Report Button Column -->
                         <div class="col-md-6">
                             <?php if (!empty($websites)): ?>
-                                <?php $website = reset($websites); ?>
+                                <?php $bi_website = reset($websites); ?>
                                 <div class="mb-4 p-3 d-flex justify-content-end">
                                     <form class="scrape-form" action="<?php echo site_url('upload_bireport_file'); ?>" method="POST">
-                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
-                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
-                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
+                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($bi_website['website_url']); ?>">
+                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($bi_website['website_userId']); ?>">
+                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($bi_website['website_password']); ?>">
                                         <button class="btn btn-primary" type="submit">BI Report</button>
                                         <div class="last-refresh text-muted small mt-2" style="display: none;">Last refreshed: <span class="refresh-time"></span></div>
                                     </form>
                                 </div>
                             <?php endif; ?>
                         </div>
-                        
+
                         <!-- SDMS Report Button Column -->
                         <div class="col-md-6">
                             <?php if (!empty($websites)): ?>
-                                <?php $website = reset($websites); ?>
+                                <?php $sdms_website = reset($websites); ?>
                                 <div class="mb-4 p-3 d-flex justify-content-end">
                                     <form class="scrape-form" action="<?php echo site_url('auto-login'); ?>" method="POST">
-                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
-                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
-                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
+                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($sdms_website['website_url']); ?>">
+                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($sdms_website['website_userId']); ?>">
+                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($sdms_website['website_password']); ?>">
                                         <button class="btn btn-primary" type="submit">SDMS Report</button>
                                         <div class="last-refresh text-muted small mt-2" style="display: none;">Last refreshed: <span class="refresh-time"></span></div>
                                     </form>
                                 </div>
                             <?php endif; ?>
                         </div>
+
                     </div>
                 </div>
 
@@ -733,8 +734,11 @@
                                 }
 
                                 const result = await response.json();
+                                console.log(result);
 
                                 Swal.close(); // Close loading popup
+
+                                console.log(result.status);
 
                                 if (result.status === 'success') {
                                     const now = getFormattedDateTime();
@@ -1712,17 +1716,17 @@ $(document).ready(function () {
         
         allCustomers.forEach(customer => {
             // Normalize status to uppercase, default to 'ACTIVE'
-            customer.consumer_sub_status = (customer.consumer_sub_status || 'ACTIVE').toUpperCase();
+            customer.Consumer_Sub_Status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
             
             // Normalize scheme based on model logic
-            if (customer.scheme_selected === 'PMUY' || customer.scheme_selected === 'Ujjwala' || customer.scheme_selected === 'Ujjwala - Extended') {
-                customer.scheme_selected = 'PMUY';
+            if (customer.Scheme_Selected === 'PMUY' || customer.Scheme_Selected === 'Ujjwala' || customer.Scheme_Selected === 'Ujjwala - Extended') {
+                customer.Scheme_Selected = 'PMUY';
             } else {
-                customer.scheme_selected = 'NON_PMUY';
+                customer.Scheme_Selected = 'NON_PMUY';
             }
             
-            // Default area_name to 'Unknown'
-            customer.area_name = customer.area_name || 'Unknown';
+            // Default Area_Name to 'Unknown'
+            customer.Area_Name = customer.Area_Name || 'Unknown';
         });
     }
 
@@ -1732,15 +1736,15 @@ $(document).ready(function () {
         
         // Filter customers based on status and scheme
         filteredCustomers = allCustomers.filter(customer => {
-            const statusMatch = (status === 'ALL') ? true : customer.consumer_sub_status === status;
-            const schemeMatch = (scheme === 'ALL') ? true : customer.scheme_selected === scheme;
+            const statusMatch = (status === 'ALL') ? true : customer.Consumer_Sub_Status === status;
+            const schemeMatch = (scheme === 'ALL') ? true : customer.Scheme_Selected === scheme;
             return statusMatch && schemeMatch;
         });
         
         // Calculate area breakdown
         const areaStats = {};
         filteredCustomers.forEach(customer => {
-            const area = customer.area_name;
+            const area = customer.Area_Name;
             if (!areaStats[area]) {
                 areaStats[area] = 0;
             }
@@ -1795,9 +1799,9 @@ $(document).ready(function () {
         
         // Filter customers by area, status, and scheme
         filteredCustomers = allCustomers.filter(customer => {
-            const areaMatch = customer.area_name === area;
-            const statusMatch = (currentStatus === 'ALL') ? true : customer.consumer_sub_status === currentStatus;
-            const schemeMatch = (currentScheme === 'ALL') ? true : customer.scheme_selected === currentScheme;
+            const areaMatch = customer.Area_Name === area;
+            const statusMatch = (currentStatus === 'ALL') ? true : customer.Consumer_Sub_Status === currentStatus;
+            const schemeMatch = (currentScheme === 'ALL') ? true : customer.Scheme_Selected === currentScheme;
             return areaMatch && statusMatch && schemeMatch;
         });
         
@@ -1822,18 +1826,18 @@ $(document).ready(function () {
             tableBody.html('<tr><td colspan="6" class="text-center">No data available</td></tr>');
         } else {
             pageRows.forEach(customer => {
-                const schemeClass = customer.scheme_selected === 'PMUY' ? 'badge bg-success' : 'badge bg-primary';
-                const statusClass = customer.consumer_sub_status === 'ACTIVE' ? 'badge-active' : 
-                                  customer.consumer_sub_status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived';
+                const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge bg-success' : 'badge bg-primary';
+                const statusClass = customer.Consumer_Sub_Status === 'ACTIVE' ? 'badge-active' : 
+                                  customer.Consumer_Sub_Status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived';
                 
                 tableBody.append(`
                     <tr>
-                        <td>${customer.area_name || 'N/A'}</td>
-                        <td>${customer.consumer_number || 'N/A'}</td>
-                        <td>${customer.consumer_name || 'N/A'}</td>
-                        <td>${customer.phone_number || 'N/A'}</td>
-                        <td><span class="badge ${schemeClass}">${customer.scheme_selected || 'N/A'}</span></td>
-                        <td><span class="badge ${statusClass}">${customer.consumer_sub_status || 'N/A'}</span></td>
+                        <td>${customer.Area_Name || 'N/A'}</td>
+                        <td>${customer.Consumer_Number || 'N/A'}</td>
+                        <td>${customer.Consumer_Name || 'N/A'}</td>
+                        <td>${customer.Phone_Number || 'N/A'}</td>
+                        <td><span class="badge ${schemeClass}">${customer.Scheme_Selected || 'N/A'}</span></td>
+                        <td><span class="badge ${statusClass}">${customer.Consumer_Sub_Status || 'N/A'}</span></td>
                     </tr>
                 `);
             });
@@ -2078,12 +2082,12 @@ $(document).ready(function () {
     function processData() {
         allCustomers.forEach(customer => {
             // Normalize status to uppercase, default to 'ACTIVE'
-            customer.consumer_status = (customer.consumer_sub_status || 'ACTIVE').toUpperCase();
+            customer.consumer_status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
             // Normalize scheme to 'PMUY' or 'NON PMUY'
-            const scheme = (customer.scheme_selected || '').toUpperCase().trim();
-            customer.scheme_selected = scheme == 'NON_PMUY' ? 'NON_PMUY' : 'PMUY';
-            // Default area_name to 'Unknown'
-            customer.area_name = customer.area_name || 'Unknown';
+            const scheme = (customer.Scheme_Selected || '').toUpperCase().trim();
+            customer.Scheme_Selected = scheme == 'NON_PMUY' ? 'NON_PMUY' : 'PMUY';
+            // Default Area_Name to 'Unknown'
+            customer.Area_Name = customer.Area_Name || 'Unknown';
         });
         // Debug: Log normalized data
         console.log('Normalized allCustomers:', allCustomers);
@@ -2101,8 +2105,8 @@ $(document).ready(function () {
             
             // Scheme filter
             const schemeMatch = (scheme === 'ALL') ? true :
-                               (scheme === 'PMUY') ? customer.scheme_selected === 'PMUY' :
-                               customer.scheme_selected === 'NON_PMUY';
+                               (scheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
+                               customer.Scheme_Selected === 'NON_PMUY';
             
             return statusMatch && schemeMatch;
         });
@@ -2113,7 +2117,7 @@ $(document).ready(function () {
         // Calculate area breakdown
         const areaStats = {};
         filteredCustomers.forEach(customer => {
-            const area = customer.area_name;
+            const area = customer.Area_Name;
             areaStats[area] = (areaStats[area] || 0) + 1;
         });
         
@@ -2163,11 +2167,11 @@ $(document).ready(function () {
         
         // Filter customers by area, status, and scheme
         filteredCustomers = allCustomers.filter(customer => {
-            const areaMatch = customer.area_name === area;
+            const areaMatch = customer.Area_Name === area;
             const statusMatch = (currentStatus === 'ALL') ? true : customer.consumer_status === currentStatus;
             const schemeMatch = (currentScheme === 'ALL') ? true :
-                               (currentScheme === 'PMUY') ? customer.scheme_selected === 'PMUY' :
-                               customer.scheme_selected === 'NON_PMUY';
+                               (currentScheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
+                               customer.Scheme_Selected === 'NON_PMUY';
             
             return areaMatch && statusMatch && schemeMatch;
         });
@@ -2196,19 +2200,19 @@ $(document).ready(function () {
             tableBody.html('<tr><td colspan="7" class="text-center">No data available</td></tr>');
         } else {
             pageRows.forEach(customer => {
-                const typeClass = customer.consumer_type === 'Commercial' ? 'badge-commercial' : 'badge-domestic';
-                const schemeClass = customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
+                const typeClass = customer.Consumer_Type === 'Commercial' ? 'badge-commercial' : 'badge-domestic';
+                const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
                 const statusClass = customer.consumer_status === 'ACTIVE' ? 'badge-active' : 
                                   (customer.consumer_status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived');
                 
                 tableBody.append(`
                     <tr>
-                        <td>${customer.area_name}</td>
-                        <td>${customer.consumer_number || 'N/A'}</td>
-                        <td>${customer.consumer_name || 'N/A'}</td>
-                        <td>${customer.phone_number || 'N/A'}</td>
-                        <td><span class="badge ${schemeClass}">${customer.scheme_selected}</span></td>
-                        <td><span class="badge_sbc ${typeClass}">${customer.consumer_type || 'N/A'}</span></td>
+                        <td>${customer.Area_Name}</td>
+                        <td>${customer.Consumer_Number || 'N/A'}</td>
+                        <td>${customer.Consumer_Name || 'N/A'}</td>
+                        <td>${customer.Phone_Number || 'N/A'}</td>
+                        <td><span class="badge ${schemeClass}">${customer.Scheme_Selected}</span></td>
+                        <td><span class="badge_sbc ${typeClass}">${customer.Consumer_Type || 'N/A'}</span></td>
                         <td><span class="badge ${statusClass}">${customer.consumer_status}</span></td>
                     </tr>
                 `);
@@ -2457,7 +2461,7 @@ $(document).ready(function () {
             <nav aria-label="Area Breakdown Pagination">
                 <ul class="pagination justify-content-center mt-3">
                     <li class="page-item" id="prevAreaPage"><a class="page-link" href="#" aria-label="Previous Area Page">Previous</a></li>
-                    <li class="page-item"><span class="page-link" id="currentAreaPage">1</span></li>
+                    <li class="page-item"><span class="page-link" id="areaPageRange">1-10 of 0</span></li>
                     <li class="page-item" id="nextAreaPage"><a class="page-link" href="#" aria-label="Next Area Page">Next</a></li>
                 </ul>
             </nav>
@@ -2485,7 +2489,7 @@ $(document).ready(function () {
             <nav aria-label="Customer Details Pagination">
                 <ul class="pagination justify-content-center mt-3">
                     <li class="page-item" id="prevCustomerPage"><a class="page-link" href="#" aria-label="Previous Customer Page">Previous</a></li>
-                    <li class="page-item"><span class="page-link" id="currentCustomerPage">1</span></li>
+                    <li class="page-item"><span class="page-link" id="customerPageRange">1-10 of 0</span></li>
                     <li class="page-item" id="nextCustomerPage"><a class="page-link" href="#" aria-label="Next Customer Page">Next</a></li>
                 </ul>
             </nav>
@@ -2540,13 +2544,13 @@ $(document).ready(function () {
                     else if (period === 'greater_than_1_year') periodMatch = days > 365;
 
                     // Check status condition
-                    const customerStatus = (customer.consumer_sub_status || '').toLowerCase();
+                    const customerStatus = (customer.Consumer_Sub_Status || '').toLowerCase();
                     const statusMatch = status === 'overall_total' || 
                                     status === '' || 
                                     customerStatus === status.toLowerCase();
 
                     // Check scheme condition
-                    const customerScheme = customer.scheme_selected || '';
+                    const customerScheme = customer.Scheme_Selected || '';
                     // console.log('Customer Scheme:', customerScheme);
                     const schemeMatch = scheme === 'total' || 
                                     (scheme === 'pmuy' && customerScheme === 'PMUY') || 
@@ -2558,7 +2562,7 @@ $(document).ready(function () {
                 // Group by area name
                 const areaCounts = {};
                 filteredCustomers.forEach(customer => {
-                    const area = customer.area_name || 'Unknown Area';
+                    const area = customer.Area_Name || 'Unknown Area';
                     areaCounts[area] = (areaCounts[area] || 0) + 1;
                 });
 
@@ -2621,7 +2625,11 @@ $(document).ready(function () {
                 }
 
                 // Update pagination controls
-                $('#currentAreaPage').text(currentAreaPage);
+                const startRecord = startIdx + 1;
+                const endRecord = endIdx;
+                $('#areaPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
+
+                // Update pagination controls
                 $('#prevAreaPage').toggleClass('disabled', currentAreaPage <= 1);
                 $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
             }
@@ -2629,7 +2637,7 @@ $(document).ready(function () {
             function showCustomerDetails(area) {
                 currentArea = area;
                 const areaCustomers = filteredCustomers.filter(customer => 
-                    (customer.area_name || 'Unknown Area') === area
+                    (customer.Area_Name || 'Unknown Area') === area
                 );
 
                 const statusText = currentStatus === 'overall_total' ? 'All Statuses' : 
@@ -2665,22 +2673,22 @@ $(document).ready(function () {
                     $tbody.append('<tr><td colspan="7" class="text-center">No customers found</td></tr>');
                 } else {
                     pageData.forEach(customer => {
-                        const lastRefill = customer.last_refill_date 
-                            ? new Date(customer.last_refill_date).toLocaleDateString('en-GB') 
+                        const lastRefill = customer.Last_Refill_Date 
+                            ? new Date(customer.Last_Refill_Date).toLocaleDateString('en-GB') 
                             : 'Never';
                         const monthsSince = customer.months_since_refill !== null 
                             ? `${customer.months_since_refill} months` 
                             : 'N/A';
                         
-                        const statusClass = getStatusBadgeClass(customer.consumer_sub_status);
+                        const statusClass = getStatusBadgeClass(customer.Consumer_Sub_Status);
                         
                         $tbody.append(`
                             <tr>
-                                <td>${escapeHtml(customer.area_name || 'Unknown Area')}</td>
-                                <td>${escapeHtml(customer.consumer_number)}</td>
-                                <td>${escapeHtml(customer.consumer_name)}</td>
-                                <td>${escapeHtml(customer.phone_number) || 'N/A'}</td>
-                                <td><span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">${escapeHtml(customer.scheme_selected)}</span></td>
+                                <td>${escapeHtml(customer.Area_Name || 'Unknown Area')}</td>
+                                <td>${escapeHtml(customer.Consumer_Number)}</td>
+                                <td>${escapeHtml(customer.Consumer_Name)}</td>
+                                <td>${escapeHtml(customer.Phone_Number) || 'N/A'}</td>
+                                <td><span class="badge ${customer.Scheme_Selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">${escapeHtml(customer.Scheme_Selected)}</span></td>
                                 <td><span class="badge badge-due">Due</span></td>
                                 <td class = "text-center">${statusClass}</td>
                             </tr>
@@ -2688,7 +2696,11 @@ $(document).ready(function () {
                     });
                 }
 
-                $('#currentCustomerPage').text(currentCustomerPage);
+                const startRecord = startIdx + 1;
+                const endRecord = endIdx;
+                $('#customerPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
+
+                // Update pagination controls
                 $('#prevCustomerPage').toggleClass('disabled', currentCustomerPage === 1);
                 $('#nextCustomerPage').toggleClass('disabled', currentCustomerPage >= totalPages);
             }
@@ -2775,7 +2787,7 @@ $(document).ready(function () {
                 if (currentCustomerPage > 1) {
                     currentCustomerPage--;
                     const customers = filteredCustomers.filter(c => 
-                        (c.area_name || 'Unknown Area') === currentArea
+                        (c.Area_Name || 'Unknown Area') === currentArea
                     );
                     updateCustomerDetailsView(customers);
                 }
@@ -2784,7 +2796,7 @@ $(document).ready(function () {
             $('#nextCustomerPage').on('click', function(e) {
                 e.preventDefault();
                 const customers = filteredCustomers.filter(c => 
-                    (c.area_name || 'Unknown Area') === currentArea
+                    (c.Area_Name || 'Unknown Area') === currentArea
                 );
                 const totalPages = Math.ceil(customers.length / recordsPerPage);
                 if (currentCustomerPage < totalPages) {
@@ -2944,7 +2956,7 @@ $(document).ready(function() {
 
     function initView() {
         // Filter to only pending KYC customers
-        filteredCustomers = allCustomers.filter(customer => !customer.kyc_number || customer.kyc_number === '');
+        filteredCustomers = allCustomers.filter(customer => !customer.KYC_Number || customer.KYC_Number === '');
         
         // Set up initial customer table
         updateCustomerTable();
@@ -2961,17 +2973,17 @@ $(document).ready(function() {
         // Filter customers based on status and scheme
         filteredCustomers = allCustomers.filter(customer => {
             // Skip completed KYC
-            if (customer.kyc_number && customer.kyc_number !== '') return false;
+            if (customer.KYC_Number && customer.KYC_Number !== '') return false;
             
             // Status filter
-            let statusMatch = (status === 'ALL') ? true : customer.consumer_sub_status === status;
+            let statusMatch = (status === 'ALL') ? true : customer.Consumer_Sub_Status === status;
             
             // Scheme filter
             let schemeMatch = true;
             if (scheme === 'PMUY') {
-                schemeMatch = customer.scheme_selected === 'PMUY';
+                schemeMatch = customer.Scheme_Selected === 'PMUY';
             } else if (scheme === 'NON_PMUY') {
-                schemeMatch = customer.scheme_selected === 'Non PMUY';
+                schemeMatch = customer.Scheme_Selected === 'Non PMUY';
             }
             
             return statusMatch && schemeMatch;
@@ -2980,7 +2992,7 @@ $(document).ready(function() {
         // Group by area
         const areaCounts = {};
         filteredCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
+            const area = customer.Area_Name || 'Unknown';
             areaCounts[area] = (areaCounts[area] || 0) + 1;
         });
         
@@ -3035,16 +3047,16 @@ $(document).ready(function() {
         // Filter customers for this area
         filteredCustomers = allCustomers.filter(customer => {
             // Skip completed KYC
-            if (customer.kyc_number && customer.kyc_number !== '') return false;
+            if (customer.KYC_Number && customer.KYC_Number !== '') return false;
             
-            const customerArea = customer.area_name || 'Unknown';
-            let statusMatch = (currentStatus === 'ALL') ? true : customer.consumer_sub_status === currentStatus;
+            const customerArea = customer.Area_Name || 'Unknown';
+            let statusMatch = (currentStatus === 'ALL') ? true : customer.Consumer_Sub_Status === currentStatus;
             let schemeMatch = true;
             
             if (currentScheme === 'PMUY') {
-                schemeMatch = customer.scheme_selected === 'PMUY';
+                schemeMatch = customer.Scheme_Selected === 'PMUY';
             } else if (currentScheme === 'NON_PMUY') {
-                schemeMatch = customer.scheme_selected === 'Non PMUY';
+                schemeMatch = customer.Scheme_Selected === 'Non PMUY';
             }
             
             return customerArea === area && statusMatch && schemeMatch;
@@ -3074,16 +3086,16 @@ $(document).ready(function() {
             $tbody.append('<tr><td colspan="7" class="text-center">No data available</td></tr>');
         } else {
             pageData.forEach(customer => {
-                const statusBadge = getStatusBadge(customer.consumer_sub_status);
-                const schemeBadge = customer.scheme_selected.toUpperCase() === 'PMUY' ?
+                const statusBadge = getStatusBadge(customer.Consumer_Sub_Status);
+                const schemeBadge = customer.Scheme_Selected.toUpperCase() === 'PMUY' ?
                     '<span class="badge badge-pmuy">PMUY</span>' :
                     '<span class="badge badge-non-pmuy">Non PMUY</span>';
                 $tbody.append(`
                     <tr>
-                        <td>${escapeHtml(customer.area_name || 'Unknown')}</td>
-                        <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                        <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
-                        <td>${escapeHtml(customer.phone_number || 'N/A')}</td>
+                        <td>${escapeHtml(customer.Area_Name || 'Unknown')}</td>
+                        <td>${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                        <td>${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                        <td>${escapeHtml(customer.Phone_Number || 'N/A')}</td>
                         <td>${schemeBadge}</td>
                         <td><span class="badge badge-due">Pending</span></td>
                         <td>${statusBadge}</td>
@@ -3358,7 +3370,7 @@ $(document).ready(function() {
                 // Group by area
                 const areaCounts = {};
                 filteredCustomers.forEach(customer => {
-                    const area = customer.area_name || 'Unknown';
+                    const area = customer.Area_Name || 'Unknown';
                     areaCounts[area] = (areaCounts[area] || 0) + 1;
                 });
                 
@@ -3417,7 +3429,7 @@ $(document).ready(function() {
                 
                 // Filter customers for this area and scheme/status
                 filteredCustomers = allCustomers.filter(customer => {
-                    const customerArea = customer.area_name || 'Unknown';
+                    const customerArea = customer.Area_Name || 'Unknown';
                     let statusMatch = (currentStatus === 'ALL') ? true : customer.status === currentStatus;
                     let schemeMatch = true;
                     
@@ -3480,10 +3492,10 @@ $(document).ready(function() {
                         
                         $tbody.append(`
                             <tr>
-                                <td>${escapeHtml(customer.area_name || 'Unknown')}</td>
-                                <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                                <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
-                                <td>${escapeHtml(customer.phone_number || 'N/A')}</td>
+                                <td>${escapeHtml(customer.Area_Name || 'Unknown')}</td>
+                                <td>${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                                <td>${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                                <td>${escapeHtml(customer.Phone_Number || 'N/A')}</td>
                                 <td>
                                     <span class="badge ${customer.scheme_type === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
                                         ${escapeHtml(customer.scheme_type || 'N/A')}
@@ -3748,8 +3760,8 @@ $(document).ready(function() {
         const areaSchemeData = {};
         
         allCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
-            const scheme = customer.scheme_selected || 'NON_PMUY'; // Default to NON_PMUY if not specified
+            const area = customer.Area_Name || 'Unknown';
+            const scheme = customer.Scheme_Selected || 'NON_PMUY'; // Default to NON_PMUY if not specified
             const status = customer.status || 'ACTIVE'; // Default to ACTIVE if not specified
             
             if (!areaSchemeData[area]) {
@@ -3870,16 +3882,16 @@ $(document).ready(function() {
         } else {
             pageRows.forEach(customer => {
                 const statusBadge = getStatusBadge(customer.status);
-                const schemeBadge = customer.scheme_selected === 'PMUY' ?
+                const schemeBadge = customer.Scheme_Selected === 'PMUY' ?
                     '<span class="badge badge-pmuy">PMUY</span>' : 
                     '<span class="badge badge-non-pmuy">Non PMUY</span>';
                     
                 tableBody.append(`
                     <tr>
-                        <td class="text-center">${escapeHtml(customer.area_name || 'N/A')}</td>
-                        <td class="text-center">${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                        <td class="text-center">${escapeHtml(customer.consumer_name || 'N/A')}</td>
-                        <td class="text-center">${escapeHtml(customer.phone_number || 'N/A')}</td>
+                        <td class="text-center">${escapeHtml(customer.Area_Name || 'N/A')}</td>
+                        <td class="text-center">${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                        <td class="text-center">${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                        <td class="text-center">${escapeHtml(customer.Phone_Number || 'N/A')}</td>
                         <td class="text-center">${schemeBadge}</td>
                         <td class="text-center"><span class="badge badge-due">Due</span></td>
                         <td class="text-center">${statusBadge}</td>
@@ -4190,16 +4202,16 @@ $(document).ready(function() {
             const areaCounts = {};
 
             allCustomers.forEach(customer => {
-                const area = customer.area_name || 'Unknown';
-                const scheme = (customer.scheme_selected || 'Unknown').toUpperCase();
-                const status = (customer.consumer_sub_status || 'ACTIVE').toUpperCase();
+                const area = customer.Area_Name || 'Unknown';
+                const scheme = (customer.Scheme_Selected || 'Unknown').toUpperCase();
+                const status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
 
                 // Validate and log warnings for invalid data
                 if (!['PMUY', 'NON_PMUY', 'Non PMUY'].includes(scheme)) {
-                    console.warn(`Invalid scheme for customer ${customer.consumer_number || 'unknown'}: ${customer.scheme_selected}`);
+                    console.warn(`Invalid scheme for customer ${customer.Consumer_Number || 'unknown'}: ${customer.Scheme_Selected}`);
                 }
                 if (!['ACTIVE', 'SUSPENDED', 'DEACTIVATED'].includes(status)) {
-                    console.warn(`Invalid status for customer ${customer.consumer_number || 'unknown'}: ${customer.consumer_sub_status}`);
+                    console.warn(`Invalid status for customer ${customer.Consumer_Number || 'unknown'}: ${customer.Consumer_Sub_Status}`);
                 }
 
                 // Initialize area if not exists
@@ -4234,8 +4246,8 @@ $(document).ready(function() {
                 // Store customer with normalized values
                 areaCounts[area].customers.push({
                     ...customer,
-                    scheme_selected: normalizedScheme,
-                    consumer_sub_status: status
+                    Scheme_Selected: normalizedScheme,
+                    Consumer_Sub_Status: status
                 });
             });
 
@@ -4340,8 +4352,8 @@ $(document).ready(function() {
             if (areaData) {
                 // Filter customers based on currentScheme and currentStatus
                 filteredCustomers = areaData.customers.filter(customer => {
-                    const customerScheme = (customer.scheme_selected || '').toUpperCase();
-                    const customerStatus = (customer.consumer_sub_status || '').toUpperCase();
+                    const customerScheme = (customer.Scheme_Selected || '').toUpperCase();
+                    const customerStatus = (customer.Consumer_Sub_Status || '').toUpperCase();
                     const matchesScheme = currentScheme === 'ALL' || customerScheme === currentScheme.toUpperCase();
                     const matchesStatus = currentStatus === 'ALL' || customerStatus === currentStatus.toUpperCase();
                     return matchesScheme && matchesStatus;
@@ -4385,16 +4397,16 @@ $(document).ready(function() {
                 tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
             } else {
                 pageRows.forEach(customer => {
-                    const statusBadge = getStatusBadge(customer.consumer_sub_status);
-                    const schemeBadge = customer.scheme_selected.toUpperCase() === 'PMUY' ?
+                    const statusBadge = getStatusBadge(customer.Consumer_Sub_Status);
+                    const schemeBadge = customer.Scheme_Selected.toUpperCase() === 'PMUY' ?
                         '<span class="badge badge-pmuy">PMUY</span>' :
                         '<span class="badge badge-non-pmuy">Non PMUY</span>';
 
                     tableBody.append(`
                         <tr>
-                            <td>${escapeHtml(customer.area_name || 'N/A')}</td>
-                            <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                            <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
+                            <td>${escapeHtml(customer.Area_Name || 'N/A')}</td>
+                            <td>${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                            <td>${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
                             <td><span class="badge badge-missing">Missing</span></td>
                             <td>${schemeBadge}</td>
                             <td>${statusBadge}</td>

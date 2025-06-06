@@ -17,20 +17,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def wait_for_download_to_complete(download_dir, timeout=300):
-    print("[INFO] Waiting for file to download completely...")
+    logger.info("Waiting for file to download completely...")
     seconds = 0
     while seconds < timeout:
         files = os.listdir(download_dir)
         downloading = any(fname.endswith('.crdownload') for fname in files)
 
         if not downloading and files:
-            print(f"[✔] Download complete: {files}")
+            logger.info(f"[✔] Download complete: {files}")
             return True
 
         time.sleep(1)
         seconds += 1
 
-    print("[✖] Download did not complete within timeout.")
+    logger.info("[✖] Download did not complete within timeout.")
     return False
 
 def run_bi_report_scraper(username, password):
@@ -39,12 +39,12 @@ def run_bi_report_scraper(username, password):
     'pass': password
 }
     try:
-        print("[INFO] Setting up download directory...")
+        logger.info("Setting up download directory...")
         download_dir = os.path.abspath("data")
         os.makedirs(download_dir, exist_ok=True)
-        print(f" → Download directory set to: {download_dir}")
+        logger.info(f" → Download directory set to: {download_dir}")
 
-        print("[INFO] Configuring Chrome options...")
+        logger.info("Configuring Chrome options...")
         options = Options()
         options.add_experimental_option("prefs", {
             "download.default_directory": download_dir,
@@ -52,74 +52,89 @@ def run_bi_report_scraper(username, password):
             "safebrowsing.enabled": True
         })
 
-        print("[INFO] Launching Chrome browser...")
+        logger.info("Launching Chrome browser...")
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
 
-        print("[STEP 1] Navigating to dashboard URL...")
+        logger.info("[STEP 1] Navigating to dashboard URL...")
         url = "https://reports.px.indianoil.in/analytics/saw.dll?dashboard&PortalPath=%2Fshared%2FLPG%2F_portal%2FDistributor%20Reports"
         driver.get(url)
 
-        print("[STEP 2] Waiting for login page and entering credentials...")
+        logger.info("[STEP 2] Waiting for login page and entering credentials...")
         WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "username")))
         driver.find_element(By.ID, "username").send_keys(KEYS['user'])
         driver.find_element(By.ID, "password").send_keys(KEYS['pass'])
         driver.find_element(By.ID, "submitid").click()
-        print(" → Login submitted.")
+        logger.info(" → Login submitted.")
+        time.sleep(5)  # Wait for login to process
 
-        print("[STEP 3] Waiting for dashboard to load and setting zoom to 40%...")
+        logger.info("[STEP 3] Waiting for dashboard to load and setting zoom to 40%...")
         WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
         time.sleep(2)
         driver.execute_script("document.body.style.zoom='40%'")
 
-        print("[STEP 4] Clicking 'Customer Register' tab...")
-        customer_register_tab = WebDriverWait(driver, 10).until(
+        logger.info("[STEP 4] Clicking 'Customer Register' tab...")
+        customer_register_tab = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Customer Register')]"))
         )
         driver.execute_script("arguments[0].click();", customer_register_tab)
         time.sleep(1)
 
-        print("[STEP 5] Clicking 'Customer Register Report'...")
+        logger.info("[STEP 5] Clicking 'Customer Register Report'...")
         customer_register_report = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Customer Register Report')]"))
         )
         driver.execute_script("arguments[0].click();", customer_register_report)
+        
+        existing_files = set(os.listdir(download_dir))  # Snapshot before download
+        
+        logger.info("Cleaning up existing files in download directory...")
+        for filename in existing_files:
+            file_path = os.path.join(download_dir, filename)
+            if os.path.isfile(file_path):
+                try:
+                    os.remove(file_path)
+                    logger.info(f" → Deleted old file: {filename}")
+                except Exception as e:
+                    logger.warning(f"Could not delete file {filename}: {e}")
 
-        print("[STEP 6] Clicking export icon...")
+        logger.info("[STEP 6] Clicking export icon...")
         export_link = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//a[@title='Export to different format']"))
         )
         driver.execute_script("arguments[0].click();", export_link)
         time.sleep(2)
 
-        print("[STEP 6.1] Clicking Excel option...")
+        logger.info("[STEP 6.1] Clicking Excel option...")
         excel_link = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//a[contains(@aria-label, 'Excel')]"))
         )
         driver.execute_script("arguments[0].click();", excel_link)
 
-        print("[STEP 7] Waiting for export confirmation popup (if any)...")
+        logger.info("[STEP 7] Waiting for export confirmation popup (if any)...")
         try:
             confirmation_ok = WebDriverWait(driver, 30).until(
                 EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Export process is complete')]/following-sibling::*/descendant::button[text()='OK']"))
             )
             confirmation_ok.click()
-            print(" → Confirmation popup closed.")
+            logger.info(" → Confirmation popup closed.")
         except:
-            print(" → No confirmation popup or it closed automatically.")
+            logger.info(" → No confirmation popup or it closed automatically.")
 
-        print("[STEP 8] Waiting for download to complete...")
+        logger.info("[STEP 8] Waiting for download to complete...")
         if wait_for_download_to_complete(download_dir, timeout=300):
-            print("[✅] File downloaded successfully.")
+            logger.info("[✅] File downloaded successfully.")
             return "[✅] BI Report exported successfully."
         else:
-            print("[⚠️] File download failed or timed out.")
+            logger.info("[⚠️] File download failed or timed out.")
             return "[⚠️] Export initiated, but download may have failed or timed out."
 
     except Exception as e:
         traceback.print_exc()
+        logger.error(f"An error occurred: {str(e)}")
         return f"[❌] ERROR: {str(e)}"
-
+    
+    
     finally:
         print("[STEP 9] Attempting to sign out...")
         try:
@@ -142,7 +157,13 @@ def trigger_scraper():
             return jsonify({"status": "error", "message": "Missing credentials"}), 400
         
         result = run_bi_report_scraper(data['username'], data['password'])
-        return jsonify({"message": result})
+        # return jsonify({"message": result})
+        if isinstance(result, str) and result.startswith("[✅]"):
+            return jsonify({"status": "success", "message": result})
+        elif isinstance(result, str) and (result.startswith("[❌]") or result.startswith("[⚠️]")):
+            return jsonify({"status": "error", "message": result})
+        else:
+            return jsonify({"status": "error", "message": result})
     except Exception as e:
         logger.error(f"API error: {str(e)}")
         return jsonify({

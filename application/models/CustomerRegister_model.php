@@ -28,7 +28,7 @@ class CustomerRegister_model extends CI_Model {
     public function get_total_domestic_customers() {
         $userid = $this->session->userdata('id');
         $this->db->select('COUNT(*) as total');
-        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
         $query = $this->db->get($this->table);
         
@@ -40,21 +40,21 @@ class CustomerRegister_model extends CI_Model {
     //Customer strength data
     public function get_customer_strength_data() {
         $userid = $this->session->userdata('id');
-        $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic');
+        $this->db->select("Area_Name, Consumer_Number, Consumer_Name, Phone_Number, Scheme_Selected, Consumer_Sub_Status");
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid); 
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->group_by('consumer_id'); 
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('Consumer_ID'); 
         $query = $this->db->get($this->table);
     
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
             foreach ($result as &$row) {
-                if ($row['scheme_selected'] == 'Ujjwala' || $row['scheme_selected'] == 'Ujjwala - Extended') {
-                    $row['scheme_selected'] = 'PMUY';
+                if ($row['Scheme_Selected'] == 'Ujjwala' || $row['Scheme_Selected'] == 'Ujjwala - Extended') {
+                    $row['Scheme_Selected'] = 'PMUY';
                 }
                 else {
-                    $row['scheme_selected'] = 'Non PMUY';
+                    $row['Scheme_Selected'] = 'Non PMUY';
                 }
             }
             return $result;
@@ -65,12 +65,12 @@ class CustomerRegister_model extends CI_Model {
     public function get_customer_status_counts() {
         $userid = $this->session->userdata('id');
         
-        // First get distinct consumer_id to avoid counting duplicates
-        $this->db->select('consumer_id, scheme_selected, consumer_sub_status');
-        $this->db->where('consumer_category', 'domestic');
+        // First get distinct Consumer_ID to avoid counting duplicates
+        $this->db->select('Consumer_ID, Scheme_Selected, Consumer_Sub_Status');
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->group_by('consumer_id'); // Group by consumer_id to remove duplicates
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('Consumer_ID'); // Group by Consumer_ID to remove duplicates
         $query = $this->db->get($this->table);
         
         if ($query->num_rows() > 0) {
@@ -83,9 +83,9 @@ class CustomerRegister_model extends CI_Model {
             ];
             
             foreach ($result as $row) {
-                $scheme = ($row['scheme_selected'] == 'Ujjwala' || $row['scheme_selected'] == 'Ujjwala - Extended') ? 'pmuy' : 'non_pmuy';
+                $scheme = ($row['Scheme_Selected'] == 'Ujjwala' || $row['Scheme_Selected'] == 'Ujjwala - Extended') ? 'pmuy' : 'non_pmuy';
 
-                $status = strtolower($row['consumer_sub_status']);
+                $status = strtolower($row['Consumer_Sub_Status']);
                 
                 if (isset($counts[$status])) {
                     $counts[$status][$scheme]++;
@@ -114,22 +114,22 @@ class CustomerRegister_model extends CI_Model {
         }
 
         $this->db->select([
-            'consumer_id',
-            'area_name',
-            'consumer_number',
-            'consumer_name',
-            'phone_number',
-            'scheme_selected',
-            'last_refill_date',
-            'consumer_category',
-            'consumer_sub_status'
+            'Consumer_ID',
+            'Area_Name',
+            'Consumer_Number',
+            'Consumer_Name',
+            'Phone_Number',
+            'Scheme_Selected',
+            'Last_Refill_Date',
+            'Consumer_Category',
+            'Consumer_Sub_Status'
         ]);
         
-        $this->db->where('consumer_category', 'domestic');
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where('last_refill_date IS NOT NULL');
-        $this->db->order_by('last_refill_date', 'ASC');
-        $this->db->group_by('consumer_id');
+        $this->db->where('Last_Refill_Date IS NOT NULL');
+        $this->db->order_by('Last_Refill_Date', 'ASC');
+        $this->db->group_by('Consumer_ID');
         
         $query = $this->db->get($this->table);
         
@@ -137,10 +137,10 @@ class CustomerRegister_model extends CI_Model {
             $result = $query->result_array();
             
             foreach ($result as &$row) {
-                $row['scheme_selected'] = $this->normalize_scheme($row['scheme_selected']);
+                $row['Scheme_Selected'] = $this->normalize_scheme($row['Scheme_Selected']);
                 
                 try {
-                    $last_refill = new DateTime($row['last_refill_date']);
+                    $last_refill = new DateTime($row['Last_Refill_Date']);
                     $current_date = new DateTime();
                     $interval = $current_date->diff($last_refill);
                     $row['days_since_refill'] = $interval->days;
@@ -150,8 +150,8 @@ class CustomerRegister_model extends CI_Model {
                     $row['months_since_refill'] = null;
                 }
                 
-                $row['area_name'] = $row['area_name'] ?: 'Unknown';
-                $row['consumer_sub_status'] = $row['consumer_sub_status'] ? strtoupper($row['consumer_sub_status']) : 'UNKNOWN';
+                $row['Area_Name'] = $row['Area_Name'] ?: 'Unknown';
+                $row['Consumer_Sub_Status'] = $row['Consumer_Sub_Status'] ? strtoupper($row['Consumer_Sub_Status']) : 'UNKNOWN';
             }
             
             return $result;
@@ -186,10 +186,10 @@ class CustomerRegister_model extends CI_Model {
         ];
     
         foreach ($customers as $row) {
-            if (!empty($row['days_since_refill']) && !empty($row['consumer_sub_status'])) {
-                $is_pmuy = ($row['scheme_selected'] === 'PMUY');
+            if (!empty($row['days_since_refill']) && !empty($row['Consumer_Sub_Status'])) {
+                $is_pmuy = ($row['Scheme_Selected'] === 'PMUY');
                 $days = $row['days_since_refill'];
-                $status = strtolower($row['consumer_sub_status']);
+                $status = strtolower($row['Consumer_Sub_Status']);
                 
                 if (!isset($counts[$status])) {
                     continue;
@@ -247,23 +247,23 @@ class CustomerRegister_model extends CI_Model {
      //KYC data
     public function get_kyc_data() {
         $userid = $this->session->userdata('id');
-        $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, kyc_number, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic'); 
+        $this->db->select("Area_Name, Consumer_Number, Consumer_Name, Phone_Number, Scheme_Selected, KYC_Number, Consumer_Sub_Status");
+        $this->db->where('Consumer_Category', 'domestic'); 
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->group_by('consumer_id'); 
-        $this->db->where('kyc_number', '');
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('Consumer_ID'); 
+        $this->db->where('KYC_Number', '');
         $query = $this->db->get($this->table);
 
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
             foreach ($result as &$row) {
                 // Standardize scheme names
-                $row['scheme_selected'] = (in_array($row['scheme_selected'], ['Ujjwala', 'Ujjwala - Extended'])) ? 'PMUY' : 'Non PMUY';
+                $row['Scheme_Selected'] = (in_array($row['Scheme_Selected'], ['Ujjwala', 'Ujjwala - Extended'])) ? 'PMUY' : 'Non PMUY';
                 // Determine KYC status
-                $row['kyc_status'] = empty($row['kyc_number']) ? 'Pending' : 'Completed';
+                $row['kyc_status'] = empty($row['KYC_Number']) ? 'Pending' : 'Completed';
                 // Normalize status
-                $row['consumer_status'] = strtoupper($row['consumer_sub_status'] ?? 'ACTIVE');
+                $row['consumer_status'] = strtoupper($row['Consumer_Sub_Status'] ?? 'ACTIVE');
             }
             return $result;
         }
@@ -277,11 +277,11 @@ class CustomerRegister_model extends CI_Model {
         $total_domestic = $this->get_total_domestic_customers();
         
         // Get PMUY and Non-PMUY pending counts
-        $this->db->select("CASE WHEN scheme_selected IN ('Ujjwala', 'Ujjwala - Extended') THEN 'PMUY' ELSE 'Non_PMUY' END AS category, COUNT(DISTINCT consumer_id) AS count");
-        $this->db->where('consumer_category', 'domestic');
-        $this->db->where('kyc_number', '');
+        $this->db->select("CASE WHEN Scheme_Selected IN ('Ujjwala', 'Ujjwala - Extended') THEN 'PMUY' ELSE 'Non_PMUY' END AS category, COUNT(DISTINCT Consumer_ID) AS count");
+        $this->db->where('Consumer_Category', 'domestic');
+        $this->db->where('KYC_Number', '');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
         $this->db->group_by('category');
         $query = $this->db->get($this->table);
         $result = $query->result_array();
@@ -317,12 +317,12 @@ class CustomerRegister_model extends CI_Model {
     //KYC Status Counts
     public function get_kyc_status_counts() {
         $userid = $this->session->userdata('id');
-        $this->db->select("scheme_selected, consumer_sub_status, kyc_number");
-        $this->db->where('consumer_category', 'domestic');
+        $this->db->select("Scheme_Selected, Consumer_Sub_Status, KYC_Number");
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->group_by('consumer_id');
-        $this->db->where('kyc_number', '');
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('Consumer_ID');
+        $this->db->where('KYC_Number', '');
         $query = $this->db->get($this->table);
         
         // Initialize counts array
@@ -338,10 +338,10 @@ class CustomerRegister_model extends CI_Model {
             
             foreach ($result as $row) {
                 // Skip if KYC is completed
-                if (!empty($row['kyc_number'])) continue;
+                if (!empty($row['KYC_Number'])) continue;
                 
-                $scheme = $this->normalize_scheme($row['scheme_selected']);
-                $status = strtolower($row['consumer_sub_status']);
+                $scheme = $this->normalize_scheme($row['Scheme_Selected']);
+                $status = strtolower($row['Consumer_Sub_Status']);
                 $scheme_key = ($scheme === 'PMUY') ? 'pmuy' : 'non_pmuy';
                 
                 // Count by status
@@ -368,9 +368,9 @@ class CustomerRegister_model extends CI_Model {
             if ($row['kyc_status'] === 'Completed') continue;
             
             // Check scheme filter
-            if ($scheme !== 'Total' && $row['scheme_selected'] !== $scheme) continue;
+            if ($scheme !== 'Total' && $row['Scheme_Selected'] !== $scheme) continue;
             
-            $area = $row['area_name'] ?: 'Unknown';
+            $area = $row['Area_Name'] ?: 'Unknown';
             
             if (!isset($area_counts[$area])) {
                 $area_counts[$area] = 0;
@@ -400,18 +400,18 @@ class CustomerRegister_model extends CI_Model {
             if ($row['kyc_status'] === 'Completed') continue;
             
             // Check area match
-            $row_area = $row['area_name'] ?: 'Unknown';
+            $row_area = $row['Area_Name'] ?: 'Unknown';
             if ($row_area !== $area) continue;
             
             // Check scheme filter
-            if ($scheme !== 'Total' && $row['scheme_selected'] !== $scheme) continue;
+            if ($scheme !== 'Total' && $row['Scheme_Selected'] !== $scheme) continue;
             
             $filtered[] = $row;
         }
 
         // Sort by consumer number
         usort($filtered, function($a, $b) {
-            return strcmp($a['consumer_number'], $b['consumer_number']);
+            return strcmp($a['Consumer_Number'], $b['Consumer_Number']);
         });
 
         return $filtered;
@@ -421,25 +421,25 @@ class CustomerRegister_model extends CI_Model {
     //MI due data
     public function get_pending_mi_area_scheme_wise() {
         $userid = $this->session->userdata('id');
-        $this->db->select("COALESCE(area_name, 'Unknown') AS area_name, 
-                        consumer_number, consumer_name, phone_number,
+        $this->db->select("COALESCE(Area_Name, 'Unknown') AS Area_Name, 
+                        Consumer_Number, Consumer_Name, Phone_Number,
                         CASE 
-                            WHEN LOWER(TRIM(scheme_selected)) IN ('ujjwala', 'ujjwala - extended') THEN 'PMUY'
+                            WHEN LOWER(TRIM(Scheme_Selected)) IN ('ujjwala', 'ujjwala - extended') THEN 'PMUY'
                             ELSE 'Non PMUY'
                         END AS scheme_type,
-                        consumer_sub_status AS status");
-        $this->db->where('consumer_category', 'domestic');
+                        Consumer_Sub_Status AS status");
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->group_by('consumer_id'); 
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('Consumer_ID'); 
         
         $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
         $today = date('Y-m-d');
         
         $this->db->group_start();
-        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
-        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
-        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
         $this->db->group_end();
         
         $query = $this->db->get($this->table);
@@ -457,25 +457,25 @@ class CustomerRegister_model extends CI_Model {
         $userid = $this->session->userdata('id');
         $this->db->select("
             CASE 
-                WHEN LOWER(TRIM(scheme_selected)) IN ('ujjwala', 'ujjwala - extended') THEN 'PMUY'
+                WHEN LOWER(TRIM(Scheme_Selected)) IN ('ujjwala', 'ujjwala - extended') THEN 'PMUY'
                 ELSE 'Non PMUY'
             END AS scheme_type,
-            consumer_sub_status,
-            COUNT(DISTINCT consumer_id) as count");
-        $this->db->where('consumer_category', 'domestic');
+            Consumer_Sub_Status,
+            COUNT(DISTINCT Consumer_ID) as count");
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
         
         $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
         $today = date('Y-m-d');
         
         $this->db->group_start();
-        $this->db->where("STR_TO_DATE(mandatory_inspection_date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
-        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
-        $this->db->or_where("STR_TO_DATE(mandatory_inspection_date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
         $this->db->group_end();
         
-        $this->db->group_by('scheme_type, consumer_sub_status');
+        $this->db->group_by('scheme_type, Consumer_Sub_Status');
         $query = $this->db->get($this->table);
         
         return $query->result_array();
@@ -493,7 +493,7 @@ class CustomerRegister_model extends CI_Model {
         
         foreach ($result as $row) {
             $scheme_key = ($row['scheme_type'] === 'PMUY') ? 'pmuy' : 'non_pmuy';
-            $status = strtolower($row['consumer_sub_status']);
+            $status = strtolower($row['Consumer_Sub_Status']);
             
             if (isset($counts[$status])) {
                 $counts[$status][$scheme_key] += $row['count'];
@@ -516,12 +516,12 @@ class CustomerRegister_model extends CI_Model {
             return [];
         }
         
-        $this->db->select("consumer_id, area_name, consumer_number, consumer_name, phone_number, 
-                        scheme_selected, consumer_sub_status as status, tube_change_date, tube_change_due_date");
-        $this->db->where('consumer_category', 'domestic'); 
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->select("Consumer_ID, Area_Name, Consumer_Number, Consumer_Name, Phone_Number, 
+                        Scheme_Selected, Consumer_Sub_Status as status, Tube_Change_Date,Tube_Change_Due_Date");
+        $this->db->where('Consumer_Category', 'domestic'); 
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
         $this->db->where('userid', $userid);
-        $this->db->group_by('consumer_id'); 
+        $this->db->group_by('Consumer_ID'); 
         $query = $this->db->get($this->table);
         
         if ($query->num_rows() > 0) {
@@ -530,14 +530,14 @@ class CustomerRegister_model extends CI_Model {
 
             foreach ($result as &$row) {
                 // Normalize scheme name
-                $scheme = strtolower(trim($row['scheme_selected']));
-                $row['scheme_selected'] = in_array($scheme, ['ujjwala', 'ujjwala - extended']) ? 'PMUY' : 'NON_PMUY';
+                $scheme = strtolower(trim($row['Scheme_Selected']));
+                $row['Scheme_Selected'] = in_array($scheme, ['ujjwala', 'ujjwala - extended']) ? 'PMUY' : 'NON_PMUY';
                 
                 // Normalize status
                 $row['status'] = strtoupper($row['status']);
                 
                 // Calculate hose status
-                $lastChanged = $row['tube_change_date'] ?? $row['tube_change_due_date'] ?? null;
+                $lastChanged = $row['Tube_Change_Date'] ?? $row['Tube_Change_Due_Date'] ?? null;
                 $row['last_change_date'] = $lastChanged;
 
                 if (empty($lastChanged)) {
@@ -577,7 +577,7 @@ class CustomerRegister_model extends CI_Model {
             foreach ($hose_data as $row) {
                 if ($row['hose_status'] === 'Due') {
                     $stats['Total_Due']++;
-                    if ($row['scheme_selected'] === 'PMUY') {
+                    if ($row['Scheme_Selected'] === 'PMUY') {
                         $stats['PMUY_Due']++;
                     } else {
                         $stats['Non_PMUY_Due']++;
@@ -604,7 +604,7 @@ class CustomerRegister_model extends CI_Model {
             
             foreach ($hose_data as $row) {
                 if ($row['hose_status'] === 'Due') {
-                    $scheme = ($row['scheme_selected'] === 'PMUY') ? 'pmuy' : 'non_pmuy';
+                    $scheme = ($row['Scheme_Selected'] === 'PMUY') ? 'pmuy' : 'non_pmuy';
                     $status = strtolower($row['status']);
                     
                     if (isset($counts[$status])) {
@@ -626,13 +626,13 @@ class CustomerRegister_model extends CI_Model {
      // Add these methods to your existing model
     public function get_sbc_data() {
         $userid = $this->session->userdata('id');
-        $this->db->select("consumer_id, area_name, consumer_number, consumer_name, phone_number, 
-                        scheme_selected, consumer_type, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic'); 
+        $this->db->select("Consumer_ID, Area_Name, Consumer_Number, Consumer_Name, Phone_Number, 
+                        Scheme_Selected, Consumer_Type, Consumer_Sub_Status");
+        $this->db->where('Consumer_Category', 'domestic'); 
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->where('consumer_type', 'Single Bottle Connection'); 
-        $this->db->group_by('consumer_id'); 
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->where('Consumer_Type', 'Single Bottle Connection'); 
+        $this->db->group_by('Consumer_ID'); 
 
         $query = $this->db->get($this->table);
 
@@ -640,9 +640,9 @@ class CustomerRegister_model extends CI_Model {
             $result = $query->result_array();
             foreach ($result as &$row) {
                 // Normalize data
-                $row['scheme_selected'] = $this->normalize_scheme($row['scheme_selected']);
-                $row['consumer_sub_status'] = strtoupper($row['consumer_sub_status']);
-                // echo $row['scheme_selected'];
+                $row['Scheme_Selected'] = $this->normalize_scheme($row['Scheme_Selected']);
+                $row['Consumer_Sub_Status'] = strtoupper($row['Consumer_Sub_Status']);
+                // echo $row['Scheme_Selected'];
             }
             return $result;
         }
@@ -651,12 +651,12 @@ class CustomerRegister_model extends CI_Model {
     // Get SBC stats
     public function get_sbc_status_counts() {
         $userid = $this->session->userdata('id');
-        $this->db->select("scheme_selected, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic');
+        $this->db->select("Scheme_Selected, Consumer_Sub_Status");
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
-        $this->db->where('consumer_type', 'Single Bottle Connection');
-        $this->db->group_by('consumer_id'); 
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->where('Consumer_Type', 'Single Bottle Connection');
+        $this->db->group_by('Consumer_ID'); 
         $query = $this->db->get($this->table);
         
         // Initialize counts array
@@ -671,9 +671,9 @@ class CustomerRegister_model extends CI_Model {
             $result = $query->result_array();
             
             foreach ($result as $row) {
-                $scheme = $this->normalize_scheme($row['scheme_selected']);
+                $scheme = $this->normalize_scheme($row['Scheme_Selected']);
                 // echo $scheme;
-                $status = strtolower($row['consumer_sub_status']);
+                $status = strtolower($row['Consumer_Sub_Status']);
                 $scheme_key = strtolower($scheme);
                 
                 // Count by status
@@ -745,8 +745,8 @@ class CustomerRegister_model extends CI_Model {
 
         if (!empty($phone_missing_data)) {
             foreach ($phone_missing_data as $customer) {
-                $scheme = $this->normalize_scheme($customer['scheme_selected']);
-                $status = strtolower($customer['consumer_sub_status']);
+                $scheme = $this->normalize_scheme($customer['Scheme_Selected']);
+                $status = strtolower($customer['Consumer_Sub_Status']);
 
                 // Validate status
                 if (!in_array($status, ['active', 'suspended', 'deactivated'])) {
@@ -786,19 +786,19 @@ class CustomerRegister_model extends CI_Model {
     // Get phone number data
     public function get_phone_number_data() {
         $userid = $this->session->userdata('id');
-        $this->db->select("area_name, consumer_number, consumer_name, phone_number, scheme_selected, consumer_sub_status");
-        $this->db->where('consumer_category', 'domestic');
+        $this->db->select("Area_Name, Consumer_Number, Consumer_Name, Phone_Number, Scheme_Selected, Consumer_Sub_Status");
+        $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
-        $this->db->where_in('consumer_sub_status', ['ACTIVE', 'SUSPENDED', 'DEACTIVATED']);
-        $this->db->where("(phone_number IS NULL OR phone_number = '')", NULL, FALSE);
-        $this->db->group_by('consumer_id');
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'SUSPENDED', 'DEACTIVATED']);
+        $this->db->where("(Phone_Number IS NULL OR Phone_Number = '')", NULL, FALSE);
+        $this->db->group_by('Consumer_ID');
         $query = $this->db->get($this->table);
 
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
             foreach ($result as &$row) {
-                $row['scheme_selected'] = $this->normalize_scheme($row['scheme_selected']);
-                $row['consumer_sub_status'] = strtoupper($row['consumer_sub_status']);
+                $row['Scheme_Selected'] = $this->normalize_scheme($row['Scheme_Selected']);
+                $row['Consumer_Sub_Status'] = strtoupper($row['Consumer_Sub_Status']);
             }
             return $result;
         }

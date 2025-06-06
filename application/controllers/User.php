@@ -306,7 +306,7 @@ class User extends CI_Controller {
         $userId = $this->input->post('userId');
         $password = $this->input->post('password');
 
-        $api_url = 'http://127.0.0.1:5000/scrape';
+        $api_url = 'http://127.0.0.1:5000/data_scraper';
         $post_data = ['username' => $userId, 'password' => $password];
 
         $ch = curl_init();
@@ -523,6 +523,7 @@ class User extends CI_Controller {
 
         $result = json_decode($response, true);
 
+
         if (json_last_error() !== JSON_ERROR_NONE) {
             log_message('error', 'Invalid JSON from API: '.$response);
             return $this->output
@@ -534,7 +535,12 @@ class User extends CI_Controller {
                 ]));
         }
 
-        if (!isset($result['status']) || $result['status'] !== 'success') {
+        log_message('debug', 'Raw API response: ' . $response);
+        log_message('debug', 'Decoded API result: ' . print_r($result, true));
+
+        
+        // if (!is_array($result) || !isset($result['status']) || $result['status'] !== 'success') {
+        if(!isset($result['status']) || $result['status'] !== 'success') {
             log_message('error', 'API returned error: '.($result['message'] ?? 'Unknown error'));
             return $this->output
                 ->set_content_type('application/json')
@@ -556,13 +562,13 @@ class User extends CI_Controller {
                     'message' => 'Session expired. Please login again.'
                 ]));
         }
-
+        
         // ✅ SUCCESS RESPONSE
         return $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([
                 'status' => 'success',
-                'message' => 'BI Report scraping completed successfully.',
+                'message' => 'BI Report scraping completed successfully',
                 'data' => $result['data'] ?? [] // Optional, depends on your Flask API response
             ]));
     }
