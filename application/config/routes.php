@@ -67,8 +67,12 @@ $route['suggestionform'] = 'User/suggestion_form';
 $route['dashboard'] = 'User/dashboardview';
 $route['submitsuggetions'] = 'User/submit_suggestion';
 $route['store'] = 'User/store';
-$route['addwebsite'] = 'WebsiteDetails/addwebsite';
-$route['submitaddwebite'] = 'WebsiteDetails/store';
+// $route['addwebsite'] = 'WebsiteDetails/addwebsite';
+// $route['submitaddwebite'] = 'WebsiteDetails/store';
+$route['addwebsite'] = 'User/add_website';
+$route['submitaddwebite'] = 'User/submit_add_website';
+$route['edit-website'] = 'User/edit_website';
+$route['delete-website'] = 'User/delete_website';
 // $route['storewebsite'] = 'WebsiteDetails/stored_website'; 
 // $route['auto-login'] = 'WebsiteDetails/scrape_data'; 
 $route['storewebsite'] = 'User/stored_website'; 
@@ -129,10 +133,20 @@ $route['hosedue'] = 'Hosedue_data/hose_due_data';
 $route['phonenumber'] = 'Phonenumber/phonenumber_data';
 
 //Forgot password
-$route['forgot-password'] = 'User/forgot_password';
-$route['send-reset-link'] = 'User/send_reset_link';
+$route['forgot-password'] = 'User/forgot_password_view';
+// $route['send-reset-link'] = 'User/send_reset_link';
+$route['send-otp'] = 'User/send_otp';
+
+// Routes for OTP verification (Next step after sending OTP)
+$route['verify-otp-view'] = 'User/verify_otp_view'; // Displays the form to enter OTP
+$route['verify-otp'] = 'User/verify_otp';           // Handles OTP verification submission
+
+// Routes for Password Reset (Final step after OTP verification)
+$route['reset-password/(:any)'] = 'User/reset_password_view/$1'; // Displays the reset password form (with token/ID)
+$route['update-password'] = 'User/update_password';             // Handles new password submission
+
 // $route['reset-password/(:any)'] = 'User/reset_password/$1'; 
-$route['reset-password/(:num)'] = 'User/reset_password/$1';
-$route['update-password'] = 'User/update_password';
+// $route['reset-password/(:num)'] = 'User/reset_password/$1';
+// $route['update-password'] = 'User/update_password';
 // $route['update_password'] = 'User/update_password'; //for update password
 

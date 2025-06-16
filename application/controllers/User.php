@@ -1,100 +1,83 @@
-<?php 
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
-        $this->load->library(['form_validation', 'session']);
-        $this->load->library('email'); // Load email library
-        $this->load->model('User_model'); //load model here
-        $this->load->database();
+        $this->load->library(['form_validation', 'session', 'email']);
+        $this->load->model('User_model');
         $this->load->model('CustomerRegister_model');
-		$this->load->model('WebsiteModel');
+        $this->load->model('WebsiteModel');
         $this->load->model('WebScrapping_model');
         $this->load->model('OpenOrder_model');
+        $this->load->database();
+        $this->config->load('email');
+        $this->load->helper('string');
     }
 
-    public function index()
-    {
+    public function index() {
         $this->load->view('login_form');
     }
 
-	//Login page 
     public function login() {
         $this->load->view('login_form');
     }
 
-	public function login_user() {
-		$this->load->model('User_model');
-	
-		$email = $this->input->post('email', true);
-		$password = $this->input->post('password', true);
-	
-		$errors = [];
-	
-		if (empty($email)) {
-			$errors['email'] = 'Email field is required.';
-		}
-		if (empty($password)) {
-			$errors['password'] = 'Password field is required.';
-		}
-	
-		if (!empty($errors)) {
-			$this->session->set_flashdata('errors', $errors);
-			$this->session->set_flashdata('email', $email);
-			redirect('loginform');
-		}
-	
-		$user = $this->User_model->getUser($email);
-		
-        if ($user) {
-            if (password_verify($password, $user->Password)) {  
-                $userid = $this->session->set_userdata('id', $user->id);
-				$userid = $this->session->set_userdata('username', $user->Firstname);
-                $this->session->set_flashdata('login_success', true); // ✅ Set flashdata for success message
-				
-                redirect('dashboard'); // Redirect to Suggestion Form
-				echo '<pre>';
-				print_r($data);
-				echo '</pre>';
-            } else {
-                $errors['password'] = 'Incorrect password.';
-                $this->session->set_flashdata('errors', $errors);
-                redirect('loginform');
-            }
-        } else {
-            $errors['email'] = 'No account exists with this email.';
+    public function login_user() {
+        $login_input = trim($this->input->post('email', true));
+        $password = $this->input->post('password', true);
+
+        $errors = [];
+        if (empty($login_input)) {
+            $errors['email'] = 'Email or User ID is required.';
+        }
+        if (empty($password)) {
+            $errors['password'] = 'Password is required.';
+        }
+
+        if (!empty($errors)) {
             $this->session->set_flashdata('errors', $errors);
+            $this->session->set_flashdata('email', $login_input);
+            redirect('loginform');
+        }
+
+        $user = $this->User_model->getUserByEmailOrUserID($login_input);
+        if ($user && password_verify($password, $user->Password)) {
+            $this->session->set_userdata([
+                'id' => $user->id,
+                'Firstname' => $user->Firstname
+            ]);
+            $this->session->set_flashdata('login_success', true);
+            redirect('dashboard');
+        } else {
+            $errors = $user ? ['password' => 'Incorrect password.'] : ['email' => 'No account found with this Email or User ID.'];
+            $this->session->set_flashdata('errors', $errors);
+            $this->session->set_flashdata('email', $login_input);
             redirect('loginform');
         }
     }
-	public function logout() {
-        $this->session->unset_userdata('id');
-        $this->session->unset_userdata('username');
+
+    public function logout() {
+        $this->session->unset_userdata(['id', 'Firstname']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('loginform'); 
+        redirect('loginform');
     }
 
-	//here suggestion page section
     public function suggestion_form() {
         $data['method'] = "suggestion";
-        $this->load->view('website_dashboard',$data); 
-        // $this->load->view('suggestion_form');
+        $this->load->view('website_dashboard', $data);
     }
 
-	public function submit_suggestion() {
+    public function submit_suggestion() {
         $application = $this->input->post('application', true);
         $suggestion_type = $this->input->post('suggestion_type', true);
         $message = $this->input->post('message', true);
         $voice_message = $this->input->post('voice_message', true);
-		$userid = $this->session->userdata('id');
-		    
+        $userid = $this->session->userdata('id');
+
         $errors = [];
-    
-        // Check validation of form
         if (empty($application)) {
             $errors['application'] = 'Application field is required.';
         }
@@ -104,79 +87,187 @@ class User extends CI_Controller {
         if (empty($message)) {
             $errors['message'] = 'Message field is required.';
         }
-    
+
         if (!empty($errors)) {
             $this->session->set_flashdata('errors', $errors);
             redirect('suggestionform');
         }
-    
+
         $audio_filename = null;
-        $audio_folder = FCPATH . 'application/assets/audio/'; // Audio folder path
-    
-        if (!is_dir($audio_folder)) {
-            if (!mkdir($audio_folder, 0777, true)) {
-                $this->session->set_flashdata('errors', ['Failed to create audio folder.']);
-                redirect('suggestionform');
-            }
+        $audio_folder = FCPATH . 'application/assets/audio/';
+        if (!is_dir($audio_folder) && !mkdir($audio_folder, 0777, true)) {
+            $this->session->set_flashdata('errors', ['Failed to create audio folder.']);
+            redirect('suggestionform');
         }
-    
+
         if (!empty($voice_message)) {
-            // Generate a unique filename
-            $unique_id = time(); // You can also use uniqid() for more uniqueness
-            $audio_filename = 'audio_' . $unique_id . '.wav'; 
+            $unique_id = time();
+            $audio_filename = 'audio_' . $unique_id . '.wav';
             $audio_path = $audio_folder . $audio_filename;
-    
             $decoded_audio = base64_decode($voice_message, true);
-            if ($decoded_audio === false) {
-                $this->session->set_flashdata('errors', ['Base64 decoding failed. Please check the provided audio data.']);
-                redirect('suggestionform');
-            }
-    
-            if (file_put_contents($audio_path, $decoded_audio) === false) {
-                $this->session->set_flashdata('errors', ['Failed to save the audio file. Please check file permissions.']);
+            if ($decoded_audio === false || file_put_contents($audio_path, $decoded_audio) === false) {
+                $this->session->set_flashdata('errors', ['Failed to save the audio file.']);
                 redirect('suggestionform');
             }
         }
-    
+
         $data = [
             'application' => $application,
             'suggestion_type' => $suggestion_type,
             'message' => $message,
-            'voice_message' => $audio_filename, // Store unique filename in DB
-			'userid' => $userid
+            'voice_message' => $audio_filename,
+            'userid' => $userid
         ];
-    
-        $inserted = $this->User_model->insert_suggestion($data);
-    
-        if ($inserted) {
+
+        if ($this->User_model->insert_suggestion($data)) {
             $this->session->set_flashdata('success', '✅ Suggestion submitted successfully.');
-            redirect('suggestionform');
         } else {
-            log_message('error', 'Database insertion failed: ' . print_r($this->db->error(), true));
             $this->session->set_flashdata('errors', ['Failed to submit suggestion.']);
-            redirect('suggestionform');
+        }
+        redirect('suggestionform');
+    }
+
+    public function forgot_password_view() {
+        $this->load->view('forgot_password');
+    }
+
+    // public function send_otp() {
+    //     $email = trim($this->input->post('email', true));
+
+    //     // Form Validation
+    //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+
+    //     if ($this->form_validation->run() == FALSE) {
+    //         $this->session->set_flashdata('errors', validation_errors()); // Get all validation errors
+    //         $this->session->set_flashdata('email_input', $email); // Keep the entered email
+    //         redirect('forgot-password');
+    //     }
+
+    //     // Check if email exists in DB
+    //     $user = $this->User_model->getUserByEmail($email); // Use the existing getUserByEmail in User_model
+
+    //     if ($user) {
+    //         // Generate OTP
+    //         $otp = random_string('numeric', 6); // CodeIgniter's random_string helper
+
+    //         // Store OTP in the database with expiry
+    //         // You'll need to add columns to your 'user' table:
+    //         // - `otp_code` (VARCHAR)
+    //         // - `otp_expires_at` (DATETIME)
+    //         $this->User_model->store_otp($user->id, $otp); // Pass user ID and OTP to model
+
+    //         // Send Email with OTP
+    //         $this->email->from($this->config->item('smtp_user'), 'Your App Name'); // Sender email from config
+    //         $this->email->to($email);
+    //         $this->email->subject('Password Reset OTP for AMUDHU');
+    //         $message = "Dear " . $user->Firstname . ",\n\n";
+    //         $message .= "Your One-Time Password (OTP) for resetting your password is: <strong>" . $otp . "</strong>\n\n";
+    //         $message .= "This OTP is valid for 15 minutes. Please do not share it with anyone.\n\n";
+    //         $message .= "If you did not request a password reset, please ignore this email.\n\n";
+    //         $message .= "Regards,\nAmudhu Team";
+
+    //         $this->email->message($message);
+
+    //         if ($this->email->send()) {
+    //             $this->session->set_flashdata('success', 'An OTP has been sent to your email address.');
+    //             // Redirect to a page where user can enter OTP
+    //             redirect('verify-otp-view'); // Create this route and view next
+    //         } else {
+    //             log_message('error', 'Email sending failed: ' . $this->email->print_debugger());
+    //             $this->session->set_flashdata('error', 'Failed to send OTP email. Please try again.');
+    //             $this->session->set_flashdata('email_input', $email);
+    //             redirect('forgot-password');
+    //         }
+    //     } else {
+    //         $this->session->set_flashdata('error', 'No account found with that email address.');
+    //         $this->session->set_flashdata('email_input', $email);
+    //         redirect('forgot-password');
+    //     }
+    // }
+
+    public function send_otp() {
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            $this->load->view('forgot_password');
+        } else {
+            $email = $this->input->post('email');
+            $user = $this->User_model->getUserByEmail($email);
+
+            if ($user) {
+                $otp = rand(100000, 999999);
+                $expiration = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+
+                $this->User_model->store_otp($user->id, $otp, $expiration);
+
+                // --- NEW EMAIL CONFIGURATION WITH SSL CONTEXT ---
+                $config = array();
+                $config['protocol'] = 'smtp';
+                $config['smtp_host'] = 'smtp.googlemail.com'; // No 'ssl://' prefix
+                $config['smtp_port'] = 587;
+                $config['smtp_user'] = 'arasu5070go@gmail.com';
+                $config['smtp_pass'] = 'vhbo wdas qlzt cyuv'; // Your App Password
+                $config['smtp_crypto'] = 'tls';
+                $config['mailtype'] = 'html';
+                $config['charset'] = 'utf-8';
+                $config['newline'] = "\r\n";
+                $config['crlf'] = "\r\n"; // Fixed the typo here
+                $config['smtp_timeout'] = 30;
+                $config['smtp_keepalive'] = TRUE;
+                $config['smtp_auto_tls'] = TRUE;
+                $config['validate'] = TRUE;
+
+                // **CRUCIAL: Add stream context options to explicitly disable SSL verification**
+                $config['smtp_opts'] = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
+
+                $this->email->initialize($config); // Initialize with this new config
+
+                $this->email->from('arasu5070go@gmail.com', 'Your Application Name');
+                $this->email->to($email);
+                $this->email->subject('Password Reset OTP for Your Application');
+
+                $email_content = '<p>Dear ' . $user->username . ',</p>';
+                $email_content .= '<p>Your One-Time Password (OTP) for password reset is: <strong>' . $otp . '</strong></p>';
+                $email_content .= '<p>This OTP is valid for 10 minutes. Do not share this with anyone.</p>';
+                $email_content .= '<p>If you did not request a password reset, please ignore this email.</p>';
+                $email_content .= '<p>Regards,<br>Your Application Team</p>';
+
+                $this->email->message($email_content);
+
+                if ($this->email->send()) {
+                    $this->session->set_flashdata('success', 'An OTP has been sent to your email address. Please check your inbox and spam folder.');
+                    redirect('verify-otp-view');
+                } else {
+                    $error_message = $this->email->print_debugger(array('headers', 'subject', 'body'));
+                    log_message('error', 'Email sending failed for ' . $email . ': ' . $error_message);
+                    $this->session->set_flashdata('error', 'Failed to send OTP. Please try again later.');
+                    redirect('forgot-password');
+                }
+
+            } else {
+                $this->session->set_flashdata('error', 'Email address not found.');
+                redirect('forgot-password');
+            }
         }
     }
 
-    //Dashboard view
     public function dashboardview() {
-        // Get total domestic customers
         $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
-
-        // Customer Strength stats
         $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
-        $customer_data['total']['percent'] = $total_customers > 0 ? 
-            round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
+        $customer_data['total']['percent'] = $total_customers > 0 ? round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
 
-        // Phone Missing stats
         $phone_stats_raw = $this->CustomerRegister_model->get_phone_missing_stats();
         $phone_stats = [
             'total' => [
                 'qty' => $phone_stats_raw['total']['total'] ?? 0,
-                'percent' => $total_customers > 0 
-                    ? round(($phone_stats_raw['total']['total'] / $total_customers) * 100, 2) 
-                    : 0,
-
+                'percent' => $total_customers > 0 ? round(($phone_stats_raw['total']['total'] / $total_customers) * 100, 2) : 0,
                 'detailed' => $phone_stats_raw
             ],
             'active' => [
@@ -193,16 +284,11 @@ class User extends CI_Controller {
             ]
         ];
 
-        // Nil Refill stats
         $all_customers = $this->CustomerRegister_model->get_nillrefill_data();
         $stats = $this->CustomerRegister_model->get_nillrefill_stats($all_customers);
 
-        // MI Due stats
         $mi_due_summary = $this->CustomerRegister_model->get_mi_due_summary();
-        $total_mi_due = 0;
-        $pmuy_count = 0;
-        $non_pmuy_count = 0;
-
+        $total_mi_due = $pmuy_count = $non_pmuy_count = 0;
         foreach ($mi_due_summary as $row) {
             if ($row['scheme_type'] === 'PMUY') {
                 $pmuy_count += $row['count'];
@@ -211,7 +297,6 @@ class User extends CI_Controller {
             }
             $total_mi_due += $row['count'];
         }
-
         $mi_stats = [
             'total' => [
                 'qty' => $total_mi_due,
@@ -227,9 +312,7 @@ class User extends CI_Controller {
             ]
         ];
 
-        // Hose Due stats
         $hose_stats_raw = $this->CustomerRegister_model->get_hose_due_stats('dashboard');
-        
         $hose_stats = [
             'Total' => $hose_stats_raw['Total'],
             'total' => [
@@ -246,22 +329,9 @@ class User extends CI_Controller {
             ]
         ];
 
-        //SDSM Report stats
         $sdsms_report = $this->WebScrapping_model->get_merged_order_data();
-        $sdsms_stats = [];
-        if (!empty($sdsms_report)) {
-            $sdsms_stats = [
-                'total' => count($sdsms_report),
-            ];
-        } else {
-            $sdsms_stats = [
-                'total' => 0,
-                'areas' => [],
-                'cashmemo_generated' => 0,
-                'status_counts' => []
-            ];
-        }
-        // Prepare data for the view
+        $sdsms_stats = !empty($sdsms_report) ? ['total' => count($sdsms_report)] : ['total' => 0, 'areas' => [], 'cashmemo_generated' => 0, 'status_counts' => []];
+
         $data = [
             'method' => 'dashboard',
             'customer_data' => $customer_data,
@@ -275,37 +345,165 @@ class User extends CI_Controller {
             'page_title' => 'Dashboard',
             'report_date' => date('d-M-Y H:i:s'),
             'total_customers' => $total_customers,
-            'sdsms_stats' => $sdsms_stats  
+            'sdsms_stats' => $sdsms_stats,
+            'websites' => $this->WebsiteModel->get_all_websites()
         ];
-         $data['websites'] = $this->WebsiteModel->get_all_websites();
-        $this->load->view('website_dashboard', $data); 
+        $this->load->view('website_dashboard', $data);
     }
 
-    public function stored_website() {
+    public function stored_website() { 
         $data['websites'] = $this->WebsiteModel->get_all_websites();
         $data['method'] = 'store_website';
-        $this->load->view('website_dashboard', $data); 
+        $this->load->view('website_dashboard', $data);
     }
 
-    //Scrape data from the website
-    public function scrape_data(){
-        $this->load->library('form_validation');
+    public function add_website() {
+        $url = trim($this->input->post('url'));
+        $userId = trim($this->input->post('userId'));
+        $password = trim($this->input->post('password'));
+        $selectwebsitename = $this->input->post('selectwebsitename');
+        $loggeduserid = $this->session->userdata('id');
 
+        log_message('debug' , 'logged user id :' . ($loggeduserid ?? 'NULL'));
+        $errors = [];
+
+        // Ensure user is logged in
+        if (empty($loggeduserid)) {
+            $this->session->set_flashdata('error', 'You must be logged in to add a website.');
+            redirect('login');
+            return;
+        }
+
+        // Validate logged user exists in user table
+        $this->db->where('id', $loggeduserid);
+        $query = $this->db->get('user');
+        if ($query->num_rows() == 0) {
+            $errors['loggeduserid'] = 'Invalid user ID. User does not exist.';
+        }
+
+        // Validate URL
+        if (!empty($url)) {
+            if (!filter_var($url, FILTER_VALIDATE_URL)) {
+                $errors['url'] = 'Invalid URL format.';
+            }
+        } else {
+            $errors['url'] = 'Website URL is required.';
+        }
+
+        // Validate other inputs
+        if (empty($userId)) {
+            $errors['userId'] = 'Username is required.';
+        }
+        if (empty($password)) {
+            $errors['password'] = 'Password is required.';
+        }
+        if (empty($selectwebsitename)) {
+            $errors['selectwebsitename'] = 'Please select a website.';
+        }
+
+        if (!empty($errors)) {
+            $this->session->set_flashdata('errors', $errors);
+            $data['method'] = 'store_website';
+            $data['websites'] = $this->WebsiteModel->get_all_websites();
+            $this->load->view('website_dashboard', $data);
+            return;
+        }
+
+        // Prepare data for insertion
+        $insert_data = [
+            'website_userId' => $userId,
+            'website_password' => $password,
+            'website_url' => $url,
+            'selectwebsitename' => $selectwebsitename,
+            'userid' => $loggeduserid
+        ];
+
+        log_message('debug', 'Insert data: ' . json_encode($insert_data));
+
+        if ($this->WebsiteModel->insert_website($insert_data)) {
+            $this->session->set_flashdata('success', 'Website added successfully!');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to add website.');
+        }
+        redirect('storewebsite');
+    }
+
+    public function edit_website() {
+        $url = $this->input->post('url');
+        $website_id = $this->input->post('website_id');
+        $selectwebsitename = $this->input->post('selectwebsitename');
+        $userId = trim($this->input->post('userId'));
+        $password = trim($this->input->post('password'));
+        $loggeduserid = $this->session->userdata('id');
+
+        $errors = [];
+        if (empty($url)) $errors['url'] = 'Website URL is required.';
+        if (empty($website_id)) $errors['website_id'] = 'Website ID is required.';
+        if (empty($userId)) $errors['userId'] = 'Username is required.';
+        if (empty($password)) $errors['password'] = 'Password is required.';
+        if (empty($selectwebsitename)) $errors['selectwebsitename'] = 'Please select a website.';
+        if (empty($loggeduserid)) $errors['loggeduserid'] = 'Not a valid logged-in user.';
+
+        if (!empty($errors)) {
+            $this->session->set_flashdata('errors', $errors);
+            $data['method'] = 'store_website';
+            $data['websites'] = $this->WebsiteModel->get_all_websites();
+            $this->load->view('website_dashboard', $data);
+            return;
+        }
+
+        $data = [
+            'website_url' => $url,
+            'website_userId' => $userId,
+            'website_password' => $password,
+            'selectwebsitename' => $selectwebsitename
+        ];
+
+        if ($this->WebsiteModel->update_website($website_id, $loggeduserid, $data)) {
+            $this->session->set_flashdata('success', 'Website updated successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to update website.');
+        }
+        redirect('storewebsite');
+    }
+
+    public function delete_website() {
+        $website_id = $this->input->post('website_id');
+        $loggeduserid = $this->session->userdata('id');
+
+        $errors = [];
+        if (empty($website_id)) $errors['website_id'] = 'Website ID is required.';
+        if (empty($loggeduserid)) $errors['loggeduserid'] = 'Not a valid logged-in user.';
+
+        if (!empty($errors)) {
+            $this->session->set_flashdata('errors', $errors);
+            $data['method'] = 'store_website';
+            $data['websites'] = $this->WebsiteModel->get_all_websites();
+            $this->load->view('website_dashboard', $data);
+            return;
+        }
+
+        if ($this->WebsiteModel->delete_website($website_id, $loggeduserid)) {
+            $this->session->set_flashdata('success', 'Website deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete website.');
+        }
+        redirect('storewebsite');
+    }
+
+    public function scrape_data() {
         $this->form_validation->set_rules('userId', 'Username', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => strip_tags(validation_errors())
-                ]));
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => strip_tags(validation_errors())
+            ]));
         }
 
         $userId = $this->input->post('userId');
         $password = $this->input->post('password');
-
         $api_url = 'http://127.0.0.1:5000/data_scraper';
         $post_data = ['username' => $userId, 'password' => $password];
 
@@ -322,82 +520,63 @@ class User extends CI_Controller {
         ]);
 
         $response = curl_exec($ch);
-        
         if (curl_errno($ch)) {
             $error_msg = curl_error($ch);
             curl_close($ch);
-            log_message('error', 'CURL Error: '.$error_msg);
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'API Connection Error',
-                    'details' => $error_msg
-                ]));
+            log_message('error', 'CURL Error: ' . $error_msg);
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'API Connection Error',
+                'details' => $error_msg
+            ]));
         }
-
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         $result = json_decode($response, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            log_message('error', 'Invalid JSON from API: '.$response);
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'Invalid API Response',
-                    'details' => substr($response, 0, 200) // First 200 chars of response
-                ]));
+            log_message('error', 'Invalid JSON from API: ' . $response);
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Invalid API Response',
+                'details' => substr($response, 0, 200)
+            ]));
         }
 
         if ($result['status'] !== 'success') {
-            log_message('error', 'API returned error: '.($result['message'] ?? 'Unknown error'));
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => $result['message'] ?? 'Scraping failed',
-                    'api_response' => $result
-                ]));
+            log_message('error', 'API returned error: ' . ($result['message'] ?? 'Unknown error'));
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => $result['message'] ?? 'Scraping failed',
+                'api_response' => $result
+            ]));
         }
 
         $user_id = $this->session->userdata('id');
         if (empty($user_id)) {
             log_message('error', 'User session expired during scraping');
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'Session expired. Please login again.'
-                ]));
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Session expired. Please login again.'
+            ]));
         }
 
-        // Prepare data with better error handling
-        $invoiced_data = [];
-        if (!empty($result['data']['invoiced_process_order'])) {
-            $invoiced_data = array_map(function ($item) use ($user_id) {
-                return [
-                    'area_name' => $item['Area Name'] ?? 'N/A',
-                    'cashmemo_generated' => $item['CashMemo Generated'] ?? 'N/A',
-                    'status' => $item['Status'] ?? 'N/A',
-                    'userid' => $user_id
-                ];
-            }, $result['data']['invoiced_process_order']);
-        }
+        $invoiced_data = !empty($result['data']['invoiced_process_order']) ? array_map(function ($item) use ($user_id) {
+            return [
+                'area_name' => $item['Area Name'] ?? 'N/A',
+                'cashmemo_generated' => $item['CashMemo Generated'] ?? 'N/A',
+                'status' => $item['Status'] ?? 'N/A',
+                'userid' => $user_id
+            ];
+        }, $result['data']['invoiced_process_order']) : [];
 
-        $open_data = [];
-        if (!empty($result['data']['open_orders'])) {
-            $open_data = array_map(function ($item) use ($user_id) {
-                return [
-                    'area_name' => $item['Area Name'] ?? 'N/A',
-                    'open_refill_orders' => $item['Open Refill Orders'] ?? 'N/A',
-                    'userid' => $user_id
-                ];
-            }, $result['data']['open_orders']);
-        }
+        $open_data = !empty($result['data']['open_orders']) ? array_map(function ($item) use ($user_id) {
+            return [
+                'area_name' => $item['Area Name'] ?? '',
+                'open_refill_orders' => $item['Open Refill Orders'] ?? 'N/A',
+                'userid' => $user_id
+            ];
+        }, $result['data']['open_orders']) : [];
 
-        // Save data with transaction
         $this->db->trans_start();
         $success1 = $this->WebScrapping_model->invoice_order_data($invoiced_data);
         $success2 = $this->WebScrapping_model->open_order_data($open_data);
@@ -405,94 +584,65 @@ class User extends CI_Controller {
 
         if ($this->db->trans_status() === FALSE) {
             log_message('error', 'Database transaction failed during data save');
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'Database operation failed',
-                    'details' => [
-                        'invoiced_success' => $success1,
-                        'open_success' => $success2,
-                        'transaction_error' => true
-                    ]
-                ]));
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Database operation failed',
+                'details' => ['invoiced_success' => $success1, 'open_success' => $success2]
+            ]));
         }
 
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode([
-                'status' => 'success',
-                'message' => 'Data processed successfully',
-                'stats' => [
-                    'invoiced_records' => count($invoiced_data),
-                    'open_records' => count($open_data)
-                ]
-            ]));
+        return $this->output->set_content_type('application/json')->set_output(json_encode([
+            'status' => 'success',
+            'message' => 'Data scraped successfully',
+            'stats' => ['invoiced_records' => count($invoiced_data), 'open_records' => count($open_data)]
+        ]));
     }
-
 
     private function save_raw_data($result) {
         $data_dir = FCPATH . 'data/';
         if (!is_dir($data_dir)) {
             mkdir($data_dir, 0755, true);
         }
-        
         $filename = $data_dir . 'scraped_data_' . date('Ymd_His') . '.json';
         file_put_contents($filename, json_encode($result, JSON_PRETTY_PRINT));
     }
 
-     //Display invoice data in website
     public function display_invoice_data() {
         $data['method'] = 'display_invoice_data';
         $data['orders'] = $this->WebScrapping_model->get_all_invoice_order_data();
         $this->load->view('website_dashboard', $data);
     }
 
-    //Display open process data in website
     public function display_open_data() {
         $data['method'] = 'display_open_data';
         $data['excel_orders'] = $this->WebScrapping_model->get_all_open_order_data();
         $this->load->view('website_dashboard', $data);
     }
 
-    //Display merged data
     public function merged_data() {
-        $userid = $this->session->userdata('id');
         $data['method'] = 'sdms_report';
         $data['orders'] = $this->WebScrapping_model->get_merged_order_data();
         $this->load->view('website_dashboard', $data);
     }
-   
-    // public function bireport_store_data(){
-    //      $data['bireport'] = $this->WebsiteModel->get_all_websites();
-    //     $data['method'] = 'store_website';
-    //     $this->load->view('website_dashboard', $data); 
-    // }
 
-    public function bireport_scrape_data(){
-        $this->load->library('form_validation');
-
+    public function bireport_scrape_data() {
         $this->form_validation->set_rules('userId', 'Username', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
-        if ($this->form_validation->run() == FALSE) {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => strip_tags(validation_errors())
-                ]));
+        if ($this->form_validation->run() == NULL) {
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => strip_tags(validation_errors())
+            ]));
         }
 
         $userId = $this->input->post('userId');
         $password = $this->input->post('password');
-
-        $api_url = 'http://127.0.0.1:5000/bi_report_scraper'; // Your Flask scraper endpoint
+        $api_url = 'http://127.0.0.1:5000/bi_report_scraper';
         $post_data = ['username' => $userId, 'password' => $password];
 
         $ch = curl_init();
-        ini_set('max_execution_time', 300); // Extend timeout in PHP
-
+        ini_set('max_execution_time', 300);
         curl_setopt_array($ch, [
             CURLOPT_URL => $api_url,
             CURLOPT_RETURNTRANSFER => true,
@@ -507,73 +657,49 @@ class User extends CI_Controller {
         if (curl_errno($ch)) {
             $error_msg = curl_error($ch);
             curl_close($ch);
-            log_message('error', 'CURL Error: '.$error_msg);
-
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'API Connection Error',
-                    'details' => $error_msg
-                ]));
+            log_message('error', 'CURL Error: ' . $error_msg);
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'API Connection Error',
+                'details' => $error_msg
+            ]));
         }
-
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         $result = json_decode($response, true);
-
-
         if (json_last_error() !== JSON_ERROR_NONE) {
-            log_message('error', 'Invalid JSON from API: '.$response);
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'Invalid API Response',
-                    'details' => substr($response, 0, 200)
-                ]));
+            log_message('error', 'Invalid JSON from API: ' . $response);
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Invalid API Response',
+                'details' => substr($response, 0, 200)
+            ]));
         }
 
-        log_message('debug', 'Raw API response: ' . $response);
-        log_message('debug', 'Decoded API result: ' . print_r($result, true));
-
-        
-        // if (!is_array($result) || !isset($result['status']) || $result['status'] !== 'success') {
-        if(!isset($result['status']) || $result['status'] !== 'success') {
-            log_message('error', 'API returned error: '.($result['message'] ?? 'Unknown error'));
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => $result['message'] ?? 'Scraping failed',
-                    'api_response' => $result
-                ]));
+        if (!isset($result['status']) || $result['status'] !== 'success') {
+            log_message('error', 'API returned error: ' . ($result['message'] ?? 'Unknown error'));
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => $result['message'] ?? 'Scraping failed',
+                'api_response' => $result
+            ]));
         }
 
-        // Check if user session exists
         $user_id = $this->session->userdata('id');
         if (empty($user_id)) {
             log_message('error', 'User session expired during scraping');
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'Session expired. Please login again.'
-                ]));
-        }
-        
-        // ✅ SUCCESS RESPONSE
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode([
-                'status' => 'success',
-                'message' => 'BI Report scraping completed successfully',
-                'data' => $result['data'] ?? [] // Optional, depends on your Flask API response
+            return $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Session expired. Please login again.'
             ]));
+        }
+
+        return $this->output->set_content_type('application/json')->set_output(json_encode([
+            'status' => 'success',
+            'message' => 'BI Report scraping completed successfully',
+            'data' => $result['data'] ?? []
+        ]));
     }
 
-    
-    }
-        
-?>
+
+}

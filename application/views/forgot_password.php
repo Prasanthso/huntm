@@ -9,16 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #eceff1; 
+            background-color: #eceff1;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            font-family: 'Roboto Slab', serif; 
+            font-family: 'Roboto Slab', serif;
         }
         .navbar {
-            background-color: #2c3e50; 
+            background-color: #2c3e50;
             padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .huntmlogo {
             height: 40px;
@@ -32,10 +32,10 @@
             border: none;
             border-radius: 8px;
             margin-top: 5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         .card-header {
-            background-color: #007bff; 
+            background-color: #007bff;
             border-radius: 8px 8px 0 0;
             padding: 1.5rem;
             color: #ffffff;
@@ -52,7 +52,7 @@
         }
         .btn-primary:hover {
             background-color: #0056b3;
-            transform: translateY(-2px); 
+            transform: translateY(-2px);
         }
         .form-control {
             border-radius: 5px;
@@ -88,8 +88,8 @@
             color: #343a40;
         }
 
-        .save_button {
-            background-color: #28a745; 
+        .save_button { /* This class seems to be for the submit button */
+            background-color: #28a745;
             border: none;
             padding: 0.75rem;
             border-radius: 5px;
@@ -130,16 +130,19 @@
                         <?php if ($this->session->flashdata('errors')): ?>
                             <div class="alert alert-danger d-flex align-items-center">
                                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                <?php echo $this->session->flashdata('errors'); ?>
+                                <?php echo strip_tags($this->session->flashdata('errors')); ?>
                             </div>
                         <?php endif; ?>
-                        <form action="<?php echo base_url('send-reset-link'); ?>" method="post">
-                            <div class="mb-3">
+                        <form action="<?php echo base_url('send-otp'); ?>" method="post"> <div class="mb-3">
                                 <label for="email" class="form-label"><i class="bi bi-envelope-fill me-2"></i>Email Address</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control" id="email" name="email" required
+                                       value="<?= htmlspecialchars($this->session->flashdata('email_input') ?? '') ?>">
+                                <?php if (form_error('email')): ?>
+                                    <div class="invalid-feedback d-block"><?= form_error('email'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <button type="submit" class="btn save_button w-100">
-                                <i class="bi bi-send-fill me-2"></i>Send Reset Link
+                                <i class="bi bi-send-fill me-2"></i>Send OTP
                             </button>
                         </form>
                         <div class="mt-3 text-center">
