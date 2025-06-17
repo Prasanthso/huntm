@@ -287,10 +287,10 @@
                         <div class="form-group">
                             <select name="role" title="User Role" class="form-control">
                                 <option value="">User Role</option>
+                                <option value="superadmin" <?= isset($old_data['role']) && $old_data['role'] == 'superadmin' ? 'selected' : '' ?>>Super Admin</option>
+                                <option value="admin" <?= isset($old_data['role']) && $old_data['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
                                 <option value="distributor" <?= isset($old_data['role']) && $old_data['role'] == 'distributor' ? 'selected' : '' ?>>Distributor</option>
-                                <option value="manager" <?= isset($old_data['role']) && $old_data['role'] == 'manager' ? 'selected' : '' ?>>Manager</option>
                                 <option value="staff" <?= isset($old_data['role']) && $old_data['role'] == 'staff' ? 'selected' : '' ?>>Staff</option>
-                                <option value="fieldofficer" <?= isset($old_data['role']) && $old_data['role'] == 'fieldofficer' ? 'selected' : '' ?>>Field Officer</option>
                             </select>
                             <?php if (isset($errors['role'])): ?>
                                 <div class="error"><?= htmlspecialchars($errors['role']) ?></div>
