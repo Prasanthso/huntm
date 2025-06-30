@@ -24,7 +24,7 @@ class OpenOrder extends CI_Controller {
     }
 
     public function upload_excel() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         if (!isset($_FILES['excel_file']['name']) || empty($_FILES['excel_file']['name'])) {
             $this->session->set_flashdata('error', 'No file uploaded.');
             redirect('OpenOrder');

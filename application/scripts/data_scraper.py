@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants for SDMS Scraper
-# SDMS_LOGIN_URL = "https://access.ex.indianoil.in/oam/server/obrareq.cgi?encquery%3D8JDuX7m5GTn0urPrhrLB7tpfhXlEzsMc3yZM5JbHQ5F2izqIPDQ2Tf9C0kQ27MVzpl2OYxMkTYtahUOSQpKrLvF%2BKcMciJjPzE9fvAVoZIHp2rQ%2FpNf5B%2BjY17WvXUWVvTkQbQczhGFCJtdhtXDnIkD8IEf67yhWEb7XvDFBHhNvbhK%2F3HgdJB0lQkEdysKjfD5OnO2JnVeH6BaghQcrjcrFlncBACfC3fciZs%2BFKgMaNjSL%2FGLxHwi5W6PYUdUUTqSuknwP4oa%2FBC1GhcHinKrC1cGJJo2nzncPNZ%2B0vGLID1HVq69idpsNeT%2FovRti%2BAX4EXkLiXAziP2Xb4QImw%3D%3D%20agentid%3DSIEBEL_IP24%20ver%3D1%20crmethod%3D2%26cksum%3D86f442ca9b932cd15421d389231acc8c698cde25&ECID-Context=1.006BxESH%5EAIBl3o5oV5EiY00EY2Y00Szi5%3BkXjE"
+SDMS_LOGIN_URL = "https://access.ex.indianoil.in/oam/server/obrareq.cgi?encquery%3D8JDuX7m5GTn0urPrhrLB7tpfhXlEzsMc3yZM5JbHQ5F2izqIPDQ2Tf9C0kQ27MVzpl2OYxMkTYtahUOSQpKrLvF%2BKcMciJjPzE9fvAVoZIHp2rQ%2FpNf5B%2BjY17WvXUWVvTkQbQczhGFCJtdhtXDnIkD8IEf67yhWEb7XvDFBHhNvbhK%2F3HgdJB0lQkEdysKjfD5OnO2JnVeH6BaghQcrjcrFlncBACfC3fciZs%2BFKgMaNjSL%2FGLxHwi5W6PYUdUUTqSuknwP4oa%2FBC1GhcHinKrC1cGJJo2nzncPNZ%2B0vGLID1HVq69idpsNeT%2FovRti%2BAX4EXkLiXAziP2Xb4QImw%3D%3D%20agentid%3DSIEBEL_IP24%20ver%3D1%20crmethod%3D2%26cksum%3D86f442ca9b932cd15421d389231acc8c698cde25&ECID-Context=1.006BxESH%5EAIBl3o5oV5EiY00EY2Y00Szi5%3BkXjE"
 SDMS_TARGET_URL = "https://sdms.px.indianoil.in/siebel/app/edealer/enu/?SWECmd=GotoView&SWEView=EPIC+Order+Summary+View"
 TIMEOUT = 120  # seconds
 

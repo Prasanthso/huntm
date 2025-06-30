@@ -10,7 +10,7 @@ class OpenOrder_model extends CI_Model {
 
     public function insert_data($data) {
         // Clear old data for this user first
-        $this->db->where('userid', $this->session->userdata('id'));
+        $this->db->where('userid', $this->session->userdata('user_id'));
         $this->db->truncate('open_orders');
         
         // Insert new data
@@ -18,7 +18,7 @@ class OpenOrder_model extends CI_Model {
     }
 
     public function get_all_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         return $this->db
             ->select('area_name, open_refill_orders')
             ->from('open_orders')

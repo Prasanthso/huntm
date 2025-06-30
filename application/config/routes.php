@@ -60,7 +60,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['loginform'] = 'User/login';
 $route['loginuser'] = 'User/login_user';
-$route['logout'] = 'User/logout';
+$route['logout'] = 'User_profile/logout';
 $route['signup'] = 'UserProfile/signupform';
 $route['signupsubmit'] = 'UserProfile/submit';
 $route['suggestionform'] = 'User/suggestion_form';
@@ -150,3 +150,8 @@ $route['update-password'] = 'User/update_password';             // Handles new p
 // $route['update-password'] = 'User/update_password';
 // $route['update_password'] = 'User/update_password'; //for update password
 
+$route['user_profile_signup'] = 'User_profile/signup_form';
+$route['user_profile_signup_submit'] = 'User_profile/process_signup';
+$route['user_profile_login'] = 'User_profile/login_form';
+$route['user_profile_login_submit'] = 'User_profile/process_login';
+$route['admin_data'] = 'Admindashboard/get_admin_data';

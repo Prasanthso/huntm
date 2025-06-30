@@ -7,7 +7,7 @@ class MI_due_data extends CI_Controller {
         $this->load->model('CustomerRegister_model');
         $this->load->library('session');
         // Ensure user is authenticated
-        if (!$this->session->userdata('id')) {
+        if (!$this->session->userdata('user_id')) {
             redirect('login');
         }
     }

@@ -35,7 +35,7 @@ class User_model extends CI_Model {
 
     public function getUserByEmailOrUserID($input) {
         return $this->db->where('Email', $input)
-                    ->or_where('userID', $input)
+                    // ->or_where('userID', $input)
                     ->get('user')
                     ->row();
 }

@@ -46,7 +46,7 @@ class User extends CI_Controller {
         if ($user && password_verify($password, $user->Password)) {
             $this->session->set_userdata([
                 'id' => $user->id,
-                'Firstname' => $user->Firstname
+                'full_name' => $user->full_name
             ]);
             $this->session->set_flashdata('login_success', true);
             redirect('dashboard');
@@ -54,12 +54,12 @@ class User extends CI_Controller {
             $errors = $user ? ['password' => 'Incorrect password.'] : ['email' => 'No account found with this Email or User ID.'];
             $this->session->set_flashdata('errors', $errors);
             $this->session->set_flashdata('email', $login_input);
-            redirect('loginform');
+            redirect('login/process_login');
         }
     }
 
     public function logout() {
-        $this->session->unset_userdata(['id', 'Firstname']);
+        $this->session->unset_userdata(['id', 'full_name']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
         redirect('loginform');
@@ -75,7 +75,7 @@ class User extends CI_Controller {
         $suggestion_type = $this->input->post('suggestion_type', true);
         $message = $this->input->post('message', true);
         $voice_message = $this->input->post('voice_message', true);
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
 
         $errors = [];
         if (empty($application)) {
@@ -362,7 +362,7 @@ class User extends CI_Controller {
         $userId = trim($this->input->post('userId'));
         $password = trim($this->input->post('password'));
         $selectwebsitename = $this->input->post('selectwebsitename');
-        $loggeduserid = $this->session->userdata('id');
+        $loggeduserid = $this->session->userdata('user_id');
 
         log_message('debug' , 'logged user id :' . ($loggeduserid ?? 'NULL'));
         $errors = [];
@@ -434,7 +434,7 @@ class User extends CI_Controller {
         $selectwebsitename = $this->input->post('selectwebsitename');
         $userId = trim($this->input->post('userId'));
         $password = trim($this->input->post('password'));
-        $loggeduserid = $this->session->userdata('id');
+        $loggeduserid = $this->session->userdata('user_id');
 
         $errors = [];
         if (empty($url)) $errors['url'] = 'Website URL is required.';
@@ -469,7 +469,7 @@ class User extends CI_Controller {
 
     public function delete_website() {
         $website_id = $this->input->post('website_id');
-        $loggeduserid = $this->session->userdata('id');
+        $loggeduserid = $this->session->userdata('user_id');
 
         $errors = [];
         if (empty($website_id)) $errors['website_id'] = 'Website ID is required.';
@@ -551,7 +551,7 @@ class User extends CI_Controller {
             ]));
         }
 
-        $user_id = $this->session->userdata('id');
+        $user_id = $this->session->userdata('user_id');
         if (empty($user_id)) {
             log_message('error', 'User session expired during scraping');
             return $this->output->set_content_type('application/json')->set_output(json_encode([
@@ -685,7 +685,7 @@ class User extends CI_Controller {
             ]));
         }
 
-        $user_id = $this->session->userdata('id');
+        $user_id = $this->session->userdata('user_id');
         if (empty($user_id)) {
             log_message('error', 'User session expired during scraping');
             return $this->output->set_content_type('application/json')->set_output(json_encode([

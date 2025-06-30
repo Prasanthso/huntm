@@ -585,7 +585,7 @@
 </head>
 <body>
     <?php 
-    $userid = $this->session->userdata('id');
+    $userid = $this->session->userdata('user_id');
     ?>
 
     <!-- Header -->
@@ -601,7 +601,7 @@
         </div>
 
         <div class="text-end text-white">
-            Welcome! <?php echo $this->session->userdata('Firstname'); ?>
+            Welcome! <?php echo $this->session->userdata('full_name'); ?>
         </div>
     </header>
 

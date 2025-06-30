@@ -26,7 +26,7 @@ class CustomerRegister_model extends CI_Model {
     
     //Total Customer details
     public function get_total_domestic_customers() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select('COUNT(*) as total');
         $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
@@ -39,7 +39,7 @@ class CustomerRegister_model extends CI_Model {
 /////////////////////////////Customer Strength Data and Stats///////////////////////////
     //Customer strength data
     public function get_customer_strength_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("Area_Name, Consumer_Number, Consumer_Name, Phone_Number, Scheme_Selected, Consumer_Sub_Status");
         $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid); 
@@ -63,7 +63,7 @@ class CustomerRegister_model extends CI_Model {
     }
     // Get customer status counts
     public function get_customer_status_counts() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         
         // First get distinct Consumer_ID to avoid counting duplicates
         $this->db->select('Consumer_ID, Scheme_Selected, Consumer_Sub_Status');
@@ -108,7 +108,7 @@ class CustomerRegister_model extends CI_Model {
     }
     
     public function get_nillrefill_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         if (!$userid) {
             return [];
         }
@@ -246,7 +246,7 @@ class CustomerRegister_model extends CI_Model {
 /////////////////////////////KYC Data and Stats///////////////////////////
      //KYC data
     public function get_kyc_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("Area_Name, Consumer_Number, Consumer_Name, Phone_Number, Scheme_Selected, KYC_Number, Consumer_Sub_Status");
         $this->db->where('Consumer_Category', 'domestic'); 
         $this->db->where('userid', $userid);
@@ -271,7 +271,7 @@ class CustomerRegister_model extends CI_Model {
     }
     //KYC Stats
     public function get_kyc_stats() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         
         // Get total domestic customers
         $total_domestic = $this->get_total_domestic_customers();
@@ -316,7 +316,7 @@ class CustomerRegister_model extends CI_Model {
     }
     //KYC Status Counts
     public function get_kyc_status_counts() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("Scheme_Selected, Consumer_Sub_Status, KYC_Number");
         $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
@@ -420,7 +420,7 @@ class CustomerRegister_model extends CI_Model {
 /////////////////////////Mandatory Inspection (MI) Due Data///////////////////////////
     //MI due data
     public function get_pending_mi_area_scheme_wise() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("COALESCE(Area_Name, 'Unknown') AS Area_Name, 
                         Consumer_Number, Consumer_Name, Phone_Number,
                         CASE 
@@ -454,7 +454,7 @@ class CustomerRegister_model extends CI_Model {
     }
     // Get MI due summary
     public function get_mi_due_summary() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("
             CASE 
                 WHEN LOWER(TRIM(Scheme_Selected)) IN ('ujjwala', 'ujjwala - extended') THEN 'PMUY'
@@ -510,7 +510,7 @@ class CustomerRegister_model extends CI_Model {
 ///////////////////////////Hose Due Data///////////////////////////
     //Hose Due Data
     public function get_hose_due_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         if (empty($userid)) {
             log_message('error', 'User ID is empty in get_hose_due_data');
             return [];
@@ -625,7 +625,7 @@ class CustomerRegister_model extends CI_Model {
      //SBC Data
      // Add these methods to your existing model
     public function get_sbc_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("Consumer_ID, Area_Name, Consumer_Number, Consumer_Name, Phone_Number, 
                         Scheme_Selected, Consumer_Type, Consumer_Sub_Status");
         $this->db->where('Consumer_Category', 'domestic'); 
@@ -650,7 +650,7 @@ class CustomerRegister_model extends CI_Model {
     }
     // Get SBC stats
     public function get_sbc_status_counts() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("Scheme_Selected, Consumer_Sub_Status");
         $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);
@@ -785,7 +785,7 @@ class CustomerRegister_model extends CI_Model {
     }
     // Get phone number data
     public function get_phone_number_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         $this->db->select("Area_Name, Consumer_Number, Consumer_Name, Phone_Number, Scheme_Selected, Consumer_Sub_Status");
         $this->db->where('Consumer_Category', 'domestic');
         $this->db->where('userid', $userid);

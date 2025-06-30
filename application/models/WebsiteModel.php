@@ -39,7 +39,7 @@ class WebsiteModel extends CI_Model {
 
     public function get_all_websites() {
         try {
-            $loggeduserid = $this->session->userdata('id');
+            $loggeduserid = $this->session->userdata('user_id');
             if (empty($loggeduserid)) {
                 throw new Exception('No logged-in user ID found in session');
             }
@@ -68,7 +68,7 @@ class WebsiteModel extends CI_Model {
             }
 
             // Get logged-in user ID from session
-            $logged_user_id = $this->session->userdata('id');
+            $logged_user_id = $this->session->userdata('user_id');
             if (empty($logged_user_id)) {
                 throw new Exception('No logged-in user ID found in session');
             }

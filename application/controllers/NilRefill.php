@@ -73,7 +73,7 @@ class NilRefill extends CI_Controller {
     //         $this->load->view('website_dashboard', $data);
     // }
    public function nill_fill_data() {
-        if (!$this->session->userdata('id')) {
+        if (!$this->session->userdata('user_id')) {
             redirect('login'); // Adjust redirect as per your auth system
         }
 

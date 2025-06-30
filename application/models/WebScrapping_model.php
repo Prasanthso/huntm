@@ -10,7 +10,7 @@ class WebScrapping_model extends CI_Model {
 
     // Handle invoiced orders: delete old and insert new
     public function invoice_order_data($data) {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
 
         // Delete existing data for the user
         $this->db->where('userid', $userid);
@@ -27,7 +27,7 @@ class WebScrapping_model extends CI_Model {
 
     // Handle open orders: delete old and insert new
     public function open_order_data($data) {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
 
         // Delete existing data for the user
         $this->db->where('userid', $userid);
@@ -44,7 +44,7 @@ class WebScrapping_model extends CI_Model {
 
     // Get invoiced order data (used in views)
     public function get_all_invoice_order_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         return $this->db
             ->select('area_name, cashmemo_generated, status')
             ->from('invoiced_process_order')
@@ -56,7 +56,7 @@ class WebScrapping_model extends CI_Model {
 
     // Get open order data (used in views)
     public function get_all_open_order_data() {
-        $userid = $this->session->userdata('id');
+        $userid = $this->session->userdata('user_id');
         return $this->db
             ->select('area_name, open_refill_orders')
             ->from('open_orders')
@@ -68,7 +68,7 @@ class WebScrapping_model extends CI_Model {
     // Merge both invoiced + open order data by area
     public function get_merged_order_data($userid = null) {
         if ($userid === null) {
-            $userid = $this->session->userdata('id');
+            $userid = $this->session->userdata('user_id');
         }
 
         $this->db->select('i.area_name, i.cashmemo_generated, i.status, o.open_refill_orders');
