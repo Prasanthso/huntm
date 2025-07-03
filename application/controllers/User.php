@@ -11,14 +11,15 @@ class User extends CI_Controller {
         $this->load->model('WebsiteModel');
         $this->load->model('WebScrapping_model');
         $this->load->model('OpenOrder_model');
+        $this->load->model('Permission_model');
         $this->load->database();
         $this->config->load('email');
         $this->load->helper('string');
     }
 
-    public function index() {
-        $this->load->view('login_form');
-    }
+    // public function index() {
+    //     $this->load->view('login_form');
+    // }
 
     public function login() {
         $this->load->view('login_form');
@@ -62,7 +63,7 @@ class User extends CI_Controller {
         $this->session->unset_userdata(['id', 'full_name']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('loginform');
+        redirect('user_profile/login_form');
     }
 
     public function suggestion_form() {
@@ -259,6 +260,17 @@ class User extends CI_Controller {
     }
 
     public function dashboardview() {
+        $user_id = $this->session->userdata('user_id');
+        $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
+        $data['access'] = [
+            'customer_strength' => $this->Permission_model->is_allowed($route, $user_id),
+            'kyc_data' => $this->Permission_model->is_allowed($route, $user_id),
+            'sbc_data' => $this->Permission_model->is_allowed($route, $user_id),
+            'nillfill' => $this->Permission_model->is_allowed($route, $user_id),
+            'midue' => $this->Permission_model->is_allowed($route, $user_id),
+            'hosedue' => $this->Permission_model->is_allowed($route, $user_id),
+            'phonenumber' => $this->Permission_model->is_allowed($route, $user_id)
+        ];
         $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
         $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
         $customer_data['total']['percent'] = $total_customers > 0 ? round(($customer_data['total']['total'] / $total_customers) * 100, 2) : 0;
@@ -620,6 +632,15 @@ class User extends CI_Controller {
     }
 
     public function merged_data() {
+         $this->load->model('Permission_model');
+
+        $user_id = $this->session->userdata('user_id');
+        $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
+
+        if (!$this->Permission_model->is_allowed($route, $user_id)) {
+            show_error('403 - Access Denied');
+            return;
+        }
         $data['method'] = 'sdms_report';
         $data['orders'] = $this->WebScrapping_model->get_merged_order_data();
         $this->load->view('website_dashboard', $data);

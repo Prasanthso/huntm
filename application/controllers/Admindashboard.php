@@ -119,40 +119,36 @@ class Admindashboard extends CI_Controller {
         }
     }
 
-    public function assign_distributor_pages($distributor_id = null) {
+    public function assign_same_pages_to_all_staff() {
         $admin_id = $this->session->userdata('user_id');
-        $staff_id = $this->session->userdata('user_id'); 
-        $distributor_id = $this->session->userdata('user_id');
-
-        if (!$admin_id && !$staff_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
-            redirect('login');
-        }
+        if (!$admin_id) redirect('login');
 
         $this->load->model('Permission_model');
+        $this->load->model('Admindashboard_model');
 
         if ($this->input->post()) {
             $selected_pages = $this->input->post('page_ids') ?: [];
+            $staff_users = $this->Admindashboard_model->get_all_staff_users();
 
-            // Debug log with all possible IDs
-            log_message('debug', "Assigning permissions: Admin ID = $admin_id, Staff ID = $staff_id, Distributor ID = $distributor_id");
+            foreach ($staff_users as $staff) {
+                $this->Permission_model->update_staff_permissions($staff->id, $selected_pages);
+            }
 
-            // Update permissions with all possible IDs
-            $this->Permission_model->update_permissions($admin_id, $staff_id, $distributor_id, $selected_pages);
-
-            $this->session->set_flashdata('success', 'Permissions updated successfully.');
-            redirect('Admindashboard/assign_distributor_pages/' . $distributor_id);
+            $this->session->set_flashdata('success', 'Pages assigned to all staff successfully.');
+            redirect('Admindashboard/assign_same_pages_to_all_staff');
         }
 
-        $data['method'] = 'assign_distributor_pages';
+        $data['method'] = 'assign_same_pages_to_all_staff';
         $data['all_pages'] = $this->Permission_model->get_all_pages();
-        $data['selected_pages'] = $this->Permission_model->get_permissions($distributor_id);
-        $data['distributor_id'] = $distributor_id;
-
+        $data['selected_pages'] = []; 
         $this->load->view('Admindashboard_view', $data);
     }
 
-
-
-    
+    public function logout() {
+        $this->session->unset_userdata(['user_id', 'email', 'role', 'logged_in']);
+        $this->session->sess_destroy();
+        $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
+        redirect('user_profile/process_login');
+    }
+  
 }

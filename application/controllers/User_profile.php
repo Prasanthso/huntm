@@ -11,6 +11,9 @@ class User_profile extends CI_Controller {
         $this->load->library('form_validation');
     }
 
+    public function index() {
+        $this->load->view('User_profile_login');
+    }
     // public function signup_form(){
     //     $this->load->view('User_profile_view');
     // }

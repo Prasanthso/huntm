@@ -59,4 +59,9 @@ class Admindashboard_model extends CI_Model {
             return FALSE;
         }
     }
+
+    public function get_all_staff_users() {
+    return $this->db->get('user')->result(); // Uses the separate staff table
+}
+
 }

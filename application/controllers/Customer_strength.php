@@ -11,6 +11,15 @@ class Customer_strength extends CI_Controller {
     }
 
     public function customer_strength_data() {
+        $this->load->model('Permission_model');
+
+        $user_id = $this->session->userdata('user_id');
+        $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
+
+        if (!$this->Permission_model->is_allowed($route, $user_id)) {
+            show_error('403 - Access Denied');
+            return;
+        }
         // Get customer data from model
         $customers = $this->CustomerRegister_model->get_customer_strength_data();
         $customer_data = $this->CustomerRegister_model->get_customer_status_counts();

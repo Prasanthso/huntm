@@ -28,26 +28,33 @@ class Kyc_data extends CI_Controller {
     //     $this->load->view('website_dashboard', $data);
     // }
 
-    public function kyc_data() {
-        // Get all KYC data (pending only)
-        $kyc_data = $this->CustomerRegister_model->get_kyc_data();
-        
-        // Get KYC statistics
-        $kyc_stats = $this->CustomerRegister_model->get_kyc_stats();
-        
-        // Get status counts for summary table
-        $customer_data = $this->CustomerRegister_model->get_kyc_status_counts();
-        
-        $data = [
-            'kyc_data' => $kyc_data ?: [],
-            'kyc_stats' => $kyc_stats,
-            'customer_data' => $customer_data,
-            'method' => 'kyc_data',
-            'page_title' => 'KYC Status Report',
-            'report_date' => date('d-M-Y H:i:s')
-        ];
-    
-        $this->load->view('website_dashboard', $data);
+   public function kyc_data() {
+    $this->load->model('Permission_model');
+
+    $user_id = $this->session->userdata('user_id');
+    $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
+
+    if (!$this->Permission_model->is_allowed($route, $user_id)) {
+        show_error('403 - Access Denied');
+        return;
     }
+
+    $kyc_data = $this->CustomerRegister_model->get_kyc_data();
+    $kyc_stats = $this->CustomerRegister_model->get_kyc_stats();
+    $customer_data = $this->CustomerRegister_model->get_kyc_status_counts();
+
+    $data = [
+        'kyc_data' => $kyc_data ?: [],
+        'kyc_stats' => $kyc_stats,
+        'customer_data' => $customer_data,
+        'method' => 'kyc_data',
+        'page_title' => 'KYC Status Report',
+        'report_date' => date('d-M-Y H:i:s')
+    ];
+
+    $this->load->view('website_dashboard', $data);
+}
+
+
     
 }

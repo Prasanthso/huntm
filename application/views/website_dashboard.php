@@ -658,13 +658,30 @@
             </div> -->
             
             <div class="logout-container mt-auto p-3">
-                <a href="<?php echo base_url('loginform'); ?>" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                <a class="logout-btn" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="nav-text">Logout</span>
                 </a>
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a href="<?= base_url('user/logout'); ?>" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
 
@@ -1108,154 +1125,154 @@
                         </div>
                     
                         <?php } elseif ($method == 'customer_register') { ?>
-                    <div class="container">
-                        <div class="card shadow p-4">
-                            <h2 class="text-center mb-4">Customer Register Upload Data</h2>
-                            
-                            <?php if ($this->session->flashdata('success')): ?>
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <?php echo $this->session->flashdata('success'); ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($this->session->flashdata('error')): ?>
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <?php echo $this->session->flashdata('error'); ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <p class="text-muted text-center"> <?php echo $message; ?> </p>
-                            
-                            <form action="<?php echo site_url('customerregister_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                <div class="mb-3">
-                                    <label for="excel_file" class="form-label">Select Excel File</label>
-                                    <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
-                                    <div class="invalid-feedback">Please select a valid Excel file.</div>
-                                </div>
-                                <button type="submit" class="btn btn-primary save_btn">Upload</button>
-                            </form>
+                        <div class="container">
+                            <div class="card shadow p-4">
+                                <h2 class="text-center mb-4">Customer Register Upload Data</h2>
+                                
+                                <?php if ($this->session->flashdata('success')): ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <?php echo $this->session->flashdata('success'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('error')): ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <?php echo $this->session->flashdata('error'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                                
+                                <form action="<?php echo site_url('customerregister_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                    <div class="mb-3">
+                                        <label for="excel_file" class="form-label">Select Excel File</label>
+                                        <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                                        <div class="invalid-feedback">Please select a valid Excel file.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary save_btn">Upload</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
 
                 <!-- display open process data in website -->
                 <?php } elseif ($method == 'sdms_report') { ?>
-                <div class="container">
-                    <div class="dashboard-back-btn">
-                        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                            <i class="fas fa-arrow-left"></i> Back to Dashboard
-                        </a>
-                    </div>
-                    <h2 class="text-center mb-4">Invoice Order Service Area</h2>
+                    <div class="container">
+                        <div class="dashboard-back-btn">
+                            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                            </a>
+                        </div>
+                        <h2 class="text-center mb-4">Invoice Order Service Area</h2>
 
-                    <?php if ($this->session->flashdata('success')): ?>
-                        <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
-                    <?php endif; ?>
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                        <?php endif; ?>
 
-                    <?php if ($this->session->flashdata('error')): ?>
-                        <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
-                    <?php endif; ?>
-                    
-                    <div class="table-responsive">
-                        <table id="invoiceTable" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>Area Name</th>
-                                    <th>Cashmemo Generated</th>
-                                    <th>Status</th>
-                                    <th>Open Refill Orders</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($orders)): ?>
-                                    <?php foreach ($orders as $index => $order): ?>
-                                        <tr>
-                                            <td><?php echo $index + 1; ?></td>
-                                            <td><?php echo htmlspecialchars($order['area_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($order['cashmemo_generated']); ?></td>
-                                            <td><?php echo htmlspecialchars($order['status']); ?></td>
-                                            <td><?php echo htmlspecialchars($order['open_refill_orders'] ?? 'N/A'); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
+                        <?php if ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
+                        <?php endif; ?>
+                        
+                        <div class="table-responsive">
+                            <table id="invoiceTable" class="table table-bordered">
+                                <thead>
                                     <tr>
-                                        <td colspan="4" class="text-center">No records found.</td>
+                                        <th>S.No</th>
+                                        <th>Area Name</th>
+                                        <th>Cashmemo Generated</th>
+                                        <th>Status</th>
+                                        <th>Open Refill Orders</th>
                                     </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination - Exactly as you requested -->
-                    <nav>
-                        <ul class="pagination justify-content-center mt-3">
-                            <li class="page-item" id="prevPage"><a class="page-link" href="javascript:void(0)">Previous</a></li>
-                            <li class="page-item"><a class="page-link" id="currentPage">1-10</a></li>
-                            <li class="page-item" id="nextPage"><a class="page-link" href="javascript:void(0)">Next</a></li>
-                        </ul>
-                    </nav>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($orders)): ?>
+                                        <?php foreach ($orders as $index => $order): ?>
+                                            <tr>
+                                                <td><?php echo $index + 1; ?></td>
+                                                <td><?php echo htmlspecialchars($order['area_name']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['cashmemo_generated']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['status']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['open_refill_orders'] ?? 'N/A'); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="4" class="text-center">No records found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination - Exactly as you requested -->
+                        <nav>
+                            <ul class="pagination justify-content-center mt-3">
+                                <li class="page-item" id="prevPage"><a class="page-link" href="javascript:void(0)">Previous</a></li>
+                                <li class="page-item"><a class="page-link" id="currentPage">1-10</a></li>
+                                <li class="page-item" id="nextPage"><a class="page-link" href="javascript:void(0)">Next</a></li>
+                            </ul>
+                        </nav>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const table = document.getElementById('invoiceTable');
-                    const rows = Array.from(table.querySelectorAll('tbody tr'));
-                    const rowsPerPage = 10;
-                    let currentPage = 1;
-                    const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
-                    
-                    // Pagination elements
-                    const currentPageElement = document.getElementById('currentPage');
-                    const prevButton = document.getElementById('prevPage');
-                    const nextButton = document.getElementById('nextPage');
-                    
-                    function updatePagination() {
-                        // Calculate range to show
-                        const start = (currentPage - 1) * rowsPerPage + 1;
-                        const end = Math.min(start + rowsPerPage - 1, rows.length);
-                        
-                        // Update current page display with range (e.g., "1-10")
-                        currentPageElement.textContent = rows.length > 0 ? `${start}-${end}` : '0-0';
-                        
-                        // Toggle disabled state
-                        if (currentPage === 1) {
-                            prevButton.classList.add('disabled');
-                        } else {
-                            prevButton.classList.remove('disabled');
-                        }
-                        
-                        if (currentPage === totalPages || rows.length === 0) {
-                            nextButton.classList.add('disabled');
-                        } else {
-                            nextButton.classList.remove('disabled');
-                        }
-                        
-                        // Show/hide rows
-                        rows.forEach((row, index) => {
-                            row.style.display = (index >= start - 1 && index < end) ? '' : 'none';
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const table = document.getElementById('invoiceTable');
+                            const rows = Array.from(table.querySelectorAll('tbody tr'));
+                            const rowsPerPage = 10;
+                            let currentPage = 1;
+                            const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
+                            
+                            // Pagination elements
+                            const currentPageElement = document.getElementById('currentPage');
+                            const prevButton = document.getElementById('prevPage');
+                            const nextButton = document.getElementById('nextPage');
+                            
+                            function updatePagination() {
+                                // Calculate range to show
+                                const start = (currentPage - 1) * rowsPerPage + 1;
+                                const end = Math.min(start + rowsPerPage - 1, rows.length);
+                                
+                                // Update current page display with range (e.g., "1-10")
+                                currentPageElement.textContent = rows.length > 0 ? `${start}-${end}` : '0-0';
+                                
+                                // Toggle disabled state
+                                if (currentPage === 1) {
+                                    prevButton.classList.add('disabled');
+                                } else {
+                                    prevButton.classList.remove('disabled');
+                                }
+                                
+                                if (currentPage === totalPages || rows.length === 0) {
+                                    nextButton.classList.add('disabled');
+                                } else {
+                                    nextButton.classList.remove('disabled');
+                                }
+                                
+                                // Show/hide rows
+                                rows.forEach((row, index) => {
+                                    row.style.display = (index >= start - 1 && index < end) ? '' : 'none';
+                                });
+                            }
+                            
+                            // Event listeners
+                            prevButton.addEventListener('click', function() {
+                                if (currentPage > 1) {
+                                    currentPage--;
+                                    updatePagination();
+                                }
+                            });
+                            
+                            nextButton.addEventListener('click', function() {
+                                if (currentPage < totalPages) {
+                                    currentPage++;
+                                    updatePagination();
+                                }
+                            });
+                            
+                            // Initialize
+                            updatePagination();
                         });
-                    }
-                    
-                    // Event listeners
-                    prevButton.addEventListener('click', function() {
-                        if (currentPage > 1) {
-                            currentPage--;
-                            updatePagination();
-                        }
-                    });
-                    
-                    nextButton.addEventListener('click', function() {
-                        if (currentPage < totalPages) {
-                            currentPage++;
-                            updatePagination();
-                        }
-                    });
-                    
-                    // Initialize
-                    updatePagination();
-                });
-            </script>
+                    </script>
 
                 <!-- display open process data in website -->
                     <?php } elseif ($method == 'display_open_data') {?>
@@ -1405,7 +1422,7 @@
                         </form>
                     </div> -->
                     <!-- Display and store website -->
-               <?php } elseif ($method == 'store_website') { ?>
+                <?php } elseif ($method == 'store_website') { ?>
                 <div class="container">
                     <h2 class="text-center mb-4"><i class="bi bi-shop me-2"></i>Stored Websites</h2>
 
@@ -4780,5 +4797,42 @@
         //     console.log('Navigating to:', section);
         // }
     </script>
+    <!-- Access Denied Modal -->
+    <div class="modal fade" id="accessDeniedModal" tabindex="-1" aria-labelledby="accessDeniedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="accessDeniedModalLabel">Access Denied</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                You do not have permission to access this page.
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if (!empty($access_denied) && $access_denied): ?>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize the modal
+        var accessDeniedModal = new bootstrap.Modal(document.getElementById('accessDeniedModal'));
+        
+        // Show the modal
+        accessDeniedModal.show();
+        
+        // Optional: Close modal when clicking outside
+        document.getElementById('accessDeniedModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            accessDeniedModal.hide();
+        }
+        });
+    });
+    </script>
+    <?php endif; ?>
+
 </body>
 </html>
