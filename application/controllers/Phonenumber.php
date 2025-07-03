@@ -10,19 +10,32 @@ class Phonenumber extends CI_Controller {
     }
 
 public function phonenumber_data() {
-   $this->load->model('Permission_model');
+    $this->load->model('Permission_model');
 
     $user_id = $this->session->userdata('user_id');
     $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
 
     if (!$this->Permission_model->is_allowed($route, $user_id)) {
-        show_error('403 - Access Denied');
+        // Access denied: Show modal on dashboard view
+        $data = [
+            'access_denied' => true,
+            'customer_data' => [],
+            'phone_missing_data' => [],
+            'phone_stats' => [],
+            'method' => 'phonenumber',
+            'page_title' => 'Phone Number Missing Report',
+            'report_date' => date('d-M-Y H:i:s'),
+            'debug_count' => 0
+        ];
+        $this->load->view('website_dashboard', $data);
         return;
     }
+
+    // Access allowed: Fetch data
     $stats = $this->CustomerRegister_model->get_phone_missing_stats();
     $phone_missing_data = $this->CustomerRegister_model->get_phone_number_data();
     $total_customers = $this->CustomerRegister_model->get_total_domestic_customers();
-    
+
     // Prepare data for view
     $data = [
         'customer_data' => $stats,
@@ -49,9 +62,11 @@ public function phonenumber_data() {
         'method' => 'phonenumber',
         'page_title' => 'Phone Number Missing Report',
         'report_date' => date('d-M-Y H:i:s'),
-        'debug_count' => count($phone_missing_data)
+        'debug_count' => count($phone_missing_data),
+        'access_denied' => false
     ];
-    
+
     $this->load->view('website_dashboard', $data);
 }
+
 }

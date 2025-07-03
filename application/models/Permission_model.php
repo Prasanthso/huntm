@@ -9,7 +9,7 @@ class Permission_model extends CI_Model {
 
     public function update_staff_permissions($staff_id, $page_ids = []) {
         $this->db->where('staff_id', $staff_id);
-        $this->db->delete('user_page_permissions');
+        // $this->db->delete('user_page_permissions');
 
         foreach ($page_ids as $pid) {
             $this->db->insert('user_page_permissions', [

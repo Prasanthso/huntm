@@ -28,6 +28,7 @@ class User extends CI_Controller {
     public function login_user() {
         $login_input = trim($this->input->post('email', true));
         $password = $this->input->post('password', true);
+        $user_name = $this->User_model->getusername();
 
         $errors = [];
         if (empty($login_input)) {
@@ -362,7 +363,7 @@ class User extends CI_Controller {
         ];
         $this->load->view('website_dashboard', $data);
     }
-
+    
     public function stored_website() { 
         $data['websites'] = $this->WebsiteModel->get_all_websites();
         $data['method'] = 'store_website';
@@ -632,19 +633,31 @@ class User extends CI_Controller {
     }
 
     public function merged_data() {
-         $this->load->model('Permission_model');
+        $this->load->model('Permission_model');
 
         $user_id = $this->session->userdata('user_id');
         $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
 
         if (!$this->Permission_model->is_allowed($route, $user_id)) {
-            show_error('403 - Access Denied');
+            // Load dashboard view with access denied modal trigger
+            $data = [
+                'access_denied' => true,
+                'method' => 'sdms_report',
+                'orders' => []
+            ];
+            $this->load->view('website_dashboard', $data);
             return;
         }
-        $data['method'] = 'sdms_report';
-        $data['orders'] = $this->WebScrapping_model->get_merged_order_data();
+
+        // Permission allowed
+        $data = [
+            'method' => 'sdms_report',
+            'orders' => $this->WebScrapping_model->get_merged_order_data(),
+            'access_denied' => false
+        ];
         $this->load->view('website_dashboard', $data);
     }
+
 
     public function bireport_scrape_data() {
         $this->form_validation->set_rules('userId', 'Username', 'required');

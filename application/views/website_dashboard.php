@@ -4801,38 +4801,29 @@
     <div class="modal fade" id="accessDeniedModal" tabindex="-1" aria-labelledby="accessDeniedModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-danger">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="accessDeniedModalLabel">Access Denied</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                You do not have permission to access this page.
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
-            </div>
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="accessDeniedModalLabel">Access Denied</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    You do not have permission to access this page.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+                </div>
             </div>
         </div>
     </div>
 
     <?php if (!empty($access_denied) && $access_denied): ?>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Initialize the modal
-        var accessDeniedModal = new bootstrap.Modal(document.getElementById('accessDeniedModal'));
-        
-        // Show the modal
-        accessDeniedModal.show();
-        
-        // Optional: Close modal when clicking outside
-        document.getElementById('accessDeniedModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            accessDeniedModal.hide();
-        }
-        });
-    });
-    </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var accessDeniedModal = new bootstrap.Modal(document.getElementById('accessDeniedModal'));
+                accessDeniedModal.show();
+            });
+        </script>
     <?php endif; ?>
+
 
 </body>
 </html>
