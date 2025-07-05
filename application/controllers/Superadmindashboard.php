@@ -17,16 +17,25 @@ class Superadmindashboard extends CI_Controller {
             $this->session->set_flashdata('error', 'You must be logged in to view this page.');
             redirect('login');
         }
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to load admin data.');
+            redirect('login');
+        }
+        
         $data['method'] = "superadmindashboard";
-        $data['admin_data'] = $this->Admindashboard_model->get_admin_data($admin_id); 
+        $data['admin'] = $admin_data; // Changed from 'admin_data' to 'admin' to match view
         $this->load->view('Superadmindashboard_view', $data);
     }
 
     public function create_admin() {
-
+        $superadmin_id = $this->session->userdata('user_id');
+        
         $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[admin.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+        $this->form_validation->set_rules('distributor_limit', 'Distributor Limit', 'required|integer|greater_than[0]');
 
         if ($this->form_validation->run() == FALSE) {
             $data['method'] = 'create_admin';
@@ -37,9 +46,10 @@ class Superadmindashboard extends CI_Controller {
                 'email' => $this->input->post('email'),
                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                 'role' => 'admin',
+                'distributor_limit' => $this->input->post('distributor_limit'),
+                'created_by_admin' => $superadmin_id // Using new column name
             );
 
-            // Save the new admin to the database
             if ($this->Superadmindashboard_model->create_admin($admin_data)) {
                 $this->session->set_flashdata('success', 'Admin created successfully!');
             } else {
@@ -89,4 +99,6 @@ class Superadmindashboard extends CI_Controller {
         $data['method'] = 'showing_distributor_remaining_data';
         $this->load->view('Superadmindashboard_view', $data);
     }
+
+    
 }

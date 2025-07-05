@@ -45,7 +45,27 @@ class User_model extends CI_Model {
         return $this->db->where('userID', $id)->get('user')->row();
     }
 
+    public function get_staff_data_by_id($staff_id) {
+        $this->db->select('*');
+        $this->db->from('user');
+        $this->db->where('id', $staff_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        }
+        return null;
+    }
 
+    public function update_staff_data($staff_id, $data) {
+        $this->db->where('id', $staff_id);
+        $this->db->update('user', $data);
+        if ($this->db->affected_rows() > 0) {
+            return TRUE;
+        } else {
+            log_message('error', 'Update failed: ' . $this->db->last_query() . ' | Error: ' . json_encode($this->db->error()));
+            return FALSE;
+        }
+    }
     // public function updatePassword($user_id, $password) {
     //     return $this->db->where('id', $user_id)
     //                    ->update('user', ['password' => $password]);

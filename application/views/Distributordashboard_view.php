@@ -586,6 +586,11 @@
                 <i class="fas fa-user-plus"></i>
                 <span>Create Staff</span>
             </a>
+            <a href="<?php echo base_url('Distributordashboard/get_staff_data'); ?>" 
+            class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Distributordashboard/get_staff_data')) ? 'active' : ''; ?>">
+                <i class="fas fa-user-plus"></i>
+                <span>Manage Staff</span>
+            </a>
         </div>
         <div class="logout-container">
             <a href="<?php echo base_url('login'); ?>" class="logout-btn">
@@ -597,7 +602,7 @@
 
     <div class="main-content" id="main-content">
         <div class="container-fluid">
-            <?php if (isset($method) && in_array($method, ['distributordashboard', 'profile', 'create_staff'])) : ?>
+            <?php if (isset($method) && in_array($method, ['distributordashboard', 'profile', 'create_staff','get_staff_data' , 'showing_staff_remaining_data'])) : ?>
                 <?php if ($method == "distributordashboard") : ?>
                     <div class="row fade-in">
                         <div class="col-12 mb-4">
@@ -844,13 +849,20 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row fade-in">
                         <div class="col-lg-8 mx-auto">
                             <div class="form-container">
                                 <div class="text-center mb-4">
                                     <h2><i class="fas fa-user-plus"></i> New Staff Account</h2>
                                     <p class="text-muted">Create a new staff member account</p>
+                                    <!-- Staff Limit Indicator -->
+                                    <?php if (isset($staff_limit) && isset($current_staff_count)): ?>
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            You have created <?php echo $current_staff_count; ?> out of <?php echo $staff_limit; ?> allowed staff accounts.
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                                 
                                 <?php echo form_open('Distributordashboard/create_staff'); ?>
@@ -890,7 +902,179 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Limit Reached Modal (Will be shown automatically if limit is reached) -->
+                    <?php if (isset($staff_limit) && isset($current_staff_count) && $current_staff_count >= $staff_limit): ?>
+                    <div class="modal fade show" id="limitModal" tabindex="-1" aria-labelledby="limitModalLabel" aria-modal="true" style="display: block; padding-right: 17px;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-warning text-white">
+                                    <h5 class="modal-title" id="limitModalLabel">
+                                        <i class="fas fa-exclamation-triangle me-2"></i> Staff Limit Reached
+                                    </h5>
+                                    <button type="button" class="btn-close" onclick="closeModal()"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>You have reached your maximum limit of <?php echo $staff_limit; ?> staff accounts.</p>
+                                    <p>Please contact your administrator to request an increase in your staff limit.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-backdrop fade show"></div>
+                    <?php endif; ?>
+
+                    <script>
+                    // Password toggle functionality
+                    document.getElementById('togglePassword').addEventListener('click', function() {
+                        const passwordInput = document.getElementById('password');
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                    });
+
+                    // Close modal function
+                    function closeModal() {
+                        document.getElementById('limitModal').style.display = 'none';
+                        document.querySelector('.modal-backdrop').style.display = 'none';
+                    }
+                    </script>
+                <?php elseif($method == 'get_staff_data'): ?>
+                    <div class="row">
+                            <div class="col-12">
+                                <h2 class="mb-4"><i class="fas fa-users me-2"></i>Staff Details</h2>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S.No</th>
+                                                        <th>Full Name</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($distributor_data as $distributor): ?>
+                                                        <tr>
+                                                            <td><?php echo $serialNo; ?></td>
+                                                            <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
+                                                            <td><?php echo htmlspecialchars($distributor->Email); ?></td>
+                                                            <td><?php echo htmlspecialchars($distributor->role); ?></td>
+                                                            <td>
+                                                                <a href="<?php echo base_url('Distributordashboard/showing_staff_remaining_data/'. $distributor->id); ?>" class="btn btn-info btn-sm">
+                                                                    <i class="fas fa-eye me-1"></i> View
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php $serialNo++; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                <?php elseif($method == 'showing_staff_remaining_data'): ?>
+                    <div class="row">
+                        <div class="col-12 pt-0">
+                            <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Staff Full Details</h2>
+                                    <form>
+                                         <?php foreach ($distributor_data as $distributor): ?>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="full_name" class="form-label">Full Name</label>
+                                                    <input type="text" class="form-control" id="full_name" name="full_name" 
+                                                        value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="email" name="email" 
+                                                        value="<?php echo htmlspecialchars($distributor->Email ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="phone" class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" id="phone" name="phone" 
+                                                        value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="sap_code" class="form-label">SAP Code</label>
+                                                    <input type="text" class="form-control" id="sap_code" name="sap_code" 
+                                                        value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <h5 class="section-header"><i class="fas fa-university me-2"></i>Bank Details</h5>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                                    <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
+                                                        value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="account_number" class="form-label">Account Number</label>
+                                                    <input type="text" class="form-control" id="account_number" name="account_number" 
+                                                        value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                                    <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
+                                                        value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="bank_name" class="form-label">Bank Name</label>
+                                                    <input type="text" class="form-control" id="bank_name" name="bank_name" 
+                                                        value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">Address</label>
+                                                <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="pin_code" class="form-label">Pin Code</label>
+                                                    <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                                        value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="city" name="city" 
+                                                        value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="office_mobile" class="form-label">Office Mobile</label>
+                                                    <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
+                                                        value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php else: ?>
                     <div class="row fade-in">
                         <div class="col-12">

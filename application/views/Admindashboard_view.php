@@ -514,6 +514,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?php echo base_url('AdminDashboard/get_distributor_data'); ?>" 
+                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/get_distributor_data')) ? 'active' : ''; ?>">
+                         <i class="fas fa-users-cog"></i>
+                        <span>Manage Distributor</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/assign_same_pages_to_all_staff'); ?>" 
                        class="nav-link <?php echo (current_url() == base_url('AdminDashboard/assign_same_pages_to_all_staff')) ? 'active' : ''; ?>">
                         <i class="fas fa-tasks"></i>
@@ -546,6 +553,9 @@
                     <?php elseif ($method == "create_distributor") : ?>
                         <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Create Distributor</li>
+                     <?php elseif ($method == "get_distributor_data") : ?>
+                        <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Manage Distributor</li>
                     <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                         <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Manage Pages</li>
@@ -562,6 +572,8 @@
                         <i class="fas fa-user-cog text-primary me-2"></i>Profile Management
                     <?php elseif ($method == "create_distributor") : ?>
                         <i class="fas fa-user-plus text-primary me-2"></i>Create New Distributor
+                    <?php elseif ($method == "manage_distributor") : ?>
+                        <i class="fas fa-users-cog text-primary me-2"></i>Manage Distributor
                     <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                         <i class="fas fa-tasks text-primary me-2"></i>Page Management
                     <?php endif; ?>
@@ -572,30 +584,28 @@
             <?php if ($method == "admindashboard") : ?>
                 <div class="row">
                     <?php if (!empty($admin_data)) : ?>
-                        <?php foreach ($admin_data as $admin) : ?>
-                            <div class="col-md-6 col-lg-4 mb-4">
-                                <div class="dashboard-card h-100">
-                                    <div class="card-header">
-                                        <i class="fas fa-user-shield me-2"></i>
-                                        <span class="card-title">Admin Profile</span>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="dashboard-card h-100">
+                                <div class="card-header">
+                                    <i class="fas fa-user-shield me-2"></i>
+                                    <span class="card-title">Admin Profile</span>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="text-primary mb-3"><?php echo htmlspecialchars($admin_data->full_name ?? 'N/A'); ?></h5>
+                                    <div class="mb-2">
+                                        <i class="fas fa-envelope me-2 text-muted"></i>
+                                        <span><?php echo htmlspecialchars($admin_data->email ?? 'N/A'); ?></span>
                                     </div>
-                                    <div class="card-body">
-                                        <h5 class="text-primary mb-3"><?php echo htmlspecialchars($admin->full_name ?? 'N/A'); ?></h5>
-                                        <div class="mb-2">
-                                            <i class="fas fa-envelope me-2 text-muted"></i>
-                                            <span><?php echo htmlspecialchars($admin->email ?? 'N/A'); ?></span>
-                                        </div>
-                                        <div class="mb-4">
-                                            <i class="fas fa-user-tag me-2 text-muted"></i>
-                                            <span class="badge bg-primary"><?php echo htmlspecialchars($admin->role ?? 'N/A'); ?></span>
-                                        </div>
-                                        <a href="<?php echo base_url('AdminDashboard/profile'); ?>" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit me-1"></i> Edit Profile
-                                        </a>
+                                    <div class="mb-4">
+                                        <i class="fas fa-user-tag me-2 text-muted"></i>
+                                        <span class="badge bg-primary"><?php echo htmlspecialchars($admin_data->role ?? 'N/A'); ?></span>
                                     </div>
+                                    <a href="<?php echo base_url('AdminDashboard/profile'); ?>" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit me-1"></i> Edit Profile
+                                    </a>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        </div>
                     <?php else : ?>
                         <div class="col-12">
                             <div class="alert alert-info">
@@ -604,6 +614,7 @@
                         </div>
                     <?php endif; ?>
                 </div>
+
                 
             <?php elseif ($method == "profile") : ?>
                 <div class="row">
@@ -733,6 +744,14 @@
                     <div class="col-lg-8 mx-auto">
                         <div class="form-container">
                             <h2><i class="fas fa-user-plus me-2 text-primary"></i>New Distributor Account</h2>
+                            <p class="text-muted">Create a new distributor member account</p>
+                            <!-- Distributor Limit Indicator -->
+                                <?php if (isset($distributor_limit) && isset($current_distributor_count)): ?>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        You have created <?php echo $current_distributor_count; ?> out of <?php echo $distributor_limit; ?> allowed staff accounts.
+                                    </div>
+                                <?php endif; ?>
                             
                             <?php echo form_open('Admindashboard/create_distributor'); ?>
                                 <div class="mb-3">
@@ -762,6 +781,14 @@
                                     <small class="text-muted">Password must be at least 8 characters long</small>
                                 </div>
                                 
+                                <div class="mb-3">
+                                    <label for="staff_limit" class="form-label"><i class="fas fa-users me-1 text-muted"></i>Staff Limit</label>
+                                    <input type="number" class="form-control <?php echo form_error('staff_limit') ? 'is-invalid' : ''; ?>" 
+                                        id="staff_limit" name="staff_limit" value="<?php echo set_value('staff_limit', 5); ?>" min="1" required>
+                                    <?php echo form_error('staff_limit', '<div class="invalid-feedback">', '</div>'); ?>
+                                    <small class="text-muted">Maximum number of staff this distributor can create</small>
+                                </div>
+                                
                                 <div class="d-grid mt-4">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-user-plus me-2"></i>Create Distributor
@@ -771,7 +798,189 @@
                         </div>
                     </div>
                 </div>
-                
+
+                <!-- Limit Reached Modal -->
+                <div class="modal fade" id="limitReachedModal" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="limitReachedModalLabel">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Limit Reached
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You have reached your maximum distributor limit of <span class="fw-bold"><?php echo $current_limit; ?></span>.</p>
+                                <p>Please contact your administrator if you need to increase your distributor limit.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Make sure jQuery and Bootstrap JS are loaded before this script -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+                <script>
+                $(document).ready(function() {
+                    // Password toggle functionality
+                    $('#togglePassword').click(function() {
+                        const passwordField = $('#password');
+                        const icon = $(this).find('i');
+                        
+                        if (passwordField.attr('type') === 'password') {
+                            passwordField.attr('type', 'text');
+                            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                        } else {
+                            passwordField.attr('type', 'password');
+                            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                        }
+                    });
+                    
+                    // Show modal if limit is reached
+                    <?php if (isset($limit_reached) && $limit_reached): ?>
+                        $(window).on('load', function() {
+                            var myModal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
+                            myModal.show();
+                        });
+                    <?php endif; ?>
+                });
+                </script>
+                <?php elseif($method == 'get_distributor_data'): ?>
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="mb-4"><i class="fas fa-users me-2"></i>Distributor Admin Details</h2>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S.No</th>
+                                                        <th>Full Name</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($distributor_data as $distributor): ?>
+                                                        <tr>
+                                                            <td><?php echo $serialNo; ?></td>
+                                                            <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
+                                                            <td><?php echo htmlspecialchars($distributor->email); ?></td>
+                                                            <td><?php echo htmlspecialchars($distributor->role); ?></td>
+                                                            <td>
+                                                                <a href="<?php echo base_url('Admindashboard/showing_distributor_remaining_data/'. $distributor->id); ?>" class="btn btn-info btn-sm">
+                                                                    <i class="fas fa-eye me-1"></i> View
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php $serialNo++; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                <?php elseif($method == 'showing_distributor_remaining_data'): ?>
+                    <div class="row">
+                        <div class="col-12 pt-0">
+                            <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Distributor Full Details</h2>
+                                    <form>
+                                         <?php foreach ($distributor_data as $distributor): ?>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="full_name" class="form-label">Full Name</label>
+                                                    <input type="text" class="form-control" id="full_name" name="full_name" 
+                                                        value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="email" name="email" 
+                                                        value="<?php echo htmlspecialchars($distributor->email ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="phone" class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" id="phone" name="phone" 
+                                                        value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="sap_code" class="form-label">SAP Code</label>
+                                                    <input type="text" class="form-control" id="sap_code" name="sap_code" 
+                                                        value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <h5 class="section-header"><i class="fas fa-university me-2"></i>Bank Details</h5>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                                    <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
+                                                        value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="account_number" class="form-label">Account Number</label>
+                                                    <input type="text" class="form-control" id="account_number" name="account_number" 
+                                                        value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                                    <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
+                                                        value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="bank_name" class="form-label">Bank Name</label>
+                                                    <input type="text" class="form-control" id="bank_name" name="bank_name" 
+                                                        value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">Address</label>
+                                                <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="pin_code" class="form-label">Pin Code</label>
+                                                    <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                                        value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="city" name="city" 
+                                                        value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="office_mobile" class="form-label">Office Mobile</label>
+                                                    <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
+                                                        value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">

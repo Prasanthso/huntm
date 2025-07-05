@@ -420,7 +420,6 @@
         <div class="container-fluid fade-in">
             <?php if (isset($method)) : ?>
                 <?php if ($method == 'superadmindashboard') : ?>
-                    <?php foreach($admin_data as $admin) : ?>
                         <div class="container-fluid">
                             <h1 class="mb-4">Dashboard Overview</h1>
                             <div class="row g-4">
@@ -452,20 +451,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                    <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/get_admin_data'); ?>'">
-                                        <div class="card-body">
-                                            <h6><i class="fas fa-users-cog me-2"></i> Manage Admins</h6>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <p>View and manage</p>
-                                                    <p>all admin accounts</p>
-                                                </div>
-                                                <i class="fas fa-chevron-right text-muted"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                                     <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/get_distributor_data'); ?>'">
                                         <div class="card-body">
@@ -482,7 +467,6 @@
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
                 <?php elseif($method == 'get_admin_data') : ?>
                     <div class="row">
                         <div class="col-12">
@@ -747,45 +731,117 @@
                             </div>
                         </div>
                     </div>
+               
                 <?php elseif($method == 'create_admin') : ?>
-                    <div class="row">
-                        <div class="col-12">
+                    <div class="row fade-in">
+                        <div class="col-12 mb-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h2 class="h3 mb-0 text-gray-800">Admin Management</h2>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="<?php echo base_url('Superadmindashboard/dashboard'); ?>"><i class="fas fa-home"></i> Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-user-plus"></i> Create Admin</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row fade-in">
+                        <div class="col-lg-8 mx-auto">
                             <div class="form-container">
-                                <h2><i class="fas fa-user-plus me-2"></i>Create New Admin</h2>
+                                <div class="text-center mb-4">
+                                    <h2><i class="fas fa-user-plus"></i> New Admin Account</h2>
+                                    <p class="text-muted">Create a new administrator account</p>
+                                </div>
+                                
                                 <?php echo form_open('Superadmindashboard/create_admin'); ?>
                                     <div class="mb-3">
-                                        <label for="full_name" class="form-label">Full Name</label>
+                                        <label for="full_name" class="form-label"><i class="fas fa-user me-1 text-gray-500"></i> Full Name</label>
                                         <input type="text" class="form-control <?php echo form_error('full_name') ? 'is-invalid' : ''; ?>" 
-                                               id="full_name" name="full_name" value="<?php echo set_value('full_name'); ?>" required>
+                                            id="full_name" name="full_name" value="<?php echo set_value('full_name'); ?>" required>
                                         <?php echo form_error('full_name', '<div class="invalid-feedback">', '</div>'); ?>
                                     </div>
+                                    
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
+                                        <label for="email" class="form-label"><i class="fas fa-envelope me-1 text-gray-500"></i> Email</label>
                                         <input type="email" class="form-control <?php echo form_error('email') ? 'is-invalid' : ''; ?>" 
-                                               id="email" name="email" value="<?php echo set_value('email'); ?>" required>
+                                            id="email" name="email" value="<?php echo set_value('email'); ?>" required>
                                         <?php echo form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
                                     </div>
+                                    
                                     <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
+                                        <label for="password" class="form-label"><i class="fas fa-lock me-1 text-gray-500"></i> Password</label>
                                         <div class="input-group">
                                             <input type="password" class="form-control <?php echo form_error('password') ? 'is-invalid' : ''; ?>" 
-                                                   id="password" name="password" required>
-                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                id="password" name="password" required>
+                                            <button class="btn btn-outline-secondary password-toggle" type="button" id="togglePassword">
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                             <?php echo form_error('password', '<div class="invalid-feedback">', '</div>'); ?>
                                         </div>
-                                        <div class="form-text">Password must be at least 8 characters long</div>
+                                        <div class="form-text text-muted small">Password must be at least 8 characters long</div>
                                     </div>
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-user-plus me-2"></i>Create Admin
+                                    
+                                    <div class="mb-3">
+                                        <label for="distributor_limit" class="form-label"><i class="fas fa-users-cog me-1 text-gray-500"></i> Distributor Limit</label>
+                                        <input type="number" class="form-control <?php echo form_error('distributor_limit') ? 'is-invalid' : ''; ?>" 
+                                            id="distributor_limit" name="distributor_limit" value="<?php echo set_value('distributor_limit', 5); ?>" min="1" required>
+                                        <?php echo form_error('distributor_limit', '<div class="invalid-feedback">', '</div>'); ?>
+                                        <div class="form-text text-muted small">Maximum number of distributors this admin can create</div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 mt-4">
+                                        <button type="submit" class="btn btn-primary py-2">
+                                            <i class="fas fa-user-plus me-2"></i> Create Admin Account
                                         </button>
                                     </div>
                                 <?php echo form_close(); ?>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Distributor Limit Reached Modal (Will be shown automatically if limit is reached) -->
+                    <div class="modal fade" id="limitModal" tabindex="-1" aria-labelledby="limitModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-warning text-white">
+                                    <h5 class="modal-title" id="limitModalLabel">
+                                        <i class="fas fa-exclamation-triangle me-2"></i> Distributor Limit Reached
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>You have reached your maximum limit of <?php echo isset($distributor_limit) ? $distributor_limit : ''; ?> distributors.</p>
+                                    <p>Please contact your super administrator to request an increase in your distributor limit.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <a href="<?php echo base_url('Admindashboard/contact_superadmin'); ?>" class="btn btn-warning">
+                                        <i class="fas fa-paper-plane me-2"></i> Contact Super Admin
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                    // Password toggle functionality
+                    document.getElementById('togglePassword').addEventListener('click', function() {
+                        const passwordInput = document.getElementById('password');
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                    });
+
+                    // Show modal if limit reached
+                    <?php if (isset($show_limit_modal) && $show_limit_modal): ?>
+                        window.onload = function() {
+                            var limitModal = new bootstrap.Modal(document.getElementById('limitModal'));
+                            limitModal.show();
+                        };
+                    <?php endif; ?>
+                    </script>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

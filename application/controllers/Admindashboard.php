@@ -7,6 +7,7 @@ class Admindashboard extends CI_Controller {
         parent::__construct();
         $this->load->model('Admindashboard_model');
         $this->load->model('Distributordashboard_model');
+        $this->load->model('Superadmindashboard_model');
         // $this->load->;
         $this->load->helper('url');
         $this->load->library('session');
@@ -20,7 +21,7 @@ class Admindashboard extends CI_Controller {
             redirect('login');
         }
         $data['method'] = "admindashboard";
-        $data['admin_name'] = $this->Admindashboard_model->get_admin_name($admin_id);
+        $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['admin_data'] = $this->Admindashboard_model->get_admin_data($admin_id);
         $this->load->view('admindashboard_view', $data);
     }
@@ -92,32 +93,93 @@ class Admindashboard extends CI_Controller {
         }
     }
 
+    // public function create_distributor() {
+    //     $admin_id = $this->session->userdata('user_id');
+    //     $admin = $this->Admindashboard_model->get_admin($admin_id);
+    //     $current_distributor_count = $this->Admindashboard_model->count_distributors($admin_id);
+
+    //     // Check if admin has reached distributor limit
+        
+
+    //     $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
+    //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[distributor.email]');
+    //     $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+    //     $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
+
+    //     if ($this->form_validation->run() == FALSE) {
+    //     $data = [
+    //         'method' => 'create_distributor',
+    //         'distributor_limit' => $admin->distributor_limit,
+    //         'current_distributor_count' => $current_distributor_count,
+    //         'show_limit_modal' => ($current_distributor_count >= $admin->distributor_limit)
+    //     ];
+    //     $this->load->view('Admindashboard_view', $data);
+    //     } else {
+    //         if ($current_distributor_count >= $admin->distributor_limit) {
+    //         $this->session->set_flashdata('error', 'You have reached your distributor limit of '.$admin->distributor_limit.'. Cannot create more distributors.');
+    //         redirect('Admindashboard/create_distributor');
+    //         return;
+    //     }
+    //         $distributor_data = array(
+    //             'full_name' => $this->input->post('full_name'),
+    //             'email' => $this->input->post('email'),
+    //             'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+    //             'staff_limit' => $this->input->post('staff_limit'),
+    //             'created_by' => $admin_id,
+    //             'created_by_admin' => $admin_id 
+    //         );
+
+    //         $result = $this->Admindashboard_model->create_distributor($distributor_data);
+    //         if ($result) {
+    //             $this->session->set_flashdata('success', 'Distributor created successfully!');
+    //         } else {
+    //             $this->session->set_flashdata('error', 'Failed to create distributor. Please try again.');
+    //         }
+    //         redirect('Admindashboard/create_distributor');
+    //     }
+    // }
     public function create_distributor() {
-        $admin_id = $this->session->userdata('user_id');
-        $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[admin.email]');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+    $admin_id = $this->session->userdata('user_id');
+    $admin = $this->Admindashboard_model->get_admin($admin_id);
+    $current_distributor_count = $this->Admindashboard_model->count_distributors($admin_id);
 
-        if ($this->form_validation->run() == FALSE) {
-            $data['method'] = 'create_distributor';
-            $this->load->view('Admindashboard_view', $data);
+    // Check if admin has reached distributor limit
+    $limit_reached = ($current_distributor_count >= $admin->distributor_limit);
+
+    $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[distributor.email]');
+    $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+    $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
+
+    if ($this->form_validation->run() == FALSE || $limit_reached) {
+        $data = [
+            'method' => 'create_distributor',
+            'distributor_limit' => $admin->distributor_limit,
+            'current_distributor_count' => $current_distributor_count,
+            'limit_reached' => $limit_reached, // This will trigger the modal
+            'current_limit' => $admin->distributor_limit
+        ];
+        $this->load->view('Admindashboard_view', $data);
+    } else {
+        $distributor_data = array(
+            'full_name' => $this->input->post('full_name'),
+            'email' => $this->input->post('email'),
+            'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+            'role' => 'distributor',
+            'staff_limit' => $this->input->post('staff_limit'),
+            'created_by' => $admin_id,
+            'created_by_admin' => $admin_id 
+        );
+
+        $result = $this->Admindashboard_model->create_distributor($distributor_data);
+        if ($result) {
+            $this->session->set_flashdata('success', 'Distributor created successfully!');
         } else {
-            $admin_data = array(
-                'full_name' => $this->input->post('full_name'),
-                'email' => $this->input->post('email'),
-                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-                'role' => 'distributor',
-            );
-
-            $result = $this->Admindashboard_model->create_distributor($admin_data);
-            if ($result) {
-                $this->session->set_flashdata('success', 'Distributor created successfully!');
-            } else {
-                $this->session->set_flashdata('error', 'Failed to create distributor. Please try again.');
-            }
-            redirect('Admindashboard/create_distributor');
+            $this->session->set_flashdata('error', 'Failed to create distributor. Please try again.');
         }
+        redirect('Admindashboard/create_distributor');
     }
+}
 
     public function assign_same_pages_to_all_staff() {
         $admin_id = $this->session->userdata('user_id');
@@ -141,6 +203,26 @@ class Admindashboard extends CI_Controller {
         $data['method'] = 'assign_same_pages_to_all_staff';
         $data['all_pages'] = $this->Permission_model->get_all_pages();
         $data['selected_pages'] = []; 
+        $this->load->view('Admindashboard_view', $data);
+    }
+    public function get_distributor_data() {
+        $admin_id = $this->session->userdata('user_id');
+        $data['distributor_data'] = $this->Admindashboard_model->get_distributor_details($admin_id);
+        $data['method'] = 'get_distributor_data';
+        $this->load->view('Admindashboard_view', $data);
+    }
+
+    public function showing_distributor_remaining_data($distributor_id) {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+
+        if (!$distributor_id) {
+            show_error("Distributor ID is required", 400);
+        }
+
+        $data['distributor_data'] = $this->Superadmindashboard_model->get_remaining_distributor_data($distributor_id);
+        $data['method'] = 'showing_distributor_remaining_data';
         $this->load->view('Admindashboard_view', $data);
     }
 

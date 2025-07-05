@@ -88,29 +88,74 @@ class Distributordashboard extends CI_Controller {
     }
 
     public function create_staff() {
-        $admin_id = $this->session->userdata('user_id');
+        // Check if distributor is logged in
+        if (!$this->session->userdata('user_id')) {
+            redirect('login'); // Redirect to login if not authenticated
+        }
+
+        $distributor_id = $this->session->userdata('user_id');
+        $distributor = $this->Distributordashboard_model->get_distributor_data_by_id($distributor_id);
+        $current_count = $this->Distributordashboard_model->count_staff($distributor_id);
+
+        // Set form validation rules
         $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[admin.email]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
 
         if ($this->form_validation->run() == FALSE) {
+            // If form validation fails, reload the page with errors
             $data['method'] = 'create_staff';
+            $data['staff_limit'] = $distributor->staff_limit;
+            $data['current_staff_count'] = $current_count;
             $this->load->view('Distributordashboard_view', $data);
         } else {
-            $admin_data = array(
+            // Check staff limit before creating
+            if ($current_count >= $distributor->staff_limit) {
+                $this->session->set_flashdata('error', 'You have reached your staff limit of '.$distributor->staff_limit);
+                redirect('Distributordashboard/create_staff');
+                return; // Important to prevent further execution
+            }
+
+            // Prepare staff data
+            $staff_data = array(
                 'full_name' => $this->input->post('full_name'),
                 'email' => $this->input->post('email'),
                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-                'role' => 'staff',
+                'created_by' => $distributor_id,
+                'role' => 'staff' // Make sure to set the role
             );
 
-            $result = $this->Distributordashboard_model->create_staff($admin_data);
+            $result = $this->Distributordashboard_model->create_staff($staff_data);
+            
             if ($result) {
                 $this->session->set_flashdata('success', 'Staff created successfully!');
+                redirect('Distributordashboard/create_staff'); // Redirect to staff list instead of create form
             } else {
                 $this->session->set_flashdata('error', 'Failed to create staff. Please try again.');
+                redirect('Distributordashboard/create_staff');
             }
-            redirect('Distributordashboard/create_staff');
         }
+
+    }
+
+    public function get_staff_data() {
+        $admin_id = $this->session->userdata('user_id');
+        $data['distributor_data'] = $this->Distributordashboard_model->get_staff_data($admin_id);
+        $data['method'] = 'get_staff_data';
+        $this->load->view('Distributordashboard_view', $data);
+    }
+
+    public function showing_staff_remaining_data($distributor_id) {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+
+        if (!$distributor_id) {
+            show_error("Distributor ID is required", 400);
+        }
+
+        $data['distributor_data'] = $this->Distributordashboard_model->get_remaining_staff_data($distributor_id);
+        $data['method'] = 'showing_staff_remaining_data';
+        $this->load->view('Distributordashboard_view', $data);
     }
 }

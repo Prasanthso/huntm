@@ -59,7 +59,86 @@ class User extends CI_Controller {
             redirect('login/process_login');
         }
     }
+    public function profile() {
+        $staff_id = $this->session->userdata('user_id');
+        if (!$staff_id) {
+            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
+            redirect('login');
+        }
+        $data['method'] = "profile";
+        $data['distributor_data'] = $this->User_model->get_staff_data_by_id($staff_id);
+        $data['validation_errors'] = $this->form_validation->error_array();
+        $this->load->view('website_dashboard', $data);
+    }
 
+    public function add() {
+        // Verify user is logged in
+        $staff_id = $this->session->userdata('user_id');
+        if (!$staff_id) {
+            $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
+            redirect('login');
+        }
+        
+        if ($this->input->post()) {
+            // Set validation rules
+            $this->form_validation->set_rules('phone', 'Phone', 'trim|required|numeric|min_length[10]|max_length[15]');
+            $this->form_validation->set_rules('sap_code', 'SAP Code', 'trim|max_length[500]');
+            $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|max_length[500]');
+            $this->form_validation->set_rules('account_number', 'Account Number', 'trim|numeric');
+            $this->form_validation->set_rules('ifsc_code', 'IFSC Code', 'trim|max_length[500]');
+            $this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|max_length[500]');
+            $this->form_validation->set_rules('address', 'Address', 'trim|required');
+            $this->form_validation->set_rules('pin_code', 'Pin Code', 'trim|required|numeric');
+            $this->form_validation->set_rules('city', 'City', 'trim|required|max_length[100]');
+            $this->form_validation->set_rules('office_mobile', 'Office Mobile', 'trim|numeric|min_length[10]|max_length[15]');
+
+            if ($this->form_validation->run() === FALSE) {
+                // Store validation errors and form data
+                $this->session->set_flashdata('form_errors', validation_errors());
+                $this->session->set_flashdata('form_data', $this->input->post());
+                redirect('user/profile');
+            } else {
+                // Prepare data for update
+                $data = [
+                    'phone' => $this->input->post('phone', TRUE),
+                    'sap_code' => $this->input->post('sap_code', TRUE) ?: NULL,
+                    'account_holder_name' => $this->input->post('account_holder_name', TRUE) ?: NULL,
+                    'account_number' => $this->input->post('account_number', TRUE) ?: NULL,
+                    'ifsc_code' => $this->input->post('ifsc_code', TRUE) ?: NULL,
+                    'bank_name' => $this->input->post('bank_name', TRUE) ?: NULL,
+                    'address' => $this->input->post('address', TRUE),
+                    'pin_code' => $this->input->post('pin_code', TRUE),
+                    'city' => $this->input->post('city', TRUE),
+                    'office_mobile' => $this->input->post('office_mobile', TRUE) ?: NULL
+                ];
+
+                // Check for actual changes
+                $current_data = $this->User_model->get_staff_data_by_id($staff_id);
+                $changes = array_diff_assoc($data, (array)$current_data);
+                
+                if (empty($changes)) {
+                    $this->session->set_flashdata('info', 'No changes were made to your profile.');
+                    redirect('user/profile');
+                }
+
+                // Attempt update
+                $update = $this->User_model->update_staff_data($staff_id, $data);
+                
+                if ($update) {
+                    $this->session->set_flashdata('success', 'Profile updated successfully.');
+                } else {
+                    $error = $this->db->error();
+                    $error_message = $error['code'] ? 'Database error: ' . $error['message'] : 'No matching record found';
+                    log_message('error', 'Profile update failed: ' . $error_message);
+                    $this->session->set_flashdata('error', 'Failed to update profile. ' . $error_message);
+                }
+                redirect('user/profile');
+            }
+        } else {
+            $this->session->set_flashdata('error', 'No data submitted.');
+            redirect('user/profile');
+        }
+    }
     public function logout() {
         $this->session->unset_userdata(['id', 'full_name']);
         $this->session->sess_destroy();
