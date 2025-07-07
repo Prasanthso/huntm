@@ -34,6 +34,7 @@ class Admindashboard extends CI_Controller {
         }
         $data['method'] = "profile";
         $data['admin_data'] = $this->Admindashboard_model->get_admin_data_by_id($admin_id);
+         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['validation_errors'] = $this->form_validation->error_array();
         $this->load->view('admindashboard_view', $data);
     }
@@ -142,6 +143,7 @@ class Admindashboard extends CI_Controller {
     $admin_id = $this->session->userdata('user_id');
     $admin = $this->Admindashboard_model->get_admin($admin_id);
     $current_distributor_count = $this->Admindashboard_model->count_distributors($admin_id);
+    $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
 
     // Check if admin has reached distributor limit
     $limit_reached = ($current_distributor_count >= $admin->distributor_limit);
@@ -154,6 +156,7 @@ class Admindashboard extends CI_Controller {
     if ($this->form_validation->run() == FALSE || $limit_reached) {
         $data = [
             'method' => 'create_distributor',
+            'admin_name' => $this->Admindashboard_model->get_admin($admin_id),
             'distributor_limit' => $admin->distributor_limit,
             'current_distributor_count' => $current_distributor_count,
             'limit_reached' => $limit_reached, // This will trigger the modal
@@ -201,18 +204,22 @@ class Admindashboard extends CI_Controller {
         }
 
         $data['method'] = 'assign_same_pages_to_all_staff';
+        $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['all_pages'] = $this->Permission_model->get_all_pages();
         $data['selected_pages'] = []; 
         $this->load->view('Admindashboard_view', $data);
     }
+    
     public function get_distributor_data() {
         $admin_id = $this->session->userdata('user_id');
         $data['distributor_data'] = $this->Admindashboard_model->get_distributor_details($admin_id);
+        $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_distributor_data';
         $this->load->view('Admindashboard_view', $data);
     }
 
     public function showing_distributor_remaining_data($distributor_id) {
+         $admin_id = $this->session->userdata('user_id');
         if (!$this->session->userdata('user_id')) {
             redirect('login');
         }
@@ -222,12 +229,13 @@ class Admindashboard extends CI_Controller {
         }
 
         $data['distributor_data'] = $this->Superadmindashboard_model->get_remaining_distributor_data($distributor_id);
+         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'showing_distributor_remaining_data';
         $this->load->view('Admindashboard_view', $data);
     }
 
     public function logout() {
-        $this->session->unset_userdata(['user_id', 'email', 'role', 'logged_in']);
+        $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
         redirect('user_profile/process_login');

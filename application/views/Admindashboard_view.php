@@ -531,12 +531,29 @@
         </div>
         
         <div class="sidebar-footer">
-            <a href="<?php echo base_url('login'); ?>" class="logout-btn">
+            <a class="logout-btn" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Sign Out</span>
             </a>
         </div>
     </aside>
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a href="<?= base_url('Admindashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- Main Content -->
     <main class="app-main" id="main-content">

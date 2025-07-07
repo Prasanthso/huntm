@@ -304,17 +304,6 @@
                                     <a href="#">Forgot your password?</a>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label for="role" class="form-label">Access Role</label>
-                                    <select class="form-select" id="role" name="role" required>
-                                        <option value="" selected disabled>Select your access level</option>
-                                        <option value="admin">LSG Administrator</option>
-                                        <option value="distributor">Distributor Admin</option>
-                                        <option value="staff">Staff Member</option>
-                                    </select>
-                                    <div class="invalid-feedback" id="roleError">Please select your access role.</div>
-                                </div>
-                                
                                 <button type="submit" class="btn btn-auth mt-2">Login to Dashboard</button>
                             </form>
                         </div>

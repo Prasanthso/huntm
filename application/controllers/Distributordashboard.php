@@ -95,6 +95,7 @@ class Distributordashboard extends CI_Controller {
 
         $distributor_id = $this->session->userdata('user_id');
         $distributor = $this->Distributordashboard_model->get_distributor_data_by_id($distributor_id);
+        $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $current_count = $this->Distributordashboard_model->count_staff($distributor_id);
 
         // Set form validation rules
@@ -157,5 +158,11 @@ class Distributordashboard extends CI_Controller {
         $data['distributor_data'] = $this->Distributordashboard_model->get_remaining_staff_data($distributor_id);
         $data['method'] = 'showing_staff_remaining_data';
         $this->load->view('Distributordashboard_view', $data);
+    }
+    public function logout() {
+        $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
+        $this->session->sess_destroy();
+        $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
+        redirect('user_profile/process_login');
     }
 }

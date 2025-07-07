@@ -57,33 +57,27 @@ class User_profile_model extends CI_Model
         return false;
     }
 
-    public function validate_email($email, $password, $role)
-    {
-        switch ($role) {
-            case 'admin':
-                $table = 'admin';
-                break;
-            case 'distributor':
-                $table = 'distributor';
-                break;
-            case 'staff':
-                $table = 'user';
-                break;
-            default:
-                error_log("Invalid role for validation: $role");
-                return false;
-        }
+    public function validate_email($email, $password)
+{
+    $tables = [
+        'admin' => 'admin',
+        'distributor' => 'distributor',
+        'staff' => 'user'
+    ];
 
+    foreach ($tables as $role => $table) {
         $this->db->where('email', $email);
         $query = $this->db->get($table);
 
-        error_log("Login query for $role: " . $this->db->last_query());
+        error_log("Login query for $table: " . $this->db->last_query());
 
         if ($query->num_rows() > 0) {
             $user = $query->row();
             error_log("User found in $table: " . print_r($user, true));
+            
             if (isset($user->password) && (strpos($user->password, '$2y$') === 0 || strpos($user->password, '$2a$') === 0)) {
                 if (password_verify($password, $user->password)) {
+                    // Add role to user object if not already set
                     if (!isset($user->role)) {
                         $user->role = $role;
                         error_log("Role not set in DB, assigned: $role");
@@ -96,9 +90,10 @@ class User_profile_model extends CI_Model
             } else {
                 error_log("Invalid password format for $email in $table (not hashed)");
             }
-        } else {
-            error_log("No user found for $email in $table");
         }
-        return false;
     }
+    
+    error_log("No user found for $email in any table");
+    return false;
+}
 }

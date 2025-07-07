@@ -13,10 +13,11 @@ class Distributordashboard_model extends CI_Model {
         $this->db->where('id', $distributor_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
-            return $query->result();
+            return $query->row(); // ✅ return single object
         }
-        return array();
+        return null;
     }
+
     
     public function get_distributor_data_by_id($distributor_id) {
         $this->db->select('*');

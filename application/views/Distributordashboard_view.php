@@ -593,13 +593,29 @@
             </a>
         </div>
         <div class="logout-container">
-            <a href="<?php echo base_url('login'); ?>" class="logout-btn">
+            <a class="logout-btn" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
         </div>
     </div>
-
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a href="<?= base_url('Distributordashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="main-content" id="main-content">
         <div class="container-fluid">
             <?php if (isset($method) && in_array($method, ['distributordashboard', 'profile', 'create_staff','get_staff_data' , 'showing_staff_remaining_data'])) : ?>
@@ -619,7 +635,7 @@
                     
                     <div class="row fade-in">
                         <?php if (!empty($distributor_data)): ?>
-                            <?php foreach ($distributor_data as $distributor) : ?>
+                           
                             <div class="col-md-6 col-lg-4 mb-4">
                                 <div class="dashboard-card h-100">
                                     <div class="card-header">
@@ -627,26 +643,26 @@
                                         <span>Admin Profile</span>
                                     </div>
                                     <div class="card-body">
-                                        <h5 class="card-title"><?php echo htmlspecialchars($distributor->full_name ?? 'N/A'); ?></h5>
+                                        <h5 class="card-title"><?php echo htmlspecialchars($distributor_data->full_name ?? 'N/A'); ?></h5>
                                         <div class="detail-item">
                                             <i class="fas fa-envelope"></i>
-                                            <span><?php echo htmlspecialchars($distributor->email ?? 'N/A'); ?></span>
+                                            <span><?php echo htmlspecialchars($distributor_data->email ?? 'N/A'); ?></span>
                                         </div>
                                         <div class="detail-item">
                                             <i class="fas fa-phone"></i>
-                                            <span><?php echo htmlspecialchars($distributor->phone ?? 'N/A'); ?></span>
+                                            <span><?php echo htmlspecialchars($distributor_data->phone ?? 'N/A'); ?></span>
                                         </div>
                                         <div class="detail-item">
                                             <i class="fas fa-map-marker-alt"></i>
-                                            <span><?php echo htmlspecialchars($distributor->city ?? 'N/A'); ?></span>
+                                            <span><?php echo htmlspecialchars($distributor_data->city ?? 'N/A'); ?></span>
                                         </div>
                                         <div class="mt-3">
-                                            <span class="badge-custom"><?php echo htmlspecialchars($distributor->role ?? 'Distributor Admin'); ?></span>
+                                            <span class="badge-custom"><?php echo htmlspecialchars($distributor_data->role ?? 'Distributor Admin'); ?></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <?php endforeach; ?>
+                            
                             
                             <div class="col-md-6 col-lg-4 mb-4">
                                 <div class="dashboard-card h-100">
@@ -670,7 +686,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6 col-lg-4 mb-4">
                                 <div class="dashboard-card h-100">
                                     <div class="card-header">

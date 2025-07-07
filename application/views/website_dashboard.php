@@ -1032,182 +1032,210 @@
                     </div>
                 </div>
                 <?php } elseif($method == 'profile') { ?>
-                <div class="row fade-in">
-    <div class="col-12 mb-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h2 class="h3 mb-0 text-gray-800">Profile Management</h2>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?php echo base_url('user/dashboard'); ?>"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-user-cog"></i> Profile</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-</div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h2 class="h4 mb-0"><i class="fas fa-user-cog text-primary me-2"></i>Profile Management</h2>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
 
-<div class="row fade-in">
-    <div class="col-lg-8 mx-auto">
-        <div class="form-container">
-            <div class="text-center mb-4">
-                <h2><i class="fas fa-user-circle"></i> Profile Information</h2>
-                <p class="text-muted">Update your personal and business details</p>
-            </div>
-            
-            <?php if ($this->session->flashdata('error')): ?>
-                <div class="alert alert-danger alert-dismissible fade show">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <?php echo $this->session->flashdata('error'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
-            
-            <?php if ($this->session->flashdata('success')): ?>
-                <div class="alert alert-success alert-dismissible fade show">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <?php echo $this->session->flashdata('success'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
-            
-            <?php if ($this->session->flashdata('info')): ?>
-                <div class="alert alert-info alert-dismissible fade show">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <?php echo $this->session->flashdata('info'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
-            
-            <form id="profileForm" method="post" action="<?php echo base_url('user/add'); ?>">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="full_name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="full_name" name="full_name" 
-                            value="<?php echo htmlspecialchars($distributor_data->full_name ?? ''); ?>" readonly>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" 
-                            value="<?php echo htmlspecialchars($distributor_data->Email ?? ''); ?>" readonly>
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <?php if ($this->session->flashdata('error')): ?>
+                                    <div class="alert alert-danger alert-dismissible fade show mb-4">
+                                        <?php echo $this->session->flashdata('error'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('success')): ?>
+                                    <div class="alert alert-success alert-dismissible fade show mb-4">
+                                        <?php echo $this->session->flashdata('success'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('info')): ?>
+                                    <div class="alert alert-info alert-dismissible fade show mb-4">
+                                        <?php echo $this->session->flashdata('info'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <form id="profileForm" method="post" action="<?php echo base_url('user/add'); ?>">
+                                    <div class="mb-4">
+                                       <h5 class="mb-3 border-bottom pb-2">
+                                            <i class="fas fa-user me-2 text-primary" style="color: rgba(10, 81, 127, 1);"></i>
+                                            Personal Information
+                                        </h5>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="full_name" class="form-label">Full Name</label>
+                                                <input type="text" class="form-control" id="full_name" name="full_name" 
+                                                    value="<?php echo htmlspecialchars($distributor_data->full_name ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" 
+                                                    value="<?php echo htmlspecialchars($distributor_data->Email ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control <?php echo form_error('phone') ? 'is-invalid' : ''; ?>" 
+                                                    id="phone" name="phone" maxlength="10"
+                                                    value="<?php echo set_value('phone', htmlspecialchars($distributor_data->phone ?? '')); ?>"
+                                                    required>
+                                                <div class="invalid-feedback"><?php echo form_error('phone'); ?></div>
+                                                <small class="form-text text-muted">10 digits only</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="sap_code" class="form-label">SAP Code</label>
+                                                <input type="text" class="form-control <?php echo form_error('sap_code') ? 'is-invalid' : ''; ?>" 
+                                                    id="sap_code" name="sap_code" 
+                                                    value="<?php echo set_value('sap_code', htmlspecialchars($distributor_data->sap_code ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('sap_code'); ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-university me-2 text-primary"></i>Bank Details</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                                <input type="text" class="form-control <?php echo form_error('account_holder_name') ? 'is-invalid' : ''; ?>" 
+                                                    id="account_holder_name" name="account_holder_name" 
+                                                    value="<?php echo set_value('account_holder_name', htmlspecialchars($distributor_data->account_holder_name ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('account_holder_name'); ?></div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="account_number" class="form-label">Account Number</label>
+                                                <input type="text" class="form-control <?php echo form_error('account_number') ? 'is-invalid' : ''; ?>" 
+                                                    id="account_number" name="account_number" maxlength="18"
+                                                    value="<?php echo set_value('account_number', htmlspecialchars($distributor_data->account_number ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('account_number'); ?></div>
+                                                <small class="form-text text-muted">Maximum 18 digits</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                                <input type="text" class="form-control <?php echo form_error('ifsc_code') ? 'is-invalid' : ''; ?>" 
+                                                    id="ifsc_code" name="ifsc_code" 
+                                                    value="<?php echo set_value('ifsc_code', htmlspecialchars($distributor_data->ifsc_code ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('ifsc_code'); ?></div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="bank_name" class="form-label">Bank Name</label>
+                                                <input type="text" class="form-control <?php echo form_error('bank_name') ? 'is-invalid' : ''; ?>" 
+                                                    id="bank_name" name="bank_name" 
+                                                    value="<?php echo set_value('bank_name', htmlspecialchars($distributor_data->bank_name ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('bank_name'); ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Address Details</h5>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+                                            <textarea class="form-control <?php echo form_error('address') ? 'is-invalid' : ''; ?>" 
+                                                id="address" name="address" rows="3" required><?php echo set_value('address', htmlspecialchars($distributor_data->address ?? '')); ?></textarea>
+                                            <div class="invalid-feedback"><?php echo form_error('address'); ?></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="pin_code" class="form-label">Pin Code <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control <?php echo form_error('pin_code') ? 'is-invalid' : ''; ?>" 
+                                                    id="pin_code" name="pin_code" maxlength="6"
+                                                    value="<?php echo set_value('pin_code', htmlspecialchars($distributor_data->pin_code ?? '')); ?>"
+                                                    required>
+                                                <div class="invalid-feedback"><?php echo form_error('pin_code'); ?></div>
+                                                <small class="form-text text-muted">6 digits only</small>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control <?php echo form_error('city') ? 'is-invalid' : ''; ?>" 
+                                                    id="city" name="city" 
+                                                    value="<?php echo set_value('city', htmlspecialchars($distributor_data->city ?? '')); ?>"
+                                                    required>
+                                                <div class="invalid-feedback"><?php echo form_error('city'); ?></div>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="office_mobile" class="form-label">Office Mobile</label>
+                                                <input type="text" class="form-control <?php echo form_error('office_mobile') ? 'is-invalid' : ''; ?>" 
+                                                    id="office_mobile" name="office_mobile" maxlength="10"
+                                                    value="<?php echo set_value('office_mobile', htmlspecialchars($distributor_data->office_mobile ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('office_mobile'); ?></div>
+                                                <small class="form-text text-muted">10 digits only</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <button type="submit" class="btn btn-primary px-4">
+                                            <i class="fas fa-save me-2"></i>Update Profile
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="phone" class="form-label">Phone *</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['phone']) ? 'is-invalid' : ''; ?>" 
-                            id="phone" name="phone" 
-                            value="<?php echo set_value('phone', htmlspecialchars($distributor_data->phone ?? '')); ?>"
-                            required>
-                        <?php if (isset($this->session->flashdata('form_errors')['phone'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['phone']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="sap_code" class="form-label">SAP Code</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['sap_code']) ? 'is-invalid' : ''; ?>" 
-                            id="sap_code" name="sap_code" 
-                            value="<?php echo set_value('sap_code', htmlspecialchars($distributor_data->sap_code ?? '')); ?>">
-                        <?php if (isset($this->session->flashdata('form_errors')['sap_code'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['sap_code']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <h5 class="form-section-title"><i class="fas fa-university"></i> Bank Details</h5>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['account_holder_name']) ? 'is-invalid' : ''; ?>" 
-                            id="account_holder_name" name="account_holder_name" 
-                            value="<?php echo set_value('account_holder_name', htmlspecialchars($distributor_data->account_holder_name ?? '')); ?>">
-                        <?php if (isset($this->session->flashdata('form_errors')['account_holder_name'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['account_holder_name']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="account_number" class="form-label">Account Number</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['account_number']) ? 'is-invalid' : ''; ?>" 
-                            id="account_number" name="account_number" 
-                            value="<?php echo set_value('account_number', htmlspecialchars($distributor_data->account_number ?? '')); ?>">
-                        <?php if (isset($this->session->flashdata('form_errors')['account_number'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['account_number']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="ifsc_code" class="form-label">IFSC Code</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['ifsc_code']) ? 'is-invalid' : ''; ?>" 
-                            id="ifsc_code" name="ifsc_code" 
-                            value="<?php echo set_value('ifsc_code', htmlspecialchars($distributor_data->ifsc_code ?? '')); ?>">
-                        <?php if (isset($this->session->flashdata('form_errors')['ifsc_code'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['ifsc_code']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="bank_name" class="form-label">Bank Name</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['bank_name']) ? 'is-invalid' : ''; ?>" 
-                            id="bank_name" name="bank_name" 
-                            value="<?php echo set_value('bank_name', htmlspecialchars($distributor_data->bank_name ?? '')); ?>">
-                        <?php if (isset($this->session->flashdata('form_errors')['bank_name'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['bank_name']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <h5 class="form-section-title"><i class="fas fa-map-marker-alt"></i> Address Details</h5>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address *</label>
-                    <textarea class="form-control <?php echo isset($this->session->flashdata('form_errors')['address']) ? 'is-invalid' : ''; ?>" 
-                        id="address" name="address" rows="3" required><?php echo set_value('address', htmlspecialchars($distributor_data->address ?? '')); ?></textarea>
-                    <?php if (isset($this->session->flashdata('form_errors')['address'])): ?>
-                        <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['address']; ?></div>
-                    <?php endif; ?>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="pin_code" class="form-label">Pin Code *</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['pin_code']) ? 'is-invalid' : ''; ?>" 
-                            id="pin_code" name="pin_code" 
-                            value="<?php echo set_value('pin_code', htmlspecialchars($distributor_data->pin_code ?? '')); ?>"
-                            required>
-                        <?php if (isset($this->session->flashdata('form_errors')['pin_code'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['pin_code']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="city" class="form-label">City *</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['city']) ? 'is-invalid' : ''; ?>" 
-                            id="city" name="city" 
-                            value="<?php echo set_value('city', htmlspecialchars($distributor_data->city ?? '')); ?>"
-                            required>
-                        <?php if (isset($this->session->flashdata('form_errors')['city'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['city']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="office_mobile" class="form-label">Office Mobile</label>
-                        <input type="text" class="form-control <?php echo isset($this->session->flashdata('form_errors')['office_mobile']) ? 'is-invalid' : ''; ?>" 
-                            id="office_mobile" name="office_mobile" 
-                            value="<?php echo set_value('office_mobile', htmlspecialchars($distributor_data->office_mobile ?? '')); ?>">
-                        <?php if (isset($this->session->flashdata('form_errors')['office_mobile'])): ?>
-                            <div class="invalid-feedback"><?php echo $this->session->flashdata('form_errors')['office_mobile']; ?></div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                    <button type="submit" class="btn btn-primary px-4">
-                        <i class="fas fa-save me-1"></i> Update Profile
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
+                <script>
+                    // Client-side validation to remove error when field is filled
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('profileForm');
+                        const inputs = form.querySelectorAll('input, textarea');
+                        
+                        inputs.forEach(input => {
+                            input.addEventListener('input', function() {
+                                if (this.value.trim() !== '') {
+                                    this.classList.remove('is-invalid');
+                                    
+                                    // Remove the error message
+                                    const feedback = this.nextElementSibling;
+                                    if (feedback && feedback.classList.contains('invalid-feedback')) {
+                                        feedback.textContent = '';
+                                    }
+                                }
+                            });
+                        });
+                        
+                        // Phone number validation (digits only)
+                        const phoneInputs = form.querySelectorAll('input[type="tel"]');
+                        phoneInputs.forEach(input => {
+                            input.addEventListener('input', function() {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            });
+                        });
+                        
+                        // Account number validation (digits only)
+                        const accountNumber = form.querySelector('input[name="account_number"]');
+                        if (accountNumber) {
+                            accountNumber.addEventListener('input', function() {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            });
+                        }
+                        
+                        // Pin code validation (digits only)
+                        const pinCode = form.querySelector('input[name="pin_code"]');
+                        if (pinCode) {
+                            pinCode.addEventListener('input', function() {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            });
+                        }
+                    });
+                </script>
 
             <!-- Other sections would follow the same responsive pattern -->
             <?php } elseif ($method == 'invoice_order') { ?>
