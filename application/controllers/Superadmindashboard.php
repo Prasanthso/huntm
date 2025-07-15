@@ -100,5 +100,22 @@ class Superadmindashboard extends CI_Controller {
         $this->load->view('Superadmindashboard_view', $data);
     }
 
-    
+    public function get_staff_data(){
+        $data['staff_data'] = $this->Superadmindashboard_model->get_staff_data();
+        $data['method'] = 'get_staff_data';
+        $this->load->view('Superadmindashboard_view', $data);
+    }
+
+    public function showing_staff_remaining_data($staff_id) {
+        // $distributor_id = $this->session->userdata('user_id');
+        if(!$this->session->userdata('user_id')){
+            redirect('login');
+        }
+        if (!$staff_id) {
+            show_error("Staff ID is required", 400);
+        }
+        $data['staff_data'] = $this->Superadmindashboard_model->get_remaining_staff_data($staff_id);
+        $data['method'] = 'showing_staff_remaining_data';
+        $this->load->view('Superadmindashboard_view', $data);
+    }
 }

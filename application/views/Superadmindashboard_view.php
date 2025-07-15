@@ -156,7 +156,55 @@
             color: var(--primary-color);
             font-size: 1.2rem;
         }
-        
+        .form-group-custom {
+        position: relative;
+        margin-bottom: 1.5rem;
+        }
+
+        .form-group-custom label {
+        position: absolute;
+        top: -24px;
+        left: 12px;
+        background: #fff;
+        padding: 0 6px;
+        font-size: 16px;
+        color: #0A517F;
+        font-weight: 500;
+        pointer-events: none;
+
+        }
+
+        .form-group-custom input {
+        width: 100%;
+        padding: 14px 15px 8px;
+        border: 1px solid #0A517F;
+        border-radius: 12px;
+        font-size: 16px;
+        color: rgba(10, 81, 127, 0.6);
+        outline: none;
+        }
+
+        .form-group-custom input::placeholder {
+        color: rgba(10, 81, 127, 0.6);
+        font-size: 13px;
+        }
+
+        .form-group-custom .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        }
+
+        .form-group-custom select {
+        border: 1px solid #0A517F;
+        border-radius: 10px;
+        padding: 14px 45px 14px 15px;
+        }
         @media (max-width: 992px) {
             #sidebar {
                 left: calc(-1 * var(--sidebar-width));
@@ -407,6 +455,11 @@
                 <i class="fas fa-users-cog"></i>
                 <span>Manage Distributor</span>
             </a>
+            <a href="<?php echo base_url('Superadmindashboard/get_staff_data'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/get_staff_data')) ? 'active' : ''; ?>">
+                <i class="fas fa-users-cog"></i>
+                <span>Manage Staff</span>
+            </a>
         </div>
         <div class="logout-container">
             <a href="<?php echo base_url('login'); ?>" class="logout-btn">
@@ -465,6 +518,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                    <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/get_staff_data'); ?>'">
+                                        <div class="card-body">
+                                            <h6><i class="fas fa-users-cog me-2"></i> Staff Details</h6>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <p>View and manage</p>
+                                                    <p>all distributor accounts</p>
+                                                </div>
+                                                <i class="fas fa-chevron-right text-muted"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                 <?php elseif($method == 'get_admin_data') : ?>
@@ -472,9 +539,9 @@
                         <div class="col-12">
                             <h2 class="mb-4"><i class="fas fa-users me-2"></i>Admin Details</h2>
                             <div class="card border-0 shadow-sm">
-                                <div class="card-body">
+                                <!-- <div class="card-body"> -->
                                     <div class="table-responsive">
-                                        <table class="table table-hover mb-0">
+                                        <table class="table  mb-0 table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -503,7 +570,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                <!-- </div> -->
                             </div>
                         </div>
                     </div>                
@@ -602,11 +669,11 @@
                 <?php elseif($method == 'get_distributor_data'): ?>
                     <div class="row">
                         <div class="col-12">
-                            <h2 class="mb-4"><i class="fas fa-users me-2"></i>Distributor Admin Details</h2>
+                            <h2 class="mb-4"><i class="fas fa-users me-2"></i>Distributor Details</h2>
                             <div class="card border-0 shadow-sm">
-                                <div class="card-body">
+                                <!-- <div class="card-body"> -->
                                     <div class="table-responsive">
-                                        <table class="table table-hover mb-0">
+                                        <table class="table table-bordered table-hover mb-0">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -634,7 +701,7 @@
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
-                                    </div>
+                                    <!-- </div> -->
                                 </div>
                             </div>
                         </div>
@@ -731,7 +798,139 @@
                             </div>
                         </div>
                     </div>
-               
+                
+                <?php elseif($method == 'get_staff_data'): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="mb-4"><i class="fas fa-users me-2"></i>Staff Details</h2>
+                            <div class="card border-0 shadow-sm">
+                                <!-- <div class="card-body"> -->
+                                    <div class="table-responsive">
+                                        <table class="table mb-0 table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Full Name</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <?php $serialNo = 1; ?>
+                                                <?php foreach ($staff_data as $staff): ?>
+                                                    <tr>
+                                                        <td><?php echo $serialNo; ?></td>
+                                                        <td><?php echo htmlspecialchars($staff->full_name); ?></td>
+                                                        <td><?php echo htmlspecialchars($staff->Email); ?></td>
+                                                        <td><?php echo htmlspecialchars($staff->role); ?></td>
+                                                        <td>
+                                                            <a href="<?php echo base_url('Superadmindashboard/showing_staff_remaining_data/'. $staff->id); ?>" class="btn btn-info btn-sm">
+                                                                <i class="fas fa-eye me-1"></i> View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <?php $serialNo++; ?>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <?php elseif($method == 'showing_staff_remaining_data'): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-secondary back-btn" onclick="window.history.back();">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Staff Full Details</h2>
+                                    <form>
+                                         <?php foreach ($staff_data as $staff): ?>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3 ">
+                                                    <label for="full_name" class="form-label">Full Name</label>
+                                                    <input type="text" class="form-control" id="full_name" name="full_name" 
+                                                        value="<?php echo htmlspecialchars($staff->full_name ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="email" name="email" 
+                                                        value="<?php echo htmlspecialchars($staff->Email ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="phone" class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" id="phone" name="phone" 
+                                                        value="<?php echo htmlspecialchars($staff->phone ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="sap_code" class="form-label">SAP Code</label>
+                                                    <input type="text" class="form-control" id="sap_code" name="sap_code" 
+                                                        value="<?php echo htmlspecialchars($staff->sap_code ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <h5 class="section-header"><i class="fas fa-university me-2"></i>Bank Details</h5>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                                    <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
+                                                        value="<?php echo htmlspecialchars($staff->account_holder_name ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="account_number" class="form-label">Account Number</label>
+                                                    <input type="text" class="form-control" id="account_number" name="account_number" 
+                                                        value="<?php echo htmlspecialchars($staff->account_number ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                                    <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
+                                                        value="<?php echo htmlspecialchars($staff->ifsc_code ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="bank_name" class="form-label">Bank Name</label>
+                                                    <input type="text" class="form-control" id="bank_name" name="bank_name" 
+                                                        value="<?php echo htmlspecialchars($staff->bank_name ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">Address</label>
+                                                <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($staff->address ?? ''); ?></textarea>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="pin_code" class="form-label">Pin Code</label>
+                                                    <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                                        value="<?php echo htmlspecialchars($staff->pin_code ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="city" name="city" 
+                                                        value="<?php echo htmlspecialchars($staff->city ?? ''); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="office_mobile" class="form-label">Office Mobile</label>
+                                                    <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
+                                                        value="<?php echo htmlspecialchars($staff->office_mobile ?? ''); ?>" readonly>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php elseif($method == 'create_admin') : ?>
                     <div class="row fade-in">
                         <div class="col-12 mb-4">
@@ -756,7 +955,7 @@
                                 </div>
                                 
                                 <?php echo form_open('Superadmindashboard/create_admin'); ?>
-                                    <div class="mb-3">
+                                    <div class="mb-3 ">
                                         <label for="full_name" class="form-label"><i class="fas fa-user me-1 text-gray-500"></i> Full Name</label>
                                         <input type="text" class="form-control <?php echo form_error('full_name') ? 'is-invalid' : ''; ?>" 
                                             id="full_name" name="full_name" value="<?php echo set_value('full_name'); ?>" required>
@@ -770,13 +969,13 @@
                                         <?php echo form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
                                     </div>
                                     
-                                    <div class="mb-3">
+                                     <div class="mb-3">
                                         <label for="password" class="form-label"><i class="fas fa-lock me-1 text-gray-500"></i> Password</label>
                                         <div class="input-group">
                                             <input type="password" class="form-control <?php echo form_error('password') ? 'is-invalid' : ''; ?>" 
                                                 id="password" name="password" required>
-                                            <button class="btn btn-outline-secondary password-toggle" type="button" id="togglePassword">
-                                                <i class="fas fa-eye"></i>
+                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                <i class="fas fa-eye" id="toggleIcon"></i>
                                             </button>
                                             <?php echo form_error('password', '<div class="invalid-feedback">', '</div>'); ?>
                                         </div>
@@ -826,21 +1025,34 @@
                     </div>
 
                     <script>
-                    // Password toggle functionality
-                    document.getElementById('togglePassword').addEventListener('click', function() {
+                        // Password toggle functionality
+                        document.addEventListener('DOMContentLoaded', function() {
+                        const togglePassword = document.getElementById('togglePassword');
                         const passwordInput = document.getElementById('password');
-                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                        passwordInput.setAttribute('type', type);
-                        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-                    });
+                        const toggleIcon = document.getElementById('toggleIcon');
+                        
+                        togglePassword.addEventListener('click', function() {
+                            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                            passwordInput.setAttribute('type', type);
+                            
+                            // Toggle the eye icon
+                            if (type === 'password') {
+                                toggleIcon.classList.remove('fa-eye-slash');
+                                toggleIcon.classList.add('fa-eye');
+                            } else {
+                                toggleIcon.classList.remove('fa-eye');
+                                toggleIcon.classList.add('fa-eye-slash');
+                            }
+                        });
+                        });
 
-                    // Show modal if limit reached
-                    <?php if (isset($show_limit_modal) && $show_limit_modal): ?>
-                        window.onload = function() {
-                            var limitModal = new bootstrap.Modal(document.getElementById('limitModal'));
-                            limitModal.show();
-                        };
-                    <?php endif; ?>
+                        // Show modal if limit reached
+                        <?php if (isset($show_limit_modal) && $show_limit_modal): ?>
+                            window.onload = function() {
+                                var limitModal = new bootstrap.Modal(document.getElementById('limitModal'));
+                                limitModal.show();
+                            };
+                        <?php endif; ?>
                     </script>
                 <?php endif; ?>
             <?php endif; ?>

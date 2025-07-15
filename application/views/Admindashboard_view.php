@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSG Admin Dashboard</title>
+    <title>LSA Admin Dashboard</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -473,7 +473,7 @@
         
         <a href="<?php echo base_url('AdminDashboard/dashboard'); ?>" class="header-brand">
             <img src="<?php echo base_url(); ?>Image/Huntm-logo.svg" alt="Huntm Logo">
-            <span>LSG Admin</span>
+            <span>LSA Admin</span>
         </a>
         
         <div class="user-info">

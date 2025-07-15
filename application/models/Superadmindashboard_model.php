@@ -60,4 +60,21 @@ class Superadmindashboard_model extends CI_Model {
         return $query->result(); // returns array of distributor objects
     }
 
+    public function get_staff_data() {
+        $this->db->select('*');
+        $this->db->from('user');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return array();
+    }
+
+    public function get_remaining_staff_data($staff_id) {
+        $this->db->select('*');
+        $this->db->from('user'); 
+        $this->db->where('id', $staff_id);
+        $query = $this->db->get();
+        return $query->result(); 
+    }
 }
