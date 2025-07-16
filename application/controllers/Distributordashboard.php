@@ -140,22 +140,25 @@ class Distributordashboard extends CI_Controller {
     }
 
     public function get_staff_data() {
-        $admin_id = $this->session->userdata('user_id');
-        $data['distributor_data'] = $this->Distributordashboard_model->get_staff_data($admin_id);
+        $staff_id = $this->session->userdata('user_id');
+        $distributor_id = $this->session->userdata('user_id');
+        $data['staff_data'] = $this->Distributordashboard_model->get_staff_data($staff_id);
+        $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $data['method'] = 'get_staff_data';
         $this->load->view('Distributordashboard_view', $data);
     }
 
-    public function showing_staff_remaining_data($distributor_id) {
+    public function showing_staff_remaining_data($staff_id) {
         if (!$this->session->userdata('user_id')) {
             redirect('login');
         }
 
-        if (!$distributor_id) {
+        if (!$staff_id) {
             show_error("Distributor ID is required", 400);
         }
-
-        $data['distributor_data'] = $this->Distributordashboard_model->get_remaining_staff_data($distributor_id);
+        $distributor_id = $this->session->userdata('user_id');
+        $data['staff_data'] = $this->Distributordashboard_model->get_remaining_staff_data($staff_id);
+        $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $data['method'] = 'showing_staff_remaining_data';
         $this->load->view('Distributordashboard_view', $data);
     }

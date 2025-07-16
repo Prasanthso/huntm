@@ -10,6 +10,40 @@ class Superadmindashboard extends CI_Controller {
         $this->load->library('session');
         $this->load->library('form_validation');
     }
+    public function login() {
+        $this->load->view('Superadmin_loginpage');
+    }
+
+    public function process_login() {
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+
+        $email = trim($this->input->post('email', true));
+        $password = $this->input->post('password', true);
+
+        $user = $this->Superadmindashboard_model->validate_email($email, $password);
+        
+        if ($user) {
+            
+            $session_data = [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'full_name' => isset($user->full_name) ? $user->full_name : 'User',
+                'role' => $user->role,
+                'logged_in' => TRUE
+            ];
+            $this->session->set_userdata($session_data);
+            error_log("Session: " . print_r($session_data, true));
+            redirect('Superadmindashboard/dashboard');
+        } 
+        else {
+            // Invalid credentials
+            $this->session->set_flashdata('login_error', 'Invalid email or password');
+            redirect('superadmin/login');
+        }
+    }
 
     public function dashboard() {
         $admin_id = $this->session->userdata('user_id');
@@ -25,13 +59,14 @@ class Superadmindashboard extends CI_Controller {
         }
         
         $data['method'] = "superadmindashboard";
-        $data['admin'] = $admin_data; // Changed from 'admin_data' to 'admin' to match view
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
+        $data['admin'] = $admin_data;
         $this->load->view('Superadmindashboard_view', $data);
     }
 
     public function create_admin() {
         $superadmin_id = $this->session->userdata('user_id');
-        
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[admin.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
@@ -63,6 +98,7 @@ class Superadmindashboard extends CI_Controller {
         // $admin_id = $this->session->userdata('user_id');
         $data['admin_data'] = $this->Superadmindashboard_model->get_admin_data();
         $data['method'] = 'get_admin_data';
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $this->load->view('Superadmindashboard_view', $data);
     }
 
@@ -76,6 +112,7 @@ class Superadmindashboard extends CI_Controller {
         }
 
         $data['admin_data'] = $this->Superadmindashboard_model->get_remaining_admin_data($admin_id);
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_admin_remaining_data';
         $this->load->view('Superadmindashboard_view', $data);
     }
@@ -83,6 +120,7 @@ class Superadmindashboard extends CI_Controller {
     public function get_distributor_data() {
         //  $distributor_id = $this->session->userdata('user_id');
         $data['distributor_data'] = $this->Superadmindashboard_model->get_distributor_data();
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_distributor_data';
         $this->load->view('Superadmindashboard_view', $data);
     }
@@ -96,12 +134,14 @@ class Superadmindashboard extends CI_Controller {
             show_error("Student ID is required", 400);
         }
         $data['distributor_data'] = $this->Superadmindashboard_model->get_remaining_distributor_data($distributor_id);
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_distributor_remaining_data';
         $this->load->view('Superadmindashboard_view', $data);
     }
 
     public function get_staff_data(){
         $data['staff_data'] = $this->Superadmindashboard_model->get_staff_data();
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_staff_data';
         $this->load->view('Superadmindashboard_view', $data);
     }
@@ -115,7 +155,15 @@ class Superadmindashboard extends CI_Controller {
             show_error("Staff ID is required", 400);
         }
         $data['staff_data'] = $this->Superadmindashboard_model->get_remaining_staff_data($staff_id);
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_staff_remaining_data';
         $this->load->view('Superadmindashboard_view', $data);
+    }
+
+    public function logout() {
+        $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
+        $this->session->sess_destroy();
+        $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
+        redirect('Superadmindashboard/login');
     }
 }

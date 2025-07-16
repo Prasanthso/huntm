@@ -425,7 +425,7 @@
         <div class="d-flex align-items-center">
             <div class="user-greeting">
                 <i class="fas fa-user-shield"></i>
-                Welcome! Super Admin
+                <span>Welcome, <?php echo htmlspecialchars($superadmin_data->full_name ?? 'Super Admin'); ?></span>
             </div>
         </div>
     </header>
@@ -462,13 +462,29 @@
             </a>
         </div>
         <div class="logout-container">
-            <a href="<?php echo base_url('login'); ?>" class="logout-btn">
+            <a href="#" class="logout-btn" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
         </div>
     </div>
-
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="<?= base_url('Superadmindashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="main-content" id="main-content">
         <div class="container-fluid fade-in">
             <?php if (isset($method)) : ?>

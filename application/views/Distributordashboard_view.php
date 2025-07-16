@@ -966,7 +966,7 @@
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-hover mb-0">
+                                            <table class="table table-bordered table-hover mb-0">
                                                 <thead>
                                                     <tr>
                                                         <th>S.No</th>
@@ -978,14 +978,14 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php $serialNo = 1; ?>
-                                                    <?php foreach ($distributor_data as $distributor): ?>
+                                                    <?php foreach ($staff_data as $staff): ?>
                                                         <tr>
                                                             <td><?php echo $serialNo; ?></td>
-                                                            <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
-                                                            <td><?php echo htmlspecialchars($distributor->Email); ?></td>
-                                                            <td><?php echo htmlspecialchars($distributor->role); ?></td>
+                                                            <td><?php echo htmlspecialchars($staff->full_name); ?></td>
+                                                            <td><?php echo htmlspecialchars($staff->Email); ?></td>
+                                                            <td><?php echo htmlspecialchars($staff->role); ?></td>
                                                             <td>
-                                                                <a href="<?php echo base_url('Distributordashboard/showing_staff_remaining_data/'. $distributor->id); ?>" class="btn btn-info btn-sm">
+                                                                <a href="<?php echo base_url('Distributordashboard/showing_staff_remaining_data/'. $staff->id); ?>" class="btn btn-info btn-sm">
                                                                     <i class="fas fa-eye me-1"></i> View
                                                                 </a>
                                                             </td>
@@ -1011,29 +1011,29 @@
                                 <div class="card-body">
                                     <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Staff Full Details</h2>
                                     <form>
-                                         <?php foreach ($distributor_data as $distributor): ?>
+                                         <?php foreach ($staff_data as $staff): ?>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="full_name" class="form-label">Full Name</label>
                                                     <input type="text" class="form-control" id="full_name" name="full_name" 
-                                                        value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->full_name ?? ''); ?>" readonly>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" id="email" name="email" 
-                                                        value="<?php echo htmlspecialchars($distributor->Email ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->Email ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="phone" class="form-label">Phone</label>
                                                     <input type="text" class="form-control" id="phone" name="phone" 
-                                                        value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->phone ?? ''); ?>" readonly>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="sap_code" class="form-label">SAP Code</label>
                                                     <input type="text" class="form-control" id="sap_code" name="sap_code" 
-                                                        value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->sap_code ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             
@@ -1042,47 +1042,47 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label for="account_holder_name" class="form-label">Account Holder Name</label>
                                                     <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
-                                                        value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->account_holder_name ?? ''); ?>" readonly>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="account_number" class="form-label">Account Number</label>
                                                     <input type="text" class="form-control" id="account_number" name="account_number" 
-                                                        value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->account_number ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="ifsc_code" class="form-label">IFSC Code</label>
                                                     <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
-                                                        value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->ifsc_code ?? ''); ?>" readonly>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="bank_name" class="form-label">Bank Name</label>
                                                     <input type="text" class="form-control" id="bank_name" name="bank_name" 
-                                                        value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->bank_name ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             
                                             <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
                                             <div class="mb-3">
                                                 <label for="address" class="form-label">Address</label>
-                                                <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
+                                                <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($staff->address ?? ''); ?></textarea>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-4 mb-3">
                                                     <label for="pin_code" class="form-label">Pin Code</label>
                                                     <input type="text" class="form-control" id="pin_code" name="pin_code" 
-                                                        value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->pin_code ?? ''); ?>" readonly>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="city" class="form-label">City</label>
                                                     <input type="text" class="form-control" id="city" name="city" 
-                                                        value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->city ?? ''); ?>" readonly>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="office_mobile" class="form-label">Office Mobile</label>
                                                     <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
-                                                        value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
+                                                        value="<?php echo htmlspecialchars($staff->office_mobile ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>

@@ -6,6 +6,28 @@ class Superadmindashboard_model extends CI_Model {
         parent::__construct();
     }
 
+    public function validate_email($email,$password){
+        $this->db->where('email', $email);
+        $query = $this->db->get('super_admin');
+
+        if ($query->num_rows() == 1) {
+            $user = $query->row();
+
+            if (password_verify($password, $user->password)) {
+                return $user; 
+            }
+        }
+        return false; 
+    }
+    public function get_superadmin_data(){
+        $this->db->select('full_name');
+        $this->db->from('super_admin');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+           return $query->row();;
+        }
+        return array();
+    }
     public function create_admin($admin_data) {
         return $this->db->insert('admin', $admin_data);
     }

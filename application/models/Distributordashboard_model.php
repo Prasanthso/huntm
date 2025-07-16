@@ -57,10 +57,10 @@ class Distributordashboard_model extends CI_Model {
         return $this->db->count_all_results('user');
     }
 
-    public function get_staff_data($admin_id){
+    public function get_staff_data($staff_id){
         $this->db->select('*');
         $this->db->from('user');
-        $this->db->where('created_by', $admin_id);
+        $this->db->where('created_by', $staff_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -68,10 +68,10 @@ class Distributordashboard_model extends CI_Model {
         return array();
     }
 
-    public function get_remaining_staff_data($distributor_id) {
+    public function get_remaining_staff_data($staff_id) {
         $this->db->select('*');
         $this->db->from('user'); // replace with your actual distributor table name
-        $this->db->where('id', $distributor_id);
+        $this->db->where('id', $staff_id);
         $query = $this->db->get();
 
         return $query->result(); // returns array of distributor objects
