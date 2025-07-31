@@ -162,6 +162,29 @@ class Distributordashboard extends CI_Controller {
         $data['method'] = 'showing_staff_remaining_data';
         $this->load->view('Distributordashboard_view', $data);
     }
+
+    public function delete_staff($staff_id) {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+
+        if (!$staff_id) {
+            show_error("Staff ID is required", 400);
+        }
+
+        $distributor_id = $this->session->userdata('user_id');
+        $result = $this->Distributordashboard_model->delete_staff($staff_id, $distributor_id);
+
+        if ($result) {
+            $this->session->set_flashdata('success', 'Staff deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete staff. Please try again.');
+        }
+
+        redirect('Distributordashboard/get_staff_data');
+    }
+
+
     public function logout() {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();

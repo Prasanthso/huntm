@@ -98,7 +98,36 @@ public function count_distributors($admin_id) {
         return array();
     }
 
-    
+    public function get_staff_limits($admin_id){
+        $this->db->select('id,full_name, email, role, staff_limit');
+        $this->db->from('distributor');
+        $this->db->where('created_by_admin', $admin_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return array();
+    }
+
+    public function update_staff_limit($distributor_id, $staff_limit) {
+        $this->db->where('id', $distributor_id);
+        return $this->db->update('distributor', ['staff_limit' => $staff_limit]);
+    }
+
+    public function delete_distributor($distributor_id) {
+        $this->db->where('id', $distributor_id);
+        return $this->db->delete('distributor');
+    }
+
+    public function get_assigned_pages_to_staff($staff_id) {
+        $query = $this->db
+            ->select('page_id')
+            ->from('user_page_permissions')
+            ->where('staff_id', $staff_id)
+            ->get();
+
+        return array_column($query->result_array(), 'page_id');
+    }
 
 }
 

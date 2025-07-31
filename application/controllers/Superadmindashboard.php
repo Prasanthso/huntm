@@ -82,7 +82,7 @@ class Superadmindashboard extends CI_Controller {
                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                 'role' => 'admin',
                 'distributor_limit' => $this->input->post('distributor_limit'),
-                'created_by_admin' => $superadmin_id // Using new column name
+                'created_by_super_admin' => $superadmin_id // Using new column name
             );
 
             if ($this->Superadmindashboard_model->create_admin($admin_data)) {
@@ -117,6 +117,23 @@ class Superadmindashboard extends CI_Controller {
         $this->load->view('Superadmindashboard_view', $data);
     }
 
+    public function delete_admin($admin_id) {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+        if (!$admin_id) {
+            show_error("Admin ID is required", 400);
+        }
+
+        $deleted = $this->Superadmindashboard_model->delete_admin($admin_id);
+        if ($deleted) {
+            $this->session->set_flashdata('success', 'Admin deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete admin. Please try again.');
+        }
+        redirect('Superadmindashboard/get_admin_data');
+    }
+
     public function get_distributor_data() {
         //  $distributor_id = $this->session->userdata('user_id');
         $data['distributor_data'] = $this->Superadmindashboard_model->get_distributor_data();
@@ -137,6 +154,23 @@ class Superadmindashboard extends CI_Controller {
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_distributor_remaining_data';
         $this->load->view('Superadmindashboard_view', $data);
+    }
+
+    public function delete_distributor($distributor_id) {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+        if (!$distributor_id) {
+            show_error("Distributor ID is required", 400);
+        }
+
+        $deleted = $this->Superadmindashboard_model->delete_distributor($distributor_id);
+        if ($deleted) {
+            $this->session->set_flashdata('success', 'Distributor deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete distributor. Please try again.');
+        }
+        redirect('Superadmindashboard/get_distributor_data');
     }
 
     public function get_staff_data(){
@@ -160,6 +194,60 @@ class Superadmindashboard extends CI_Controller {
         $this->load->view('Superadmindashboard_view', $data);
     }
 
+    public function delete_staff($staff_id) {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+        if (!$staff_id) {
+            show_error("Staff ID is required", 400);
+        }
+
+        $deleted = $this->Superadmindashboard_model->delete_staff($staff_id);
+        if ($deleted) {
+            $this->session->set_flashdata('success', 'Staff deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete staff. Please try again.');
+        }
+        redirect('Superadmindashboard/get_staff_data');
+    }
+
+    public function get_distributor_limits()
+    {
+        $admin_id = $this->session->userdata('user_id');
+        $data['get_distributor_limits'] = $this->Superadmindashboard_model->get_distributor_limits($admin_id);
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
+        $data['method'] = 'get_distributor_limits';
+        $this->load->view('Superadmindashboard_view', $data);
+    }
+
+    public function update_distributor_limits()
+    {
+        $admin_id = $this->session->userdata('user_id');
+        if (!$admin_id) {
+            redirect('login');
+        }
+
+        $this->form_validation->set_rules('distributor_limit', 'Distributor Limit', 'required|integer|greater_than[0]');
+        $this->form_validation->set_rules('distributor_id', 'Distributor ID', 'required|integer');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('Superadmindashboard/get_distributor_limits');
+        } else {
+            $distributor_limit = $this->input->post('distributor_limit');
+            $distributor_id = $this->input->post('distributor_id');
+
+            $updated = $this->Superadmindashboard_model->update_distributor_limit($distributor_id, $distributor_limit);
+
+            if ($updated) {
+                $this->session->set_flashdata('success', 'Distributor limit updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'No changes made or failed to update distributor limit.');
+            }
+            redirect('Superadmindashboard/get_distributor_limits');
+        }
+    }
+    
     public function logout() {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();

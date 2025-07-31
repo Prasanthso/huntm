@@ -76,4 +76,9 @@ class Distributordashboard_model extends CI_Model {
 
         return $query->result(); // returns array of distributor objects
     }
+
+    public function delete_staff($staff_id) {
+        $this->db->where('id', $staff_id);
+        return $this->db->delete('user');
+    }
 }

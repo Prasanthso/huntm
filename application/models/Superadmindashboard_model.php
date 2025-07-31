@@ -47,10 +47,12 @@ class Superadmindashboard_model extends CI_Model {
         $query = $this->db->get('admin');
         return $query->row();
     }
+
     public function count_distributors_created_by($admin_id) {
         $this->db->where('created_by', $admin_id);
         return $this->db->count_all_results('distributor');
     }
+
     public function get_remaining_admin_data($user_id) {
         $this->db->select('*');
         $this->db->from('admin');
@@ -62,6 +64,11 @@ class Superadmindashboard_model extends CI_Model {
         return array();
     }
     
+    public function delete_admin($admin_id) {
+        $this->db->where('id', $admin_id);
+        return $this->db->delete('admin');
+    }
+
     public function get_distributor_data(){
         $this->db->select('*');
         $this->db->from('distributor');
@@ -81,7 +88,10 @@ class Superadmindashboard_model extends CI_Model {
 
         return $query->result(); // returns array of distributor objects
     }
-
+    public function delete_distributor($distributor_id) {
+        $this->db->where('id', $distributor_id);
+        return $this->db->delete('distributor');
+    }
     public function get_staff_data() {
         $this->db->select('*');
         $this->db->from('user');
@@ -98,5 +108,28 @@ class Superadmindashboard_model extends CI_Model {
         $this->db->where('id', $staff_id);
         $query = $this->db->get();
         return $query->result(); 
+    }
+
+    public function delete_staff($staff_id) {
+        $this->db->where('id', $staff_id);
+        return $this->db->delete('user');
+    }
+    
+    public function get_distributor_limits($admin_id)
+    {
+        $this->db->select('id, full_name, email, role, distributor_limit');
+        $this->db->from('admin');
+        $this->db->where('created_by_super_admin', $admin_id);
+        $query = $this->db->get();
+
+        return ($query->num_rows() > 0) ? $query->result() : [];
+    }
+
+    public function update_distributor_limit($distributor_id, $distributor_limit)
+    {
+        $this->db->where('id', $distributor_id);
+        $this->db->update('admin', ['distributor_limit' => $distributor_limit]);
+
+        return $this->db->affected_rows() >= 0;
     }
 }

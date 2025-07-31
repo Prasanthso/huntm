@@ -234,6 +234,60 @@ class Admindashboard extends CI_Controller {
         $this->load->view('Admindashboard_view', $data);
     }
 
+    public function get_staff_limits() {
+        $admin_id = $this->session->userdata('user_id');
+        $data['get_staff_limits'] = $this->Admindashboard_model->get_staff_limits($admin_id);
+        $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
+        $data['method'] = 'get_staff_limits';
+        $this->load->view('Admindashboard_view', $data);
+    }
+
+    public function update_staff_limits() {
+        $admin_id = $this->session->userdata('user_id');
+        if (!$admin_id) {
+            redirect('login');
+        }
+
+        $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', 'Invalid input. Please try again.');
+            redirect('Admindashboard/get_staff_limits');
+        } else {
+            $staff_limit = $this->input->post('staff_limit');
+            $distributor_id = $this->input->post('distributor_id');
+
+            if ($this->Admindashboard_model->update_staff_limit($distributor_id, $staff_limit)) {
+                $this->session->set_flashdata('success', 'Staff limit updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to update staff limit. Please try again.');
+            }
+            redirect('Admindashboard/get_staff_limits');
+        }
+    }
+    
+    public function delete_distributor($distributor_id) 
+    {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+
+        if (!$distributor_id) {
+            show_error("Distributor ID is required", 400);
+        }
+
+        $admin_id = $this->session->userdata('user_id');
+        $result = $this->Admindashboard_model->delete_distributor($distributor_id, $admin_id);
+
+        if ($result) {
+            $this->session->set_flashdata('success', 'Distributor deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete distributor. Please try again.');
+        }
+
+        redirect('Admindashboard/get_distributor_data');
+    }
+
     public function logout() {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();

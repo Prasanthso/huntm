@@ -10,9 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
             --sidebar-width: 260px;
+            --sidebar-collapsed-width: 80px;
             --header-height: 70px;
             --sidebar-bg: #2c3e50;
             --sidebar-color: #e0e0e0;
@@ -26,17 +28,17 @@
             --text-muted: #6c757d;
             --border-color: #dee2e6;
             --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
         }
-        
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--content-bg);
             color: var(--text-color);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            margin: 0;
         }
-        
+
         /* Header Styles */
         .app-header {
             height: var(--header-height);
@@ -52,7 +54,7 @@
             padding: 0 2rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .header-brand {
             display: flex;
             align-items: center;
@@ -63,18 +65,18 @@
             color: var(--secondary-color);
             letter-spacing: 0.5px;
         }
-        
+
         .header-brand img {
             height: 32px;
             margin-right: 12px;
         }
-        
+
         .user-info {
             display: flex;
             align-items: center;
             margin-left: auto;
         }
-        
+
         .user-avatar {
             width: 38px;
             height: 38px;
@@ -88,136 +90,183 @@
             border: 1px solid var(--border-color);
             font-size: 1rem;
         }
-        
+
         .user-name {
             font-weight: 500;
             color: var(--secondary-color);
             font-size: 0.95rem;
         }
-        
+
         /* Sidebar Styles */
         .app-sidebar {
-            width: var(--sidebar-width);
+            width: var(--sidebar-collapsed-width);
             height: calc(100vh - var(--header-height));
             position: fixed;
             top: var(--header-height);
             left: 0;
             background: var(--sidebar-bg);
             color: var(--sidebar-color);
-            transition: all 0.3s ease;
+            transition: var(--transition);
             z-index: 1020;
             display: flex;
             flex-direction: column;
             border-right: 1px solid rgba(0, 0, 0, 0.1);
+            overflow-x: hidden;
         }
-        
+
+        .app-sidebar.expanded {
+            width: var(--sidebar-width);
+        }
+
+        .sidebar-header h4,
+        .nav-link span,
+        .logout-btn span {
+            display: none;
+        }
+
+        .app-sidebar.expanded .sidebar-header h4,
+        .app-sidebar.expanded .nav-link span,
+        .app-sidebar.expanded .logout-btn span {
+            display: inline;
+        }
+
         .sidebar-header {
             padding: 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
         }
-        
+
+        .app-sidebar.expanded .sidebar-header {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
         .sidebar-header h4 {
             margin-bottom: 0;
             color: white;
             font-weight: 500;
             font-size: 1.1rem;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
-        
+
         .sidebar-menu {
             flex-grow: 1;
             padding: 1rem 0;
         }
-        
+
         .nav-item {
             margin-bottom: 0.25rem;
         }
-        
+
         .nav-link {
             color: var(--sidebar-color);
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem;
             font-weight: 400;
-            transition: all 0.2s ease;
+            transition: var(--transition);
             border-left: 4px solid transparent;
             display: flex;
             align-items: center;
+            justify-content: center;
             font-size: 0.95rem;
             letter-spacing: 0.3px;
         }
-        
+
+        .app-sidebar.expanded .nav-link {
+            justify-content: flex-start;
+            padding: 0.8rem 1.5rem;
+        }
+
+        .nav-link i {
+            margin-right: 0;
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .app-sidebar.expanded .nav-link i {
+            margin-right: 12px;
+        }
+
         .nav-link:hover {
             background: rgba(255, 255, 255, 0.05);
             color: white;
         }
-        
+
         .nav-link.active {
             background: var(--sidebar-active-bg);
             color: white;
             border-left-color: var(--primary-color);
             font-weight: 500;
         }
-        
-        .nav-link i {
-            margin-right: 12px;
-            width: 20px;
-            text-align: center;
-            font-size: 1rem;
-        }
-        
+
         .sidebar-footer {
             padding: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .logout-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             color: var(--sidebar-color);
             text-decoration: none;
-            padding: 0.7rem 1.5rem;
+            padding: 0.7rem;
             border-radius: 4px;
-            transition: all 0.2s ease;
+            transition: var(--transition);
             font-weight: 400;
             font-size: 0.95rem;
         }
-        
+
+        .app-sidebar.expanded .logout-btn {
+            justify-content: flex-start;
+            padding: 0.7rem 1.5rem;
+        }
+
+        .logout-btn i {
+            margin-right: 0;
+            font-size: 1rem;
+        }
+
+        .app-sidebar.expanded .logout-btn i {
+            margin-right: 10px;
+        }
+
         .logout-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: white;
         }
-        
-        .logout-btn i {
-            margin-right: 10px;
-            font-size: 1rem;
-        }
-        
+
         /* Main Content Styles */
         .app-main {
-            margin-left: var(--sidebar-width);
+            margin-left: var(--sidebar-collapsed-width);
             margin-top: var(--header-height);
             padding: 2.5rem;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             min-height: calc(100vh - var(--header-height));
             background-color: var(--content-bg);
         }
-        
+
+        .app-main.expanded {
+            margin-left: var(--sidebar-width);
+        }
+
         /* Dashboard Cards */
         .dashboard-card {
             border-radius: 6px;
             border: none;
             box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
+            transition: var(--transition);
             height: 100%;
             background-color: white;
             border-top: 3px solid var(--primary-color);
         }
-        
+
         .dashboard-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .dashboard-card .card-header {
             background-color: transparent;
             border-bottom: 1px solid var(--border-color);
@@ -225,24 +274,24 @@
             display: flex;
             align-items: center;
         }
-        
+
         .dashboard-card .card-header i {
             margin-right: 0.75rem;
             color: var(--primary-color);
             font-size: 1.1rem;
         }
-        
+
         .dashboard-card .card-header .card-title {
             font-weight: 500;
             color: var(--secondary-color);
             margin-bottom: 0;
             font-size: 1rem;
         }
-        
+
         .dashboard-card .card-body {
             padding: 1.5rem;
         }
-        
+
         /* Form Styling */
         .form-container {
             background: white;
@@ -251,7 +300,7 @@
             box-shadow: var(--card-shadow);
             border-top: 3px solid var(--primary-color);
         }
-        
+
         .form-container h2 {
             margin-bottom: 1.75rem;
             color: var(--secondary-color);
@@ -262,75 +311,75 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .form-container h2 i {
             margin-right: 15px;
             color: var(--primary-color);
         }
-        
+
         .form-label {
             font-weight: 500;
             color: var(--secondary-color);
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
         }
-        
+
         .form-control {
             padding: 0.75rem 1rem;
             border-radius: 4px;
             border: 1px solid var(--border-color);
-            transition: all 0.2s ease;
+            transition: var(--transition);
             font-size: 0.95rem;
         }
-        
+
         .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.15);
         }
-        
+
         /* Buttons */
         .btn {
             padding: 0.75rem 1.5rem;
             border-radius: 4px;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: var(--transition);
             font-size: 0.95rem;
             letter-spacing: 0.3px;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
-        
+
         .btn-primary:hover {
             background-color: var(--primary-dark);
             border-color: var(--primary-dark);
         }
-        
+
         .btn i {
             margin-right: 0.5rem;
             font-size: 0.95rem;
         }
-        
+
         /* Breadcrumb */
         .breadcrumb {
             background-color: transparent;
             padding: 0;
             margin-bottom: 1.75rem;
         }
-        
+
         .breadcrumb-item a {
             text-decoration: none;
             color: var(--primary-color);
             font-size: 0.9rem;
         }
-        
+
         .breadcrumb-item.active {
             color: var(--text-muted);
             font-size: 0.9rem;
         }
-        
+
         /* Page Title */
         .page-title {
             color: var(--secondary-color);
@@ -339,26 +388,26 @@
             margin-bottom: 1.5rem;
             font-size: 1.75rem;
         }
-        
+
         /* Alerts */
         .alert {
             border-radius: 4px;
             padding: 1rem 1.5rem;
             border-left: 4px solid transparent;
         }
-        
+
         .alert i {
             margin-right: 0.75rem;
         }
-        
+
         .alert-success {
-            border-left-color: var(--success-color);
+            border-left-color: #28a745;
         }
-        
+
         .alert-danger {
-            border-left-color: var(--danger-color);
+            border-left-color: #dc3545;
         }
-        
+
         /* Table Styling */
         .table {
             background: white;
@@ -366,7 +415,7 @@
             overflow: hidden;
             box-shadow: var(--card-shadow);
         }
-        
+
         .table thead th {
             background-color: var(--primary-color);
             color: white;
@@ -375,107 +424,166 @@
             padding: 1rem;
             font-size: 0.95rem;
         }
-        
+
         .table tbody tr {
-            transition: all 0.2s ease;
+            transition: var(--transition);
         }
-        
+
         .table tbody tr:hover {
             background-color: rgba(52, 152, 219, 0.03);
         }
-        
+
         .table tbody td {
             padding: 1rem;
             vertical-align: middle;
             border-color: var(--border-color);
             font-size: 0.95rem;
         }
-        
+
         /* Responsive Adjustments */
         @media (max-width: 992px) {
             .app-sidebar {
-                left: calc(-1 * var(--sidebar-width));
+                width: 0;
+                overflow: hidden;
             }
-            
-            .app-sidebar.active {
-                left: 0;
+
+            .app-sidebar.expanded {
+                width: var(--sidebar-width);
                 box-shadow: 5px 0 15px rgba(0,0,0,0.1);
             }
-            
+
             .app-main {
                 margin-left: 0;
             }
-            
-            .app-main.active {
+
+            .app-main.expanded {
                 margin-left: var(--sidebar-width);
             }
         }
-        
+
         @media (max-width: 768px) {
             .app-main {
                 padding: 1.5rem;
             }
-            
+
             .form-container {
                 padding: 1.75rem;
             }
-            
+
             .user-name {
                 display: none;
             }
-            
+
             .page-title {
                 font-size: 1.5rem;
             }
         }
-        
+
+        @media (min-width: 993px) {
+            .app-sidebar {
+                width: var(--sidebar-collapsed-width);
+            }
+
+            .app-sidebar.expanded {
+                width: var(--sidebar-width);
+            }
+
+            .app-main {
+                margin-left: var(--sidebar-collapsed-width);
+            }
+
+            .app-main.expanded {
+                margin-left: var(--sidebar-width);
+            }
+        }
+
         /* Animation */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .animate-fade-in {
             animation: fadeIn 0.3s ease-out;
         }
-        
+
         /* Custom Utilities */
         .text-primary {
             color: var(--primary-color) !important;
         }
-        
+
         .bg-primary {
             background-color: var(--primary-color) !important;
         }
-        
+
         .border-primary {
             border-color: var(--primary-color) !important;
         }
-        
+
         .section-divider {
             border: 0;
             height: 1px;
             background-color: var(--border-color);
             margin: 2rem 0;
         }
-        
+
         .badge-primary {
             background-color: var(--primary-color);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--content-bg);
+        }
+
+        /* ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        } */
+        .header-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .toggle-btn:hover {
+            color: var(--primary-color);
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header class="app-header">
-        <button class="btn btn-link text-dark d-lg-none me-2" type="button" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <a href="<?php echo base_url('AdminDashboard/dashboard'); ?>" class="header-brand">
+        <div class="d-flex align-items-center">
+            <button class="toggle-btn text-dark " type="button" id="sidebarToggle">
+                <i class="fas fa-bars me-2"></i>  
+            </button>
+            <h1 class="header-title">LSA Admin Portal</h1>
+        </div>
+        <!-- <a href="<?php echo base_url('AdminDashboard/dashboard'); ?>" class="header-brand">
             <img src="<?php echo base_url(); ?>Image/Huntm-logo.svg" alt="Huntm Logo">
             <span>LSA Admin</span>
-        </a>
-        
+        </a> -->
         <div class="user-info">
             <div class="user-avatar">
                 <i class="fas fa-user"></i>
@@ -489,7 +597,6 @@
         <div class="sidebar-header">
             <h4>Menu</h4>
         </div>
-        
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -516,7 +623,7 @@
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/get_distributor_data'); ?>" 
                        class="nav-link <?php echo (current_url() == base_url('AdminDashboard/get_distributor_data')) ? 'active' : ''; ?>">
-                         <i class="fas fa-users-cog"></i>
+                        <i class="fas fa-users-cog"></i>
                         <span>Manage Distributor</span>
                     </a>
                 </li>
@@ -527,9 +634,15 @@
                         <span>Manage Pages</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?php echo base_url('AdminDashboard/get_staff_limits'); ?>" 
+                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/get_staff_limits')) ? 'active' : ''; ?>">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <span>Update Staff Limits</span>
+                    </a>
+                </li>
             </ul>
         </div>
-        
         <div class="sidebar-footer">
             <a class="logout-btn" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fas fa-sign-out-alt"></i>
@@ -537,29 +650,31 @@
             </a>
         </div>
     </aside>
+
+    <!-- Logout Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="<?= base_url('Admindashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          Are you sure you want to logout?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <a href="<?= base_url('Admindashboard/logout'); ?>" class="btn btn-danger">Logout</a>
-        </div>
-      </div>
     </div>
-  </div>
 
     <!-- Main Content -->
     <main class="app-main" id="main-content">
         <div class="container-fluid animate-fade-in">
             <!-- Breadcrumb Navigation -->
-            <nav aria-label="breadcrumb" class="mb-4">
+            <!-- <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>"><i class="fas fa-home"></i> Home</a></li>
                     <?php if ($method == "admindashboard") : ?>
@@ -570,16 +685,19 @@
                     <?php elseif ($method == "create_distributor") : ?>
                         <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Create Distributor</li>
-                     <?php elseif ($method == "get_distributor_data") : ?>
+                    <?php elseif ($method == "get_distributor_data") : ?>
                         <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Manage Distributor</li>
                     <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                         <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Manage Pages</li>
+                    <?php elseif ($method == "get_staff_limits") : ?>
+                        <li class="breadcrumb-item"><a href="<?php echo base_url('AdminDashboard/dashboard'); ?>">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Update Distributor Limits</li>
                     <?php endif; ?>
                 </ol>
-            </nav>
-            
+            </nav> -->
+
             <!-- Page Title -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="page-title mb-0">
@@ -589,14 +707,12 @@
                         <i class="fas fa-user-cog text-primary me-2"></i>Profile Management
                     <?php elseif ($method == "create_distributor") : ?>
                         <i class="fas fa-user-plus text-primary me-2"></i>Create New Distributor
-                    <?php elseif ($method == "manage_distributor") : ?>
-                        <i class="fas fa-users-cog text-primary me-2"></i>Manage Distributor
                     <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                         <i class="fas fa-tasks text-primary me-2"></i>Page Management
                     <?php endif; ?>
                 </h2>
             </div>
-            
+
             <!-- Dashboard Content -->
             <?php if ($method == "admindashboard") : ?>
                 <div class="row">
@@ -632,7 +748,6 @@
                     <?php endif; ?>
                 </div>
 
-                
             <?php elseif ($method == "profile") : ?>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
@@ -643,14 +758,12 @@
                                     <?php echo $this->session->flashdata('error'); ?>
                                 </div>
                             <?php endif; ?>
-                            
                             <?php if ($this->session->flashdata('success')) : ?>
                                 <div class="alert alert-success mb-4">
                                     <i class="fas fa-check-circle me-2"></i>
                                     <?php echo $this->session->flashdata('success'); ?>
                                 </div>
                             <?php endif; ?>
-                            
                             <form id="profileForm" method="post" action="<?php echo base_url('AdminDashboard/add'); ?>">
                                 <h5 class="mb-4"><i class="fas fa-user me-2 text-primary"></i>Basic Information</h5>
                                 <div class="row">
@@ -665,7 +778,6 @@
                                             value="<?php echo htmlspecialchars($admin_data->email ?? ''); ?>" readonly>
                                     </div>
                                 </div>
-                                
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="phone" class="form-label">Phone</label>
@@ -680,11 +792,8 @@
                                         <div class="invalid-feedback" id="sap_code-error"><?php echo form_error('sap_code'); ?></div>
                                     </div>
                                 </div>
-                                
                                 <hr class="section-divider">
-                                
                                 <h5 class="mb-4"><i class="fas fa-university me-2 text-primary"></i>Bank Details</h5>
-                                
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="account_holder_name" class="form-label">Account Holder Name</label>
@@ -699,7 +808,6 @@
                                         <div class="invalid-feedback" id="account_number-error"><?php echo form_error('account_number'); ?></div>
                                     </div>
                                 </div>
-                                
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="ifsc_code" class="form-label">IFSC Code</label>
@@ -714,17 +822,13 @@
                                         <div class="invalid-feedback" id="bank_name-error"><?php echo form_error('bank_name'); ?></div>
                                     </div>
                                 </div>
-                                
                                 <hr class="section-divider">
-                                
                                 <h5 class="mb-4"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Address Details</h5>
-                                
                                 <div class="mb-3">
                                     <label for="address" class="form-label">Address</label>
                                     <textarea class="form-control" id="address" name="address" rows="3" oninput="validateAddress(this)"><?php echo htmlspecialchars($admin_data->address ?? ''); ?></textarea>
                                     <div class="invalid-feedback" id="address-error"><?php echo form_error('address'); ?></div>
                                 </div>
-                                
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label for="pin_code" class="form-label">Pin Code</label>
@@ -745,7 +849,6 @@
                                         <div class="invalid-feedback" id="office_mobile-error"><?php echo form_error('office_mobile'); ?></div>
                                     </div>
                                 </div>
-                                
                                 <div class="d-flex justify-content-end mt-4">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-save me-1"></i> Update Profile
@@ -755,7 +858,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             <?php elseif ($method == "create_distributor") : ?>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
@@ -763,13 +866,12 @@
                             <h2><i class="fas fa-user-plus me-2 text-primary"></i>New Distributor Account</h2>
                             <p class="text-muted">Create a new distributor member account</p>
                             <!-- Distributor Limit Indicator -->
-                                <?php if (isset($distributor_limit) && isset($current_distributor_count)): ?>
-                                    <div class="alert alert-info">
-                                        <i class="fas fa-info-circle me-2"></i>
-                                        You have created <?php echo $current_distributor_count; ?> out of <?php echo $distributor_limit; ?> allowed staff accounts.
-                                    </div>
-                                <?php endif; ?>
-                            
+                            <?php if (isset($distributor_limit) && isset($current_distributor_count)): ?>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    You have created <?php echo $current_distributor_count; ?> out of <?php echo $distributor_limit; ?> allowed distributor accounts.
+                                </div>
+                            <?php endif; ?>
                             <?php echo form_open('Admindashboard/create_distributor'); ?>
                                 <div class="mb-3">
                                     <label for="full_name" class="form-label"><i class="fas fa-user me-1 text-muted"></i>Full Name</label>
@@ -777,14 +879,12 @@
                                         id="full_name" name="full_name" value="<?php echo set_value('full_name'); ?>" required>
                                     <?php echo form_error('full_name', '<div class="invalid-feedback">', '</div>'); ?>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label for="email" class="form-label"><i class="fas fa-envelope me-1 text-muted"></i>Email</label>
                                     <input type="email" class="form-control <?php echo form_error('email') ? 'is-invalid' : ''; ?>" 
                                         id="email" name="email" value="<?php echo set_value('email'); ?>" required>
                                     <?php echo form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label for="password" class="form-label"><i class="fas fa-lock me-1 text-muted"></i>Password</label>
                                     <div class="input-group">
@@ -797,7 +897,6 @@
                                     </div>
                                     <small class="text-muted">Password must be at least 8 characters long</small>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label for="staff_limit" class="form-label"><i class="fas fa-users me-1 text-muted"></i>Staff Limit</label>
                                     <input type="number" class="form-control <?php echo form_error('staff_limit') ? 'is-invalid' : ''; ?>" 
@@ -805,7 +904,6 @@
                                     <?php echo form_error('staff_limit', '<div class="invalid-feedback">', '</div>'); ?>
                                     <small class="text-muted">Maximum number of staff this distributor can create</small>
                                 </div>
-                                
                                 <div class="d-grid mt-4">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-user-plus me-2"></i>Create Distributor
@@ -837,173 +935,295 @@
                     </div>
                 </div>
 
-                <!-- Make sure jQuery and Bootstrap JS are loaded before this script -->
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <?php elseif ($method == "get_distributor_data") : ?>
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4 fw-bold text-dark">
+                            <i class="fas fa-users me-2 text-primary"></i> Distributor Details
+                        </h4>
 
-                <script>
-                $(document).ready(function() {
-                    // Password toggle functionality
-                    $('#togglePassword').click(function() {
-                        const passwordField = $('#password');
-                        const icon = $(this).find('i');
-                        
-                        if (passwordField.attr('type') === 'password') {
-                            passwordField.attr('type', 'text');
-                            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-                        } else {
-                            passwordField.attr('type', 'password');
-                            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-                        }
-                    });
-                    
-                    // Show modal if limit is reached
-                    <?php if (isset($limit_reached) && $limit_reached): ?>
-                        $(window).on('load', function() {
-                            var myModal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
-                            myModal.show();
-                        });
-                    <?php endif; ?>
-                });
-                </script>
-                <?php elseif($method == 'get_distributor_data'): ?>
-                        <div class="row">
-                            <div class="col-12">
-                                <h2 class="mb-4"><i class="fas fa-users me-2"></i>Distributor Admin Details</h2>
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>S.No</th>
-                                                        <th>Full Name</th>
-                                                        <th>Email</th>
-                                                        <th>Role</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $serialNo = 1; ?>
-                                                    <?php foreach ($distributor_data as $distributor): ?>
-                                                        <tr>
-                                                            <td><?php echo $serialNo; ?></td>
-                                                            <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
-                                                            <td><?php echo htmlspecialchars($distributor->email); ?></td>
-                                                            <td><?php echo htmlspecialchars($distributor->role); ?></td>
-                                                            <td>
-                                                                <a href="<?php echo base_url('Admindashboard/showing_distributor_remaining_data/'. $distributor->id); ?>" class="btn btn-info btn-sm">
-                                                                    <i class="fas fa-eye me-1"></i> View
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        <?php $serialNo++; ?>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- Flash messages -->
+                        <?php if ($this->session->flashdata('success')): ?>
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <?= $this->session->flashdata('success') ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
-                        </div>
-                <?php elseif($method == 'showing_distributor_remaining_data'): ?>
-                    <div class="row">
-                        <div class="col-12 pt-0">
-                            <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
-                        </div>
-                        <div class="col-12">
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body">
-                                    <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Distributor Full Details</h2>
-                                    <form>
-                                         <?php foreach ($distributor_data as $distributor): ?>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="full_name" class="form-label">Full Name</label>
-                                                    <input type="text" class="form-control" id="full_name" name="full_name" 
-                                                        value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="email" class="form-label">Email</label>
-                                                    <input type="email" class="form-control" id="email" name="email" 
-                                                        value="<?php echo htmlspecialchars($distributor->email ?? ''); ?>" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="phone" class="form-label">Phone</label>
-                                                    <input type="text" class="form-control" id="phone" name="phone" 
-                                                        value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="sap_code" class="form-label">SAP Code</label>
-                                                    <input type="text" class="form-control" id="sap_code" name="sap_code" 
-                                                        value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
-                                                </div>
-                                            </div>
-                                            
-                                            <h5 class="section-header"><i class="fas fa-university me-2"></i>Bank Details</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                                                    <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
-                                                        value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="account_number" class="form-label">Account Number</label>
-                                                    <input type="text" class="form-control" id="account_number" name="account_number" 
-                                                        value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="ifsc_code" class="form-label">IFSC Code</label>
-                                                    <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
-                                                        value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="bank_name" class="form-label">Bank Name</label>
-                                                    <input type="text" class="form-control" id="bank_name" name="bank_name" 
-                                                        value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
-                                                </div>
-                                            </div>
-                                            
-                                            <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label">Address</label>
-                                                <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4 mb-3">
-                                                    <label for="pin_code" class="form-label">Pin Code</label>
-                                                    <input type="text" class="form-control" id="pin_code" name="pin_code" 
-                                                        value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
-                                                </div>
-                                                <div class="col-md-4 mb-3">
-                                                    <label for="city" class="form-label">City</label>
-                                                    <input type="text" class="form-control" id="city" name="city" 
-                                                        value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
-                                                </div>
-                                                <div class="col-md-4 mb-3">
-                                                    <label for="office_mobile" class="form-label">Office Mobile</label>
-                                                    <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
-                                                        value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </form>
+                        <?php elseif ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                <?= $this->session->flashdata('error') ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered align-middle text-center mb-0">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th scope="col">S.No</th>
+                                                <th scope="col">Full Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Role</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $serialNo = 1; ?>
+                                            <?php foreach ($distributor_data as $distributor): ?>
+                                                <tr>
+                                                    <td><?= $serialNo++; ?></td>
+                                                    <td><?= htmlspecialchars($distributor->full_name); ?></td>
+                                                    <td><?= htmlspecialchars($distributor->email); ?></td>
+                                                    <td class="text-capitalize"><?= htmlspecialchars($distributor->role); ?></td>
+                                                    <td>
+                                                        <a href="<?= base_url('Admindashboard/showing_distributor_remaining_data/' . $distributor->id); ?>"
+                                                        class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                            <i class="fas fa-eye me-1"></i> 
+                                                        </a>
+                                                        <!-- Trigger Delete Modal -->
+                                                        <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal" 
+                                                                data-id="<?= $distributor->id ?>">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this distributor?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript to set delete link dynamically -->
+                <script>
+                    const deleteModal = document.getElementById('deleteModal');
+                    const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+                    deleteModal.addEventListener('show.bs.modal', function (event) {
+                        const button = event.relatedTarget;
+                        const distributorId = button.getAttribute('data-id');
+                        const deleteUrl = "<?= base_url('Admindashboard/delete_distributor/') ?>" + distributorId;
+                        confirmBtn.setAttribute('href', deleteUrl);
+                    });
+                </script>
+
+                
+            <?php elseif ($method == "showing_distributor_remaining_data") : ?>
+                <div class="row">
+                    <div class="col-12 pt-0">
+                        <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Distributor Full Details</h2>
+                                <form>
+                                    <?php foreach ($distributor_data as $distributor): ?>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="full_name" class="form-label">Full Name</label>
+                                                <input type="text" class="form-control" id="full_name" name="full_name" 
+                                                    value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" 
+                                                    value="<?php echo htmlspecialchars($distributor->email ?? ''); ?>" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="phone" class="form-label">Phone</label>
+                                                <input type="text" class="form-control" id="phone" name="phone" 
+                                                    value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="sap_code" class="form-label">SAP Code</label>
+                                                <input type="text" class="form-control" id="sap_code" name="sap_code" 
+                                                    value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
+                                            </div>
+                                        </div>
+                                        <h5 class="section-header"><i class="fas fa-university me-2"></i>Bank Details</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                                <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
+                                                    value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="account_number" class="form-label">Account Number</label>
+                                                <input type="text" class="form-control" id="account_number" name="account_number" 
+                                                    value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                                <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
+                                                    value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="bank_name" class="form-label">Bank Name</label>
+                                                <input type="text" class="form-control" id="bank_name" name="bank_name" 
+                                                    value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
+                                            </div>
+                                        </div>
+                                        <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="pin_code" class="form-label">Pin Code</label>
+                                                <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                                    value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="city" class="form-label">City</label>
+                                                <input type="text" class="form-control" id="city" name="city" 
+                                                    value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="office_mobile" class="form-label">Office Mobile</label>
+                                                <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
+                                                    value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <?php elseif ($method == "get_staff_limits") : ?>
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4 fw-bold text-dark">
+                            <i class="bi bi-arrow-clockwise me-2 text-primary"></i> Update Staff Limit
+                        </h4>
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered mb-0 align-middle text-center">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th scope="col">S.No</th>
+                                                <th scope="col">Full Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Role</th>
+                                                <th scope="col">Staff Limit</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $serialNo = 1; ?>
+                                            <?php foreach ($get_staff_limits as $get_staff_limit): ?>
+                                                <tr>
+                                                    <td><?= $serialNo++; ?></td>
+                                                    <td><?= htmlspecialchars($get_staff_limit->full_name); ?></td>
+                                                    <td><?= htmlspecialchars($get_staff_limit->email); ?></td>
+                                                    <td class="text-capitalize"><?= htmlspecialchars($get_staff_limit->role); ?></td>
+                                                    <td><?= htmlspecialchars($get_staff_limit->staff_limit); ?></td>
+                                                    <td>
+                                                        <button type="button"
+                                                            class="btn btn-primary btn-sm update-staff-limit-btn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#updateStaffLimitModal"
+                                                            data-id="<?= $get_staff_limit->id; ?>"
+                                                            data-name="<?= htmlspecialchars($get_staff_limit->full_name); ?>"
+                                                            data-email="<?= htmlspecialchars($get_staff_limit->email); ?>"
+                                                            data-role="<?= htmlspecialchars($get_staff_limit->role); ?>"
+                                                            data-limit="<?= htmlspecialchars($get_staff_limit->staff_limit); ?>">
+                                                            <i class="fas fa-edit me-1"></i> Update Limit
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Staff Limit Modal -->
+                <div class="modal fade" id="updateStaffLimitModal" tabindex="-1" aria-labelledby="updateStaffLimitModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateStaffLimitModalLabel">
+                                    <i class="fas fa-users-cog me-2 text-primary"></i>Update Staff Limit
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="post" action="<?php echo base_url('Admindashboard/update_staff_limits'); ?>">
+                                <div class="modal-body">
+                                    <input type="hidden" name="distributor_id" id="modal_distributor_id">
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="modal_full_name" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="modal_email" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Role</label>
+                                        <input type="text" class="form-control" id="modal_role" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="modal_staff_limit" class="form-label">Staff Limit</label>
+                                        <input type="number" class="form-control <?php echo form_error('staff_limit') ? 'is-invalid' : ''; ?>"
+                                            id="modal_staff_limit" name="staff_limit" min="1" required>
+                                        <?php echo form_error('staff_limit', '<div class="invalid-feedback">', '</div>'); ?>
+                                        <small class="text-muted">Maximum number of staff this distributor can create</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
                         <div class="form-container">
                             <h3 class="mb-4"><i class="fas fa-file-alt me-2 text-primary"></i>Available Pages</h3>
-                            
                             <form method="post">
                                 <div class="list-group mb-4">
                                     <?php foreach ($all_pages as $page) : ?>
@@ -1021,7 +1241,6 @@
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-save me-2"></i>Save Changes
@@ -1031,7 +1250,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             <?php else : ?>
                 <div class="row">
                     <div class="col-12">
@@ -1049,37 +1268,74 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
-        // Toggle sidebar on mobile
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('main-content').classList.toggle('active');
-        }
-
-        // Initialize sidebar state
         document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const toggleBtn = document.getElementById('sidebarToggle');
+
+            // Initialize sidebar state
+            if (localStorage.getItem('sidebarExpanded') === 'true') {
+                sidebar.classList.add('expanded');
+                mainContent.classList.add('expanded');
+            }
+
+            // Toggle sidebar
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('expanded');
+                mainContent.classList.toggle('expanded');
+                localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+            });
+
+            // Handle responsive behavior
+            function handleResponsive() {
+                const isMobile = window.innerWidth <= 992;
+                if (isMobile && sidebar.classList.contains('expanded')) {
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                    localStorage.setItem('sidebarExpanded', false);
+                }
+            }
+
+            // Initial responsive check
+            handleResponsive();
+
+            // Add resize listener
+            window.addEventListener('resize', handleResponsive);
+
             // Close sidebar when clicking outside on mobile
             document.addEventListener('click', function(event) {
-                const sidebar = document.getElementById('sidebar');
-                const toggleBtn = document.querySelector('.toggle-btn');
-                if (window.innerWidth <= 992 && !sidebar.contains(event.target) && event.target !== toggleBtn && !toggleBtn.contains(event.target)) {
-                    sidebar.classList.remove('active');
-                    document.getElementById('main-content').classList.remove('active');
+                if (window.innerWidth <= 992 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                    localStorage.setItem('sidebarExpanded', false);
                 }
             });
-            
+
             // Toggle password visibility
             const togglePassword = document.querySelector('#togglePassword');
             if (togglePassword) {
                 togglePassword.addEventListener('click', function() {
                     const password = document.querySelector('#password');
+                    const icon = this.querySelector('i');
                     const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
                     password.setAttribute('type', type);
-                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                    icon.classList.toggle('fa-eye');
+                    icon.classList.toggle('fa-eye-slash');
                 });
             }
-            
+
+            // Populate update staff limit modal
+            document.querySelectorAll('.update-staff-limit-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.getElementById('modal_distributor_id').value = this.getAttribute('data-id');
+                    document.getElementById('modal_full_name').value = this.getAttribute('data-name');
+                    document.getElementById('modal_email').value = this.getAttribute('data-email');
+                    document.getElementById('modal_role').value = this.getAttribute('data-role');
+                    document.getElementById('modal_staff_limit').value = this.getAttribute('data-limit');
+                });
+            });
+
             // Show SweetAlert notifications
             <?php if($this->session->flashdata('success')): ?>
                 Swal.fire({
@@ -1093,7 +1349,6 @@
                     timerProgressBar: true,
                 });
             <?php endif; ?>
-            
             <?php if($this->session->flashdata('error')): ?>
                 Swal.fire({
                     icon: 'error',
@@ -1106,212 +1361,201 @@
                     timerProgressBar: true,
                 });
             <?php endif; ?>
-        });
 
-        // Validation functions
-        function validatePhone(input) {
-            const errorElement = document.getElementById('phone-error');
-            const value = input.value.trim();
-            const phoneRegex = /^\d{10}$/;
-            
-            if (value && !phoneRegex.test(value)) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Please enter a valid 10-digit phone number';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            // Show limit reached modal
+            <?php if (isset($limit_reached) && $limit_reached): ?>
+                var myModal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
+                myModal.show();
+            <?php endif; ?>
+
+            // Validation functions
+            function validatePhone(input) {
+                const errorElement = document.getElementById('phone-error');
+                const value = input.value.trim();
+                const phoneRegex = /^\d{10}$/;
+                if (value && !phoneRegex.test(value)) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Please enter a valid 10-digit phone number';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateSapCode(input) {
-            const errorElement = document.getElementById('sap_code-error');
-            const value = input.value.trim();
-            
-            if (value && value.length < 4) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'SAP Code must be at least 4 characters';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateSapCode(input) {
+                const errorElement = document.getElementById('sap_code-error');
+                const value = input.value.trim();
+                if (value && value.length < 4) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'SAP Code must be at least 4 characters';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateAccountHolderName(input) {
-            const errorElement = document.getElementById('account_holder_name-error');
-            const value = input.value.trim();
-            
-            if (value && value.length < 3) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Account Holder Name must be at least 3 characters';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateAccountHolderName(input) {
+                const errorElement = document.getElementById('account_holder_name-error');
+                const value = input.value.trim();
+                if (value && value.length < 3) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Account Holder Name must be at least 3 characters';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateAccountNumber(input) {
-            const errorElement = document.getElementById('account_number-error');
-            const value = input.value.trim();
-            const accountNumberRegex = /^\d{8,16}$/;
-            
-            if (value && !accountNumberRegex.test(value)) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Please enter a valid account number (8-16 digits)';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateAccountNumber(input) {
+                const errorElement = document.getElementById('account_number-error');
+                const value = input.value.trim();
+                const accountNumberRegex = /^\d{8,16}$/;
+                if (value && !accountNumberRegex.test(value)) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Please enter a valid account number (8-16 digits)';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateIfscCode(input) {
-            const errorElement = document.getElementById('ifsc_code-error');
-            const value = input.value.trim();
-            const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
-            
-            if (value && !ifscRegex.test(value)) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Please enter a valid IFSC code (e.g., SBIN0001234)';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateIfscCode(input) {
+                const errorElement = document.getElementById('ifsc_code-error');
+                const value = input.value.trim();
+                const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+                if (value && !ifscRegex.test(value)) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Please enter a valid IFSC code (e.g., SBIN0001234)';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateBankName(input) {
-            const errorElement = document.getElementById('bank_name-error');
-            const value = input.value.trim();
-            
-            if (value && value.length < 2) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Bank Name must be at least 2 characters';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateBankName(input) {
+                const errorElement = document.getElementById('bank_name-error');
+                const value = input.value.trim();
+                if (value && value.length < 2) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Bank Name must be at least 2 characters';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateAddress(input) {
-            const errorElement = document.getElementById('address-error');
-            const value = input.value.trim();
-            
-            if (value && value.length < 5) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Address must be at least 5 characters';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateAddress(input) {
+                const errorElement = document.getElementById('address-error');
+                const value = input.value.trim();
+                if (value && value.length < 5) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Address must be at least 5 characters';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validatePinCode(input) {
-            const errorElement = document.getElementById('pin_code-error');
-            const value = input.value.trim();
-            const pinCodeRegex = /^\d{6}$/;
-            
-            if (value && !pinCodeRegex.test(value)) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Please enter a valid 6-digit pin code';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validatePinCode(input) {
+                const errorElement = document.getElementById('pin_code-error');
+                const value = input.value.trim();
+                const pinCodeRegex = /^\d{6}$/;
+                if (value && !pinCodeRegex.test(value)) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Please enter a valid 6-digit pin code';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateCity(input) {
-            const errorElement = document.getElementById('city-error');
-            const value = input.value.trim();
-            
-            if (value && value.length < 3) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'City must be at least 3 characters';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateCity(input) {
+                const errorElement = document.getElementById('city-error');
+                const value = input.value.trim();
+                if (value && value.length < 3) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'City must be at least 3 characters';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateOfficeMobile(input) {
-            const errorElement = document.getElementById('office_mobile-error');
-            const value = input.value.trim();
-            const phoneRegex = /^\d{10}$/;
-            
-            if (value && !phoneRegex.test(value)) {
-                input.classList.add('is-invalid');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Please enter a valid 10-digit phone number';
-                return false;
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement.style.display = 'none';
-                return true;
+            function validateOfficeMobile(input) {
+                const errorElement = document.getElementById('office_mobile-error');
+                const value = input.value.trim();
+                const phoneRegex = /^\d{10}$/;
+                if (value && !phoneRegex.test(value)) {
+                    input.classList.add('is-invalid');
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = 'Please enter a valid 10-digit phone number';
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
             }
-        }
 
-        function validateForm(event) {
-            event.preventDefault();
-            let isValid = true;
-            
-            // Validate all fields
-            const inputs = [
-                { id: 'phone', validate: validatePhone },
-                { id: 'sap_code', validate: validateSapCode },
-                { id: 'account_holder_name', validate: validateAccountHolderName },
-                { id: 'account_number', validate: validateAccountNumber },
-                { id: 'ifsc_code', validate: validateIfscCode },
-                { id: 'bank_name', validate: validateBankName },
-                { id: 'address', validate: validateAddress },
-                { id: 'pin_code', validate: validatePinCode },
-                { id: 'city', validate: validateCity },
-                { id: 'office_mobile', validate: validateOfficeMobile }
-            ];
+            // Form validation
+            document.getElementById('profileForm')?.addEventListener('submit', function(event) {
+                let isValid = true;
+                const inputs = [
+                    { id: 'phone', validate: validatePhone },
+                    { id: 'sap_code', validate: validateSapCode },
+                    { id: 'account_holder_name', validate: validateAccountHolderName },
+                    { id: 'account_number', validate: validateAccountNumber },
+                    { id: 'ifsc_code', validate: validateIfscCode },
+                    { id: 'bank_name', validate: validateBankName },
+                    { id: 'address', validate: validateAddress },
+                    { id: 'pin_code', validate: validatePinCode },
+                    { id: 'city', validate: validateCity },
+                    { id: 'office_mobile', validate: validateOfficeMobile }
+                ];
 
-            inputs.forEach(({ id, validate }) => {
-                const input = document.getElementById(id);
-                if (!validate(input)) {
-                    isValid = false;
+                inputs.forEach(({ id, validate }) => {
+                    const input = document.getElementById(id);
+                    if (!validate(input)) {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                    const firstInvalid = document.querySelector('.is-invalid');
+                    if (firstInvalid) {
+                        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 }
             });
-
-            if (isValid) {
-                // Submit the form if valid
-                document.getElementById('profileForm').submit();
-            } else {
-                // Scroll to the first invalid field
-                const firstInvalid = document.querySelector('.is-invalid');
-                if (firstInvalid) {
-                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-            
-            return isValid;
-        }
+        });
     </script>
 </body>
 </html>
