@@ -606,13 +606,14 @@
     </header>
 
     <!-- Sidebar -->
+     
     <div id="sidebar">
         <div class="list-group list-group-flush">
             <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'dashboard') ? 'active' : ''; ?>">
                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
             </a>
             <a href="<?php echo base_url('User/profile'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'profile') ? 'active' : ''; ?>">
-                <i class="fas fa-tachometer-alt me-2"></i>Profile
+                <i class="bi bi-pencil-square me-2"></i>Profile
             </a>
              <div class="list-group-item p-0 dropdown">
                 <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="fileUploadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -646,7 +647,7 @@
             <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'suggestion') ? 'active' : ''; ?>">
                 <i class="fas fa-lightbulb me-2"></i>Suggestion
             </a>
-            <a href="<?php echo base_url('storewebsite'); ?>" class="list-group-item list-group-item-action">
+            <a href="<?php echo base_url('storewebsite'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'store_website') ? 'active' : ''; ?>">
                 <i class="bi bi-key-fill me-2"></i>Website credentials
             </a>
             <!-- <div class="list-group-item p-0 dropdown">
@@ -667,6 +668,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Logout Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -1090,7 +1093,7 @@
                                                     value="<?php echo htmlspecialchars($distributor_data->Email ?? ''); ?>" readonly>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                                                <label for="phone" class="form-label">Whatsapp Number <span class="text-danger">*</span></label>
                                                 <input type="tel" class="form-control <?php echo form_error('phone') ? 'is-invalid' : ''; ?>" 
                                                     id="phone" name="phone" maxlength="10"
                                                     value="<?php echo set_value('phone', htmlspecialchars($distributor_data->phone ?? '')); ?>"
@@ -1695,7 +1698,7 @@
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="4" class="text-center">No records found.</td>
+                                        <td colspan="5" class="text-center">No records found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -2014,8 +2017,8 @@
                                 <table class="table table-bordered area-table">
                                     <thead>
                                         <tr>
-                                            <th class="clickabled">Area Name</th>
-                                            <th class="clickabled">Total Customers</th>
+                                            <th>Area Name</th>
+                                            <th>Total Customers</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -2368,8 +2371,8 @@
                                 <table class="table table table-bordered area-table">
                                     <thead>
                                         <tr>
-                                            <th class="clickabled">Area Name</th>
-                                            <th class="clickabled">Connection Count</th>
+                                            <th>Area Name</th>
+                                            <th>Connection Count</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -5010,7 +5013,7 @@
             <div class="modal-content border-danger">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title" id="accessDeniedModalLabel">Access Denied</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body text-center">
                     You do not have permission to access this page.
@@ -5025,11 +5028,20 @@
     <?php if (!empty($access_denied) && $access_denied): ?>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                var accessDeniedModal = new bootstrap.Modal(document.getElementById('accessDeniedModal'));
+                var modalElement = document.getElementById('accessDeniedModal');
+                var accessDeniedModal = new bootstrap.Modal(modalElement);
+
+                // Show the modal
                 accessDeniedModal.show();
+
+                // Redirect to dashboard when modal is closed
+                modalElement.addEventListener('hidden.bs.modal', function () {
+                    window.location.href = "<?= base_url('dashboard') ?>";
+                });
             });
         </script>
     <?php endif; ?>
+
 
 
 </body>

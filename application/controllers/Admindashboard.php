@@ -184,31 +184,50 @@ class Admindashboard extends CI_Controller {
     }
 }
 
-    public function assign_same_pages_to_all_staff() {
+    public function assign_same_pages_to_all_staff()
+    {
+        // 1. Check if admin is logged in
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) redirect('login');
 
+        // 2. Load required models
         $this->load->model('Permission_model');
         $this->load->model('Admindashboard_model');
 
+        // 3. If the form is submitted
         if ($this->input->post()) {
             $selected_pages = $this->input->post('page_ids') ?: [];
+
+            // Get all staff users
             $staff_users = $this->Admindashboard_model->get_all_staff_users();
 
+            // Assign selected pages to every staff
             foreach ($staff_users as $staff) {
                 $this->Permission_model->update_staff_permissions($staff->id, $selected_pages);
             }
 
+            // Flash success message and reload
             $this->session->set_flashdata('success', 'Pages assigned to all staff successfully.');
             redirect('Admindashboard/assign_same_pages_to_all_staff');
         }
 
+        // 4. Get selected pages from DB (from first staff as reference)
+        $first_staff = $this->Admindashboard_model->get_first_staff_user();
+        $selected_pages = [];
+        if ($first_staff) {
+            $selected_pages = $this->Permission_model->get_staff_permissions($first_staff->id);
+        }
+
+        // 5. Pass data to view
         $data['method'] = 'assign_same_pages_to_all_staff';
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['all_pages'] = $this->Permission_model->get_all_pages();
-        $data['selected_pages'] = []; 
+        $data['selected_pages'] = $selected_pages;
+
+        // 6. Load the view
         $this->load->view('Admindashboard_view', $data);
     }
+
     
     public function get_distributor_data() {
         $admin_id = $this->session->userdata('user_id');

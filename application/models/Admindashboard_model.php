@@ -129,5 +129,16 @@ public function count_distributors($admin_id) {
         return array_column($query->result_array(), 'page_id');
     }
 
+    public function get_first_staff_user()
+    {
+        return $this->db->select('id')
+                        ->from('user') 
+                        ->order_by('id', 'ASC')
+                        ->limit(1)
+                        ->get()
+                        ->row();
+    }
+
+
 }
 

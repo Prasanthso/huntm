@@ -76,6 +76,7 @@
         
         .btn-auth {
             background-color: var(--primary-color);
+            color: white;
             border: none;
             padding: 0.75rem;
             font-weight: 500;
@@ -87,12 +88,13 @@
         
         .btn-auth:hover {
             background-color: var(--accent-color);
+            color: white;
         }
         
         .password-toggle {
             position: absolute;
             right: 12px;
-            top: 50%;
+            top: 70%;
             transform: translateY(-50%);
             cursor: pointer;
             color: var(--text-color);
@@ -283,7 +285,7 @@
                 <div class="col-lg-6">
                     <div class="auth-card">
                         <div class="auth-header">
-                            <h2><i class="fas fa-sign-in-alt me-2"></i>Account Login</h2>
+                            <h2>Account Login</h2>
                         </div>
                         <div class="auth-body">
                             <form id="loginForm" action="<?php echo site_url('user_profile_login_submit'); ?>" method="post">
@@ -304,7 +306,7 @@
                                     <a href="#">Forgot your password?</a>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-auth mt-2">Login to Dashboard</button>
+                                <button type="submit" class="btn btn-auth mt-2"><i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard</button>
                             </form>
                         </div>
                     </div>
@@ -437,5 +439,38 @@
             });
         </script>
     <?php endif; ?>
+
+    <!-- Login Error Modal -->
+    <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="loginErrorModalLabel">
+            <i class="fas fa-exclamation-circle me-2"></i> Login Error
+            </h5>
+            <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+            <?php if($this->session->flashdata('error')): ?>
+            <?php echo $this->session->flashdata('error'); ?>
+            <?php endif; ?>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <?php if($this->session->flashdata('error')): ?>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
+            loginErrorModal.show();
+        });
+        </script>
+    <?php endif; ?>
+
+
 </body>
 </html>

@@ -14,44 +14,6 @@ class User_profile extends CI_Controller {
     public function index() {
         $this->load->view('User_profile_login');
     }
-    // public function signup_form(){
-    //     $this->load->view('User_profile_view');
-    // }
-
-    // public function process_signup() {
-    //     $this->load->library('form_validation');
-    //     $this->load->library('session'); 
-
-    //     $this->form_validation->set_rules('full_name', 'Full Name', 'required');
-    //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-    //     $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
-    //     $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
-    //     $this->form_validation->set_rules('role', 'Role', 'required');
-
-    //     if ($this->form_validation->run() == FALSE) {
-    //         $this->signup_form();
-    //     } else {
-    //         $data = array(
-    //             'full_name' => $this->input->post('full_name'),
-    //             'email' => $this->input->post('email'),
-    //             'password' => $this->input->post('password'), 
-    //             'role' => $this->input->post('role')
-    //         );
-
-    //         try {
-    //         $user_id = $this->User_profile_model->insert_user($data);
-    //         if ($user_id) {
-    //             $this->session->set_flashdata('success', 'User registered successfully!');
-    //             redirect('user_profile_login');
-    //         } else {
-    //             throw new Exception('Database insertion failed');
-    //         }
-    //     } catch (Exception $e) {
-    //         $this->session->set_flashdata('error', 'Registration failed: ' . $e->getMessage());
-    //         redirect('user_profile_signup');
-    //     }
-    //  }
-    // }
 
     public function login_form() {
         $this->load->view('user_profile_login');

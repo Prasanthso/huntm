@@ -378,7 +378,7 @@
         }
         
         /* Table Styling */
-        .table {
+        /* .table {
             background: white;
             border-radius: 10px;
             overflow: hidden;
@@ -397,14 +397,36 @@
             transition: var(--transition);
         }
         
-        .table tbody tr:hover {
-            background-color: rgba(52, 152, 219, 0.1);
+        .table-hover tbody tr:hover {
+            background-color: #3498db !important;
+            color: white; /* Optional: makes text visible on blue *
         }
         
         .table tbody td {
             padding: 15px;
             vertical-align: middle;
             border-color: #eee;
+        } */
+        
+        /* Table style */
+        .table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .table tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover td {
+            background-color: #e2f1ff;
         }
         
         /* Back Button */
@@ -569,7 +591,7 @@
         </div>
         <div class="list-group list-group-flush flex-grow-1">
             <a href="<?php echo base_url('Superadmindashboard/dashboard'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/dashboard')) ? 'active' : ''; ?>">
+               class="list-group-item list-group-item-action <?php echo ($method == 'superadmindashboard') ? 'active' : ''; ?>">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
@@ -1196,7 +1218,7 @@
                         <div class="col-12">
                             <h2 class="mb-4"><i class="fas fa-users me-2"></i>Update Distributor Limit</h2>
                             <div class="card border-0 shadow-sm">
-                                <div class="card-body">
+                                <!-- <div class="card-body"> -->
                                     <div class="table-responsive">
                                         <table class="table table-hover table-bordered">
                                             <thead>
@@ -1236,7 +1258,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                <!-- </div> -->
                             </div>
                         </div>
                     </div>

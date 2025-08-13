@@ -409,7 +409,7 @@
         }
 
         /* Table Styling */
-        .table {
+        /* .table {
             background: white;
             border-radius: 6px;
             overflow: hidden;
@@ -438,6 +438,26 @@
             vertical-align: middle;
             border-color: var(--border-color);
             font-size: 0.95rem;
+        } */
+        /* Table style */
+        .table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .table tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover td {
+            background-color: #e2f1ff;
         }
 
         /* Responsive Adjustments */
@@ -601,42 +621,42 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/dashboard'); ?>" 
-                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/dashboard')) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo ($method == 'admindashboard') ? 'active' : ''; ?>">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/profile'); ?>" 
-                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/profile')) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo ($method == 'profile')? 'active' : ''; ?>">
                         <i class="fas fa-user-cog"></i>
                         <span>My Profile</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/create_distributor'); ?>" 
-                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/create_distributor')) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo ($method == 'create_distributor') ? 'active' : ''; ?>">
                         <i class="fas fa-user-plus"></i>
                         <span>Create Distributor</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/get_distributor_data'); ?>" 
-                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/get_distributor_data')) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo ($method == 'get_distributor_data') ? 'active' : ''; ?>">
                         <i class="fas fa-users-cog"></i>
                         <span>Manage Distributor</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/assign_same_pages_to_all_staff'); ?>" 
-                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/assign_same_pages_to_all_staff')) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo ($method == 'assign_same_pages_to_all_staff') ? 'active' : ''; ?>">
                         <i class="fas fa-tasks"></i>
                         <span>Manage Pages</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('AdminDashboard/get_staff_limits'); ?>" 
-                       class="nav-link <?php echo (current_url() == base_url('AdminDashboard/get_staff_limits')) ? 'active' : ''; ?>">
+                       class="nav-link <?php echo ($method == 'get_staff_limits') ? 'active' : ''; ?>">
                         <i class="bi bi-arrow-clockwise"></i>
                         <span>Update Staff Limits</span>
                     </a>

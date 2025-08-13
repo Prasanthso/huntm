@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huntm | User Login</title>
+    <title>Huntm | Super Admin Login</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -76,6 +76,7 @@
         
         .btn-auth {
             background-color: var(--primary-color);
+            color: white;
             border: none;
             padding: 0.75rem;
             font-weight: 500;
@@ -87,12 +88,13 @@
         
         .btn-auth:hover {
             background-color: var(--accent-color);
+            color: white;
         }
         
         .password-toggle {
             position: absolute;
             right: 12px;
-            top: 50%;
+            top: 70%;
             transform: translateY(-50%);
             cursor: pointer;
             color: var(--text-color);
@@ -206,6 +208,7 @@
             font-size: 0.9rem;
             text-align: center;
         }
+        
         
         @media (max-width: 992px) {
             .features-container {
@@ -437,5 +440,38 @@
             });
         </script>
     <?php endif; ?>
+
+    <!-- Login Error Modal -->
+    <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="loginErrorModalLabel">
+                <i class="fas fa-exclamation-circle me-2"></i> Login Error
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?php if($this->session->flashdata('error')): ?>
+                <?php echo $this->session->flashdata('error'); ?>
+                <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if($this->session->flashdata('error')): ?>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
+            loginErrorModal.show();
+        });
+        </script>
+    <?php endif; ?>
+
+
 </body>
 </html>

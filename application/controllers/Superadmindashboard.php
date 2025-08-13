@@ -40,8 +40,8 @@ class Superadmindashboard extends CI_Controller {
         } 
         else {
             // Invalid credentials
-            $this->session->set_flashdata('login_error', 'Invalid email or password');
-            redirect('superadmin/login');
+            $this->session->set_flashdata('error', 'Invalid email or password');
+            redirect('Superadmindashboard/login');
         }
     }
 

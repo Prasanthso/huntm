@@ -7,17 +7,23 @@ class Permission_model extends CI_Model {
         return $this->db->get('pages')->result();
     }
 
-    public function update_staff_permissions($staff_id, $page_ids = []) {
-        $this->db->where('staff_id', $staff_id);
-        // $this->db->delete('user_page_permissions');
+    public function update_staff_permissions($staff_id, $page_ids = [])
+{
+    // 1. Remove all existing permissions for this staff
+    $this->db->where('staff_id', $staff_id);
+    $this->db->delete('user_page_permissions'); // uncommented & fixed
 
+    // 2. Insert only the currently selected pages
+    if (!empty($page_ids)) {
         foreach ($page_ids as $pid) {
             $this->db->insert('user_page_permissions', [
                 'staff_id' => $staff_id,
-                'page_id' => $pid
+                'page_id'  => $pid
             ]);
         }
     }
+}
+
 
     public function get_staff_permissions($staff_id) {
         $this->db->select('page_id');

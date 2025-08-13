@@ -85,7 +85,7 @@
             position: fixed;
             top: var(--header-height);
             left: 0;
-            background: var(--sidebar-bg);
+            background: #2c3e50;
             color: var(--sidebar-color);
             transition: var(--transition);
             z-index: 999;
@@ -168,17 +168,18 @@
             font-size: 1rem;
         }
 
-        #sidebar .list-group-item:hover,
         #sidebar .list-group-item.active {
-            background: rgba(255, 255, 255, 0.05);
+            background: #b1d3e933;
             color: white;
-            /* border-left-color: var(--accent-color); */
-            border-left: 4px solid var(--sidebar-bg);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
         }
 
         #sidebar .list-group-item.active {
-            background: var(--sidebar-active-bg);
+            background: #b1d3e933;
             font-weight: 500;
+            color: white;
+            border-left-color: #3498db;
         }
 
         .logout-container {
@@ -496,7 +497,7 @@
         }
 
         /* Table Styling */
-        .table {
+        /* .table {
             background: white;
             border-radius: var(--border-radius);
             overflow: hidden;
@@ -528,6 +529,27 @@
             vertical-align: middle;
             border-color: var(--light-gray);
             font-size: 0.9rem;
+        } */
+
+        /* Table style */
+        .table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .table tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover td {
+            background-color: #e2f1ff;
         }
 
         /* Password Toggle */
@@ -721,22 +743,22 @@
         </div>
         <div class="list-group list-group-flush flex-grow-1">
             <a href="<?php echo base_url('Distributordashboard/dashboard'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Distributordashboard/dashboard')) ? 'active' : ''; ?>">
+               class="list-group-item list-group-item-action <?php echo ($method == 'distributordashboard') ? 'active' : ''; ?>">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
             <a href="<?php echo base_url('Distributordashboard/profile'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Distributordashboard/profile')) ? 'active' : ''; ?>">
+               class="list-group-item list-group-item-action <?php echo ($method == 'profile') ? 'active' : ''; ?>">
                 <i class="fas fa-user-cog"></i>
                 <span>Profile Settings</span>
             </a>
             <a href="<?php echo base_url('Distributordashboard/create_staff'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Distributordashboard/create_staff')) ? 'active' : ''; ?>">
+               class="list-group-item list-group-item-action <?php echo ($method == 'create_staff') ? 'active' : ''; ?>">
                 <i class="fas fa-user-plus"></i>
                 <span>Create Staff</span>
             </a>
             <a href="<?php echo base_url('Distributordashboard/get_staff_data'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Distributordashboard/get_staff_data')) ? 'active' : ''; ?>">
+               class="list-group-item list-group-item-action <?php echo ($method == 'get_staff_data') ? 'active' : ''; ?>">
                 <i class="fas fa-users-cog"></i>
                 <span>Manage Staff</span>
             </a>
