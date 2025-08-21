@@ -246,6 +246,41 @@
             font-weight: 500;
             border-radius: 12px;
         }
+        
+        .badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        }
+        .badge-pmuy {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .bade-due{
+            background-color: #F44336;
+            color: white;
+        }
+        .badge-non-pmuy {
+            background-color: #2196F3;
+            color: white;
+        }
+        .badge-missing {
+            background-color: #f6c23e;
+            color: #000;
+        }
+        .badge-active {
+            background-color: #8BC34A;
+            color: white;
+        }
+        .badge-suspended {
+            background-color: #FFC107;
+            color: black;
+        }
+        .badge-deactived {
+            background-color: #F44336;
+            color: white;
+        }
 
         /* Back button */
         .back-btn {
@@ -403,16 +438,11 @@
 
         
         /* Store Website style */
-        .password-hidden {
-            font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 5px;
-            color: #555;
-        }
+        
         .password-visible {
             font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 5px;
+            
+            
             color: #28a745;
         }
         .password-icon {
@@ -440,7 +470,6 @@
             vertical-align: middle;
             cursor: pointer;
         }
-
         .btnautologin{
             background-color: #28a745;
             color: white;
@@ -454,6 +483,43 @@
             background-color: #218838;
         }
 
+        .btn-details, .btn-edit, .btn-delete {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-right: 5px;
+        }
+        .btn-details {
+            background-color: #00f7ff;
+            color: #000;
+            box-shadow: 0 0 15px #00f7ff, 0 0 30px #00f7ff;
+        }
+        .btn-details:hover {
+            background-color: #00d4ff;
+            box-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff;
+        }
+        .btn-edit {
+            background-color: #ff9500;
+            color: #000;
+            box-shadow: 0 0 15px #ff9500, 0 0 30px #ff9500;
+        }
+        .btn-edit:hover {
+            background-color: #ff8000;
+            box-shadow: 0 0 20px #ff9500, 0 0 40px #ff9500;
+        }
+        .btn-delete {
+            background-color: #ff0055;
+            color: #fff;
+            box-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055;
+        }
+        .btn-delete:hover {
+            background-color: #e6004c;
+            box-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055;
+        }
         
         /* Responsive adjustments */
         @media (max-width: 992px) {
@@ -515,11 +581,18 @@
             from { left: 0; }
             to { left: calc(-1 * var(--sidebar-width))); }
         }
+
+        /* Whatsapp Icon Style */
+        .whatsapp_icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
     <?php 
-    $userid = $this->session->userdata('id');
+    $userid = $this->session->userdata('user_id');
     ?>
 
     <!-- Header -->
@@ -535,23 +608,26 @@
         </div>
 
         <div class="text-end text-white">
-            Welcome! <?php echo $this->session->userdata('username'); ?>
+            Welcome! <?php echo $this->session->userdata('full_name'); ?>
         </div>
     </header>
 
     <!-- Sidebar -->
-    <div id="sidebar">
-        <div class="list-group list-group-flush">
+     
+    <div id="sidebar" class="mt-0">
+        <div class="list-group list-group-flush mt-2">
             <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'dashboard') ? 'active' : ''; ?>">
                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
             </a>
-            
-            <div class="list-group-item p-0 dropdown">
+            <a href="<?php echo base_url('User/profile'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'profile') ? 'active' : ''; ?>">
+                <i class="bi bi-pencil-square me-2"></i>Profile
+            </a>
+             <div class="list-group-item p-0 dropdown">
                 <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="fileUploadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-upload me-2"></i>File Upload
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="fileUploadDropdown">
-                    <li class="dropdown-submenu">
+                    <!-- <li class="dropdown-submenu">
                         <a class="dropdown-item dropdown-toggle" href="#" id="backlogDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-layer-group me-2"></i>Backlog
                         </a>
@@ -559,13 +635,13 @@
                             <li><a class="dropdown-item" href="<?php echo base_url('WebScrapping'); ?>">Invoice File Upload</a></li>
                             <li><a class="dropdown-item" href="<?php echo base_url('OpenOrder'); ?>">Process File Upload</a></li>
                         </ul>
-                    </li>
-                    <li><a class="dropdown-item" href="<?php echo base_url('fundbalance'); ?>"><i class="fas fa-wallet me-2"></i>Fund Balance</a></li>
+                    </li> -->
+                    <!-- <li><a class="dropdown-item" href="<?php echo base_url('fundbalance'); ?>"><i class="fas fa-wallet me-2"></i>Fund Balance</a></li> -->
                     <li><a class="dropdown-item" href="<?php echo base_url('customerregister'); ?>"><i class="fas fa-users me-2"></i>Customer Register</a></li>
                 </ul>
             </div>
 
-            <div class="list-group-item p-0 dropdown">
+             <!-- <div class="list-group-item p-0 dropdown">
                 <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="backlogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-layer-group me-2"></i>Backlog
                 </a>
@@ -573,45 +649,219 @@
                     <li><a class="dropdown-item" href="<?php echo base_url('invoiceorder'); ?>">Invoice Order Service Area</a></li>
                     <li><a class="dropdown-item" href="<?php echo base_url('open-process-order'); ?>">Process Order Service Area</a></li>
                 </ul>
-            </div>
+            </div>  -->
 
             <a href="<?php echo base_url('submitsuggetions'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'suggestion') ? 'active' : ''; ?>">
                 <i class="fas fa-lightbulb me-2"></i>Suggestion
             </a>
-            
-            <div class="list-group-item p-0 dropdown">
+            <a href="<?php echo base_url('storewebsite'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'store_website') ? 'active' : ''; ?>">
+                <i class="bi bi-key-fill me-2"></i>Website credentials
+            </a>
+            <!-- <div class="list-group-item p-0 dropdown">
                 <a class="dropdown-toggle list-group-item list-group-item-action" href="#" role="button" id="websiteDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-globe me-2"></i>User Website
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="websiteDropdown">
-                    <li><a class="dropdown-item" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li>
+                    -- <li><a class="dropdown-item" href="<?php echo base_url('addwebsite'); ?>">Add Website</a></li> --
                     <li><a class="dropdown-item" href="<?php echo base_url('storewebsite'); ?>">Store Website</a></li>
                 </ul>
-            </div>
+            </div> -->
             
             <div class="logout-container mt-auto p-3">
-                <a href="<?php echo base_url('loginform'); ?>" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                <a class="logout-btn" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="nav-text">Logout</span>
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a href="<?= base_url('user/logout'); ?>" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
+
         <?php if (isset($method)) { ?>
             <!-- Dashboard Section -->
             <?php if ($method == 'dashboard') { ?>
+                <div class="container mt-1">
+                    <div class="row">
+                        <!-- BI Report Button Column -->
+                        <div class="col-md-6">
+                            <?php if (!empty($websites)): ?>
+                                <?php $bi_website = reset($websites); ?>
+                                <div class="mb-4 p-3 d-flex justify-content-end">
+                                    <form class="scrape-form" action="<?php echo site_url('upload_bireport_file'); ?>" method="POST">
+                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($bi_website['website_url']); ?>">
+                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($bi_website['website_userId']); ?>">
+                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($bi_website['website_password']); ?>">
+                                        <button class="btn btn-primary" type="submit">BI Report</button>
+                                        <div class="last-refresh text-muted small mt-2" style="display: none;">Last refreshed: <span class="refresh-time"></span></div>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- SDMS Report Button Column -->
+                        <div class="col-md-6">
+                            <?php if (!empty($websites)): ?>
+                                <?php $sdms_website = reset($websites); ?>
+                                <div class="mb-4 p-3 d-flex justify-content-end">
+                                    <form class="scrape-form" action="<?php echo site_url('auto-login'); ?>" method="POST">
+                                        <input type="hidden" name="url" value="<?php echo htmlspecialchars($sdms_website['website_url']); ?>">
+                                        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($sdms_website['website_userId']); ?>">
+                                        <input type="hidden" name="password" value="<?php echo htmlspecialchars($sdms_website['website_password']); ?>">
+                                        <button class="btn btn-primary" type="submit">SDMS Report</button>
+                                        <div class="last-refresh text-muted small mt-2" style="display: none;">Last refreshed: <span class="refresh-time"></span></div>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Include SweetAlert2 CSS and JS -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                <script>
+                    function getFormattedDateTime() {
+                        const now = new Date();
+                        return now.toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true
+                        });
+                    }
+
+                    document.querySelectorAll('.scrape-form').forEach(form => {
+                        // Determine which form this is (BI or SDMS)
+                        const isBiReport = form.action.includes('upload_bireport_file');
+                        const storageKey = isBiReport ? 'lastRefreshTimeBI' : 'lastRefreshTimeSDMS';
+                        
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            const wrapper = form.closest('.mb-4');
+                            const refreshDiv = wrapper.querySelector('.last-refresh');
+                            const refreshTimeSpan = wrapper.querySelector('.refresh-time');
+
+                            // Show loading popup
+                            Swal.fire({
+                                title: 'Processing',
+                                text: 'Scraping data, please wait...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            const formData = new FormData(form);
+
+                            try {
+                                const response = await fetch(form.action, {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    }
+                                });
+
+                                const contentType = response.headers.get("content-type") || "";
+                                if (!contentType.includes("application/json")) {
+                                    const text = await response.text();
+                                    throw new Error("Invalid response format (not JSON): " + text.slice(0, 100));
+                                }
+
+                                const result = await response.json();
+                                console.log(result);
+
+                                Swal.close(); // Close loading popup
+
+                                console.log(result.status);
+
+                                if (result.status === 'success') {
+                                    const now = getFormattedDateTime();
+                                    refreshTimeSpan.textContent = now;
+                                    refreshDiv.style.display = 'block';
+                                    localStorage.setItem(storageKey, now);
+                                    
+                                    // Show success popup
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: result.message,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        showConfirmButton: false
+                                    });
+                                } else {
+                                    // Show error popup
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: result.message
+                                    });
+                                }
+                            } catch (error) {
+                                Swal.close(); // Close loading popup
+                                // Show error popup
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: error.message
+                                });
+                            }
+                        });
+
+                        // Load last refresh time if available
+                        const wrapper = form.closest('.mb-4');
+                        const refreshDiv = wrapper.querySelector('.last-refresh');
+                        const refreshTimeSpan = wrapper.querySelector('.refresh-time');
+                        const lastRefresh = localStorage.getItem(storageKey);
+                        if(lastRefresh) {
+                            refreshTimeSpan.textContent = lastRefresh;
+                            refreshDiv.style.display = 'block';
+                        }
+                    });
+                </script>
+                                        
                 <div class="container-fluid">
                     <h1 class="mb-4">Dashboard Overview</h1>
-                    
+
                     <div class="row g-4">
                         <!-- Backlog Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card dashboard-card bg-light" onclick="window.location.href='invoiceorder'">
                                 <div class="card-body">
                                     <h6><i class="fas fa-users me-2"></i> Backlog</h6>
-                                    <p>Areas: 150</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p>Total Area : <?php echo $sdsms_stats['total'] ?? 0; ?></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -621,19 +871,20 @@
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
                                     <h6><i class="fas fa-wallet me-2"></i> Fund Balance</h6>
-                                    <p>Rs:760,461.17</p>
+                                    <p>Rs:(363,010.10)</p>
+                                    <p>Remark : Risk category-IOCL</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card dashboard-card bg-info bg-opacity-10">
                                 <div class="card-body">
-                                    <h6>Remark</h6>
+                                    <h6><i class="bi bi-pencil-square me-2"></i> Remark</h6>
                                     <p>IOCL</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         
                         <!-- Customer Strength Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -667,21 +918,20 @@
                                 <div class="card-body">
                                     <h6><i class="fas fa-gas-pump me-2"></i> SBC</h6>
                                     <?php
-                                    if (isset($sbc_counts) && isset($customer_data)) {
-                                        $sbc_total = $sbc_counts['total'] ?? 0;
-                                        $customer_total = $customer_data['total']['total'] ?? 0;
+                                    // Safely access the data with proper null checks
+                                    $sbc_total = $sbc_counts['total']['total'] ?? 0;
+                                    $customer_total = $customer_data['total']['total'] ?? 0;
+                                    
+                                    // Ensure both values are numeric before calculations
+                                    $sbc_total = is_numeric($sbc_total) ? $sbc_total : 0;
+                                    $customer_total = is_numeric($customer_total) ? $customer_total : 0;
 
-                                        if ($sbc_total > 0 && $customer_total > 0):
-                                            $sbc_percent = round(($sbc_total / $customer_total) * 100);
-                                    ?>
-                                            <p>Total: <?= number_format($sbc_total) ?></p>
-                                            <p>Percent: <?= $sbc_percent ?>%</p>
-                                    <?php
-                                        else:
-                                            echo '<p>No SBC data found</p>';
-                                        endif;
+                                    if ($sbc_total > 0 && $customer_total > 0) {
+                                        $sbc_percent = round(($sbc_total / $customer_total) * 100);
+                                        echo '<p>Total: ' . number_format($sbc_total) . '</p>';
+                                        echo '<p>Percent: ' . $sbc_percent . '%</p>';
                                     } else {
-                                        echo '<p>Data not available</p>';
+                                        echo '<p>No SBC data found</p>';
                                     }
                                     ?>
                                 </div>
@@ -690,16 +940,30 @@
                         
                         <!-- Nil Refill Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="card dashboard-card bg-danger bg-opacity-10" onclick="window.location.href='nillfill'">
+                            <div class="card dashboard-card bg-danger bg-opacity-10" onclick="window.location.href='<?php echo base_url('nillfill'); ?>'">
                                 <div class="card-body">
                                     <h6><i class="fas fa-calendar-times me-2"></i> Nil Refill</h6>
-                                    <?php if (!empty($stats)): ?>
-                                        <p>3 Months</p>
-                                        <p>Total: <?= number_format($stats['greater_than_3_months']['total']['qty']) ?></p>
-                                        <p>Percent: <?=round ($stats['greater_than_3_months']['total']['percent'])?>% </p>
-                                    <?php else: ?>
-                                        <p>Data not available</p>
-                                    <?php endif; ?>
+                                    <!-- <pre><?php print_r($stats); ?></pre> -->
+                                    <?php
+                                    // Safely access the data with proper null checks
+                                    $gt3 = $stats['data']['overall_total']['greater_than_3_months']['total']['qty'] ?? 0;
+                                    $gt6 = $stats['data']['overall_total']['greater_than_6_months']['total']['qty'] ?? 0;
+                                    $gt1 = $stats['data']['overall_total']['greater_than_1_year']['total']['qty'] ?? 0;
+                                    $nil_total = $gt3 + $gt6 + $gt1;
+                                    $customer_total = $customer_data['total']['total'] ?? 0;
+                                    // echo "abcdefghijklmnopqrstuvwxyzabcdefgh ".$stats['overall_total']['greater_than_3_months']['total'];
+                                    // Ensure both values are numeric before calculations
+                                    $nil_total = is_numeric($nil_total) ? $nil_total : 0;
+                                    $customer_total = is_numeric($customer_total) ? $customer_total : 0;
+
+                                    if ($nil_total > 0 && $customer_total > 0) {
+                                        $nil_percent = round(($nil_total / $customer_total) * 100);
+                                        echo '<p>Total: ' . number_format($nil_total) . '</p>';
+                                        echo '<p>Percent: ' . $nil_percent . '%</p>';
+                                    } else {
+                                        echo '<p>No NIL REFILL data found</p>';
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -748,18 +1012,18 @@
                         
                         <!-- Hose Due Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="card dashboard-card bg-purple bg-opacity-10" onclick="window.location.href='hosedue'">
-                                <div class="card-body">
-                                    <h6><i class="fas fa-fire-extinguisher me-2"></i> Hose Due</h6>
-                                    <?php if (!empty($hose_stats) && isset($hose_stats['total']['qty']) && isset($hose_stats['total']['percent'])): ?>
-                                        <p>Total: <?= number_format($hose_stats['total']['qty']) ?></p>
-                                        <p>Percent: <?= round($hose_stats['total']['percent']) ?>%</p>
-                                    <?php else: ?>
-                                        <p>Data not available</p>
-                                    <?php endif; ?>
-                                </div>
+                        <div class="card dashboard-card bg-purple bg-opacity-10" onclick="window.location.href='hosedue'">
+                            <div class="card-body">
+                                <h6><i class="fas fa-fire-extinguisher me-2"></i> Hose Due</h6>
+                                <?php if (!empty($hose_stats) && is_array($hose_stats) && isset($hose_stats['total']['qty']) && isset($hose_stats['total']['percent'])): ?>
+                                    <p>Total: <?= number_format($hose_stats['total']['qty']) ?></p>
+                                    <p>Percent: <?= round($hose_stats['total']['percent']) ?>%</p>
+                                <?php else: ?>
+                                    <p>Data not available</p>
+                                <?php endif; ?>
                             </div>
                         </div>
+                    </div>
                         
                         <!-- Phone Number Card -->
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -777,6 +1041,211 @@
                         </div>
                     </div>
                 </div>
+                <?php } elseif($method == 'profile') { ?>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h2 class="h4 mb-0"><i class="fas fa-user-cog text-primary me-2"></i>Profile Management</h2>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <?php if ($this->session->flashdata('error')): ?>
+                                    <div class="alert alert-danger alert-dismissible fade show mb-4">
+                                        <?php echo $this->session->flashdata('error'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('success')): ?>
+                                    <div class="alert alert-success alert-dismissible fade show mb-4">
+                                        <?php echo $this->session->flashdata('success'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('info')): ?>
+                                    <div class="alert alert-info alert-dismissible fade show mb-4">
+                                        <?php echo $this->session->flashdata('info'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <form id="profileForm" method="post" action="<?php echo base_url('user/add'); ?>">
+                                    <div class="mb-4">
+                                       <h5 class="mb-3 border-bottom pb-2">
+                                            <i class="fas fa-user me-2 text-primary" style="color: rgba(10, 81, 127, 1);"></i>
+                                            Personal Information
+                                        </h5>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="full_name" class="form-label">Full Name</label>
+                                                <input type="text" class="form-control" id="full_name" name="full_name" 
+                                                    value="<?php echo htmlspecialchars($distributor_data->full_name ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" 
+                                                    value="<?php echo htmlspecialchars($distributor_data->Email ?? ''); ?>" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="phone" class="form-label">Whatsapp Number <span class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control <?php echo form_error('phone') ? 'is-invalid' : ''; ?>" 
+                                                    id="phone" name="phone" maxlength="10"
+                                                    value="<?php echo set_value('phone', htmlspecialchars($distributor_data->phone ?? '')); ?>"
+                                                    required>
+                                                <div class="invalid-feedback"><?php echo form_error('phone'); ?></div>
+                                                <small class="form-text text-muted">10 digits only</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="sap_code" class="form-label">SAP Code</label>
+                                                <input type="text" class="form-control <?php echo form_error('sap_code') ? 'is-invalid' : ''; ?>" 
+                                                    id="sap_code" name="sap_code" 
+                                                    value="<?php echo set_value('sap_code', htmlspecialchars($distributor_data->sap_code ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('sap_code'); ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-university me-2 text-primary"></i>Bank Details</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                                <input type="text" class="form-control <?php echo form_error('account_holder_name') ? 'is-invalid' : ''; ?>" 
+                                                    id="account_holder_name" name="account_holder_name" 
+                                                    value="<?php echo set_value('account_holder_name', htmlspecialchars($distributor_data->account_holder_name ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('account_holder_name'); ?></div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="account_number" class="form-label">Account Number</label>
+                                                <input type="text" class="form-control <?php echo form_error('account_number') ? 'is-invalid' : ''; ?>" 
+                                                    id="account_number" name="account_number" maxlength="18"
+                                                    value="<?php echo set_value('account_number', htmlspecialchars($distributor_data->account_number ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('account_number'); ?></div>
+                                                <small class="form-text text-muted">Maximum 18 digits</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                                <input type="text" class="form-control <?php echo form_error('ifsc_code') ? 'is-invalid' : ''; ?>" 
+                                                    id="ifsc_code" name="ifsc_code" 
+                                                    value="<?php echo set_value('ifsc_code', htmlspecialchars($distributor_data->ifsc_code ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('ifsc_code'); ?></div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="bank_name" class="form-label">Bank Name</label>
+                                                <input type="text" class="form-control <?php echo form_error('bank_name') ? 'is-invalid' : ''; ?>" 
+                                                    id="bank_name" name="bank_name" 
+                                                    value="<?php echo set_value('bank_name', htmlspecialchars($distributor_data->bank_name ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('bank_name'); ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Address Details</h5>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+                                            <textarea class="form-control <?php echo form_error('address') ? 'is-invalid' : ''; ?>" 
+                                                id="address" name="address" rows="3" required><?php echo set_value('address', htmlspecialchars($distributor_data->address ?? '')); ?></textarea>
+                                            <div class="invalid-feedback"><?php echo form_error('address'); ?></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="pin_code" class="form-label">Pin Code <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control <?php echo form_error('pin_code') ? 'is-invalid' : ''; ?>" 
+                                                    id="pin_code" name="pin_code" maxlength="6"
+                                                    value="<?php echo set_value('pin_code', htmlspecialchars($distributor_data->pin_code ?? '')); ?>"
+                                                    required>
+                                                <div class="invalid-feedback"><?php echo form_error('pin_code'); ?></div>
+                                                <small class="form-text text-muted">6 digits only</small>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control <?php echo form_error('city') ? 'is-invalid' : ''; ?>" 
+                                                    id="city" name="city" 
+                                                    value="<?php echo set_value('city', htmlspecialchars($distributor_data->city ?? '')); ?>"
+                                                    required>
+                                                <div class="invalid-feedback"><?php echo form_error('city'); ?></div>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="office_mobile" class="form-label">Office Mobile</label>
+                                                <input type="text" class="form-control <?php echo form_error('office_mobile') ? 'is-invalid' : ''; ?>" 
+                                                    id="office_mobile" name="office_mobile" maxlength="10"
+                                                    value="<?php echo set_value('office_mobile', htmlspecialchars($distributor_data->office_mobile ?? '')); ?>">
+                                                <div class="invalid-feedback"><?php echo form_error('office_mobile'); ?></div>
+                                                <small class="form-text text-muted">10 digits only</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <button type="submit" class="btn btn-primary px-4">
+                                            <i class="fas fa-save me-2"></i>Update Profile
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Client-side validation to remove error when field is filled
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('profileForm');
+                        const inputs = form.querySelectorAll('input, textarea');
+                        
+                        inputs.forEach(input => {
+                            input.addEventListener('input', function() {
+                                if (this.value.trim() !== '') {
+                                    this.classList.remove('is-invalid');
+                                    
+                                    // Remove the error message
+                                    const feedback = this.nextElementSibling;
+                                    if (feedback && feedback.classList.contains('invalid-feedback')) {
+                                        feedback.textContent = '';
+                                    }
+                                }
+                            });
+                        });
+                        
+                        // Phone number validation (digits only)
+                        const phoneInputs = form.querySelectorAll('input[type="tel"]');
+                        phoneInputs.forEach(input => {
+                            input.addEventListener('input', function() {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            });
+                        });
+                        
+                        // Account number validation (digits only)
+                        const accountNumber = form.querySelector('input[name="account_number"]');
+                        if (accountNumber) {
+                            accountNumber.addEventListener('input', function() {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            });
+                        }
+                        
+                        // Pin code validation (digits only)
+                        const pinCode = form.querySelector('input[name="pin_code"]');
+                        if (pinCode) {
+                            pinCode.addEventListener('input', function() {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                            });
+                        }
+                    });
+                </script>
 
             <!-- Other sections would follow the same responsive pattern -->
             <?php } elseif ($method == 'invoice_order') { ?>
@@ -802,45 +1271,10 @@
                     </div>
                 </div>
 
-            <?php } elseif ($method == 'open_order') { ?>
-                <div class="container">
-                    <div class="form-container">
-                        <h2 class="text-center text-dark mb-4">Upload Open Order Data</h2>
-                        
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <?php echo $this->session->flashdata('success'); ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <?php echo $this->session->flashdata('error'); ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <p class="text-muted text-center"> <?php echo $message; ?> </p>
-                        
-                        <form action="<?php echo base_url('uploadfile_openorder'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                            <div class="mb-3">
-                                <label for="excel_file" class="form-label">Select Excel File</label>
-                                <input type="file" name="excel_file" id="excel_file" class="form-control" required>
-                                <div class="invalid-feedback">Please select a valid Excel file.</div>
-                            </div>
-                            <!-- <div class="d-grid">
-                                <button type="submit" class="btn btn-primary save_btn w-20">Upload</button>
-                            </div> -->
-                            <button type="submit" class="btn btn-primary save_btn">Upload</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- Fund Balance section -->
-                <?php } elseif ($method == 'fund_balance') { ?>
+                <?php } elseif ($method == 'open_order') { ?>
                     <div class="container">
-                        <div class="card shadow p-4">
-                            <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
+                        <div class="form-container">
+                            <h2 class="text-center text-dark mb-4">Upload Open Order Data</h2>
                             
                             <?php if ($this->session->flashdata('success')): ?>
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -858,120 +1292,206 @@
                             
                             <p class="text-muted text-center"> <?php echo $message; ?> </p>
                             
-                            <form action="<?php echo site_url('fundbalance_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            <form action="<?php echo base_url('uploadfile_openorder'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 <div class="mb-3">
                                     <label for="excel_file" class="form-label">Select Excel File</label>
-                                    <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                                    <input type="file" name="excel_file" id="excel_file" class="form-control" required>
                                     <div class="invalid-feedback">Please select a valid Excel file.</div>
                                 </div>
                                 <!-- <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary save_btn">Upload File</button>
+                                    <button type="submit" class="btn btn-primary save_btn w-20">Upload</button>
                                 </div> -->
                                 <button type="submit" class="btn btn-primary save_btn">Upload</button>
                             </form>
                         </div>
                     </div>
-                
-                <?php } elseif ($method == 'customer_register') { ?>
-                    <!-- <div class="container1">
-                        <h2 class="text-center mb-4">Customer Register Upload Data</h2>
-
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <div class="message success"><?php echo $this->session->flashdata('success'); ?></div>
-                        <?php endif; ?>
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <div class="message error"><?php echo $this->session->flashdata('error'); ?></div>
-                        <?php endif; ?>
-
-                        <?php if (isset($message)): ?>
-                            <div class="message"><?php echo $message; ?></div>
-                        <?php endif; ?>
-
-                        <div class="upload-form">
-    <form method="post" enctype="multipart/form-data" action="<?php echo base_url('customerregister_uploadfile'); ?>">
-        <input type="file" name="excel_file" accept=".xls,.xlsx,.csv" required>
-        <br>
-        <input type="submit" value="Upload Excel">
-    </form>
-</div> --
-                    </div> -->
-                    <div class="container">
-                        <div class="card shadow p-4">
-                            <h2 class="text-center mb-4">Customer Register Upload Data</h2>
-                            
-                            <?php if ($this->session->flashdata('success')): ?>
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <?php echo $this->session->flashdata('success'); ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($this->session->flashdata('error')): ?>
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <?php echo $this->session->flashdata('error'); ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <p class="text-muted text-center"> <?php echo $message; ?> </p>
-                            
-                            <form action="<?php echo site_url('customerregister_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                <div class="mb-3">
-                                    <label for="excel_file" class="form-label">Select Excel File</label>
-                                    <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
-                                    <div class="invalid-feedback">Please select a valid Excel file.</div>
-                                </div>
-                                <!-- <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Upload File</button>
-                                </div> -->
-                                <button type="submit" class="btn btn-primary save_btn">Upload</button>
-                            </form>
+                    <!-- Fund Balance section -->
+                    <?php } elseif ($method == 'fund_balance') { ?>
+                        <div class="container">
+                            <div class="card shadow p-4">
+                                <h2 class="text-center mb-4">Upload Fund Balance Data</h2>
+                                
+                                <?php if ($this->session->flashdata('success')): ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <?php echo $this->session->flashdata('success'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('error')): ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <?php echo $this->session->flashdata('error'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                                
+                                <form action="<?php echo site_url('fundbalance_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                    <div class="mb-3">
+                                        <label for="excel_file" class="form-label">Select Excel File</label>
+                                        <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                                        <div class="invalid-feedback">Please select a valid Excel file.</div>
+                                    </div>
+                                    <!-- <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary save_btn">Upload File</button>
+                                    </div> -->
+                                    <button type="submit" class="btn btn-primary save_btn">Upload</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    
+                        <?php } elseif ($method == 'customer_register') { ?>
+                        <div class="container">
+                            <div class="card shadow p-4">
+                                <h2 class="text-center mb-4">Customer Register Upload Data</h2>
+                                
+                                <?php if ($this->session->flashdata('success')): ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <?php echo $this->session->flashdata('success'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($this->session->flashdata('error')): ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <?php echo $this->session->flashdata('error'); ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <p class="text-muted text-center"> <?php echo $message; ?> </p>
+                                
+                                <form action="<?php echo site_url('customerregister_uploadfile'); ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                    <div class="mb-3">
+                                        <label for="excel_file" class="form-label">Select Excel File</label>
+                                        <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                                        <div class="invalid-feedback">Please select a valid Excel file.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary save_btn">Upload</button>
+                                </form>
+                            </div>
+                        </div>
 
                 <!-- display open process data in website -->
-                <?php } elseif ($method == 'display_invoice_data') { ?>
+                <?php } elseif ($method == 'sdms_report') { ?>
                     <div class="container">
+                        <div class="dashboard-back-btn">
+                            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                            </a>
+                        </div>
                         <h2 class="text-center mb-4">Invoice Order Service Area</h2>
 
                         <?php if ($this->session->flashdata('success')): ?>
-                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
+                            <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
                         <?php endif; ?>
 
                         <?php if ($this->session->flashdata('error')): ?>
-                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
+                            <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
                         <?php endif; ?>
+                        
                         <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>Area Name</th>
-                                    <th>Cashmemo Generated</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($orders)): ?>
-                                    <?php $serial_no = 1; ?>
-                                    <?php foreach ($orders as $order): ?>
-                                        <tr>
-                                            <td><?php echo $serial_no++; ?></td>
-                                            <td><?php echo $order['area_name']; ?></td>
-                                            <td><?php echo $order['cashmemo_generated']; ?></td>
-                                            <td><?php echo $order['status']; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
+                            <table id="invoiceTable" class="table table-bordered">
+                                <thead>
                                     <tr>
-                                        <td colspan="4">No records found.</td>
+                                        <th>S.No</th>
+                                        <th>Area Name</th>
+                                        <th>Cashmemo Generated</th>
+                                        <th>Status</th>
+                                        <th>Open Refill Orders</th>
                                     </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                                </div>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($orders)): ?>
+                                        <?php foreach ($orders as $index => $order): ?>
+                                            <tr>
+                                                <td><?php echo $index + 1; ?></td>
+                                                <td><?php echo htmlspecialchars($order['area_name']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['cashmemo_generated']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['status']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['open_refill_orders'] ?? 'N/A'); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="4" class="text-center">No records found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination - Exactly as you requested -->
+                        <nav>
+                            <ul class="pagination justify-content-center mt-3">
+                                <li class="page-item" id="prevPage"><a class="page-link" href="javascript:void(0)">Previous</a></li>
+                                <li class="page-item"><a class="page-link" id="currentPage">1-10</a></li>
+                                <li class="page-item" id="nextPage"><a class="page-link" href="javascript:void(0)">Next</a></li>
+                            </ul>
+                        </nav>
 
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const table = document.getElementById('invoiceTable');
+                            const rows = Array.from(table.querySelectorAll('tbody tr'));
+                            const rowsPerPage = 10;
+                            let currentPage = 1;
+                            const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
+                            
+                            // Pagination elements
+                            const currentPageElement = document.getElementById('currentPage');
+                            const prevButton = document.getElementById('prevPage');
+                            const nextButton = document.getElementById('nextPage');
+                            
+                            function updatePagination() {
+                                // Calculate range to show
+                                const start = (currentPage - 1) * rowsPerPage + 1;
+                                const end = Math.min(start + rowsPerPage - 1, rows.length);
+                                
+                                // Update current page display with range (e.g., "1-10")
+                                currentPageElement.textContent = rows.length > 0 ? `${start}-${end}` : '0-0';
+                                
+                                // Toggle disabled state
+                                if (currentPage === 1) {
+                                    prevButton.classList.add('disabled');
+                                } else {
+                                    prevButton.classList.remove('disabled');
+                                }
+                                
+                                if (currentPage === totalPages || rows.length === 0) {
+                                    nextButton.classList.add('disabled');
+                                } else {
+                                    nextButton.classList.remove('disabled');
+                                }
+                                
+                                // Show/hide rows
+                                rows.forEach((row, index) => {
+                                    row.style.display = (index >= start - 1 && index < end) ? '' : 'none';
+                                });
+                            }
+                            
+                            // Event listeners
+                            prevButton.addEventListener('click', function() {
+                                if (currentPage > 1) {
+                                    currentPage--;
+                                    updatePagination();
+                                }
+                            });
+                            
+                            nextButton.addEventListener('click', function() {
+                                if (currentPage < totalPages) {
+                                    currentPage++;
+                                    updatePagination();
+                                }
+                            });
+                            
+                            // Initialize
+                            updatePagination();
+                        });
+                    </script>
+
+                <!-- display open process data in website -->
                     <?php } elseif ($method == 'display_open_data') {?>
                         <div class="container">
                         <h2 class="text-center mb-4">Open Process Service Area</h2>
@@ -1005,7 +1525,7 @@
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="3">No records found.</td> <!-- Adjust colspan to 3 due to new column -->
+                                        <td colspan="3" class="text-center">No records found.</td> <!-- Adjust colspan to 3 due to new column -->
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -1082,7 +1602,7 @@
                         </div>
                     </div>
 
-                    <?php } elseif ($method == 'add_website') { ?>
+                    <!-- <?php } elseif ($method == 'add_website') { ?>
                         <div class="form-container">
                         <h2 class="text-center text-dark mb-3"><i class="fas fa-globe"></i> Add Website</h>
                         <form action="<?= base_url('submitaddwebite'); ?>" method="POST">
@@ -1117,2623 +1637,3882 @@
                             </div>
                             <button type="submit" class="btn btn-primary save_btn">Save</button>
                         </form>
-                    </div>
+                    </div> -->
                     <!-- Display and store website -->
                 <?php } elseif ($method == 'store_website') { ?>
+                <div class="container">
+                    <h2 class="text-center mb-4"><i class="bi bi-shop me-2"></i>Stored Websites</h2>
+
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                    <?php endif; ?>
+
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
+                    <?php endif; ?>
+
+                    <?php if ($this->session->flashdata('errors')): ?>
+                        <div class="alert alert-danger">
+                            <?php foreach ($this->session->flashdata('errors') as $error): ?>
+                                <p><?php echo $error; ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="container">
-                        <h2 class="text-center mb-4"><i class="bi bi-shop me-2"></i>Stored Websites</h2>
+                        <div class="d-flex justify-content-start mb-3">
+                            <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addWebsiteModal">
+                                <i class="bi bi-plus-circle me-2"></i>Add Website
+                            </button>
+                        </div>
+                    </div>
 
-                        <?php if ($this->session->flashdata('success')): ?>
-                            <p style="color: green;"><?php echo $this->session->flashdata('success'); ?></p>
-                        <?php endif; ?>
 
-                        <?php if ($this->session->flashdata('error')): ?>
-                            <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
-                        <?php endif; ?>
-						<!-- <div class="d-flex justify-content-center"> -->
-						<div class="table-responsive">
+                    <div class="table-responsive">
                         <table class="table">
-						<thead class="table-primary">
-                            <tr>
-                                <th>Website URL</th>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Login</th>
-                            </tr>
-						</thead>
-                            <?php foreach ($websites as $website): ?>
+                            <thead class="table-primary">
                                 <tr>
-                                    <td>
-                                        <span class="truncate-url"><?php echo htmlspecialchars($website['website_url']); ?></span>
-                                        <button class="btn-copy" onclick="copyToClipboard('<?php echo htmlspecialchars($website['website_url']); ?>')">📋</button>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
-                                    <td class="password-hidden">******</td>
-                                    <td>
-                                        <form action="<?php echo site_url('auto-login'); ?>" method="POST">
-                                            <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
-                                            <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
-                                            <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">
-                                            <button class="btnautologin" type="submit">Auto-Login</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </table>
-						</div>
-						<!-- </div> -->
-                    </div>
-                    
-                    <!-- Display customer strength -->
-                    <?php } elseif($method == 'customer_strength') { ?>
-                   <!-- Back to Dashboard Button (Always visible) -->
-                   <div class="dashboard-back-btn back_dashborad">
-        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
-    </div>
-
-    <div class="container-fluid">
-        <!-- Fixed Summary Table -->
-        <div class="summary-section sticky-top bg-white py-3 shadow-sm">
-            <h2 class="text-center mb-4">Customer Strength Data</h2>
-            <div class="table-responsive">
-                <table class="table table-bordered mb-0">
-                    <thead>
-                        <tr class="header-row">
-                            <th rowspan="2">Quantity/Percent</th>
-                            <th colspan="3">ACTIVE</th>
-                            <th colspan="3">SUSPENDED</th>
-                            <th colspan="3">DEACTIVATED</th>
-                            <th colspan="3">TOTAL</th>
-                        </tr>
-                        <tr>
-                            <th>PMUY</th>
-                            <th>NON PMUY</th>
-                            <th>Total</th>
-                            <th>PMUY</th>
-                            <th>NON PMUY</th>
-                            <th>Total</th>
-                            <th>PMUY</th>
-                            <th>NON PMUY</th>
-                            <th>Total</th>
-                            <th>PMUY</th>
-                            <th>NON PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
-                            <td class="clickabled" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percent</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                            <td>97.36%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Main Content Area -->
-        <div id="mainContent" class="customer_area_details mt-4">
-        <!-- <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a> -->
-            <h4 class="text-center mb-4">Customer Distribution by Area</h4>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="table-success">
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Total Customers</th>
-                        </tr>
-                    </thead>
-                    <tbody id="initialAreaBreakdown">
-                        <?php if (empty($customers)): ?>
-                            <tr>
-                                <td colspan="2" class="no-data">No customer data available</td>
-                            </tr>
-                        <?php else: ?>
-                            <?php 
-                            $area_counts = [];
-                            foreach ($customers as $customer) {
-                                $area = $customer['area_name'] ?? 'Unknown Area';
-                                $area_counts[$area] = ($area_counts[$area] ?? 0) + 1;
-                            }
-                            $display_areas = array_slice($area_counts, 0, 10, true);
-                            ?>
-                            <?php foreach ($display_areas as $area => $count): ?>
-                                <tr>
-                                    <td class="clickabled initial-area-click" data-area="<?= htmlspecialchars($area, ENT_QUOTES, 'UTF-8') ?>">
-                                        <?= htmlspecialchars($area, ENT_QUOTES, 'UTF-8') ?>
-                                    </td>
-                                    <td><?= $count ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-            <?php if (!empty($customers) && count($area_counts) > 10): ?>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
-                    </ul>
-                </nav>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <!-- Floating Buttons -->
-    <div class="floating-buttons">
-        <button id="backButton" class="btn btn-primary rounded-circle shadow" title="Back to Previous View" style="display: none;" aria-label="Back to Previous View">
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        <button id="backToAreaButton" class="btn rounded-circle shadow" title="Back to Area Breakdown" style="display: none;" aria-label="Back to Area Breakdown">
-            <i class="fas fa-map-marker-alt"></i>
-        </button>
-    </div>
-
-    <!-- JavaScript Dependencies -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            let currentPage = 1;
-            const recordsPerPage = 10;
-            let allAreas = [];
-            let filteredCustomers = [];
-            let currentStatus = null;
-            let currentScheme = null;
-            let currentArea = null;
-            let viewHistory = ['initial'];
-
-            // Initialize with all customer data from PHP
-            const allCustomers = <?= json_encode($customers) ?>;
-            const customerData = <?= json_encode($customer_data) ?>;
-
-            // Load initial area breakdown
-            function loadInitialAreaBreakdown() {
-                viewHistory = ['initial'];
-                $('#backButton').hide();
-                $('#backToAreaButton').hide();
-                currentStatus = null;
-                currentScheme = null;
-                currentArea = null;
-
-                // Group customers by area
-                const areaCounts = {};
-                allCustomers.forEach(customer => {
-                    const area = customer.area_name || 'Unknown Area';
-                    areaCounts[area] = (areaCounts[area] || 0) + 1;
-                });
-
-                // Convert to array for pagination
-                allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
-                currentPage = 1;
-                updateAreaTable();
-            }
-
-            function updateAreaTable() {
-                const start = (currentPage - 1) * recordsPerPage;
-                const end = start + recordsPerPage;
-                const pageAreas = allAreas.slice(start, end);
-
-                let areaRows = '';
-                if (pageAreas.length === 0) {
-                    areaRows = '<tr><td colspan="2" class="no-data">No areas found</td></tr>';
-                } else {
-                    pageAreas.forEach(({ area, count }) => {
-                        areaRows += `
-                            <tr>
-                                <td class="clickabled initial-area-click" data-area="${area}">${area}</td>
-                                <td>${count}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                $('#initialAreaBreakdown').html(areaRows);
-                $('#currentPage').text(currentPage);
-                $('#prevPage').toggleClass('disabled', currentPage === 1);
-                $('#nextPage').toggleClass('disabled', end >= allAreas.length);
-
-                // Add click handlers for area rows
-                $('.initial-area-click').off('click').on('click', function () {
-                    currentArea = $(this).data('area');
-                    filteredCustomers = allCustomers.filter(customer => 
-                        (customer.area_name || 'Unknown Area') === currentArea
-                    );
-                    loadCustomerDetailsView(null, null, currentArea);
-                });
-            }
-
-            function loadAreaBreakdownView(status, scheme) {
-                viewHistory.push('areaBreakdown');
-                $('#backButton').show();
-                $('#backToAreaButton').hide();
-                currentStatus = status;
-                currentScheme = scheme;
-
-                const title = `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers by Area`;
-
-                // Filter customers by status and scheme
-                filteredCustomers = allCustomers.filter(customer => {
-                    const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
-                    const schemeMatch = scheme === 'ALL' ? true : 
-                        (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
-                    return statusMatch && schemeMatch;
-                });
-
-                // Group by area
-                const areaCounts = {};
-                filteredCustomers.forEach(customer => {
-                    const area = customer.area_name || 'Unknown Area';
-                    areaCounts[area] = (areaCounts[area] || 0) + 1;
-                });
-
-                // Convert to array for pagination
-                allAreas = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
-                currentPage = 1;
-
-                const areaBreakdownHTML = `
-                    <h4 class="text-center mb-4">${title}</h4>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-success">
-                                <tr>
-                                    <th>Area Name</th>
-                                    <th>Count</th>
+                                    <th>Website URL</th>
+                                    <th>Website Name</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="areaBreakdownBody"></tbody>
-                        </table>
-                    </div>
-                    <nav>
-                        <ul class="pagination justify-content-center mt-3">
-                            <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
-                            <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                            <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
-                        </ul>
-                    </nav>
-                `;
-
-                $('#mainContent').html(areaBreakdownHTML);
-                updateAreaBreakdownTable();
-            }
-
-            function updateAreaBreakdownTable() {
-                const start = (currentPage - 1) * recordsPerPage;
-                const end = start + recordsPerPage;
-                const pageAreas = allAreas.slice(start, end);
-
-                let areaRows = '';
-                if (pageAreas.length === 0) {
-                    areaRows = '<tr><td colspan="2" class="no-data">No data available</td></tr>';
-                } else {
-                    pageAreas.forEach(({ area, count }) => {
-                        areaRows += `
-                            <tr>
-                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
-                                <td>${count}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                $('#areaBreakdownBody').html(areaRows);
-                $('#currentPage').text(currentPage);
-                $('#prevPage').toggleClass('disabled', currentPage === 1);
-                $('#nextPage').toggleClass('disabled', end >= allAreas.length);
-
-                // Add click handlers for area rows
-                $('.area-click').off('click').on('click', function () {
-                    currentArea = $(this).data('area');
-                    const areaCustomers = filteredCustomers.filter(customer => 
-                        (customer.area_name || 'Unknown Area') === currentArea
-                    );
-                    loadCustomerDetailsView(currentStatus, currentScheme, currentArea);
-                });
-            }
-
-            function loadCustomerDetailsView(status, scheme, area) {
-                viewHistory.push('customerDetails');
-                $('#backButton').show();
-                $('#backToAreaButton').show();
-
-                let title = status && scheme 
-                    ? `${status === 'ALL' ? 'All Statuses' : status} - ${scheme === 'ALL' ? 'All Schemes' : scheme.replace('_', ' ')} Customers in ${area || 'N/A'}`
-                    : `All Customers in ${area || 'N/A'}`;
-
-                filteredCustomers = allCustomers.filter(customer => {
-                    const statusMatch = status === 'ALL' ? true : customer.consumer_sub_status === status;
-                    const schemeMatch = scheme === 'ALL' ? true : 
-                        (scheme === 'PMUY' ? customer.scheme_selected === 'PMUY' : customer.scheme_selected !== 'PMUY');
-                    const areaMatch = (customer.area_name || 'Unknown Area') === area;
-                    return (!status || statusMatch) && (!scheme || schemeMatch) && areaMatch;
-                });
-
-                currentPage = 1;
-
-                const customerDetailsHTML = `
-                    <h4 class="text-center mb-4">${title}</h4>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-success">
-                                <tr>
-                                    <th>Area Name</th>
-                                    <th>Consumer Number</th>
-                                    <th>Consumer Name</th>
-                                    <th>Phone Number</th>
-                                    <th>Scheme Selected</th>
-                                    <th>Consumer Sub Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="customerTableBody"></tbody>
-                        </table>
-                    </div>
-                    <nav>
-                        <ul class="pagination justify-content-center mt-3">
-                            <li class="page-item disabled" id="prevPage"><a class="page-link">Previous</a></li>
-                            <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                            <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
-                        </ul>
-                    </nav>
-                `;
-
-                $('#mainContent').html(customerDetailsHTML);
-                updateCustomerTable();
-            }
-
-            function updateCustomerTable() {
-                const start = (currentPage - 1) * recordsPerPage;
-                const end = start + recordsPerPage;
-                const pageRows = filteredCustomers.slice(start, end);
-
-                let tableBody = '';
-                if (pageRows.length === 0) {
-                    tableBody = '<tr><td colspan="6" class="no-data">No data available</td></tr>';
-                } else {
-                    pageRows.forEach(customer => {
-                        const schemeClass = customer.scheme_selected === 'PMUY' ? 'badge bg-success' : 'badge bg-primary';
-                        tableBody += `
-                            <tr>
-                                <td>${customer.area_name || 'N/A'}</td>
-                                <td>${customer.consumer_number || 'N/A'}</td>
-                                <td>${customer.consumer_name || 'N/A'}</td>
-                                <td>${customer.phone_number || 'N/A'}</td>
-                                <td><span class="badge ${schemeClass}">${customer.scheme_selected || 'N/A'}</span></td>
-                                <td>${customer.consumer_sub_status || 'N/A'}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                $('#customerTableBody').html(tableBody);
-                $('#currentPage').text(currentPage);
-                $('#prevPage').toggleClass('disabled', currentPage === 1);
-                $('#nextPage').toggleClass('disabled', end >= filteredCustomers.length);
-            }
-
-            // Event listeners
-            $('.table .clickabled').on('click', function () {
-                const status = $(this).data('status');
-                const scheme = $(this).data('scheme');
-                if (status && scheme) {
-                    loadAreaBreakdownView(status, scheme);
-                }
-            });
-
-            $('#backButton').on('click', function () {
-                if (viewHistory.length <= 1) return;
-
-                viewHistory.pop();
-                const previousView = viewHistory[viewHistory.length - 1];
-
-                if (previousView === 'initial') {
-                    loadInitialAreaBreakdown();
-                } else if (previousView === 'areaBreakdown') {
-                    loadAreaBreakdownView(currentStatus, currentScheme);
-                }
-
-                if (viewHistory.length <= 1) {
-                    $('#backButton').hide();
-                    $('#backToAreaButton').hide();
-                }
-            });
-
-            $('#backToAreaButton').on('click', function () {
-                if (currentStatus && currentScheme) {
-                    // Navigate to filtered area breakdown
-                    viewHistory = ['initial', 'areaBreakdown'];
-                    loadAreaBreakdownView(currentStatus, currentScheme);
-                } else {
-                    // Navigate to initial area breakdown
-                    viewHistory = ['initial'];
-                    loadInitialAreaBreakdown();
-                }
-            });
-
-            // Pagination handlers
-            $(document).on('click', '#prevPage:not(.disabled)', function () {
-                if (currentPage > 1) {
-                    currentPage--;
-                    if ($('#areaBreakdownBody').length) {
-                        updateAreaBreakdownTable();
-                    } else if ($('#customerTableBody').length) {
-                        updateCustomerTable();
-                    } else {
-                        updateAreaTable();
-                    }
-                }
-            });
-
-            $(document).on('click', '#nextPage:not(.disabled)', function () {
-                const end = currentPage * recordsPerPage;
-                if ($('#areaBreakdownBody').length && end < allAreas.length) {
-                    currentPage++;
-                    updateAreaBreakdownTable();
-                } else if ($('#customerTableBody').length && end < filteredCustomers.length) {
-                    currentPage++;
-                    updateCustomerTable();
-                } else if ($('#initialAreaBreakdown').length && end < allAreas.length) {
-                    currentPage++;
-                    updateAreaTable();
-                }
-            });
-
-            
-            $("#backToSummary").on("click", function(e) {
-            e.preventDefault();
-            $('#mainContent').hide();
-            $('#customerDetailsHTML').hide();
-        });
-        
-        $("#backToAreas").on("click", function(e) {
-            e.preventDefault();
-            showAreaBreakdown(currentScheme);
-        });
-            // Initialize the view
-            loadInitialAreaBreakdown();
-        });
-    </script>
-
-                        
-                    <?php } elseif($method == 'sbc_data_display') { ?>
-                         <!-- Back to Dashboard Button (Always visible) -->
-          <div class="dashboard-back-btn">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-        <div class="container4">
-        <!-- Fixed Summary Section -->
-        <div class="sbc_summary">
-            <h2 class="text-center mb-4">SBC Data Report</h2>
-            <div class="table-responsive">
-                <table class="table table table-bordered summary-table" id="summaryTable">
-                    <thead>
-                        <tr>
-                            <th>SBC</th>
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summaryTableBody">
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-                    
-        <!-- Scrollable Content Section -->
-        <div class="content-section">
-            <!-- Area Breakdown Table -->
-            <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
-                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered area-table">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Connection Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaBreakdownBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Customer Details Table -->
-            <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
-                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered table_area">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number</th>
-                                <th>Scheme</th>
-                                <th>Consumer Type</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Pagination variables
-            let currentPage = 1;
-            let currentAreaPage = 1;
-            const recordsPerPage = 10;
-            
-            // Data variables
-            let allCustomers = <?= json_encode($sbc_data ?? []) ?>;
-            let filteredCustomers = [];
-            let areaBreakdownData = [];
-            let currentScheme = null;
-            let currentArea = null;
-
-            // Initialize the view
-            initView();
-
-            function initView() {
-                $('#areaBreakdownView').hide();
-                $('#customerDetailsView').hide();
-                
-                if (allCustomers && allCustomers.length > 0) {
-                    processData();
-                }
-            }
-
-            function processData() {
-                allCustomers.forEach(customer => {
-                    if (customer.scheme_selected === 'Ujjwala') {
-                        customer.scheme_selected = 'PMUY';
-                    } else if (!customer.scheme_selected || customer.scheme_selected !== 'PMUY') {
-                        customer.scheme_selected = 'Non PMUY';
-                    }
-                });
-            }
-
-            function showAreaBreakdown(scheme) {
-                currentScheme = scheme;
-                
-                filteredCustomers = allCustomers.filter(customer => {
-                    let schemeMatch = true;
-                    if (scheme === 'PMUY') {
-                        schemeMatch = customer.scheme_selected === 'PMUY';
-                    } else if (scheme === 'Non PMUY') {
-                        schemeMatch = customer.scheme_selected !== 'PMUY';
-                    }
-                    return schemeMatch;
-                });
-                
-                const areaStats = {};
-                filteredCustomers.forEach(customer => {
-                    const area = customer.area_name || 'Unknown';
-                    if (!areaStats[area]) {
-                        areaStats[area] = { total: 0 };
-                    }
-                    areaStats[area].total++;
-                });
-                
-                areaBreakdownData = Object.entries(areaStats).map(([area, stats]) => ({
-                    area,
-                    total: stats.total
-                })).sort((a, b) => b.total - a.total);
-                
-                $('#areaBreakdownTitle').text(`SBC Connections (${scheme}) by Area`);
-                currentAreaPage = 1;
-                updateAreaBreakdownTable();
-                
-                $('#areaBreakdownView').show();
-                $('#customerDetailsView').hide();
-                $('.content-section').scrollTop(0);
-            }
-
-            function updateAreaBreakdownTable() {
-                const start = (currentAreaPage - 1) * recordsPerPage;
-                const end = start + recordsPerPage;
-                const pageAreas = areaBreakdownData.slice(start, end);
-                const tableBody = $("#areaBreakdownBody");
-                
-                tableBody.empty();
-                
-                if (pageAreas.length === 0) {
-                    tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
-                } else {
-                    pageAreas.forEach(({area, total}) => {
-                        tableBody.append(`
-                            <tr>
-                                <td class="clickabled area-click" data-area="${area}">${area || 'N/A'}</td>
-                                <td>${total}</td>
-                            </tr>
-                        `);
-                    });
-                }
-                
-                $("#currentAreaPage").text(currentAreaPage);
-                $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
-                $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
-            }
-
-            function showCustomerDetails(area) {
-                currentArea = area;
-                
-                filteredCustomers = allCustomers.filter(customer => {
-                    const areaMatch = (customer.area_name || 'Unknown') === area;
-                    let schemeMatch = true;
-                    if (currentScheme === 'PMUY') {
-                        schemeMatch = customer.scheme_selected === 'PMUY';
-                    } else if (currentScheme === 'Non PMUY') {
-                        schemeMatch = customer.scheme_selected !== 'PMUY';
-                    }
-                    return areaMatch && schemeMatch;
-                });
-                
-                currentPage = 1;
-                $('#customerDetailsTitle').text(`SBC Connections (${currentScheme}) in ${area}`);
-                updateCustomerTable();
-                
-                $('#areaBreakdownView').hide();
-                $('#customerDetailsView').show();
-                $('.content-section').scrollTop(0);
-            }
-
-            function updateCustomerTable() {
-                const start = (currentPage - 1) * recordsPerPage;
-                const end = start + recordsPerPage;
-                const pageRows = filteredCustomers.slice(start, end);
-                const tableBody = $("#customerTableBody");
-                
-                tableBody.empty();
-                
-                if (pageRows.length === 0) {
-                    tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
-                } else {
-                    pageRows.forEach(customer => {
-                        const consumerType = customer.consumer_type || 'domestic';
-                        const typeBadgeClass = consumerType === 'domestic' ? 'badge-domestic' : 'badge-commercial';
-                        
-                        tableBody.append(`
-                            <tr>
-                                <td>${customer.area_name || 'N/A'}</td>
-                                <td>${customer.consumer_number || 'N/A'}</td>
-                                <td>${customer.consumer_name || 'N/A'}</td>
-                                <td>${customer.phone_number || 'N/A'}</td>
-                                <td>
-                                    <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                        ${customer.scheme_selected || 'N/A'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge_sbc ${typeBadgeClass}">
-                                        ${customer.consumer_type}
-                                    </span>
-                                </td>
-                            </tr>
-                        `);
-                    });
-                }
-                
-                $("#currentPage").text(currentPage);
-                $("#prevPage").toggleClass("disabled", currentPage === 1);
-                $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
-            }
-
-            // Event listeners
-            $(document).on('click', '.clickabled[data-scheme]', function() {
-                const scheme = $(this).data('scheme');
-                showAreaBreakdown(scheme);
-            });
-            
-            $(document).on('click', '.area-click', function() {
-                const area = $(this).data('area');
-                showCustomerDetails(area);
-            });
-            
-            $("#prevPage").on("click", function(e) {
-                e.preventDefault();
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateCustomerTable();
-                }
-            });
-            
-            $("#nextPage").on("click", function(e) {
-                e.preventDefault();
-                if ((currentPage * recordsPerPage) < filteredCustomers.length) {
-                    currentPage++;
-                    updateCustomerTable();
-                }
-            });
-            
-            $("#prevAreaPage").on("click", function(e) {
-                e.preventDefault();
-                if (currentAreaPage > 1) {
-                    currentAreaPage--;
-                    updateAreaBreakdownTable();
-                }
-            });
-            
-            $("#nextAreaPage").on("click", function(e) {
-                e.preventDefault();
-                if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
-                    currentAreaPage++;
-                    updateAreaBreakdownTable();
-                }
-            });
-            
-            $("#backToSummary").on("click", function(e) {
-            e.preventDefault();
-            $('#areaBreakdownView').hide();
-            $('#customerDetailsView').hide();
-        });
-        
-        $("#backToAreas").on("click", function(e) {
-            e.preventDefault();
-            showAreaBreakdown(currentScheme);
-        });
-        });
-    </script>
-                    <?php } elseif ($method == 'nil_refill_report') { ?>
-                        <!-- Back to Dashboard Button (Always visible) -->
-        <div class="dashboard-back-btn back_dashborad">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-        
-        <div class="container4">
-        <!-- Fixed Summary Table -->
-        <div class="nerefil-summary">
-            <h2 class="text-center mb-4">Nil Refill Report</h2>
-            <div class="table-responsive">
-                <table class="table table table-bordered nilrefil_summary_table" id="summaryTable">
-                    <thead>
-                        <tr class="table-primary">
-                            <th rowspan="2">Time Since Last Refill</th>
-                            <th colspan="3">3 Months</th>
-                            <th colspan="3">6 Months</th>
-                            <th colspan="3">1 Year</th>
-                        </tr>
-                        <tr class="table-secondary">
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo $stats['greater_than_3_months']['pmuy']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_3_months']['non_pmuy']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_3_months" data-scheme="total"><?php echo $stats['greater_than_3_months']['total']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo $stats['greater_than_6_months']['pmuy']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo $stats['greater_than_6_months']['non_pmuy']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_6_months" data-scheme="total"><?php echo $stats['greater_than_6_months']['total']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo $stats['greater_than_1_year']['pmuy']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo $stats['greater_than_1_year']['non_pmuy']['qty'] ?? 0; ?></td>
-                            <td class="clickabled" data-period="greater_than_1_year" data-scheme="total"><?php echo $stats['greater_than_1_year']['total']['qty'] ?? 0; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td><?php echo $stats['greater_than_3_months']['pmuy']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_3_months']['non_pmuy']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_3_months']['total']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_6_months']['pmuy']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_6_months']['non_pmuy']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_6_months']['total']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_1_year']['pmuy']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_1_year']['non_pmuy']['percent'] ?? 0; ?>%</td>
-                            <td><?php echo $stats['greater_than_1_year']['total']['percent'] ?? 0; ?>%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Details Sections -->
-        <div class="content-section">
-            <!-- Area Breakdown View -->
-            <div id="areaBreakdownView" style="display: none;" class="nilrefil_area_details">
-                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered area-table">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Customer Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaBreakdownBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><span class="page-link" id="currentAreaPage">1</span></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Customer Details View -->
-            <div id="customerDetailsView" style="display: none;" class="nilrefil_customer_details">
-                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number</th>
-                                <th>Scheme</th>
-                                <th>Nil Refill Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevCustomerPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentCustomerPage">1</a></li>
-                        <li class="page-item" id="nextCustomerPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    const recordsPerPage = 10;
-    let currentView = 'summary';
-    let viewStack = [];
-    const allCustomers = <?php echo json_encode($all_customers); ?>;
-    let filteredCustomers = [];
-    let areaBreakdownData = [];
-    let currentPeriod = '';
-    let currentScheme = '';
-    let currentArea = '';
-    let currentAreaPage = 1;
-    let currentCustomerPage = 1;
-
-    // Debugging: Log initial data
-    console.log('Initial All Customers:', allCustomers);
-
-    // Initialize view
-    initView();
-
-    function initView() {
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-        $('#backButton').hide();
-        currentView = 'summary';
-        viewStack = [];
-        console.log('Initialized to Summary View');
-    }
-
-    // Show area breakdown
-    function showAreaBreakdown(period, scheme) {
-        currentPeriod = period;
-        currentScheme = scheme;
-
-        console.log('Showing Area Breakdown for:', { period, scheme });
-
-        // Filter customers
-        filteredCustomers = allCustomers.filter(customer => {
-            if (!customer.days_since_refill || isNaN(parseInt(customer.days_since_refill))) {
-                console.log('Skipping customer due to invalid days_since_refill:', customer);
-                return false;
-            }
-            const days = parseInt(customer.days_since_refill, 10);
-            let periodMatch = false;
-            if (period === 'greater_than_3_months') periodMatch = days > 90;
-            else if (period === 'greater_than_6_months') periodMatch = days > 180;
-            else if (period === 'greater_than_1_year') periodMatch = days > 365;
-
-            if (scheme === 'total') return periodMatch;
-            const schemeMatch = (scheme === 'pmuy' && customer.scheme_selected === 'PMUY') || 
-                               (scheme === 'non_pmuy' && customer.scheme_selected === 'Non PMUY');
-            return schemeMatch && periodMatch;
-        });
-
-        console.log('Filtered Customers:', filteredCustomers);
-
-        // Group by area
-        const areaCounts = {};
-        filteredCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
-            areaCounts[area] = (areaCounts[area] || 0) + 1;
-        });
-
-        areaBreakdownData = Object.entries(areaCounts)
-            .map(([area, count]) => ({ area, count }))
-            .sort((a, b) => b.count - a.count);
-
-        console.log('Area Breakdown Data:', areaBreakdownData);
-
-        // Update title
-        const periodText = getPeriodText(period);
-        const schemeText = scheme === 'pmuy' ? 'PMUY' : scheme === 'non_pmuy' ? 'Non-PMUY' : 'Total';
-        $('#areaBreakdownTitle').text(`Areas (${periodText}, ${schemeText})`);
-
-        // Reset to first page and update
-        currentAreaPage = 1;
-        updateAreaBreakdownView();
-
-        // Update view state
-        $('#areaBreakdownView').show();
-        $('#customerDetailsView').hide();
-        $('#backButton').show();
-        viewStack.push(currentView);
-        currentView = 'area';
-        console.log('Switched to Area View');
-    }
-
-    // Update area breakdown table
-    function updateAreaBreakdownView() {
-        const totalRecords = areaBreakdownData.length;
-        const totalPages = Math.ceil(totalRecords / recordsPerPage);
-        const startIdx = (currentAreaPage - 1) * recordsPerPage;
-        const endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
-        const pageData = areaBreakdownData.slice(startIdx, endIdx);
-
-        console.log(`Updating Area Breakdown - Page ${currentAreaPage}:`, { totalRecords, totalPages, startIdx, endIdx, pageData });
-
-        const $tbody = $('#areaBreakdownBody');
-        $tbody.empty();
-
-        if (totalRecords === 0) {
-            $tbody.append('<tr><td colspan="2" class="no-data">No areas found</td></tr>');
-            console.log('No areas to display');
-        } else if (pageData.length === 0) {
-            $tbody.append('<tr><td colspan="2" class="no-data">No more areas on this page</td></tr>');
-            console.log('Page data empty for current page');
-        } else {
-            pageData.forEach(item => {
-                $tbody.append(`
-                    <tr>
-                        <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">${escapeHtml(item.area)}</td>
-                        <td>${item.count}</td>
-                    </tr>
-                `);
-            });
-            console.log('Rendered area breakdown rows:', pageData.length);
-
-            // Reattach click handlers
-            $('.area-link').off('click').on('click', function() {
-                const area = $(this).data('area');
-                console.log('Area clicked:', area);
-                showCustomerDetails(area);
-            });
-        }
-
-        $('#currentAreaPage').text(currentAreaPage);
-        $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
-        $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
-    }
-
-    // Show customer details
-    function showCustomerDetails(area) {
-        currentArea = area;
-        console.log('Filtering customers for area:', area);
-
-        const areaCustomers = filteredCustomers.filter(customer => {
-            const match = customer.area_name === area;
-            if (!match) console.log('Customer skipped (area mismatch):', customer);
-            return match;
-        });
-
-        console.log('Area Customers:', areaCustomers);
-
-        const periodText = getPeriodText(currentPeriod);
-        const schemeText = currentScheme === 'pmuy' ? 'PMUY' : currentScheme === 'non_pmuy' ? 'Non-PMUY' : 'Total';
-        $('#customerDetailsTitle').text(`${escapeHtml(area)} - ${periodText}, ${schemeText}`);
-
-        currentCustomerPage = 1;
-        updateCustomerDetailsView(areaCustomers);
-
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').show();
-        $('#backButton').show();
-        viewStack.push(currentView);
-        currentView = 'customer';
-        console.log('Switched to Customer View');
-    }
-
-    // Update customer details table
-    function updateCustomerDetailsView(customers) {
-        const totalRecords = customers.length;
-        const totalPages = Math.ceil(totalRecords / recordsPerPage);
-        const startIdx = (currentCustomerPage - 1) * recordsPerPage;
-        const endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
-        const pageData = customers.slice(startIdx, endIdx);
-
-        console.log(`Updating Customer Details - Page ${currentCustomerPage}:`, { totalRecords, totalPages, startIdx, endIdx, pageData });
-
-        const $tbody = $('#customerTableBody');
-        $tbody.empty();
-
-        if (totalRecords === 0) {
-            $tbody.append('<tr><td colspan="6" class="no-data">No customers found</td></tr>');
-            console.log('No customers to display');
-        } else if (pageData.length === 0) {
-            $tbody.append('<tr><td colspan="6" class="no-data">No more customers on this page</td></tr>');
-            console.log('Page data empty for current page');
-        } else {
-            pageData.forEach(customer => {
-                const lastRefill = customer.last_refill_date 
-                    ? new Date(customer.last_refill_date).toLocaleDateString() 
-                    : 'Never';
-                const monthsSince = customer.months_since_refill 
-                    ? `${customer.months_since_refill} months` 
-                    : 'N/A';
-                
-                $tbody.append(`
-                    <tr>
-                        <td>${escapeHtml(customer.area_name)}</td>
-                        <td>${escapeHtml(customer.consumer_number)}</td>
-                        <td>${escapeHtml(customer.consumer_name)}</td>
-                        <td>${escapeHtml(customer.phone_number) || 'N\A'}</td>
-                        <td><span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">${customer.scheme_selected}</span></td>
-                        <td><span class="badge badge-due">Due</span></td>
-                    </tr>
-                `);
-            });
-            console.log('Rendered customer detail rows:', pageData.length);
-        }
-
-        $('#currentCustomerPage').text(currentCustomerPage);
-        $('#prevCustomerPage').prop('disabled', currentCustomerPage === 1);
-        $('#nextCustomerPage').prop('disabled', currentCustomerPage >= totalPages);
-    }
-
-    // Helper functions
-    function getPeriodText(period) {
-        switch(period) {
-            case 'greater_than_3_months': return '3+ Months';
-            case 'greater_than_6_months': return '6+ Months';
-            case 'greater_than_1_year': return '1+ Year';
-            default: return '';
-        }
-    }
-
-    function escapeHtml(text) {
-        if (!text) return '';
-        return text.toString()
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    // Event handlers
-    $('.clickabled[data-period][data-scheme]').on('click', function() {
-        const period = $(this).data('period');
-        const scheme = $(this).data('scheme');
-        showAreaBreakdown(period, scheme);
-    });
-
-    $('#backButton').on('click', function() {
-        if (viewStack.length === 0) {
-            initView();
-            return;
-        }
-        const previousView = viewStack.pop();
-        if (previousView === 'summary') {
-            $('#areaBreakdownView').hide();
-            $('#customerDetailsView').hide();
-            $('#backButton').hide();
-            currentView = 'summary';
-            console.log('Back to Summary View');
-        } else if (previousView === 'area') {
-            $('#areaBreakdownView').show();
-            $('#customerDetailsView').hide();
-            currentView = 'area';
-            updateAreaBreakdownView();
-            console.log('Back to Area View');
-        }
-    });
-
-    $('#prevAreaPage').on('click', function(e) {
-        e.preventDefault();
-        if (currentAreaPage > 1) {
-            currentAreaPage--;
-            updateAreaBreakdownView();
-            console.log('Previous Area Page');
-        }
-    });
-
-    $('#nextAreaPage').on('click', function(e) {
-        e.preventDefault();
-        const totalPages = Math.ceil(areaBreakdownData.length / recordsPerPage);
-        if (currentAreaPage < totalPages) {
-            currentAreaPage++;
-            updateAreaBreakdownView();
-            console.log('Next Area Page');
-        }
-    });
-
-    $('#prevCustomerPage').on('click', function() {
-        if (currentCustomerPage > 1) {
-            currentCustomerPage--;
-            const customers = filteredCustomers.filter(c => c.area_name === currentArea);
-            updateCustomerDetailsView(customers);
-            console.log('Previous Customer Page');
-        }
-    });
-
-    $('#nextCustomerPage').on('click', function() {
-        const customers = filteredCustomers.filter(c => c.area_name === currentArea);
-        const totalPages = Math.ceil(customers.length / recordsPerPage);
-        if (currentCustomerPage < totalPages) {
-            currentCustomerPage++;
-            updateCustomerDetailsView(customers);
-            console.log('Next Customer Page');
-        }
-    });
-
-    $("#backToSummary").on("click", function(e) {
-        e.preventDefault();
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-    });
-    
-    $("#backToAreas").on("click", function(e) {
-        e.preventDefault();
-        showAreaBreakdown(currentScheme);
-    });
-});
-</script>
-                    <?php } elseif($method == 'kyc_data') { ?>
-                         <!-- Back to Dashboard Button (Always visible) -->
-       <div class="dashboard-back-btn back_dashborad">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-        <div class="container5">
-        <!-- Fixed Summary Table -->
-        <div class="kyc-summary" id="summaryTableContainer">
-            <h2 class="text-center mb-4">KYC Data Table</h2>
-            <div class="table-responsive">
-                <table class="table table table-bordered table_summary_kyc" id="summaryTable">
-                    <thead>
-                        <tr class="head-row">
-                            <th rowspan="2">KYC Data</th>
-                            <!-- <th colspan="3">KYC Pending</th> -->
-                        </tr>
-                        <tr class="sub-header">
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-scheme="PMUY"><?php echo $kyc_stats['PMUY_Pending'] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $kyc_stats['Non_PMUY_Pending'] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Total"><?php echo $kyc_stats['Total_Pending'] ?? 0; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td><?php echo $kyc_stats['PMUY_Pending_Percent'] ?? 0; ?>%</td>
-                            <td><?php echo $kyc_stats['Non_PMUY_Pending_Percent'] ?? 0; ?>%</td>
-                            <td><?php echo $kyc_stats['Total_Pending_Percent'] ?? 0; ?>%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    
-        <!-- Main Content Area -->
-        <div id="mainContent">
-            <!-- Area Breakdown View -->
-            <div id="areaBreakdownView" style="display: none;" class="kyc-area-details">
-                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Pending KYC Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaBreakdownBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Customer Details View -->
-            <div id="customerDetailsView" style="display: none;" class="kyc_customer_details">
-                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number</th>
-                                <th>Scheme</th>
-                                <th>KYC Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody">
-                            <?php foreach ($kyc_data as $customer): ?>
-                                <?php if (empty($customer['kyc_number'])): ?>
-                                    <tr data-area="<?php echo htmlspecialchars($customer['area_name'] ?? 'Unknown', ENT_QUOTES, 'UTF-8'); ?>" 
-                                        data-scheme="<?php echo htmlspecialchars($customer['scheme_selected'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <td><?php echo htmlspecialchars($customer['area_name'] ?? 'Unknown', ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td><?php echo htmlspecialchars($customer['consumer_number'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td><?php echo htmlspecialchars($customer['consumer_name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td><?php echo htmlspecialchars($customer['phone_number'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td>
-                                            <span class="badge <?php echo ($customer['scheme_selected'] === 'PMUY') ? 'badge-pmuy' : 'badge-non-pmuy'; ?>">
-                                                <?php echo htmlspecialchars($customer['scheme_selected'], ENT_QUOTES, 'UTF-8'); ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-non-pmuy">Pending</span>
-                                        </td>
+                            <tbody>
+                                <?php if (!empty($websites)): ?>
+                                    <?php foreach ($websites as $website): ?>
+                                        <tr>
+                                            <td>
+                                                <span class="truncate-url"><?php echo htmlspecialchars($website['website_url']); ?></span>
+                                                <button class="btn-copy" onclick="copyToClipboard('<?php echo htmlspecialchars($website['website_url']); ?>')">📋</button>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($website['selectwebsitename']); ?></td>
+                                            <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
+                                            <td class="password-hidden"><?php echo htmlspecialchars($website['website_password']); ?></td>
+                                            
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editWebsiteModal" 
+                                                    onclick="populateEditModal('<?php echo $website['website_id']; ?>', '<?php echo htmlspecialchars($website['website_userId']); ?>', '')">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteWebsiteModal"
+                                                    onclick="setDeleteWebsiteId('<?php echo $website['website_id']; ?>')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No records found.</td>
                                     </tr>
                                 <?php endif; ?>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Configuration
-    const recordsPerPage = 10;
-    let currentView = 'summary';
-    let viewHistory = [];
-    let currentPage = 1;
-    let currentAreaPage = 1;
-    let currentScheme = null;
-    let currentArea = null;
-    
-    // Data from server
-    let allCustomers = <?= json_encode($kyc_data) ?>;
-    let filteredCustomers = [];
-    let areaBreakdownData = [];
+                    <!-- Add Website Modal -->
+                    <div class="modal fade" id="addWebsiteModal" tabindex="-1" aria-labelledby="addWebsiteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addWebsiteModalLabel">Add New Website</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="<?php echo site_url('addwebsite'); ?>" method="POST">
+                                    <div class="modal-body">
+                                        <?php if ($this->session->flashdata('errors')): ?>
+                                            <div class="alert alert-danger">
+                                                <?php foreach ($this->session->flashdata('errors') as $error): ?>
+                                                    <p><?php echo $error; ?></p>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if ($this->session->flashdata('success')): ?>
+                                            <div class="alert alert-success">
+                                                <?php echo $this->session->flashdata('success'); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="mb-3">
+                                            <label for="addWebsiteUrl" class="form-label">Website URL</label>
+                                            <input type="url" class="form-control" id="addWebsiteUrl" name="url" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addWebsiteUserId" class="form-label">UserID</label>
+                                            <input type="text" class="form-control" id="addWebsiteUserId" name="userId" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addWebsitePassword" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="addWebsitePassword" name="password" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="selectWebsiteName" class="form-label">Select Website</label>
+                                            <select name="selectwebsitename" id="selectWebsiteName" class="form-control" required>
+                                                <option value="" disabled selected>Select a website</option>
+                                                <option value="SDSM">SDSM</option>
+                                                <option value="BI">BI</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Add Website</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-    // Initialize view
-    initView();
+                    <!-- Edit Website Modal -->
+                    <div class="modal fade" id="editWebsiteModal" tabindex="-1" aria-labelledby="editWebsiteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editWebsiteModalLabel">Edit Website</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="<?php echo site_url('edit-website'); ?>" method="POST">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="editWebsiteId" name="website_id">
+                                        
+                                        <div class="mb-3">
+                                            <label for="editWebsiteUrl" class="form-label">Website URL</label>
+                                            <input type="text" class="form-control" id="editWebsiteUrl" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>" required>
+                                        </div>
 
-    function initView() {
-        // Filter to only pending KYC customers
-        filteredCustomers = allCustomers.filter(customer => !customer.kyc_number || customer.kyc_number === '');
-        
-        // Set up initial customer table
-        updateCustomerTable();
-        
-        // Hide views that should not be visible initially
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-        $('#backButton').hide();
-    }
+                                        <div class="mb-3">
+                                            <label for="editWebsiteUserId" class="form-label">UserID</label>
+                                            <input type="text" class="form-control" id="editWebsiteUserId" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>" required>
+                                        </div>
 
-    // Show area breakdown for selected scheme
-    function showAreaBreakdown(scheme) {
-        currentScheme = scheme;
-        
-        // Filter customers based on scheme
-        filteredCustomers = allCustomers.filter(customer => {
-            if (customer.kyc_number && customer.kyc_number !== '') return false; // Skip completed KYC
-            return scheme === 'Total' || customer.scheme_selected === scheme;
-        });
-        
-        // Group by area
-        const areaCounts = {};
-        filteredCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
-            areaCounts[area] = (areaCounts[area] || 0) + 1;
-        });
-        
-        // Convert to array and sort
-        areaBreakdownData = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
-        areaBreakdownData.sort((a, b) => b.count - a.count);
-        
-        // Update view
-        $('#areaBreakdownTitle').text(
-            `Pending KYC Customers (${scheme === 'Total' ? 'All Schemes' : scheme}) by Area`
-        );
-        currentAreaPage = 1;
-        updateAreaBreakdownTable();
-        
-        // Show the area breakdown view
-        $('#areaBreakdownView').show();
-        $('#customerDetailsView').hide();
-        $('#backButton').show();
-        
-        // Update navigation history
-        viewHistory.push(currentView);
-        currentView = 'area';
-    }
+                                        <div class="mb-3">
+                                            <label for="editWebsitePassword1" class="form-label">Password</label>
+                                            <input type="text" class="form-control" id="editWebsitePassword1" name="password" value="<?php echo $website['website_password']; ?>" required>
+                                        </div>
 
-    function updateAreaBreakdownTable() {
-        const startIdx = (currentAreaPage - 1) * recordsPerPage;
-        const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
-        const $tbody = $('#areaBreakdownBody');
-        
-        $tbody.empty();
-        
-        if (pageData.length === 0) {
-            $tbody.append('<tr><td colspan="2" class="no-data">No data available</td></tr>');
-        } else {
-            pageData.forEach(item => {
-                $tbody.append(`
-                    <tr>
-                        <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
-                            ${escapeHtml(item.area)}
-                        </td>
-                        <td>${item.count}</td>
-                    </tr>
-                `);
-            });
-            
-            // Add click handlers for area links
-            $('.area-link').off('click').on('click', function() {
-                const area = $(this).data('area');
-                showCustomerDetails(area);
-            });
-        }
-        
-        // Update pagination controls
-        $('#currentAreaPage').text(currentAreaPage);
-        $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
-        $('#nextAreaPage').toggleClass('disabled', 
-            currentAreaPage * recordsPerPage >= areaBreakdownData.length
-        );
-    }
+                                        <div class="mb-3">
+                                            <label for="editwebsitename" class="form-label">Website Name</label>
+                                            <input type="text" class="form-control" id="editwebsitename" name="selectwebsitename" value="<?php echo htmlspecialchars($website['selectwebsitename']); ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-    function showCustomerDetails(area) {
-        currentArea = area;
-        
-        // Filter customers for this area
-        filteredCustomers = allCustomers.filter(customer => {
-            if (customer.kyc_number && customer.kyc_number !== '') return false;
-            const customerArea = customer.area_name || 'Unknown';
-            return customerArea === area && 
-                  (currentScheme === 'Total' || customer.scheme_selected === currentScheme);
-        });
-        
-        // Update view
-        $('#customerDetailsTitle').text(
-            `Pending KYC Customers in ${escapeHtml(area)} (${currentScheme === 'Total' ? 'All Schemes' : currentScheme})`
-        );
-        currentPage = 1;
-        updateCustomerTable();
-        
-        // Show the customer details view
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').show();
-        
-        // Update navigation history
-        viewHistory.push(currentView);
-        currentView = 'customer';
-    }
-
-    function updateCustomerTable() {
-        const startIdx = (currentPage - 1) * recordsPerPage;
-        const pageData = filteredCustomers.slice(startIdx, startIdx + recordsPerPage);
-        const $tbody = $('#customerTableBody');
-        
-        $tbody.empty();
-        
-        if (pageData.length === 0) {
-            $tbody.append('<tr><td colspan="6" class="no-data">No data available</td></tr>');
-        } else {
-            pageData.forEach(customer => {
-                $tbody.append(`
-                    <tr>
-                        <td>${escapeHtml(customer.area_name || 'Unknown')}</td>
-                        <td>${escapeHtml(customer.consumer_number || '')}</td>
-                        <td>${escapeHtml(customer.consumer_name || '')}</td>
-                        <td>${escapeHtml(customer.phone_number || '')}</td>
-                        <td>
-                            <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                ${escapeHtml(customer.scheme_selected)}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="badge badge-non-pmuy">Pending</span>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-        
-        // Update pagination controls
-        $('#currentPage').text(currentPage);
-        $('#prevPage').toggleClass('disabled', currentPage === 1);
-        $('#nextPage').toggleClass('disabled', 
-            currentPage * recordsPerPage >= filteredCustomers.length
-        );
-    }
-
-    function goBack() {
-        if (viewHistory.length === 0) return;
-        
-        const previousView = viewHistory.pop();
-        
-        if (previousView === 'summary') {
-            // Return to summary view
-            $('#areaBreakdownView').hide();
-            $('#customerDetailsView').hide();
-            $('#backButton').hide();
-            currentView = 'summary';
-        } else if (previousView === 'area') {
-            // Return to area breakdown view
-            $('#areaBreakdownView').show();
-            $('#customerDetailsView').hide();
-            currentView = 'area';
-        }
-        
-        if (viewHistory.length === 0) {
-            $('#backButton').hide();
-        }
-    }
-
-    function escapeHtml(text) {
-        if (text == null) return '';
-        return text.toString()
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    // Event listeners
-    $('.clickabled[data-scheme]').on('click', function() {
-        showAreaBreakdown($(this).data('scheme'));
-    });
-    
-    $('#backButton').on('click', goBack);
-    
-    // Pagination controls
-    $('#prevPage').on('click', function(e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            updateCustomerTable();
-        }
-    });
-    
-    $('#nextPage').on('click', function(e) {
-        e.preventDefault();
-        if (currentPage * recordsPerPage < filteredCustomers.length) {
-            currentPage++;
-            updateCustomerTable();
-        }
-    });
-    
-    $('#prevAreaPage').on('click', function(e) {
-        e.preventDefault();
-        if (currentAreaPage > 1) {
-            currentAreaPage--;
-            updateAreaBreakdownTable();
-        }
-    });
-    
-    $('#nextAreaPage').on('click', function(e) {
-        e.preventDefault();
-        if (currentAreaPage * recordsPerPage < areaBreakdownData.length) {
-            currentAreaPage++;
-            updateAreaBreakdownTable();
-        }
-    });
-
-    $("#backToSummary").on("click", function(e) {
-        e.preventDefault();
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-    });
-    
-    $("#backToAreas").on("click", function(e) {
-        e.preventDefault();
-        showAreaBreakdown(currentScheme);
-    });
-});
-</script>
-
-
-                    <?php } elseif ($method == 'midue') { ?>
-                                      <!-- Back to Dashboard Button (Always visible) -->
-        <div class="dashboard-back-btn back_dashborad">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-        <div class="container4">
-        <!-- Fixed Summary Section -->
-        <div class="midue-summary">
-            <h2 class="text-center mb-4">MI Due Data Table</h2>
-            <div class="table-responsive">
-                <table class="table table table-bordered" id="summaryTable">
-                    <thead>
-                        <tr class="table-primary">
-                            <th>MI Due</th>
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summaryTableBody">
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Scrollable Content Section -->
-        <div class="content-section">
-            <!-- Area Breakdown Table -->
-            <div id="areaBreakdownView" style="display: none;" class="midue-area-details">
-                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Due Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaBreakdownBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><span class="page-link" id="currentAreaPage">1</span></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Customer Details Table -->
-            <div id="customerDetailsView" style="display: none;" class="midue_customer_details">
-                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number</th>
-                                <th>Scheme</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><span class="page-link" id="currentPage">1</span></li>
-                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <!-- jQuery and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Configuration
-            const recordsPerPage = 10;
-            let currentView = 'summary';
-            let viewHistory = [];
-            
-            // Data from server
-            const allCustomers = <?= json_encode($mi_due ?? []) ?>;
-            let filteredCustomers = [];
-            let areaBreakdownData = [];
-            let currentScheme = null;
-            let currentArea = null;
-            let currentPage = 1;
-            let currentAreaPage = 1;
-
-            console.log('Initial data loaded:', {
-                allCustomers: allCustomers,
-                count: allCustomers.length
-            });
-
-            // Initialize the view
-            initView();
-
-            function initView() {
-                $('#areaBreakdownView').hide();
-                $('#customerDetailsView').hide();
-                $('.fixed-summary').show();
-                currentView = 'summary';
-                viewHistory = [];
-            }
-
-            function showAreaBreakdown(scheme) {
-                currentScheme = scheme;
-                console.log('Showing area breakdown for scheme:', scheme);
-                
-                // Filter customers based on scheme
-                filteredCustomers = allCustomers.filter(customer => {
-                    if (scheme === 'Total') return true;
-                    return customer.scheme_type === scheme;
-                });
-                
-                console.log('Filtered customers count:', filteredCustomers.length, 'for scheme:', scheme);
-                console.log('Sample filtered customers:', filteredCustomers.slice(0, 5));
-                
-                // Group by area
-                const areaCounts = {};
-                filteredCustomers.forEach(customer => {
-                    const area = customer.area_name;
-                    areaCounts[area] = (areaCounts[area] || 0) + 1;
-                });
-                
-                // Convert to array and sort
-                areaBreakdownData = Object.entries(areaCounts)
-                    .map(([area, count]) => ({ area, count }))
-                    .sort((a, b) => b.count - a.count);
-                
-                console.log('Area breakdown data:', areaBreakdownData);
-                
-                // Update view
-                const title = scheme === 'Total' ? 'Due MI Customers (All Schemes) by Area' : `Due MI Customers (${scheme}) by Area`;
-                $('#areaBreakdownTitle').text(title);
-                
-                currentAreaPage = 1;
-                updateAreaBreakdownTable();
-                
-                // Show the correct view
-                $('#areaBreakdownView').show();
-                $('#customerDetailsView').hide();
-                // Keep fixed-summary visible
-                
-                // Update navigation
-                viewHistory.push(currentView);
-                currentView = 'area';
-            }
-
-            function updateAreaBreakdownTable() {
-                const startIdx = (currentAreaPage - 1) * recordsPerPage;
-                const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
-                const $tbody = $('#areaBreakdownBody');
-                
-                $tbody.empty();
-                
-                if (pageData.length === 0) {
-                    $tbody.append('<tr><td colspan="2" class="no-data">No data available</td></tr>');
-                } else {
-                    pageData.forEach(item => {
-                        $tbody.append(`
-                            <tr>
-                                <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
-                                    ${escapeHtml(item.area)}
-                                </td>
-                                <td>${item.count}</td>
-                            </tr>
-                        `);
-                    });
-                    
-                    // Add click handlers for area links
-                    $('.area-link').off('click').on('click', function() {
-                        const area = $(this).data('area');
-                        showCustomerDetails(area);
-                    });
-                }
-                
-                // Update pagination controls
-                const totalPages = Math.ceil(areaBreakdownData.length / recordsPerPage);
-                $('#currentAreaPage').text(currentAreaPage);
-                $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
-                $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
-            }
-
-            function showCustomerDetails(area) {
-                currentArea = area;
-                console.log('Showing customer details for area:', area);
-                
-                // Filter customers for this area and scheme
-                filteredCustomers = allCustomers.filter(customer => {
-                    const customerArea = customer.area_name;
-                    return customerArea === area && 
-                           (currentScheme === 'Total' || customer.scheme_type === currentScheme);
-                });
-                
-                console.log('Filtered customers for area:', filteredCustomers.length);
-                
-                // Update view
-                const schemeText = currentScheme === 'Total' ? 'All Schemes' : currentScheme;
-                $('#customerDetailsTitle').text(`Due MI Customers (${schemeText}) in ${escapeHtml(area)}`);
-                
-                currentPage = 1;
-                updateCustomerTable();
-                
-                // Show the correct view
-                $('#areaBreakdownView').hide();
-                $('#customerDetailsView').show();
-                // Keep fixed-summary visible
-                
-                // Update navigation
-                viewHistory.push(currentView);
-                currentView = 'customer';
-            }
-
-            function updateCustomerTable() {
-                const startIdx = (currentPage - 1) * recordsPerPage;
-                const pageData = filteredCustomers.slice(startIdx, startIdx + recordsPerPage);
-                const $tbody = $('#customerTableBody');
-                
-                $tbody.empty();
-                
-                if (pageData.length === 0) {
-                    $tbody.append('<tr><td colspan="6" class="no-data">No data available</td></tr>');
-                } else {
-                    pageData.forEach(customer => {
-                        $tbody.append(`
-                            <tr>
-                                <td>${escapeHtml(customer.area_name)}</td>
-                                <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                                <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
-                                <td>${escapeHtml(customer.phone_number || 'N/A')}</td>
-                                <td>
-                                    <span class="badge ${customer.scheme_type === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                        ${escapeHtml(customer.scheme_type || 'N/A')}
-                                    </span>
-                                </td>
-                                <td><span class="badge badge-due">Due</span></td>
-                            </tr>
-                        `);
-                    });
-                }
-                
-                // Update pagination controls
-                const totalPages = Math.ceil(filteredCustomers.length / recordsPerPage);
-                $('#currentPage').text(currentPage);
-                $('#prevPage').toggleClass('disabled', currentPage === 1);
-                $('#nextPage').toggleClass('disabled', currentPage >= totalPages);
-            }
-
-            function escapeHtml(text) {
-                if (!text) return '';
-                return text.toString()
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-            }
-
-            function goBack() {
-                if (viewHistory.length === 0) {
-                    initView();
-                    return;
-                }
-                
-                const previousView = viewHistory.pop();
-                
-                if (previousView === 'summary') {
-                    initView();
-                } else if (previousView === 'area') {
-                    $('#areaBreakdownView').show();
-                    $('#customerDetailsView').hide();
-                    $('.fixed-summary').show();
-                    currentView = 'area';
-                }
-            }
-
-            // Event listeners
-            $('.clickabled[data-scheme]').on('click', function() {
-                const scheme = $(this).data('scheme');
-                showAreaBreakdown(scheme);
-            });
-            
-            $('#backToSummary').on('click', function(e) {
-                e.preventDefault();
-                goBack();
-            });
-            
-            $('#backToAreas').on('click', function(e) {
-                e.preventDefault();
-                goBack();
-            });
-            
-            // Pagination controls
-            $('#prevAreaPage').on('click', function(e) {
-                e.preventDefault();
-                if (currentAreaPage > 1) {
-                    currentAreaPage--;
-                    updateAreaBreakdownTable();
-                }
-            });
-            
-            $('#nextAreaPage').on('click', function(e) {
-                e.preventDefault();
-                if (currentAreaPage * recordsPerPage < areaBreakdownData.length) {
-                    currentAreaPage++;
-                    updateAreaBreakdownTable();
-                }
-            });
-            
-            $('#prevPage').on('click', function(e) {
-                e.preventDefault();
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateCustomerTable();
-                }
-            });
-            
-            $('#nextPage').on('click', function(e) {
-                e.preventDefault();
-                if (currentPage * recordsPerPage < filteredCustomers.length) {
-                    currentPage++;
-                    updateCustomerTable();
-                }
-            });
-        });
-    </script>
-                    <?php } elseif ($method == 'hosedue') { ?>
-                                        <!-- Back to Dashboard Button (Always visible) -->
-        <div class="dashboard-back-btn back_dashborad">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-        <div class="container4">
-        <div class="hosedue_summary">
-            <h2 class="text-center mb-4">Hose Due Report</h2>
-            <div class="table-responsive">
-                <table class="table table table-bordered" id="summaryTable">
-                    <thead>
-                        <tr>
-                            <th>Hose Status</th>
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summaryTableBody">
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="content-section">
-            <!-- Area View -->
-            <div id="areaView" style="display: none;" class="hosedue-area-details">
-                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="text-center mb-4" id="areaViewTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Due Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Customer Details View -->
-            <div id="customerDetailsView" style="display: none;" class="hosedue_customer_details">
-                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number</th>
-                                <th>Scheme</th>
-                                <th>Hose Due</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function () {
-    // Configuration
-    const recordsPerPage = 10;
-    let currentPage = 1;
-    let currentScheme = null;
-    let currentArea = null;
-    
-    // Data from server
-    let allCustomers = <?= json_encode($hose_due ?? []) ?>;
-    let filteredCustomers = [];
-    let areaBreakdownData = [];
-
-    // Initialize view
-    initView();
-
-    function initView() {
-        $('#areaView').hide();
-        $('#customerDetailsView').hide();
-        
-        // Process the data from the controller
-        if (allCustomers && allCustomers.length > 0) {
-            processData();
-        }
-    }
-
-    function processData() {
-        // Group data by area and scheme type for quick access
-        const areaSchemeData = {};
-        
-        allCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
-            const scheme = customer.scheme_selected;
-            
-            if (!areaSchemeData[area]) {
-                areaSchemeData[area] = { PMUY: [], NonPMUY: [] };
-            }
-            
-            if (scheme === 'PMUY') {
-                areaSchemeData[area].PMUY.push(customer);
-            } else {
-                areaSchemeData[area].NonPMUY.push(customer);
-            }
-        });
-        
-        // Store the processed data
-        allCustomers = areaSchemeData;
-    }
-
-    // Show area breakdown for selected scheme
-    function showAreaBreakdown(scheme) {
-        currentScheme = scheme;
-        
-        // Prepare area breakdown data
-        areaBreakdownData = [];
-        
-        for (const area in allCustomers) {
-            const customers = allCustomers[area][scheme === 'PMUY' ? 'PMUY' : 'NonPMUY'];
-            if (customers.length > 0) {
-                areaBreakdownData.push({
-                    area: area,
-                    count: customers.length,
-                    customers: customers
-                });
-            }
-        }
-        
-        // Sort by count descending
-        areaBreakdownData.sort((a, b) => b.count - a.count);
-        
-        $('#areaViewTitle').text(`Due Hose Customers (${scheme}) by Area`);
-        
-        updateAreaBreakdownTable();
-        
-        $('#areaView').show();
-        $('#customerDetailsView').hide();
-    }
-
-    function updateAreaBreakdownTable() {
-        const tableBody = $("#areaTableBody");
-        tableBody.empty();
-        
-        if (areaBreakdownData.length === 0) {
-            tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
-        } else {
-            areaBreakdownData.forEach(areaData => {
-                tableBody.append(`
-                    <tr>
-                        <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
-                            ${escapeHtml(areaData.area)}
-                        </td>
-                        <td>${areaData.count}</td>
-                    </tr>
-                `);
-            });
-        }
-    }
-
-    function showCustomerDetails(area) {
-        currentArea = area;
-        
-        // Find the selected area data
-        const areaData = areaBreakdownData.find(item => item.area === area);
-        
-        if (areaData) {
-            filteredCustomers = areaData.customers;
-            currentPage = 1;
-            
-            $('#customerDetailsTitle').text(`Due Hose Customers (${currentScheme}) in ${escapeHtml(area)}`);
-            
-            updateCustomerTable();
-            
-            $('#areaView').hide();
-            $('#customerDetailsView').show();
-        }
-    }
-
-    function updateCustomerTable() {
-        const start = (currentPage - 1) * recordsPerPage;
-        const end = start + recordsPerPage;
-        const pageRows = filteredCustomers.slice(start, end);
-        const tableBody = $("#customerTableBody");
-        
-        tableBody.empty();
-        
-        if (pageRows.length === 0) {
-            tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
-        } else {
-            pageRows.forEach(customer => {
-                tableBody.append(`
-                    <tr>
-                        <td>${escapeHtml(customer.area_name || 'N/A')}</td>
-                        <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                        <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
-                        <td>${escapeHtml(customer.phone_number || 'N/A')}</td>
-                        <td>
-                            <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                ${escapeHtml(customer.scheme_selected || 'N/A')}
-                            </span>
-                        </td>
-                    
-                        <td><span class="badge badge-due">Due</span></td>
-                    </tr>
-                `);
-            });
-        }
-        
-        $("#currentPage").text(currentPage);
-        $("#prevPage").toggleClass("disabled", currentPage === 1);
-        $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
-    }
-
-    function escapeHtml(text) {
-        if (text == null) return '';
-        return text.toString()
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    // Event listeners
-    $(document).on('click', '.clickabled[data-scheme]', function() {
-        showAreaBreakdown($(this).data('scheme'));
-    });
-    
-    $(document).on('click', '.area-click', function() {
-        showCustomerDetails($(this).data('area'));
-    });
-    
-    $("#prevPage").on("click", function(e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            updateCustomerTable();
-        }
-    });
-    
-    $("#nextPage").on("click", function(e) {
-        e.preventDefault();
-        if ((currentPage * recordsPerPage) < filteredCustomers.length) {
-            currentPage++;
-            updateCustomerTable();
-        }
-    });
-    
-    $("#backToSummary").on("click", function(e) {
-        e.preventDefault();
-        $('#areaView').hide();
-        $('#customerDetailsView').hide();
-    });
-    
-    $("#backToAreas").on("click", function(e) {
-        e.preventDefault();
-        showAreaBreakdown(currentScheme);
-    });
-});
-</script>
-
-                    <?php } elseif ($method == 'phonenumber') { ?>
-                                    <!-- Back to Dashboard Button (Always visible) -->
-        <div class="dashboard-back-btn back_dashborad">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-        <div class="container4">
-        
-        
-        <!-- Fixed Summary Section -->
-        <div class="summary-section">
-        <h2 class="text-center mb-4">Phone Number Missing Data</h2>
-            <div class="table-responsive">
-                <table class="table table table-bordered" id="summaryTable">
-                    <thead>
-                        <tr>
-                            <th>Phone Missing</th>
-                            <th>PMUY</th>
-                            <th>Non PMUY</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summaryTableBody">
-                        <tr>
-                            <td>Quantity</td>
-                            <td class="clickabled" data-scheme="PMUY"><?php echo $table_data['rows']['Qty'][0] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Non PMUY"><?php echo $table_data['rows']['Qty'][1] ?? 0; ?></td>
-                            <td class="clickabled" data-scheme="Total"><?php echo $table_data['rows']['Qty'][2] ?? 0; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td><?php echo $table_data['rows']['%'][0] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][1] ?? 0; ?>%</td>
-                            <td><?php echo $table_data['rows']['%'][2] ?? 0; ?>%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Scrollable Content Section -->
-        <div class="content-section">
-            <!-- Area Breakdown View -->
-            <div id="areaBreakdownView" style="display: none;" class="phone_missing_area_details">
-                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-                <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Missing Phone Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="areaBreakdownBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentAreaPage">1</a></li>
-                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Customer Details View -->
-            <div id="customerDetailsView" style="display: none;" class="phone_missing_customer_details">
-                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-                <div class="table-responsive">
-                    <table class="table table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Area Name</th>
-                                <th>Consumer Number</th>
-                                <th>Consumer Name</th>
-                                <th>Phone Number Status</th>
-                                <th>Scheme</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody"></tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" id="currentPage">1</a></li>
-                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function () {
-    let currentPage = 1;
-    let currentAreaPage = 1;
-    const recordsPerPage = 10;
-    
-    let allCustomers = <?= json_encode($phone_missing_data ?? []) ?>;
-    let filteredCustomers = [];
-    let areaBreakdownData = [];
-    let currentScheme = null;
-    let currentArea = null;
-
-    initView();
-
-    function initView() {
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-        
-        if (allCustomers && allCustomers.length > 0) {
-            processData();
-        } else {
-            console.log('No customer data received');
-        }
-    }
-
-    function processData() {
-        areaBreakdownData = [];
-        const areaCounts = {};
-
-        allCustomers.forEach(customer => {
-            const area = customer.area_name || 'Unknown';
-            const scheme = customer.scheme_selected;
-
-            if (!areaCounts[area]) {
-                areaCounts[area] = { 
-                    PMUY: [], 
-                    'Non PMUY': [], 
-                    customers: []
-                };
-            }
-            
-            areaCounts[area].customers.push(customer);
-            areaCounts[area][scheme].push(customer);
-        });
-
-        for (const area in areaCounts) {
-            areaBreakdownData.push({
-                area: area,
-                pmuCount: areaCounts[area].PMUY.length,
-                nonPmuCount: areaCounts[area]['Non PMUY'].length,
-                totalCount: areaCounts[area].customers.length,
-                customers: areaCounts[area].customers
-            });
-        }
-    }
-
-    function showAreaBreakdown(scheme) {
-        currentScheme = scheme;
-        
-        $('#areaBreakdownTitle').text(`Customers Missing Phone (${scheme}) by Area`);
-        currentAreaPage = 1;
-        updateAreaBreakdownTable();
-        
-        $('#areaBreakdownView').show();
-        $('#customerDetailsView').hide();
-        
-        $('.content-section').scrollTop(0);
-    }
-
-    function updateAreaBreakdownTable() {
-        const start = (currentAreaPage - 1) * recordsPerPage;
-        const end = start + recordsPerPage;
-        const tableBody = $("#areaBreakdownBody");
-        
-        tableBody.empty();
-        
-        const filteredAreas = areaBreakdownData.filter(area => 
-            currentScheme === 'Total' ? area.totalCount > 0 :
-            currentScheme === 'PMUY' ? area.pmuCount > 0 :
-            area.nonPmuCount > 0
-        );
-
-        const pageAreas = filteredAreas.slice(start, end);
-        
-        if (pageAreas.length === 0) {
-            tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
-        } else {
-            pageAreas.forEach(areaData => {
-                const count = currentScheme === 'Total' ? areaData.totalCount :
-                            currentScheme === 'PMUY' ? areaData.pmuCount :
-                            areaData.nonPmuCount;
-                tableBody.append(`
-                    <tr>
-                        <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
-                            ${escapeHtml(areaData.area)}
-                        </td>
-                        <td>${count}</td>
-                    </tr>
-                `);
-            });
-        }
-        
-        $("#currentAreaPage").text(currentAreaPage);
-        $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
-        $("#nextAreaPage").toggleClass("disabled", end >= filteredAreas.length);
-    }
-
-    function showCustomerDetails(area) {
-        currentArea = area;
-        
-        const areaData = areaBreakdownData.find(item => item.area === area);
-        
-        if (areaData) {
-            filteredCustomers = currentScheme === 'Total' ? areaData.customers :
-                              currentScheme === 'PMUY' ? areaData.customers.filter(c => c.scheme_selected === 'PMUY') :
-                              areaData.customers.filter(c => c.scheme_selected === 'Non PMUY');
-            
-            currentPage = 1;
-            
-            $('#customerDetailsTitle').text(`Customers Missing Phone (${currentScheme}) in ${escapeHtml(area)}`);
-            updateCustomerTable();
-            
-            $('#areaBreakdownView').hide();
-            $('#customerDetailsView').show();
-            
-            $('.content-section').scrollTop(0);
-        }
-    }
-
-    function updateCustomerTable() {
-        const start = (currentPage - 1) * recordsPerPage;
-        const end = start + recordsPerPage;
-        const pageRows = filteredCustomers.slice(start, end);
-        const tableBody = $("#customerTableBody");
-        
-        tableBody.empty();
-        
-        if (pageRows.length === 0) {
-            tableBody.html('<tr><td colspan="5" class="no-data">No data available</td></tr>');
-        } else {
-            pageRows.forEach(customer => {
-                tableBody.append(`
-                    <tr>
-                        <td>${escapeHtml(customer.area_name || 'N/A')}</td>
-                        <td>${escapeHtml(customer.consumer_number || 'N/A')}</td>
-                        <td>${escapeHtml(customer.consumer_name || 'N/A')}</td>
-                        <td><span class="badge badge-missing">Missing</span></td>
-                        <td>
-                            <span class="badge ${customer.scheme_selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
-                                ${escapeHtml(customer.scheme_selected || 'N/A')}
-                            </span>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-        
-        $("#currentPage").text(currentPage);
-        $("#prevPage").toggleClass("disabled", currentPage === 1);
-        $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
-    }
-
-    function escapeHtml(text) {
-        if (!text) return 'N/A';
-        return text.toString()
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    $(document).on('click', '.clickabled[data-scheme]', function() {
-        const scheme = $(this).data('scheme');
-        showAreaBreakdown(scheme);
-    });
-    
-    $(document).on('click', '.area-click', function() {
-        const area = $(this).data('area');
-        showCustomerDetails(area);
-    });
-    
-    $("#prevPage").on("click", function(e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            updateCustomerTable();
-        }
-    });
-    
-    $("#nextPage").on("click", function(e) {
-        e.preventDefault();
-        if ((currentPage * recordsPerPage) < filteredCustomers.length) {
-            currentPage++;
-            updateCustomerTable();
-        }
-    });
-    
-    $("#prevAreaPage").on("click", function(e) {
-        e.preventDefault();
-        if (currentAreaPage > 1) {
-            currentAreaPage--;
-            updateAreaBreakdownTable();
-        }
-    });
-    
-    $("#nextAreaPage").on("click", function(e) {
-        e.preventDefault();
-        if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
-            currentAreaPage++;
-            updateAreaBreakdownTable();
-        }
-    });
-    
-    $("#backToAreaView").on("click", function(e) {
-        e.preventDefault();
-        $('#customerDetailsView').hide();
-        $('#areaBreakdownView').show();
-    });
-
-    $("#backToSummary").on("click", function(e) {
-        e.preventDefault();
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-    });
-    
-    $("#backToAreas").on("click", function(e) {
-        e.preventDefault();
-        showAreaBreakdown(currentScheme);
-    });
-});
-</script>
-
-
-            <!-- Other sections would follow similar responsive patterns -->
-            <?php } else { ?>
-                <div class="container">
-                    <div class="alert alert-warning">
-                        <h1>Invalid Request</h1>
+                    <!-- Delete Website Modal -->
+                    <div class="modal fade" id="deleteWebsiteModal" tabindex="-1" aria-labelledby="deleteWebsiteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="deleteWebsiteModalLabel">Delete Website</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="<?php echo site_url('delete-website'); ?>" method="POST">
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete this website?</p>
+                                        <input type="hidden" id="deleteWebsiteId" name="website_id">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            <?php } ?>
-        <?php } else { ?>
-            <div class="container">
-                <div class="alert alert-warning">
-                    <h1>Invalid Request</h1>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    function populateEditModal(websiteId, userId, password) {
+                        document.getElementById('editWebsiteId').value = websiteId;
+                        document.getElementById('editWebsiteUserId').value = userId;
+                        document.getElementById('editWebsitePassword').value = password;
+                    }
+
+                    function setDeleteWebsiteId(websiteId) {
+                        document.getElementById('deleteWebsiteId').value = websiteId;
+                    }
+
+                    function copyToClipboard(text) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            alert('URL copied to clipboard!');
+                        });
+                    }
+
+                    function copyToClipboard(text) {
+                        navigator.clipboard.writeText(text).then(function() {
+                            alert('URL copied to clipboard!');
+                        }, function(err) {
+                            console.error('Could not copy text: ', err);
+                        });
+                    }
+
+                    function checkScrapeStatus(jobId) {
+                        $.getJSON('<?php echo site_url("WebsiteDetails/check_scrape_status"); ?>?job_id=' + jobId, function(response) {
+                            if (response.status === 'completed') {
+                                displayScrapeResults(response.result);
+                            } else if (response.status === 'error') {
+                                alert('Scraping failed: ' + response.error);
+                            } else if (response.status === 'not_found') {
+                                alert('Scraping job not found.');
+                            } else {
+                                setTimeout(function() { checkScrapeStatus(jobId); }, 5000);
+                            }
+                        }).fail(function() {
+                            alert('Failed to check scraping status. Please try again later.');
+                        });
+                    }
+
+                    function displayScrapeResults(result) {
+                        $('#invoiced-orders-table thead').empty();
+                        $('#invoiced-orders-table tbody').empty();
+                        $('#open-orders-table thead').empty();
+                        $('#open-orders-table tbody').empty();
+
+                        if (result.invoiced_orders && result.invoiced_orders.length > 0) {
+                            const invoicedOrders = result.invoiced_orders;
+                            const headers = Object.keys(invoicedOrders[0]);
+
+                            let headerRow = '<tr>';
+                            headers.forEach(header => {
+                                headerRow += `<th>${header}</th>`;
+                            });
+                            headerRow += '</tr>';
+                            $('#invoiced-orders-table thead').append(headerRow);
+
+                            invoicedOrders.forEach(order => {
+                                let row = '<tr>';
+                                headers.forEach(header => {
+                                    row += `<td>${order[header] || 'N/A'}</td>`;
+                                });
+                                row += '</tr>';
+                                $('#invoiced-orders-table tbody').append(row);
+                            });
+
+                            $('#invoiced-orders').show();
+                        } else {
+                            $('#invoiced-orders-table tbody').append('<tr><td colspan="3">No invoice orders found.</td></tr>');
+                            $('#invoiced-orders').show();
+                        }
+
+                        if (result.open_orders && result.open_orders.length > 0) {
+                            const openOrders = result.open_orders;
+                            const headers = Object.keys(openOrders[0]);
+
+                            let headerRow = '<tr>';
+                            headers.forEach(header => {
+                                headerRow += `<th>${header}</th>`;
+                            });
+                            headerRow += '</tr>';
+                            $('#open-orders-table thead').append(headerRow);
+
+                            openOrders.forEach(order => {
+                                let row = '<tr>';
+                                headers.forEach(header => {
+                                    row += `<td>${order[header] || 'N/A'}</td>`;
+                                });
+                                row += '</tr>';
+                                $('#open-orders-table tbody').append(row);
+                            });
+
+                            $('#open-orders').show();
+                        } else {
+                            $('#open-orders-table tbody').append('<tr><td colspan="2">No open orders found.</td></tr>');
+                            $('#open-orders').show();
+                        }
+
+                        $('#scraped-data').show();
+                    }
+
+                    $(document).ready(function() {
+                        $('#scraped-data').hide();
+                        $('#invoiced-orders').hide();
+                        $('#open-orders').hide();
+
+                        var jobId = '<?php echo $this->session->flashdata("job_id"); ?>';
+                        if (jobId) {
+                            checkScrapeStatus(jobId);
+                        }
+                    });
+                </script>
+                    
+                    <!-- Display customer strength -->
+                <?php } elseif($method == 'customer_strength') { ?>
+                <div class="dashboard-back-btn">
+                    <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
                 </div>
-            </div>
-        <?php } ?>
-    </div>
+                <div class="container4">
+                    <!-- Fixed Summary Section -->
+                    <div class="sbc_summary">
+                        <h2 class="text-center mb-4">Customer Strength Data</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered summary-table" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Scrollable Content Section -->
+                    <div class="content-section">
+                        <!-- Area Breakdown Table -->
+                        <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
+                            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered area-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Total Customers</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Customer Details Table -->
+                        <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table_area">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Consumer Number</th>
+                                            <th>Consumer Name</th>
+                                            <th>Phone Number</th>
+                                            <th>Scheme Selected</th>
+                                            <th>Consumer Sub Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // Pagination variables
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+                        const recordsPerPage = 10;
+                        
+                        // Data variables
+                        let allCustomers = <?= json_encode($customers ?? []) ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+                        let currentScheme = null;
+                        let currentStatus = null;
+                        let currentArea = null;
+
+                        // Initialize the view
+                        initView();
+
+                        function initView() {
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                            
+                            if (allCustomers && allCustomers.length > 0) {
+                                processData();
+                            }
+                        }
+
+                        function processData() {
+                            // Ensure allCustomers is an array
+                            if (!Array.isArray(allCustomers)) {
+                                allCustomers = [];
+                                return;
+                            }
+                            
+                            allCustomers.forEach(customer => {
+                                // Normalize status to uppercase, default to 'ACTIVE'
+                                customer.Consumer_Sub_Status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
+                                
+                                // Normalize scheme based on model logic
+                                if (customer.Scheme_Selected === 'PMUY' || customer.Scheme_Selected === 'Ujjwala' || customer.Scheme_Selected === 'Ujjwala - Extended') {
+                                    customer.Scheme_Selected = 'PMUY';
+                                } else {
+                                    customer.Scheme_Selected = 'NON_PMUY';
+                                }
+                                
+                                // Default Area_Name to 'Unknown'
+                                customer.Area_Name = customer.Area_Name || 'Unknown';
+                            });
+                        }
+
+                        function showAreaBreakdown(status, scheme) {
+                            currentStatus = status;
+                            currentScheme = scheme;
+                            
+                            // Filter customers based on status and scheme
+                            filteredCustomers = allCustomers.filter(customer => {
+                                const statusMatch = (status === 'ALL') ? true : customer.Consumer_Sub_Status === status;
+                                const schemeMatch = (scheme === 'ALL') ? true : customer.Scheme_Selected === scheme;
+                                return statusMatch && schemeMatch;
+                            });
+                            
+                            // Calculate area breakdown
+                            const areaStats = {};
+                            filteredCustomers.forEach(customer => {
+                                const area = customer.Area_Name;
+                                if (!areaStats[area]) {
+                                    areaStats[area] = 0;
+                                }
+                                areaStats[area]++;
+                            });
+                            
+                            // Convert to array and sort
+                            areaBreakdownData = Object.keys(areaStats).map(area => ({
+                                area: area,
+                                total: areaStats[area]
+                            })).sort((a, b) => b.total - a.total);
+                            
+                            // Update UI
+                            $('#areaBreakdownTitle').text(`Customer Distribution (${status} - ${scheme}) by Area`);
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const start = (currentAreaPage - 1) * recordsPerPage;
+                        //     const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                        //     const pageAreas = areaBreakdownData.slice(start, end);
+                        //     const tableBody = $("#areaBreakdownBody");
+                            
+                        //     tableBody.empty();
+                            
+                        //     if (pageAreas.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageAreas.forEach(item => {
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${item.area}">${item.area}</td>
+                        //                     <td>${item.total}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination info
+                        //     $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        // }
+
+                        function updateAreaBreakdownTable() {
+                            const start = (currentAreaPage - 1) * recordsPerPage;
+                            const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                            const pageAreas = areaBreakdownData.slice(start, end);
+                            const tableBody = $("#areaBreakdownBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageAreas.length === 0) {
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageAreas.forEach(item => {
+                                    tableBody.append(`
+                                        <tr>
+                                            <td class="clickabled area-click" data-area="${item.area}">${item.area}</td>
+                                            <td>${item.total}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination info
+                            $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                            $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        }
+
+                        // Tooltip logic
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            
+                            // Filter customers by area, status, and scheme
+                            filteredCustomers = allCustomers.filter(customer => {
+                                const areaMatch = customer.Area_Name === area;
+                                const statusMatch = (currentStatus === 'ALL') ? true : customer.Consumer_Sub_Status === currentStatus;
+                                const schemeMatch = (currentScheme === 'ALL') ? true : customer.Scheme_Selected === currentScheme;
+                                return areaMatch && statusMatch && schemeMatch;
+                            });
+                            
+                            currentPage = 1;
+                            $('#customerDetailsTitle').text(`Customers (${currentStatus} - ${currentScheme}) in ${area}`);
+                            updateCustomerTable();
+                            
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').show();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                        function updateCustomerTable() {
+                            const start = (currentPage - 1) * recordsPerPage;
+                            const end = Math.min(start + recordsPerPage, filteredCustomers.length);
+                            const pageRows = filteredCustomers.slice(start, end);
+                            const tableBody = $("#customerTableBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageRows.length === 0) {
+                                tableBody.html('<tr><td colspan="6" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageRows.forEach(customer => {
+                                    const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge bg-success' : 'badge bg-primary';
+                                    const statusClass = customer.Consumer_Sub_Status === 'ACTIVE' ? 'badge-active' : 
+                                                    customer.Consumer_Sub_Status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived';
+                                    
+                                    tableBody.append(`
+                                        <tr>
+                                            <td>${customer.Area_Name || 'N/A'}</td>
+                                            <td>${customer.Consumer_Number || 'N/A'}</td>
+                                            <td>${customer.Consumer_Name || 'N/A'}</td>
+                                            <td>${customer.Phone_Number || 'N/A'}</td>
+                                            <td><span class="badge ${schemeClass}">${customer.Scheme_Selected || 'N/A'}</span></td>
+                                            <td><span class="badge ${statusClass}">${customer.Consumer_Sub_Status || 'N/A'}</span></td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination info
+                            $("#customerPageInfo").text(`${start + 1} - ${end} of ${filteredCustomers.length}`);
+                            $("#prevPage").toggleClass("disabled", currentPage === 1);
+                            $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
+                        }
+
+                        // Event handlers
+                        $(document).on('click', '.clickabled[data-status][data-scheme]', function() {
+                            const status = $(this).data('status');
+                            const scheme = $(this).data('scheme');
+                            showAreaBreakdown(status, scheme);
+                        });
+                        
+                        $(document).on('click', '.area-click', function() {
+                            const area = $(this).data('area');
+                            showCustomerDetails(area);
+                        });
+                        
+                        $("#prevPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#nextPage").on("click", function(e) {
+                            e.preventDefault();
+                            if ((currentPage * recordsPerPage) < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#prevAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#nextAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#backToSummary").on("click", function(e) {
+                            e.preventDefault();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                        });
+                        
+                        $("#backToAreas").on("click", function(e) {
+                            e.preventDefault();
+                            showAreaBreakdown(currentStatus, currentScheme);
+                        });
+                    });
+                </script>
+                        
+                <?php } elseif($method == 'sbc_data_display') { ?>
+                <div class="dashboard-back-btn">
+                    <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+                <div class="container4">
+                    <!-- Fixed Summary Section -->
+                    <div class="sbc_summary">
+                        <h2 class="text-center mb-4">SBC Data Report</h2>
+                        <div class="table-responsive">
+                            <table class="table table table-bordered summary-table" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Scrollable Content Section -->
+                    <div class="content-section">
+                        <!-- Area Breakdown Table -->
+                        <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
+                            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered area-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Connection Count</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Customer Details Table -->
+                        <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered table_area">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Consumer Number</th>
+                                            <th>Consumer Name</th>
+                                            <th>Phone Number</th>
+                                            <th>Scheme</th>
+                                            <th>Consumer Type</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // Pagination variables
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+                        const recordsPerPage = 10;
+                        
+                        // Data variables
+                        let allCustomers = <?= json_encode($sbc_data ?? []) ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+                        let currentScheme = null;
+                        let currentStatus = null;
+                        let currentArea = null;
+
+                        // Initialize the view
+                        initView();
+
+                        function initView() {
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                            
+                            if (allCustomers && allCustomers.length > 0) {
+                                processData();
+                            }
+                        }
+
+                        function processData() {
+                            allCustomers.forEach(customer => {
+                                // Normalize status to uppercase, default to 'ACTIVE'
+                                customer.consumer_status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
+                                // Normalize scheme to 'PMUY' or 'NON PMUY'
+                                const scheme = (customer.Scheme_Selected || '').toUpperCase().trim();
+                                customer.Scheme_Selected = scheme == 'NON_PMUY' ? 'NON_PMUY' : 'PMUY';
+                                // Default Area_Name to 'Unknown'
+                                customer.Area_Name = customer.Area_Name || 'Unknown';
+                            });
+                            // Debug: Log normalized data
+                            console.log('Normalized allCustomers:', allCustomers);
+                        }
+
+                        function showAreaBreakdown(status, scheme) {
+                            currentStatus = status;
+                            currentScheme = scheme;
+                            console.log(`Showing area breakdown for status: ${status}, scheme: ${scheme}`);
+                            
+                            // Filter customers based on status and scheme
+                            filteredCustomers = allCustomers.filter(customer => {
+                                // Status filter
+                                const statusMatch = (status === 'ALL') ? true : customer.consumer_status === status;
+                                
+                                // Scheme filter
+                                const schemeMatch = (scheme === 'ALL') ? true :
+                                                (scheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
+                                                customer.Scheme_Selected === 'NON_PMUY';
+                                
+                                return statusMatch && schemeMatch;
+                            });
+                            
+                            // Debug: Log filtered customers
+                            console.log(`Filtered for ${status} - ${scheme}:`, filteredCustomers);
+                            
+                            // Calculate area breakdown
+                            const areaStats = {};
+                            filteredCustomers.forEach(customer => {
+                                const area = customer.Area_Name;
+                                areaStats[area] = (areaStats[area] || 0) + 1;
+                            });
+                            
+                            areaBreakdownData = Object.entries(areaStats)
+                                .map(([area, count]) => ({ area, total: count }))
+                                .sort((a, b) => b.total - a.total);
+                            
+                            // Update UI
+                            $('#areaBreakdownTitle').text(`SBC Connections (${status} - ${scheme}) by Area`);
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const start = (currentAreaPage - 1) * recordsPerPage;
+                        //     const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                        //     const pageAreas = areaBreakdownData.slice(start, end);
+                        //     const tableBody = $("#areaBreakdownBody");
+                            
+                        //     tableBody.empty();
+                            
+                        //     if (pageAreas.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageAreas.forEach(({ area, total }) => {
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${area}">${area}</td>
+                        //                     <td>${total}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination info
+                        //     $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        // }
+
+                        function updateAreaBreakdownTable() {
+                            const start = (currentAreaPage - 1) * recordsPerPage;
+                            const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                            const pageAreas = areaBreakdownData.slice(start, end);
+                            const tableBody = $("#areaBreakdownBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageAreas.length === 0) {
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageAreas.forEach(({ area, total }) => {
+                                    tableBody.append(`
+                                        <tr>
+                                            <td class="clickabled area-click" data-area="${area}">${area}</td>
+                                            <td>${total}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination info
+                            $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                            $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            
+                            // Filter customers by area, status, and scheme
+                            filteredCustomers = allCustomers.filter(customer => {
+                                const areaMatch = customer.Area_Name === area;
+                                const statusMatch = (currentStatus === 'ALL') ? true : customer.consumer_status === currentStatus;
+                                const schemeMatch = (currentScheme === 'ALL') ? true :
+                                                (currentScheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
+                                                customer.Scheme_Selected === 'NON_PMUY';
+                                
+                                return areaMatch && statusMatch && schemeMatch;
+                            });
+                            
+                            // Debug: Log filtered customer details
+                            console.log(`Customer details for ${area} (${currentStatus} - ${currentScheme}):`, filteredCustomers);
+                            
+                            currentPage = 1;
+                            $('#customerDetailsTitle').text(`SBC Customers (${currentStatus} - ${currentScheme}) in ${area}`);
+                            updateCustomerTable();
+                            
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').show();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                        function updateCustomerTable() {
+                            const start = (currentPage - 1) * recordsPerPage;
+                            const end = Math.min(start + recordsPerPage, filteredCustomers.length);
+                            const pageRows = filteredCustomers.slice(start, end);
+                            const tableBody = $("#customerTableBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageRows.length === 0) {
+                                tableBody.html('<tr><td colspan="7" class="text-center">No data available</td></tr>');
+                            } else {
+                                pageRows.forEach(customer => {
+                                    const typeClass = customer.Consumer_Type === 'Commercial' ? 'badge-commercial' : 'badge-domestic';
+                                    const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
+                                    const statusClass = customer.consumer_status === 'ACTIVE' ? 'badge-active' : 
+                                                    (customer.consumer_status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived');
+                                    
+                                    tableBody.append(`
+                                        <tr>
+                                            <td>${customer.Area_Name}</td>
+                                            <td>${customer.Consumer_Number || 'N/A'}</td>
+                                            <td>${customer.Consumer_Name || 'N/A'}</td>
+                                            <td>${customer.Phone_Number || 'N/A'}</td>
+                                            <td><span class="badge ${schemeClass}">${customer.Scheme_Selected}</span></td>
+                                            <td><span class="badge_sbc ${typeClass}">${customer.Consumer_Type || 'N/A'}</span></td>
+                                            <td><span class="badge ${statusClass}">${customer.consumer_status}</span></td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination info
+                            $("#customerPageInfo").text(`${start + 1} - ${end} of ${filteredCustomers.length}`);
+                            $("#prevPage").toggleClass("disabled", currentPage === 1);
+                            $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
+                        }
+
+                        // Event handlers
+                        $(document).on('click', '.clickabled:not(.area-click)', function() {
+                            const status = $(this).data('status') || 'ALL';
+                            const scheme = $(this).data('scheme') || 'ALL';
+                            console.log('Clicked:', status, scheme); // Debug: Log click event
+                            showAreaBreakdown(status, scheme);
+                        });
+                        
+                        $(document).on('click', '.area-click', function() {
+                            const area = $(this).data('area');
+                            console.log('Area clicked:', area); // Debug: Log area click
+                            showCustomerDetails(area);
+                        });
+                        
+                        $("#prevPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#nextPage").on("click", function(e) {
+                            e.preventDefault();
+                            if ((currentPage * recordsPerPage) < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#prevAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#nextAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#backToSummary").on("click", function(e) {
+                            e.preventDefault();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                        });
+                        
+                        $("#backToAreas").on("click", function(e) {
+                            e.preventDefault();
+                            showAreaBreakdown(currentStatus, currentScheme);
+                        });
+                    });
+                </script>
+
+                <?php } elseif ($method == 'nil_refill_report') { ?>
+                <div class="container4">
+                    <div class="dashboard-back-btn back_dashborad">
+                        <a href="<?php echo base_url('dashboard'); ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <div class="nerefil-summary">
+                        <h2 class="text-center mb-4">Nill Refill Report</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered nilrefil_summary_table" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="9" class="text-center">Active</th>
+                                        <th colspan="9" class="text-center">Suspended</th>
+                                        <th colspan="9" class="text-center">Deactivated</th>
+                                        <th colspan="9" class="text-center">Overall Total</th>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <th colspan="3" class="text-center">3+ Months</th>
+                                        <th colspan="3" class="text-center">6+ Months</th>
+                                        <th colspan="3" class="text-center">1+ Year</th>
+                                        <th colspan="3" class="text-center">3+ Months</th>
+                                        <th colspan="3" class="text-center">6+ Months</th>
+                                        <th colspan="3" class="text-center">1+ Year</th>
+                                        <th colspan="3" class="text-center">3+ Months</th>
+                                        <th colspan="3" class="text-center">6+ Months</th>
+                                        <th colspan="3" class="text-center">1+ Year</th>
+                                        <th colspan="3" class="text-center">3+ Months</th>
+                                        <th colspan="3" class="text-center">6+ Months</th>
+                                        <th colspan="3" class="text-center">1+ Year</th>
+                                    </tr>
+                                    <tr class="table-secondary">
+                                        <th class="text-center"></th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['active']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['active']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['active']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['active']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="active" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['active']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['active']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['suspended']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['suspended']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="suspended" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['suspended']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['suspended']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['deactivated']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['deactivated']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="deactivated" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['deactivated']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['deactivated']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_3_months" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_3_months']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_3_months" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_3_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_3_months" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_3_months']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_3_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_6_months" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_6_months']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_6_months" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_6_months']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_6_months" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_6_months']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_6_months']['total']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_1_year" data-scheme="pmuy"><?php echo isset($stats['overall_total']['greater_than_1_year']['pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_1_year" data-scheme="non_pmuy"><?php echo isset($stats['overall_total']['greater_than_1_year']['non_pmuy']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['non_pmuy']['qty']) : 0; ?></td>
+                                        <td class="clickabled text-center" data-status="overall_total" data-period="greater_than_1_year" data-scheme="total"><?php echo isset($stats['overall_total']['greater_than_1_year']['total']['qty']) ? htmlspecialchars($stats['overall_total']['greater_than_1_year']['total']['qty']) : 0; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percentage</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['active']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['active']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['suspended']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['suspended']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['deactivated']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['deactivated']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_3_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_3_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_3_months']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_3_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_6_months']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_6_months']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_6_months']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_6_months']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_1_year']['pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_1_year']['non_pmuy']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['non_pmuy']['percent'], 2)) : '0.00'; ?>%</td>
+                                        <td class="text-center"><?php echo isset($stats['overall_total']['greater_than_1_year']['total']['percent']) ? htmlspecialchars(number_format($stats['overall_total']['greater_than_1_year']['total']['percent'], 2)) : '0.00'; ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div id="areaBreakdownView" style="display: none;" class="nilrefil_area_details">
+                            <a href="#" class="back-bttn" id="backToSummary" aria-label="Back to Summary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered area-table">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Customer Count</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="Area Breakdown Pagination">
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#" aria-label="Previous Area Page">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageRange">1-10 of 0</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#" aria-label="Next Area Page">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div id="customerDetailsView" style="display: none;" class="nilrefil_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas" aria-label="Back to Areas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Consumer Number</th>
+                                            <th>Consumer Name</th>
+                                            <th>Phone Number</th>
+                                            <th>Scheme</th>
+                                            <th>Nil Refill Status</th>
+                                            <th>Consumer Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="Customer Details Pagination">
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevCustomerPage"><a class="page-link" href="#" aria-label="Previous Customer Page">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageRange">1-10 of 0</span></li>
+                                    <li class="page-item" id="nextCustomerPage"><a class="page-link" href="#" aria-label="Next Customer Page">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        const recordsPerPage = 10;
+                        let currentView = 'summary';
+                        let viewStack = [];
+                        const allCustomers = <?php echo json_encode($all_customers ?? []); ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+                        let currentStatus = '';
+                        let currentPeriod = '';
+                        let currentScheme = '';
+                        let currentArea = '';
+                        let currentAreaPage = 1;
+                        let currentCustomerPage = 1;
+
+                        // Initialize view
+                        initView();
+
+                        function initView() {
+                            $('#summaryTable').show();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                            currentView = 'summary';
+                            viewStack = [];
+                        }
+
+                        // Show area breakdown
+                        function showAreaBreakdown(status, period, scheme) {
+                            console.log('Showing area breakdown for:', status, period, scheme);
+                            currentStatus = status || '';
+                            currentPeriod = period || '';
+                            currentScheme = scheme || '';
+
+                            filteredCustomers = allCustomers.filter(customer => {
+                                if (!customer) return false;
+                                
+                                // Check days since refill
+                                const days = parseInt(customer.days_since_refill, 10);
+                                if (isNaN(days)) return false;
+
+                                // Check period condition
+                                let periodMatch = false;
+                                if (period === 'greater_than_3_months') periodMatch = days > 90 && days <= 180;
+                                else if (period === 'greater_than_6_months') periodMatch = days > 180 && days <= 365;
+                                else if (period === 'greater_than_1_year') periodMatch = days > 365;
+
+                                // Check status condition
+                                const customerStatus = (customer.Consumer_Sub_Status || '').toLowerCase();
+                                const statusMatch = status === 'overall_total' || 
+                                                status === '' || 
+                                                customerStatus === status.toLowerCase();
+
+                                // Check scheme condition
+                                const customerScheme = customer.Scheme_Selected || '';
+                                // console.log('Customer Scheme:', customerScheme);
+                                const schemeMatch = scheme === 'total' || 
+                                                (scheme === 'pmuy' && customerScheme === 'PMUY') || 
+                                                (scheme === 'non_pmuy' && customerScheme === 'NON_PMUY');
+
+                                return periodMatch && statusMatch && schemeMatch;
+                            });
+
+                            // Group by area name
+                            const areaCounts = {};
+                            filteredCustomers.forEach(customer => {
+                                const area = customer.Area_Name || 'Unknown Area';
+                                areaCounts[area] = (areaCounts[area] || 0) + 1;
+                            });
+
+                            // Convert to array and sort
+                            areaBreakdownData = Object.entries(areaCounts).map(([area, count]) => ({
+                                area: area,
+                                count: count
+                            })).sort((a, b) => b.count - a.count);
+
+                            // Update the title
+                            const statusText = status === 'overall_total' ? 'All Statuses' : 
+                                status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All Statuses';
+                            const periodText = getPeriodText(period);
+                            const schemeText = scheme === 'pmuy' ? 'PMUY' : 
+                                            scheme === 'non_pmuy' ? 'Non-PMUY' : 'All Schemes';
+                            $('#areaBreakdownTitle').text(`Areas (${statusText}, ${periodText}, ${schemeText}) - ${filteredCustomers.length} customers`);
+
+                            // Reset pagination and update view
+                            currentAreaPage = 1;
+                            updateAreaBreakdownView();
+
+                            // Show the view
+                            // $('#summaryTable').hide();
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            $('#backButton').show();
+                            viewStack.push(currentView);
+                            currentView = 'area';
+                        }
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownView() {
+                        //     const totalRecords = areaBreakdownData.length;
+                        //     const totalPages = Math.ceil(totalRecords / recordsPerPage);
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
+                        //     const pageData = areaBreakdownData.slice(startIdx, endIdx);
+
+                        //     const $tbody = $('#areaBreakdownBody');
+                        //     $tbody.empty();
+
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="2" class="text-center">No areas found</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+
+                        //         // Rebind click events
+                        //         $('.area-link').off('click').on('click', function() {
+                        //             const area = $(this).data('area');
+                        //             showCustomerDetails(area);
+                        //         });
+                        //     }
+
+                        //     // Update pagination controls
+                        //     const startRecord = startIdx + 1;
+                        //     const endRecord = endIdx;
+                        //     $('#areaPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
+
+                        //     // Update pagination controls
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage <= 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
+                        // }
+
+                        function updateAreaBreakdownView() {
+                            const totalRecords = areaBreakdownData.length;
+                            const totalPages = Math.ceil(totalRecords / recordsPerPage);
+                            const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
+                            const pageData = areaBreakdownData.slice(startIdx, endIdx);
+
+                            const $tbody = $('#areaBreakdownBody');
+                            $tbody.empty();
+
+                            if (pageData.length === 0) {
+                                $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageData.forEach(item => {
+                                    $tbody.append(`
+                                        <tr>
+                                            <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                                                ${escapeHtml(item.area)}
+                                            </td>
+                                            <td>${item.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+
+                                // Rebind click events
+                                $('.area-link').off('click').on('click', function() {
+                                    const area = $(this).data('area');
+                                    showCustomerDetails(area);
+                                });
+                            }
+
+                            // Update pagination controls
+                            const startRecord = startIdx + 1;
+                            const endRecord = endIdx;
+                            $('#areaPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
+                            $('#prevAreaPage').toggleClass('disabled', currentAreaPage <= 1);
+                            $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
+                        }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            const areaCustomers = filteredCustomers.filter(customer => 
+                                (customer.Area_Name || 'Unknown Area') === area
+                            );
+
+                            const statusText = currentStatus === 'overall_total' ? 'All Statuses' : 
+                                currentStatus ? currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1) : 'All Statuses';
+                            const periodText = getPeriodText(currentPeriod);
+                            const schemeText = currentScheme === 'pmuy' ? 'PMUY' : 
+                                            currentScheme === 'non_pmuy' ? 'Non-PMUY' : 'All Schemes';
+                            $('#customerDetailsTitle').text(`${escapeHtml(area)} - ${statusText}, ${periodText}, ${schemeText}`);
+
+                            currentCustomerPage = 1;
+                            updateCustomerDetailsView(areaCustomers);
+
+                            // Show the customer details view
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').show();
+                            $('#backButton').show();
+                            viewStack.push(currentView);
+                            currentView = 'customer';
+                            console.log('Switched to Customer View');
+                        }
+
+                        function updateCustomerDetailsView(customers) {
+                            const totalRecords = customers.length;
+                            const totalPages = Math.ceil(totalRecords / recordsPerPage);
+                            const startIdx = (currentCustomerPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(totalRecords, startIdx + recordsPerPage);
+                            const pageData = customers.slice(startIdx, endIdx);
+
+                            const $tbody = $('#customerTableBody');
+                            $tbody.empty();
+
+                            if (pageData.length === 0) {
+                                $tbody.append('<tr><td colspan="7" class="text-center">No customers found</td></tr>');
+                            } else {
+                                pageData.forEach(customer => {
+                                    const lastRefill = customer.Last_Refill_Date 
+                                        ? new Date(customer.Last_Refill_Date).toLocaleDateString('en-GB') 
+                                        : 'Never';
+                                    const monthsSince = customer.months_since_refill !== null 
+                                        ? `${customer.months_since_refill} months` 
+                                        : 'N/A';
+                                    
+                                    const statusClass = getStatusBadgeClass(customer.Consumer_Sub_Status);
+                                    
+                                    $tbody.append(`
+                                        <tr>
+                                            <td>${escapeHtml(customer.Area_Name || 'Unknown Area')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Number)}</td>
+                                            <td>${escapeHtml(customer.Consumer_Name)}</td>
+                                            <td>${escapeHtml(customer.Phone_Number) || 'N/A'}</td>
+                                            <td><span class="badge ${customer.Scheme_Selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">${escapeHtml(customer.Scheme_Selected)}</span></td>
+                                            <td><span class="badge badge-due">Due</span></td>
+                                            <td class = "text-center">${statusClass}</td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+
+                            const startRecord = startIdx + 1;
+                            const endRecord = endIdx;
+                            $('#customerPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
+
+                            // Update pagination controls
+                            $('#prevCustomerPage').toggleClass('disabled', currentCustomerPage === 1);
+                            $('#nextCustomerPage').toggleClass('disabled', currentCustomerPage >= totalPages);
+                        }
+
+                        function getPeriodText(period) {
+                            switch (period) {
+                                case 'greater_than_3_months': return '3+ Months';
+                                case 'greater_than_6_months': return '6+ Months';
+                                case 'greater_than_1_year': return '1+ Year';
+                                default: return '';
+                            }
+                        }
+
+                        function getStatusBadgeClass(status) {
+                            switch(status) {
+                                case 'ACTIVE':
+                                    return '<span class="badge badge-active">ACTIVE</span>';
+                                case 'SUSPENDED':
+                                    return '<span class="badge badge-suspended">SUSPENDED</span>';
+                                case 'DEACTIVATED':
+                                    return '<span class="badge badge-deactived">DEACTIVATED</span>';
+                                default:
+                                    return '<span class="badge badge-secondary">' + (status || 'N/A') + '</span>';
+                            }
+                        }
+
+                        function escapeHtml(text) {
+                            if (text === null || text === undefined) return '';
+                            const map = {
+                                '&': '&amp;',
+                                '<': '&lt;',
+                                '>': '&gt;',
+                                '"': '&quot;',
+                                "'": '&#39;'
+                            };
+                            return text.toString().replace(/[&<>"']/g, m => map[m]);
+                        }
+
+                        // Click handler for summary table cells
+                        $('.clickabled[data-status][data-period][data-scheme]').on('click', function() {
+                            const status = $(this).data('status');
+                            const period = $(this).data('period');
+                            const scheme = $(this).data('scheme');
+                            showAreaBreakdown(status, period, scheme);
+                        });
+
+                        $('#backToSummary').on('click', function(e) {
+                            e.preventDefault();
+                            $('#summaryTable').show();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                            currentView = 'summary';
+                            viewStack = [];
+                        });
+
+                        $('#backToAreas').on('click', function(e) {
+                            e.preventDefault();
+                            // $('#summaryTable').hide();
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            currentView = 'area';
+                        });
+
+                        $('#prevAreaPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownView();
+                            }
+                        });
+
+                        $('#nextAreaPage').on('click', function(e) {
+                            e.preventDefault();
+                            const totalRecords = areaBreakdownData.length;
+                            const totalPages = Math.ceil(totalRecords / recordsPerPage);
+                            if (currentAreaPage < totalPages) {
+                                currentAreaPage++;
+                                updateAreaBreakdownView();
+                            }
+                        });
+
+                        $('#prevCustomerPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentCustomerPage > 1) {
+                                currentCustomerPage--;
+                                const customers = filteredCustomers.filter(c => 
+                                    (c.Area_Name || 'Unknown Area') === currentArea
+                                );
+                                updateCustomerDetailsView(customers);
+                            }
+                        });
+
+                        $('#nextCustomerPage').on('click', function(e) {
+                            e.preventDefault();
+                            const customers = filteredCustomers.filter(c => 
+                                (c.Area_Name || 'Unknown Area') === currentArea
+                            );
+                            const totalPages = Math.ceil(customers.length / recordsPerPage);
+                            if (currentCustomerPage < totalPages) {
+                                currentCustomerPage++;
+                                updateCustomerDetailsView(customers);
+                            }
+                        });
+                    });
+                </script>
+
+                <?php } elseif($method == 'kyc_data') { ?>
+                <div class="container5">
+                    <div class="dashboard-back-btn back_dashborad">
+                        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <!-- Fixed Summary Table -->
+                    <div class="kyc-summary" id="summaryTableContainer">
+                        <h2 class="text-center mb-4">KYC Data Table</h2>
+                        <div class="table-responsive">
+                            <table class="table table table-bordered table_summary_kyc" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Main Content Area -->
+                    <div id="mainContent">
+                        <!-- Area Breakdown View -->
+                        <div id="areaBreakdownView" style="display: none;" class="kyc-area-details">
+                            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Pending KYC Count</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Customer Details View -->
+                        <div id="customerDetailsView" style="display: none;" class="kyc_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Area Name</th>
+                                            <th class="text-center">Consumer Number</th>
+                                            <th class="text-center">Consumer Name</th>
+                                            <th class="text-center">Phone Number</th>
+                                            <th class="text-center">Scheme</th>
+                                            <th class="text-center">KYC Status</th>
+                                            <th class="text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Configuration
+                        const recordsPerPage = 10;
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+                        let currentScheme = null;
+                        let currentStatus = null;
+                        let currentArea = null;
+                        
+                        // Data from server
+                        let allCustomers = <?= json_encode($kyc_data) ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+
+                        // Initialize view
+                        initView();
+
+                        function initView() {
+                            // Filter to only pending KYC customers
+                            filteredCustomers = allCustomers.filter(customer => !customer.KYC_Number || customer.KYC_Number === '');
+                            
+                            // Set up initial customer table
+                            updateCustomerTable();
+                            
+                            // Hide views that should not be visible initially
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                        }
+
+                        function showAreaBreakdown(status, scheme) {
+                            currentStatus = status;
+                            currentScheme = scheme;
+                            
+                            // Filter customers based on status and scheme
+                            filteredCustomers = allCustomers.filter(customer => {
+                                // Skip completed KYC
+                                if (customer.KYC_Number && customer.KYC_Number !== '') return false;
+                                
+                                // Status filter
+                                let statusMatch = (status === 'ALL') ? true : customer.Consumer_Sub_Status === status;
+                                
+                                // Scheme filter
+                                let schemeMatch = true;
+                                if (scheme === 'PMUY') {
+                                    schemeMatch = customer.Scheme_Selected === 'PMUY';
+                                } else if (scheme === 'NON_PMUY') {
+                                    schemeMatch = customer.Scheme_Selected === 'Non PMUY';
+                                }
+                                
+                                return statusMatch && schemeMatch;
+                            });
+                            
+                            // Group by area
+                            const areaCounts = {};
+                            filteredCustomers.forEach(customer => {
+                                const area = customer.Area_Name || 'Unknown';
+                                areaCounts[area] = (areaCounts[area] || 0) + 1;
+                            });
+                            
+                            // Convert to array and sort
+                            areaBreakdownData = Object.entries(areaCounts).map(([area, count]) => ({ area, count }));
+                            areaBreakdownData.sort((a, b) => b.count - a.count);
+                            
+                            // Update view
+                            $('#areaBreakdownTitle').text(
+                                `Pending KYC Customers (${status} - ${scheme}) by Area`
+                            );
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            // Show the area breakdown view
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                        }
+
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const $tbody = $('#areaBreakdownBody');
+                            
+                        //     $tbody.empty();
+                            
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        // }
+
+                        function updateAreaBreakdownTable() {
+                            const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                            const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                            const $tbody = $('#areaBreakdownBody');
+
+                            $tbody.empty();
+
+                            if (pageData.length === 0) {
+                                $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageData.forEach(item => {
+                                    $tbody.append(`
+                                        <tr>
+                                            <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                                                ${escapeHtml(item.area)}
+                                            </td>
+                                            <td>${item.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+
+                            // Update pagination controls
+                            $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                            $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                            $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                    tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                                }
+                            });
+
+                            document.addEventListener("mouseout", function (e) {
+                                if (e.target.classList.contains("whatsapp_icon")) {
+                                    const tooltip = document.querySelector(".custom-tooltip");
+                                    if (tooltip) tooltip.remove();
+                                }
+                            });
+
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            
+                            // Filter customers for this area
+                            filteredCustomers = allCustomers.filter(customer => {
+                                // Skip completed KYC
+                                if (customer.KYC_Number && customer.KYC_Number !== '') return false;
+                                
+                                const customerArea = customer.Area_Name || 'Unknown';
+                                let statusMatch = (currentStatus === 'ALL') ? true : customer.Consumer_Sub_Status === currentStatus;
+                                let schemeMatch = true;
+                                
+                                if (currentScheme === 'PMUY') {
+                                    schemeMatch = customer.Scheme_Selected === 'PMUY';
+                                } else if (currentScheme === 'NON_PMUY') {
+                                    schemeMatch = customer.Scheme_Selected === 'Non PMUY';
+                                }
+                                
+                                return customerArea === area && statusMatch && schemeMatch;
+                            });
+                            
+                            // Update view
+                            $('#customerDetailsTitle').text(
+                                `Pending KYC Customers in ${escapeHtml(area)} (${currentStatus} - ${currentScheme})`
+                            );
+                            currentPage = 1;
+                            updateCustomerTable();
+                            
+                            // Show the customer details view
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').show();
+                        }
+
+                        function updateCustomerTable() {
+                            const startIdx = (currentPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, filteredCustomers.length);
+                            const pageData = filteredCustomers.slice(startIdx, startIdx + recordsPerPage);
+                            const $tbody = $('#customerTableBody');
+                            
+                            $tbody.empty();
+                            
+                            if (pageData.length === 0) {
+                                $tbody.append('<tr><td colspan="7" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageData.forEach(customer => {
+                                    const statusBadge = getStatusBadge(customer.Consumer_Sub_Status);
+                                    const schemeBadge = customer.Scheme_Selected.toUpperCase() === 'PMUY' ?
+                                        '<span class="badge badge-pmuy">PMUY</span>' :
+                                        '<span class="badge badge-non-pmuy">Non PMUY</span>';
+                                    $tbody.append(`
+                                        <tr>
+                                            <td>${escapeHtml(customer.Area_Name || 'Unknown')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                                            <td>${escapeHtml(customer.Phone_Number || 'N/A')}</td>
+                                            <td>${schemeBadge}</td>
+                                            <td><span class="badge badge-due">Pending</span></td>
+                                            <td>${statusBadge}</td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination controls
+                            $('#customerPageInfo').text(`${startIdx + 1} - ${endIdx} of ${filteredCustomers.length}`);
+                            $('#prevPage').toggleClass('disabled', currentPage === 1);
+                            $('#nextPage').toggleClass('disabled', endIdx >= filteredCustomers.length);
+                        }
+
+                        function getStatusBadge(status) {
+                            status = (status || '').toUpperCase();
+                            switch(status) {
+                                case 'ACTIVE':
+                                    return '<span class="badge badge-active">ACTIVE</span>';
+                                case 'SUSPENDED':
+                                    return '<span class="badge badge-suspended">SUSPENDED</span>';
+                                case 'DEACTIVATED':
+                                    return '<span class="badge badge-deactived">DEACTIVATED</span>';
+                                default:
+                                    return '<span class="badge badge-suspended">' + (status || 'N/A') + '</span>';
+                            }
+                        }
+
+                        function escapeHtml(text) {
+                            if (text == null) return '';
+                            return text.toString()
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;')
+                                .replace(/'/g, '&#039;');
+                        }
+
+                        // Event listeners
+                        $('.clickabled').on('click', function() {
+                            const status = $(this).data('status') || 'ALL';
+                            const scheme = $(this).data('scheme') || 'ALL';
+                            showAreaBreakdown(status, scheme);
+                        });
+                        
+                        $(document).on('click', '.area-link', function() {
+                            const area = $(this).data('area');
+                            showCustomerDetails(area);
+                        });
+                        
+                        // Pagination controls
+                        $('#prevPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $('#nextPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentPage * recordsPerPage < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $('#prevAreaPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $('#nextAreaPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage * recordsPerPage < areaBreakdownData.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+
+                        $("#backToSummary").on("click", function(e) {
+                            e.preventDefault();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                        });
+                        
+                        $("#backToAreas").on("click", function(e) {
+                            e.preventDefault();
+                            showAreaBreakdown(currentStatus, currentScheme);
+                        });
+                    });
+                </script>
+
+
+                <?php } elseif ($method == 'midue') { ?>
+                <div class="container4">
+                    <div class="dashboard-back-btn back_dashborad">
+                        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <!-- Fixed Summary Section -->
+                    <div class="midue-summary">
+                        <h2 class="text-center mb-4">MI Due Data Table</h2>
+                        <div class="table-responsive">
+                            <table class="table table table-bordered" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Content Section -->
+                    <div class="content-section">
+                        <!-- Area Breakdown Table -->
+                        <div id="areaBreakdownView" style="display: none;" class="midue-area-details">
+                            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Due Count</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Customer Details Table -->
+                        <div id="customerDetailsView" style="display: none;" class="midue_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th class="text-center">Area Name</th>
+                                            <th class="text-center">Consumer Number</th>
+                                            <th class="text-center">Consumer Name</th>
+                                            <th class="text-center">Phone Number</th>
+                                            <th class="text-center">Scheme</th>
+                                            <th class="text-center">MI Status</th>
+                                            <th class="text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // Configuration
+                        const recordsPerPage = 10;
+                        let currentView = 'summary';
+                        let viewHistory = [];
+                        
+                        // Data from server
+                        const allCustomers = <?= json_encode($mi_due ?? []) ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+                        let currentScheme = null;
+                        let currentStatus = null;
+                        let currentArea = null;
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+
+                        // Initialize the view
+                        initView();
+
+                        function initView() {
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                            currentView = 'summary';
+                            viewHistory = [];
+                        }
+
+                        function showAreaBreakdown(status, scheme) {
+                            currentStatus = status;
+                            currentScheme = scheme;
+                            
+                            // Filter customers based on status and scheme
+                            filteredCustomers = allCustomers.filter(customer => {
+                                let statusMatch = (status === 'ALL') ? true : customer.status === status;
+                                let schemeMatch = true;
+                                if (scheme === 'PMUY') {
+                                    schemeMatch = customer.scheme_type === 'PMUY';
+                                } else if (scheme === 'NON_PMUY') {
+                                    schemeMatch = customer.scheme_type === 'Non PMUY';
+                                }
+                                return statusMatch && schemeMatch;
+                            });
+                            
+                            // Group by area
+                            const areaCounts = {};
+                            filteredCustomers.forEach(customer => {
+                                const area = customer.Area_Name || 'Unknown';
+                                areaCounts[area] = (areaCounts[area] || 0) + 1;
+                            });
+                            
+                            // Convert to array and sort
+                            areaBreakdownData = Object.entries(areaCounts)
+                                .map(([area, count]) => ({ area, count }))
+                                .sort((a, b) => b.count - a.count);
+                            
+                            // Update view
+                            const title = `Due MI Customers (${status} - ${scheme}) by Area`;
+                            $('#areaBreakdownTitle').text(title);
+                            
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            // Show the correct view
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            
+                            // Update navigation
+                            viewHistory.push(currentView);
+                            currentView = 'area';
+                        }
+
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const $tbody = $('#areaBreakdownBody');
+                            
+                        //     $tbody.empty();
+                            
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        // }
+
+                        function updateAreaBreakdownTable() {
+                            const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                            const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                            const $tbody = $('#areaBreakdownBody');
+
+                            $tbody.empty();
+
+                            if (pageData.length === 0) {
+                                $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageData.forEach(item => {
+                                    $tbody.append(`
+                                        <tr>
+                                            <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                                                ${escapeHtml(item.area)}
+                                            </td>
+                                            <td>${item.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+
+                            // Update pagination controls
+                            $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                            $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                            $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            
+                            // Filter customers for this area and scheme/status
+                            filteredCustomers = allCustomers.filter(customer => {
+                                const customerArea = customer.Area_Name || 'Unknown';
+                                let statusMatch = (currentStatus === 'ALL') ? true : customer.status === currentStatus;
+                                let schemeMatch = true;
+                                
+                                if (currentScheme === 'PMUY') {
+                                    schemeMatch = customer.scheme_type === 'PMUY';
+                                } else if (currentScheme === 'NON_PMUY') {
+                                    schemeMatch = customer.scheme_type === 'Non PMUY';
+                                }
+                                
+                                return customerArea === area && statusMatch && schemeMatch;
+                            });
+                            
+                            // Update view
+                            const schemeText = currentScheme === 'ALL' ? 'All Schemes' : currentScheme;
+                            const statusText = currentStatus === 'ALL' ? 'All Statuses' : currentStatus;
+                            $('#customerDetailsTitle').text(`Due MI Customers (${schemeText} - ${statusText}) in ${escapeHtml(area)}`);
+                            
+                            currentPage = 1;
+                            updateCustomerTable();
+                            
+                            // Show the correct view
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').show();
+                            
+                            // Update navigation
+                            viewHistory.push(currentView);
+                            currentView = 'customer';
+                        }
+
+                        function updateCustomerTable() {
+                            const startIdx = (currentPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, filteredCustomers.length);
+                            const pageData = filteredCustomers.slice(startIdx, startIdx + recordsPerPage);
+                            const $tbody = $('#customerTableBody');
+                            
+                            $tbody.empty();
+                            
+                            if (pageData.length === 0) {
+                                $tbody.append('<tr><td colspan="7" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageData.forEach(customer => {
+                                    // Use status property to match filtering logic
+                                    const status = customer.status || 'N/A';
+                                    
+                                    // Determine badge class based on status
+                                    let statusClass;
+                                    switch (status) {
+                                        case 'ACTIVE':
+                                            statusClass = 'badge-active';
+                                            break;
+                                        case 'SUSPENDED':
+                                            statusClass = 'badge-suspended';
+                                            break;
+                                        case 'DEACTIVATED':
+                                            statusClass = 'badge-deactived';
+                                            break;
+                                        default:
+                                            statusClass = 'badge-secondary'; // For 'N/A' or invalid status
+                                    }
+                                    
+                                    $tbody.append(`
+                                        <tr>
+                                            <td>${escapeHtml(customer.Area_Name || 'Unknown')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                                            <td>${escapeHtml(customer.Phone_Number || 'N/A')}</td>
+                                            <td>
+                                                <span class="badge ${customer.scheme_type === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy'}">
+                                                    ${escapeHtml(customer.scheme_type || 'N/A')}
+                                                </span>
+                                            </td>
+                                            <td><span class="badge badge-due">Due</span></td>
+                                            <td><span class="badge ${statusClass}">${escapeHtml(status)}</span></td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination controls
+                            $('#customerPageInfo').text(`${startIdx + 1} - ${endIdx} of ${filteredCustomers.length}`);
+                            $('#prevPage').toggleClass('disabled', currentPage === 1);
+                            $('#nextPage').toggleClass('disabled', endIdx >= filteredCustomers.length);
+                        }
+
+                        function escapeHtml(text) {
+                            if (!text) return '';
+                            return text.toString()
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;')
+                                .replace(/'/g, '&#039;');
+                        }
+
+                        function goBack() {
+                            if (viewHistory.length === 0) {
+                                initView();
+                                return;
+                            }
+                            
+                            const previousView = viewHistory.pop();
+                            
+                            if (previousView === 'summary') {
+                                initView();
+                            } else if (previousView === 'area') {
+                                $('#areaBreakdownView').show();
+                                $('#customerDetailsView').hide();
+                                currentView = 'area';
+                            }
+                        }
+
+                        // Event listeners
+                        $('.clickabled').on('click', function() {
+                            const status = $(this).data('status') || 'ALL';
+                            const scheme = $(this).data('scheme') || 'ALL';
+                            showAreaBreakdown(status, scheme);
+                        });
+                        
+                        $(document).on('click', '.area-link', function() {
+                            const area = $(this).data('area');
+                            showCustomerDetails(area);
+                        });
+                        
+                        $('#backToSummary').on('click', function(e) {
+                            e.preventDefault();
+                            goBack();
+                        });
+                        
+                        $('#backToAreas').on('click', function(e) {
+                            e.preventDefault();
+                            goBack();
+                        });
+                        
+                        // Pagination controls
+                        $('#prevAreaPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $('#nextAreaPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage * recordsPerPage < areaBreakdownData.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $('#prevPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $('#nextPage').on('click', function(e) {
+                            e.preventDefault();
+                            if (currentPage * recordsPerPage < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+                    });
+                </script>
+
+                <?php } elseif ($method == 'hosedue') { ?>
+                <div class="container4">
+                    <div class="dashboard-back-btn back_dashborad mb-3">
+                        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <div class="hosedue_summary">
+                        <h2 class="text-center">Hose Due Report</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['active']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['active']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['active']['total_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['suspended']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['suspended']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['suspended']['total_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['deactivated']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['deactivated']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['deactivated']['total_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total_percent'] ?? 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="content-section">
+                            <!-- Area View -->
+                            <div id="areaView" style="display: none;" class="hosedue-area-details">
+                                <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                                <h4 class="text-center mb-4" id="areaViewTitle"></h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Area Name</th>
+                                                <th>Due Count</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="areaTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <nav>
+                                    <ul class="pagination justify-content-center mt-3">
+                                        <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                        <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                        <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                            <!-- Customer Details View -->
+                            <div id="customerDetailsView" style="display: none;" class="hosedue_customer_details">
+                                <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                                <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Area Name</th>
+                                                <th class="text-center">Consumer Number</th>
+                                                <th class="text-center">Consumer Name</th>
+                                                <th class="text-center">Phone Number</th>
+                                                <th class="text-center">Scheme</th>
+                                                <th class="text-center">Hose Due</th>
+                                                <th class="text-center">Account Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="customerTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <nav>
+                                    <ul class="pagination justify-content-center mt-3">
+                                        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                        <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Configuration
+                        const recordsPerPage = 10;
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+                        let currentScheme = null;
+                        let currentArea = null;
+                        let currentStatus = null;
+                        
+                        // Data from server
+                        let allCustomers = <?= json_encode($hose_due ?? []) ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+
+                        // Initialize view
+                        initView();
+
+                        function initView() {
+                            $('#areaView').hide();
+                            $('#customerDetailsView').hide();
+                            
+                            if (allCustomers && allCustomers.length > 0) {
+                                processData();
+                            }
+                        }
+
+                        function processData() {
+                            // Group data by area, scheme, and status
+                            const areaSchemeData = {};
+                            
+                            allCustomers.forEach(customer => {
+                                const area = customer.Area_Name || 'Unknown';
+                                const scheme = customer.Scheme_Selected || 'NON_PMUY'; // Default to NON_PMUY if not specified
+                                const status = customer.status || 'ACTIVE'; // Default to ACTIVE if not specified
+                                
+                                if (!areaSchemeData[area]) {
+                                    areaSchemeData[area] = {
+                                        PMUY: { ACTIVE: [], SUSPENDED: [], DEACTIVATED: [], ALL: [] },
+                                        NON_PMUY: { ACTIVE: [], SUSPENDED: [], DEACTIVATED: [], ALL: [] },
+                                        ALL: { ACTIVE: [], SUSPENDED: [], DEACTIVATED: [], ALL: [] }
+                                    };
+                                }
+                                
+                                // Add to specific scheme
+                                if (scheme === 'PMUY') {
+                                    areaSchemeData[area].PMUY[status].push(customer);
+                                    areaSchemeData[area].PMUY.ALL.push(customer);
+                                } else {
+                                    areaSchemeData[area].NON_PMUY[status].push(customer);
+                                    areaSchemeData[area].NON_PMUY.ALL.push(customer);
+                                }
+                                
+                                // Add to ALL schemes
+                                areaSchemeData[area].ALL[status].push(customer);
+                                areaSchemeData[area].ALL.ALL.push(customer);
+                            });
+                            
+                            allCustomers = areaSchemeData;
+                        }
+
+                        // Show area breakdown for selected scheme and status
+                        function showAreaBreakdown(scheme, status) {
+                            currentScheme = scheme;
+                            currentStatus = status;
+                            
+                            areaBreakdownData = [];
+                            
+                            for (const area in allCustomers) {
+                                if (allCustomers[area][scheme] && allCustomers[area][scheme][status]) {
+                                    const customers = allCustomers[area][scheme][status];
+                                    if (customers.length > 0) {
+                                        areaBreakdownData.push({
+                                            area: area,
+                                            count: customers.length,
+                                            customers: customers
+                                        });
+                                    }
+                                }
+                            }
+                            
+                            // Sort by count descending
+                            areaBreakdownData.sort((a, b) => b.count - a.count);
+                            
+                            $('#areaViewTitle').text(`Due Hose Customers (${scheme} - ${status}) by Area`);
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            $('#areaView').show();
+                            $('#customerDetailsView').hide();
+                        }
+
+                        // Not show an tooltip this below code
+                        
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const tableBody = $("#areaTableBody");
+                            
+                        //     tableBody.empty();
+                            
+                        //     if (pageData.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(areaData => {
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
+                        //                         ${escapeHtml(areaData.area)}
+                        //                     </td>
+                        //                     <td>${areaData.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", endIdx >= areaBreakdownData.length);
+                        // }
+
+                        function updateAreaBreakdownTable() {
+                            const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                            const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                            const tableBody = $("#areaTableBody");
+
+                            tableBody.empty();
+
+                            if (pageData.length === 0) {
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageData.forEach(areaData => {
+                                    tableBody.append(`
+                                        <tr>
+                                            <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
+                                                ${escapeHtml(areaData.area)}
+                                            </td>
+                                            <td>${areaData.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+
+                            // Update pagination controls
+                            $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                            $("#nextAreaPage").toggleClass("disabled", endIdx >= areaBreakdownData.length);
+                        }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            
+                            const areaData = areaBreakdownData.find(item => item.area === area);
+                            
+                            if (areaData) {
+                                filteredCustomers = areaData.customers;
+                                currentPage = 1;
+                                
+                                $('#customerDetailsTitle').text(
+                                    `Due Hose Customers (${currentScheme} - ${currentStatus}) in ${escapeHtml(area)}`
+                                );
+                                
+                                updateCustomerTable();
+                                
+                                $('#areaView').hide();
+                                $('#customerDetailsView').show();
+                            }
+                        }
+
+                        function updateCustomerTable() {
+                            const startIdx = (currentPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, filteredCustomers.length);
+                            const pageRows = filteredCustomers.slice(startIdx, startIdx + recordsPerPage);
+                            const tableBody = $("#customerTableBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageRows.length === 0) {
+                                tableBody.html('<tr><td colspan="7" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageRows.forEach(customer => {
+                                    const statusBadge = getStatusBadge(customer.status);
+                                    const schemeBadge = customer.Scheme_Selected === 'PMUY' ?
+                                        '<span class="badge badge-pmuy">PMUY</span>' : 
+                                        '<span class="badge badge-non-pmuy">Non PMUY</span>';
+                                        
+                                    tableBody.append(`
+                                        <tr>
+                                            <td class="text-center">${escapeHtml(customer.Area_Name || 'N/A')}</td>
+                                            <td class="text-center">${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                                            <td class="text-center">${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                                            <td class="text-center">${escapeHtml(customer.Phone_Number || 'N/A')}</td>
+                                            <td class="text-center">${schemeBadge}</td>
+                                            <td class="text-center"><span class="badge badge-due">Due</span></td>
+                                            <td class="text-center">${statusBadge}</td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            // Update pagination controls
+                            $("#customerPageInfo").text(`${startIdx + 1} - ${endIdx} of ${filteredCustomers.length}`);
+                            $("#prevPage").toggleClass("disabled", currentPage === 1);
+                            $("#nextPage").toggleClass("disabled", endIdx >= filteredCustomers.length);
+                        }
+
+                        function getStatusBadge(status) {
+                            switch(status) {
+                                case 'ACTIVE':
+                                    return '<span class="badge badge-active">ACTIVE</span>';
+                                case 'SUSPENDED':
+                                    return '<span class="badge badge-suspended">SUSPENDED</span>';
+                                case 'DEACTIVATED':
+                                    return '<span class="badge badge-deactived">DEACTIVATED</span>';
+                                default:
+                                    return '<span class="badge badge-secondary">' + (status || 'N/A') + '</span>';
+                            }
+                        }
+
+                        function escapeHtml(text) {
+                            if (text == null) return '';
+                            return text.toString()
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;')
+                                .replace(/'/g, '&#039;');
+                        }
+
+                        // Event listeners
+                        $(document).on('click', '.clickabled[data-scheme][data-status]', function() {
+                            const scheme = $(this).data('scheme');
+                            const status = $(this).data('status');
+                            
+                            // Handle "ALL" scheme case
+                            if (scheme === 'ALL') {
+                                // For ALL scheme, we need to combine PMUY and NON_PMUY data
+                                showCombinedAreaBreakdown(status);
+                            } else {
+                                showAreaBreakdown(scheme, status);
+                            }
+                        });
+                        
+                        function showCombinedAreaBreakdown(status) {
+                            currentScheme = 'ALL';
+                            currentStatus = status;
+                            
+                            areaBreakdownData = [];
+                            const areaMap = {};
+                            
+                            // Combine data from both PMUY and NON_PMUY for the given status
+                            for (const area in allCustomers) {
+                                const pmuyCustomers = allCustomers[area].PMUY[status] || [];
+                                const nonPmuyCustomers = allCustomers[area].NON_PMUY[status] || [];
+                                const allCustomersForStatus = [...pmuyCustomers, ...nonPmuyCustomers];
+                                
+                                if (allCustomersForStatus.length > 0) {
+                                    areaMap[area] = {
+                                        area: area,
+                                        count: allCustomersForStatus.length,
+                                        customers: allCustomersForStatus
+                                    };
+                                }
+                            }
+                            
+                            // Convert to array and sort
+                            areaBreakdownData = Object.values(areaMap).sort((a, b) => b.count - a.count);
+                            
+                            $('#areaViewTitle').text(`Due Hose Customers (ALL Schemes - ${status}) by Area`);
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            $('#areaView').show();
+                            $('#customerDetailsView').hide();
+                        }
+                        
+                        $(document).on('click', '.area-click', function() {
+                            showCustomerDetails($(this).data('area'));
+                        });
+                        
+                        $("#prevPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#nextPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage * recordsPerPage < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#prevAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#nextAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage * recordsPerPage < areaBreakdownData.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#backToSummary").on("click", function(e) {
+                            e.preventDefault();
+                            $('#areaView').hide();
+                            $('#customerDetailsView').hide();
+                        });
+                        
+                        $("#backToAreas").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentScheme === 'ALL') {
+                                showCombinedAreaBreakdown(currentStatus);
+                            } else {
+                                showAreaBreakdown(currentScheme, currentStatus);
+                            }
+                        });
+                    });
+                </script>
+
+                <?php } elseif ($method == 'phonenumber') { ?>
+                <div class="container4">            
+                    <div class="dashboard-back-btn back_dashborad">
+                        <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <!-- Fixed Summary Section -->
+                    <div class="summary-section">
+                        <h2 class="text-center mb-4">Phone Number Missing Data</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">Non PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="Non PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="Non PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="Non PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="Non PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['active']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['active']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['active']['total_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['suspended']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['suspended']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['suspended']['total_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['deactivated']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['deactivated']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['deactivated']['total_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['non_pmuy_percent'] ?? 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total_percent'] ?? 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Content Section -->
+                    <div class="content-section">
+                        <!-- Area Breakdown View -->
+                        <div id="areaBreakdownView" style="display: none;" class="phone_missing_area_details">
+                            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th class="text-center">Missing Phone Count</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Customer Details View -->
+                        <div id="customerDetailsView" style="display: none;" class="phone_missing_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Area Name</th>
+                                            <th class="text-center">Consumer Number</th>
+                                            <th class="text-center">Consumer Name</th>
+                                            <th class="text-center">Phone Number Status</th>
+                                            <th class="text-center">Scheme</th>
+                                            <th class="text-center">Account Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                    
+                <!-- jQuery -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <!-- Bootstrap JS -->
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+                        const recordsPerPage = 10;
+
+                        let allCustomers = <?= json_encode($phone_missing_data ?? []) ?>;
+                        let filteredCustomers = [];
+                        let filteredAreas = [];
+                        let currentScheme = null;
+                        let currentStatus = 'ALL';
+                        let currentArea = null;
+
+                        initView();
+
+                        function initView() {
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+
+                            if (allCustomers && allCustomers.length > 0) {
+                                processData();
+                                updateClickableCells();
+                            } else {
+                                console.log('No customer data received');
+                                $('#summaryTableBody tr:first td.clickabled').addClass('disabled');
+                            }
+                        }
+
+                        function updateClickableCells() {
+                            $('#summaryTableBody tr:first td.clickabled').each(function() {
+                                const count = parseInt($(this).text());
+                                if (count === 0) {
+                                    $(this).addClass('disabled').css('cursor', 'not-allowed');
+                                }
+                            });
+                        }
+
+                        function processData() {
+                            areaBreakdownData = [];
+                            const areaCounts = {};
+
+                            allCustomers.forEach(customer => {
+                                const area = customer.Area_Name || 'Unknown';
+                                const scheme = (customer.Scheme_Selected || 'Unknown').toUpperCase();
+                                const status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
+
+                                // Validate and log warnings for invalid data
+                                if (!['PMUY', 'NON_PMUY', 'Non PMUY'].includes(scheme)) {
+                                    console.warn(`Invalid scheme for customer ${customer.Consumer_Number || 'unknown'}: ${customer.Scheme_Selected}`);
+                                }
+                                if (!['ACTIVE', 'SUSPENDED', 'DEACTIVATED'].includes(status)) {
+                                    console.warn(`Invalid status for customer ${customer.Consumer_Number || 'unknown'}: ${customer.Consumer_Sub_Status}`);
+                                }
+
+                                // Initialize area if not exists
+                                if (!areaCounts[area]) {
+                                    areaCounts[area] = {
+                                        PMUY: 0,
+                                        'Non PMUY': 0,
+                                        activeCount: 0,
+                                        suspendedCount: 0,
+                                        deactivatedCount: 0,
+                                        customers: []
+                                    };
+                                }
+
+                                // Normalize scheme for counting
+                                const normalizedScheme = scheme === 'PMUY' ? 'PMUY' : 'Non PMUY';
+                                if (normalizedScheme === 'PMUY') {
+                                    areaCounts[area].PMUY++;
+                                } else if (normalizedScheme === 'Non PMUY') {
+                                    areaCounts[area]['Non PMUY']++;
+                                }
+
+                                // Count by status
+                                if (status === 'ACTIVE') {
+                                    areaCounts[area].activeCount++;
+                                } else if (status === 'SUSPENDED') {
+                                    areaCounts[area].suspendedCount++;
+                                } else if (status === 'DEACTIVATED') {
+                                    areaCounts[area].deactivatedCount++;
+                                }
+
+                                // Store customer with normalized values
+                                areaCounts[area].customers.push({
+                                    ...customer,
+                                    Scheme_Selected: normalizedScheme,
+                                    Consumer_Sub_Status: status
+                                });
+                            });
+
+                            // Convert counts to areaBreakdownData
+                            for (const area in areaCounts) {
+                                areaBreakdownData.push({
+                                    area: area,
+                                    pmuyCount: areaCounts[area].PMUY,
+                                    nonPmuCount: areaCounts[area]['Non PMUY'],
+                                    activeCount: areaCounts[area].activeCount,
+                                    suspendedCount: areaCounts[area].suspendedCount,
+                                    deactivatedCount: areaCounts[area].deactivatedCount,
+                                    totalCount: areaCounts[area].customers.length,
+                                    customers: areaCounts[area].customers
+                                });
+                            }
+
+                            console.log(`Processed ${areaBreakdownData.length} areas`);
+                        }
+
+                        function showAreaBreakdown(scheme, status = 'ALL') {
+                            currentScheme = scheme;
+                            currentStatus = status;
+
+                            $('#areaBreakdownTitle').text(`Customers Missing Phone (${scheme}${status !== 'ALL' ? ' - ' + status : ''}) by Area`);
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, filteredAreas.length);
+                        //     const tableBody = $("#areaBreakdownBody");
+
+                        //     tableBody.empty();
+
+                        //     // Filter areas based on current scheme and status
+                        //     filteredAreas = areaBreakdownData.filter(area => {
+                        //         let count;
+                        //         if (currentStatus !== 'ALL') {
+                        //             count = area[currentStatus.toLowerCase() + 'Count'];
+                        //             if (count <= 0) return false;
+
+                        //             if (currentScheme !== 'ALL') {
+                        //                 return currentScheme === 'PMUY' ? area.pmuyCount > 0 : area.nonPmuCount > 0;
+                        //             }
+                        //             return true;
+                        //         }
+
+                        //         if (currentScheme !== 'ALL') {
+                        //             count = currentScheme === 'PMUY' ? area.pmuyCount : area.nonPmuCount;
+                        //             return count > 0;
+                        //         }
+
+                        //         return area.totalCount > 0;
+                        //     });
+
+                        //     console.log(`Filtered ${filteredAreas.length} areas for scheme: ${currentScheme}, status: ${currentStatus}`);
+
+                        //     const pageAreas = filteredAreas.slice(startIdx, startIdx + recordsPerPage);
+
+                        //     if (pageAreas.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
+                        //     } else {
+                        //         pageAreas.forEach(areaData => {
+                        //             let count;
+                        //             if (currentStatus !== 'ALL') {
+                        //                 count = areaData[currentStatus.toLowerCase() + 'Count'];
+                        //             } else {
+                        //                 count = currentScheme === 'PMUY' ? areaData.pmuyCount :
+                        //                     currentScheme === 'Non PMUY' ? areaData.nonPmuCount :
+                        //                     areaData.totalCount;
+                        //             }
+
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
+                        //                         ${escapeHtml(areaData.area)}
+                        //                     </td>
+                        //                     <td class="text-center">${count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+
+                        //     // Update pagination
+                        //     $("#areaPageInfo").text(`${startIdx + 1} - ${endIdx} of ${filteredAreas.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", endIdx >= filteredAreas.length);
+                        // }
+
+                        function updateAreaBreakdownTable() {
+                            const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, filteredAreas.length);
+                            const tableBody = $("#areaBreakdownBody");
+
+                            tableBody.empty();
+
+                            // Filter areas based on current scheme and status
+                            filteredAreas = areaBreakdownData.filter(area => {
+                                let count;
+                                if (currentStatus !== 'ALL') {
+                                    count = area[currentStatus.toLowerCase() + 'Count'];
+                                    if (count <= 0) return false;
+
+                                    if (currentScheme !== 'ALL') {
+                                        return currentScheme === 'PMUY' ? area.pmuyCount > 0 : area.nonPmuCount > 0;
+                                    }
+                                    return true;
+                                }
+
+                                if (currentScheme !== 'ALL') {
+                                    count = currentScheme === 'PMUY' ? area.pmuyCount : area.nonPmuCount;
+                                    return count > 0;
+                                }
+
+                                return area.totalCount > 0;
+                            });
+
+                            console.log(`Filtered ${filteredAreas.length} areas for scheme: ${currentScheme}, status: ${currentStatus}`);
+
+                            const pageAreas = filteredAreas.slice(startIdx, startIdx + recordsPerPage);
+
+                            if (pageAreas.length === 0) {
+                                tableBody.html('<tr><td colspan="3" class="no-data text-danger">No data available</td></tr>');
+                            } else {
+                                pageAreas.forEach(areaData => {
+                                    let count;
+                                    if (currentStatus !== 'ALL') {
+                                        count = areaData[currentStatus.toLowerCase() + 'Count'];
+                                    } else {
+                                        count = currentScheme === 'PMUY' ? areaData.pmuyCount :
+                                            currentScheme === 'Non PMUY' ? areaData.nonPmuCount :
+                                            areaData.totalCount;
+                                    }
+
+                                    tableBody.append(`
+                                        <tr>
+                                            <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
+                                                ${escapeHtml(areaData.area)}
+                                            </td>
+                                            <td class="text-center">${count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width:40px;height:40px;cursor:pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+
+                            // Update pagination
+                            $("#areaPageInfo").text(`${startIdx + 1} - ${endIdx} of ${filteredAreas.length}`);
+                            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                            $("#nextAreaPage").toggleClass("disabled", endIdx >= filteredAreas.length);
+                        }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+
+                                e.target.dataset.tooltipElement = tooltip;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+
+                            // Case-insensitive area lookup
+                            const areaData = areaBreakdownData.find(item => item.area.toLowerCase() === area.toLowerCase());
+
+                            if (areaData) {
+                                // Filter customers based on currentScheme and currentStatus
+                                filteredCustomers = areaData.customers.filter(customer => {
+                                    const customerScheme = (customer.Scheme_Selected || '').toUpperCase();
+                                    const customerStatus = (customer.Consumer_Sub_Status || '').toUpperCase();
+                                    const matchesScheme = currentScheme === 'ALL' || customerScheme === currentScheme.toUpperCase();
+                                    const matchesStatus = currentStatus === 'ALL' || customerStatus === currentStatus.toUpperCase();
+                                    return matchesScheme && matchesStatus;
+                                });
+
+                                console.log(`Filtered ${filteredCustomers.length} customers for area: ${area}, scheme: ${currentScheme}, status: ${currentStatus}`);
+                                if (filteredCustomers.length === 0) {
+                                    console.log('Filtered customers:', filteredCustomers);
+                                    console.log('Area customers:', areaData.customers);
+                                }
+
+                                currentPage = 1;
+
+                                // Set the title for the customer details view
+                                $('#customerDetailsTitle').text(
+                                    `Customers Missing Phone (${currentScheme}${currentStatus !== 'ALL' ? ' - ' + currentStatus : ''}) in ${escapeHtml(area)}`
+                                );
+
+                                // Update the customer table
+                                updateCustomerTable();
+
+                                // Show the customer details view and hide the area breakdown view
+                                $('#areaBreakdownView').hide();
+                                $('#customerDetailsView').show();
+                                $('.content-section').scrollTop(0);
+                            } else {
+                                console.error(`No data found for area: ${area}`);
+                                $('#customerTableBody').html('<tr><td colspan="6" class="no-data text-danger">No data available for this area</td></tr>');
+                            }
+                        }
+
+                        function updateCustomerTable() {
+                            const startIdx = (currentPage - 1) * recordsPerPage;
+                            const endIdx = Math.min(startIdx + recordsPerPage, filteredCustomers.length);
+                            const pageRows = filteredCustomers.slice(startIdx, startIdx + recordsPerPage);
+                            const tableBody = $("#customerTableBody");
+
+                            tableBody.empty();
+
+                            if (pageRows.length === 0) {
+                                tableBody.html('<tr><td colspan="6" class="no-data text-danger">No data available</td></tr>');
+                            } else {
+                                pageRows.forEach(customer => {
+                                    const statusBadge = getStatusBadge(customer.Consumer_Sub_Status);
+                                    const schemeBadge = customer.Scheme_Selected.toUpperCase() === 'PMUY' ?
+                                        '<span class="badge badge-pmuy">PMUY</span>' :
+                                        '<span class="badge badge-non-pmuy">Non PMUY</span>';
+
+                                    tableBody.append(`
+                                        <tr>
+                                            <td>${escapeHtml(customer.Area_Name || 'N/A')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Number || 'N/A')}</td>
+                                            <td>${escapeHtml(customer.Consumer_Name || 'N/A')}</td>
+                                            <td><span class="badge badge-missing">Missing</span></td>
+                                            <td>${schemeBadge}</td>
+                                            <td>${statusBadge}</td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+
+                            // Update pagination
+                            $("#customerPageInfo").text(`${startIdx + 1} - ${endIdx} of ${filteredCustomers.length}`);
+                            $("#prevPage").toggleClass("disabled", currentPage === 1);
+                            $("#nextPage").toggleClass("disabled", endIdx >= filteredCustomers.length);
+                        }
+
+                        function getStatusBadge(status) {
+                            status = (status || '').toUpperCase();
+                            switch(status) {
+                                case 'ACTIVE':
+                                    return '<span class="badge badge-active">ACTIVE</span>';
+                                case 'SUSPENDED':
+                                    return '<span class="badge badge-suspended">SUSPENDED</span>';
+                                case 'DEACTIVATED':
+                                    return '<span class="badge badge-deactived">DEACTIVATED</span>';
+                                default:
+                                    return '<span class="badge badge-secondary">' + (status || 'N/A') + '</span>';
+                            }
+                        }
+
+                        function escapeHtml(text) {
+                            if (!text) return 'N/A';
+                            return text.toString()
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;')
+                                .replace(/'/g, '&#039;');
+                        }
+
+                        // Event Handlers
+                        $(document).on('click', '.clickabled[data-scheme]', function() {
+                            if ($(this).hasClass('disabled')) return;
+
+                            const scheme = $(this).data('scheme');
+                            const status = $(this).data('status') || 'ALL';
+                            const count = parseInt($(this).text());
+
+                            if (count > 0) {
+                                showAreaBreakdown(scheme, status);
+                            }
+                        });
+
+                        $(document).on('click', '.area-click', function() {
+                            const area = $(this).data('area');
+                            showCustomerDetails(area);
+                        });
+
+                        $("#prevPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+
+                        $("#nextPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage * recordsPerPage < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+
+                        $("#prevAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+
+                        $("#nextAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage * recordsPerPage < filteredAreas.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+
+                        $("#backToSummary").on("click", function(e) {
+                            e.preventDefault();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                        });
+
+                        $("#backToAreas").on("click", function(e) {
+                            e.preventDefault();
+                            showAreaBreakdown(currentScheme, currentStatus);
+                        });
+                    });
+                </script>
+
+
+                <!-- Other sections would follow similar responsive patterns -->
+                <?php } else { ?>
+                    <div class="container">
+                        <div class="alert alert-warning">
+                            <h1>Invalid Request</h1>
+                        </div>
+                    </div>
+                <?php } ?>
+                <?php } else { ?>
+                    <div class="container">
+                        <div class="alert alert-warning">
+                            <h1>Invalid Request</h1>
+                        </div>
+                    </div>
+            <?php } ?>
+        </div>
 
     <!-- Form validation script -->
     <script src= "<?php echo base_url(); ?>application/views/javascript/dashboard.js"></script>
@@ -3802,11 +5581,87 @@ $(document).ready(function () {
             <?php endif; ?>
         });
 
-        // Function to handle dashboard card clicks
-        function showDetails(section) {
-            // You can implement navigation logic here
-            console.log('Navigating to:', section);
+        // Function to format the current date and time
+        function formatDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+            return now.toLocaleString('en-US', options);
         }
+
+        // Function to update the refresh time display
+        function updateRefreshTime() {
+            const refreshTimeElement = document.getElementById('refreshTime');
+            const lastRefreshElement = document.getElementById('lastRefresh');
+            
+            if (refreshTimeElement && lastRefreshElement) {
+                refreshTimeElement.textContent = formatDateTime();
+                lastRefreshElement.style.display = 'block'; // Show the refresh time
+            }
+        }
+
+        // Event listener for the download button
+        document.getElementById('downloadBtn').addEventListener('click', function(event) {
+            // Update the refresh time when the button is clicked
+            updateRefreshTime();
+          
+            console.log('SDMS Report button clicked');
+        });
+
+        // Initialize the refresh time when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateRefreshTime();
+        });
+
+        // // Function to handle dashboard card clicks
+        // function showDetails(section) {
+        //     // You can implement navigation logic here
+        //     console.log('Navigating to:', section);
+        // }
     </script>
+    <!-- Access Denied Modal -->
+    <div class="modal fade" id="accessDeniedModal" tabindex="-1" aria-labelledby="accessDeniedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="accessDeniedModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Access Denied</h5>
+                    <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body text-center">
+                    You do not have permission to access this page. Please contact your admin for assistance.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if (!empty($access_denied) && $access_denied): ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var modalElement = document.getElementById('accessDeniedModal');
+                var accessDeniedModal = new bootstrap.Modal(modalElement);
+
+                // Show the modal
+                accessDeniedModal.show();
+
+                // Redirect to dashboard when modal is closed
+                modalElement.addEventListener('hidden.bs.modal', function () {
+                    window.location.href = "<?= base_url('dashboard') ?>";
+                });
+            });
+        </script>
+    <?php endif; ?>
+
+
+
 </body>
 </html>

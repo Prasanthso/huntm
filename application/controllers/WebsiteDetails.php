@@ -1,276 +1,217 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class WebsiteDetails extends CI_Controller {
 
+class WebsiteDetails extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('WebsiteModel');
-        $this->load->helper(array('form', 'url'));
+        $this->load->model('WebScrapping_model');
+        $this->load->model('OpenOrder_model');
+        $this->load->helper(array('form', 'url', 'download'));
         $this->load->library('session');
         $this->load->database();
     }
 
-    // Display form and websites list
-    // public function index() {
+
+    //Display add website form
+    // public function addwebsite() {
     //     $data['users'] = $this->WebsiteModel->get_users();
     //     $data['errors'] = [];
-    //     $this->load->view('add_website', $data);
+    //     $data['method'] = "add_website";
+    //     $this->load->view('website_dashboard', $data);
     // }
 
-	 // Add Website section
-     public function addwebsite() {
-        $data['users'] = $this->WebsiteModel->get_users();
-        $data['errors'] = [];
-        $data['method'] = "add_website"; 
-        $this->load->view('website_dashboard',$data); 
-    }
 
-    // Store website login details in the database
-    public function store() {
-        $data['users'] = $this->WebsiteModel->get_users();
-        $data['errors'] = [];
+    // //Store website details
+    // // Validate and insert website details
+    // public function store() {
+    //     $data['users'] = $this->WebsiteModel->get_users();
+    //     $data['errors'] = [];
 
-        $url = trim($this->input->post('url'));
-        $userId = trim($this->input->post('userId'));
-        $password = trim($this->input->post('password'));
-        $loggeduserid = $this->session->userdata('id');
 
-        // Ensure URL starts with http:// or https://
-        if (!empty($url) && !preg_match("~^(?:f|ht)tps?://~i", $url)) {
-            $url = "https://" . $url;
-        }
+    //     $url = trim($this->input->post('url'));
+    //     $userId = trim($this->input->post('userId'));
+    //     $password = trim($this->input->post('password'));
+    //     $loggeduserid = $this->session->userdata('id');
 
-        // Manual validation
-        if (empty($url)) $data['errors']['url'] = 'Website URL is required.';
-        if (empty($userId)) $data['errors']['userId'] = 'Username is required.';
-        if (empty($password)) $data['errors']['password'] = 'Password is required.';
-        if (empty($loggeduserid)) $data['errors'] = 'Not a valid logged in user.';
 
-        if (!empty($data['errors'])) {
-            $this->load->view('add_website', $data);
-        } else {
-            // $hashed_password = password_hash($password, PASSWORD_BCRYPT); // Store hashed password
+    //     if (!empty($url) && !preg_match("~^(?:f|ht)tps?://~i", $url)) {
+    //         $url = "https://" . $url;
+    //     }
 
-            $insert_data = [
-                'website_userId' => $userId,
-                'website_password' => $password,
-                'website_url' => $url,
-                'userid' => $loggeduserid
-            ];
 
-            if ($this->WebsiteModel->insert_website($insert_data)) {
-                $this->session->set_flashdata('success', 'Website added successfully!');
-                redirect('storewebsite');
-            } else {
-                $this->session->set_flashdata('error', 'Failed to add website.');
-                redirect('addwebsite');
-            }
-        }
-    }
-    
-    // Show dashboard with saved websites
-    public function stored_website() {
+    //     if (empty($url)) $data['errors']['url'] = 'Website URL is required.';
+    //     if (empty($userId)) $data['errors']['userId'] = 'Username is required.';
+    //     if (empty($password)) $data['errors']['password'] = 'Password is required.';
+    //     if (empty($loggeduserid)) $data['errors']['loggeduserid'] = 'Not a valid logged-in user.';
 
-        $data['websites'] = $this->WebsiteModel->get_all_websites();
-        $data['method'] = 'store_website';
-        $this->load->view('website_dashboard',$data); 
-    }
 
-    // Auto-login using cURL and open in a new tab
-    // public function auto_login() {
-    //     $url = $this->input->post('url');
-    //     $userId = $this->input->post('userId');
-    //     $password = $this->input->post('password');
-
-    //     $cookie_file = tempnam(sys_get_temp_dir(), 'cookie'); // Store cookies
-
-    //     // Initialize cURL session
-    //     $ch = curl_init();
-    //     curl_setopt($ch, CURLOPT_URL, $url);
-    //     curl_setopt($ch, CURLOPT_POST, 1);
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-    //         'username' => $userId,
-    //         'password' => $password
-    //     ]));
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    //     curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-    //     curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-    //     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-
-    //     $response = curl_exec($ch);
-    //     $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL); // Get final redirected URL
-    //     curl_close($ch);
-
-    //     // Open login page in a new tab using JavaScript
-    //     if (!empty($final_url)) {
-    //         echo "<script>window.open('$final_url');</script>";
+    //     if (!empty($data['errors'])) {
+    //         $data['method'] = 'add_website';
+    //         $this->load->view('website_dashboard', $data);
     //     } else {
-    //         echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
+    //         $insert_data = [
+    //             'website_userId' => $userId,
+    //             'website_password' => $password,
+    //             'website_url' => $url,
+    //             'userid' => $loggeduserid
+    //         ];
+
+
+    //         if ($this->WebsiteModel->insert_website($insert_data)) {
+    //             $this->session->set_flashdata('success', 'Website added successfully!');
+    //             redirect('storewebsite');
+    //         } else {
+    //             $this->session->set_flashdata('error', 'Failed to add website.');
+    //             redirect('storewebsite');
+    //         }
     //     }
     // }
 
-    <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AutoLogin extends CI_Controller {
-
-    public function auto_login() {
-        $step = 1;
-        $this->log_step($step++, "AUTO LOGIN PROCESS STARTED");
-
-        // Get form data
-        $url = $this->input->post('url');
-        $userId = $this->input->post('userId');
-        $password = $this->input->post('password');
-
-        $this->log_step($step++, "Received form inputs");
-        $this->log("   - URL: $url");
-        $this->log("   - User ID: $userId");
-        $this->log("   - Password: [HIDDEN]");
-
-        // Validate inputs
-        if (empty($url) || empty($userId) || empty($password)) {
-            $this->log_step($step++, "Validation Failed: Missing fields");
-            echo "<script>alert('⚠️ All fields are required!'); window.location.href='".site_url('storewebsite')."';</script>";
-            return;
-        }
-        $this->log_step($step++, "Validation Passed");
-
-        // Create cookie file
-        $cookie_file = tempnam(sys_get_temp_dir(), 'cookie');
-        $this->log_step($step++, "Created cookie file: $cookie_file");
-
-        // Initialize cURL
-        $ch = curl_init();
-        $this->log_step($step++, "Initialized cURL");
-
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            'username' => $userId,
-            'password' => $password
-        ]));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
-
-        // Handle SSL depending on environment
-        if ($this->isLiveServer()) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For debugging: set to true when SSL is valid
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);     // Set to 2 when SSL is valid
-            $this->log_step($step++, "SSL verification DISABLED for now (LIVE SERVER)");
-        } else {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            $this->log_step($step++, "SSL verification DISABLED (LOCAL SERVER)");
-        }
-
-        // Execute login request
-        $this->log_step($step++, "Sending login request to server...");
-        $response = curl_exec($ch);
-
-        // Handle cURL errors
-        if (curl_errno($ch)) {
-            $error_msg = curl_error($ch);
-            $this->log_step($step++, "cURL ERROR: $error_msg");
-            curl_close($ch);
-            echo "<script>alert('⚠️ cURL Error: ".addslashes($error_msg)."'); window.location.href='".site_url('storewebsite')."';</script>";
-            return;
-        }
-
-        $this->log_step($step++, "Request completed successfully");
-
-        // Get response info
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-        curl_close($ch);
-
-        $this->log_step($step++, "Response received");
-        $this->log("   - HTTP Status: $httpCode");
-        $this->log("   - Final URL: $final_url");
-
-        // Optional response preview for debugging
-        $this->log("   - Response Preview: " . substr(strip_tags($response), 0, 500));
-
-        // Cleanup
-        if (file_exists($cookie_file)) {
-            unlink($cookie_file);
-            $this->log_step($step++, "Deleted temporary cookie file");
-        }
-
-        // Decide outcome
-        if (!empty($final_url) && $httpCode < 400) {
-            $this->log_step($step++, "Login SUCCESS - Redirecting...");
-            echo "<script>
-                var win = window.open('about:blank', '_blank');
-                if (win) {
-                    win.location.href = '$final_url';
-                } else {
-                    alert('Popup blocked. Please allow popups.');
-                    window.location.href = '$final_url';
-                }
-            </script>";
-        } else {
-            $this->log_step($step++, "Login FAILED - Invalid credentials or server error");
-            echo "<script>alert('⚠️ Login failed. Please check your credentials!'); window.location.href='".site_url('storewebsite')."';</script>";
-        }
-
-        $this->log_step($step++, "AUTO LOGIN PROCESS COMPLETED");
-    }
-
-    // Helper to print log with step and time
-    private function log_step($step, $message) {
-        $time = date("H:i:s");
-        echo "<script>console.log('[$time] [$step] $message');</script>";
-        error_log("[$time] [$step] $message");
-        print("[$time] [$step] $message<br>");
-    }
-
-    // Helper to print additional debug info
-    private function log($message) {
-        $time = date("H:i:s");
-        echo "<script>console.log('   $message');</script>";
-        error_log("[$time] $message");
-        print("   $message<br>");
-    }
-
-    // Check if running on live server
-    private function isLiveServer() {
-        $host = $_SERVER['HTTP_HOST'];
-        $isLive = ($host !== 'localhost' && $host !== '127.0.0.1');
-        $this->log("Server check: Is live server? " . ($isLive ? 'Yes' : 'No'));
-        return $isLive;
-    }
-}
-
-
-
-    // public function websitedashboard() {
-    //          // Get customer data from model
-    //          $customers = $this->CustomerRegister_model->get_customer_strength_data();
-    //          $customer_data = $this->CustomerRegister_model->get_customer_status_counts();
-             
-    //          // Prepare data for view
-    //          $data = [
-    //              'customer_data' => $customer_data,
-    //              'customers' => $customers ?: [],
-    //              'method' => 'customer_strength'
-    //          ];
-     
-    //          // echo '<pre>';
-    //          // print_r($data);
-    //          // echo '</pre>';
-             
-    //          $this->load->view('website_dashboard', $data);
-    //     // $this->load->view('website_dashboard');
-
+    //Display all stored websites
+    // public function stored_website() {
+    //     $data['websites'] = $this->WebsiteModel->get_all_websites();
+    //     $data['method'] = 'store_website';
+    //     $this->load->view('website_dashboard', $data);
+       
     // }
 
-   
+
+    // //Scrape data from the website
+    // public function scrape_data() {
+    //     $this->load->library('form_validation');
+       
+    //     $this->form_validation->set_rules('userId', 'Username', 'required');
+    //     $this->form_validation->set_rules('password', 'Password', 'required');
+
+
+    //     if ($this->form_validation->run() == FALSE) {
+    //         $this->session->set_flashdata('error', validation_errors());
+    //         redirect('storewebsite');
+    //     }
+
+
+    //     $userId = $this->input->post('userId');
+    //     $password = $this->input->post('password');
+       
+    //     // Prepare API request
+    //     $api_url = 'http://127.0.0.1:5000/scrape';
+
+
+    //     $post_data = [
+    //         'username' => $userId,
+    //         'password' => $password
+    //     ];
+
+
+    //     $ch = curl_init();
+    //     curl_setopt_array($ch, [
+    //         CURLOPT_URL => $api_url,
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_POST => true,
+    //         CURLOPT_POSTFIELDS => json_encode($post_data),
+    //         CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+    //         CURLOPT_TIMEOUT => 300,
+    //         CURLOPT_SSL_VERIFYPEER => false
+    //     ]);
+
+
+    //     $response = curl_exec($ch);
+    //     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+       
+    //     if (curl_errno($ch)) {
+    //         $this->session->set_flashdata('error', 'API Connection Error: ' . curl_error($ch));
+    //         redirect('storewebsite');
+    //     }
+       
+    //     curl_close($ch);
+
+
+    //     $result = json_decode($response, true);
+       
+    //     if (json_last_error() !== JSON_ERROR_NONE) {
+    //         $this->session->set_flashdata('error', 'Invalid API response format');
+    //         redirect('storewebsite');
+    //     }
+
+
+    //     if ($result['status'] === 'success') {
+    //         try {
+    //             // Process invoiced orders
+    //             if (!empty($result['data']['invoiced_process_order'])) {
+    //                 $invoiced_data = array_map(function($item) {
+    //                     return [
+    //                         'area_name' => $item['Area Name'] ?? '',
+    //                         'cashmemo_generated' => $item['CashMemo Generated'] ?? '',
+    //                         'status' => $item['Status'] ?? '',
+    //                         'userid' => $this->session->userdata('id'),
+    //                         // 'created_at' => date('Y-m-d H:i:s')
+    //                     ];
+    //                 }, $result['data']['invoiced_process_order']);
+                   
+    //                 $this->WebScrapping_model->insert_data($invoiced_data);
+    //             }
+
+
+    //             // Process open orders
+    //             if (!empty($result['data']['open_orders'])) {
+    //                 $open_data = array_map(function($item) {
+    //                     return [
+    //                         'area_name' => $item['Area Name'] ?? '',
+    //                         'open_refill_orders' => $item['Open Refill Orders'] ?? '',
+    //                         'userid' => $this->session->userdata('id'),
+    //                         // 'created_at' => date('Y-m-d H:i:s')
+    //                     ];
+    //                 }, $result['data']['open_orders']);
+                   
+    //                 $this->OpenOrder_model->insert_data($open_data);
+    //             }
+
+
+    //             $this->session->set_flashdata('success', 'Data scraped and stored successfully!');
+    //             $this->save_raw_data($result);
+               
+    //         } catch (Exception $e) {
+    //             $this->session->set_flashdata('error', 'Database error: ' . $e->getMessage());
+    //             log_message('error', 'Storage error: ' . $e->getMessage());
+    //         }
+    //     } else {
+    //         $error_message = $result['message'] ?? 'Unknown error occurred';
+    //         $this->session->set_flashdata('error', 'Scraping failed: ' . $error_message);
+    //     }
+
+
+    //     redirect('storewebsite');
+    // }
+
+
+    // private function save_raw_data($result) {
+    //     $data_dir = FCPATH . 'data/';
+    //     if (!is_dir($data_dir)) {
+    //         mkdir($data_dir, 0755, true);
+    //     }
+       
+    //     $filename = $data_dir . 'scraped_data_' . date('Ymd_His') . '.json';
+    //     file_put_contents($filename, json_encode($result, JSON_PRETTY_PRINT));
+    // }
+
+
+    //  //Display invoice data in website
+    // public function display_invoice_data() {
+    //     $data['method'] = 'display_invoice_data';
+    //     $data['orders'] = $this->WebScrapping_model->get_all_data();
+    //     $this->load->view('website_dashboard', $data);
+    // }
+
+
+    // //Display open process data in website
+    // public function display_open_data() {
+    //     $data['method'] = 'display_open_data';
+    //     $data['excel_orders'] = $this->OpenOrder_model->get_all_data();
+    //     $this->load->view('website_dashboard', $data);
+    // }
+
+
 }
-?> 
