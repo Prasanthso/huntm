@@ -904,7 +904,7 @@
                                                     <td><?php echo htmlspecialchars($distributor->email); ?></td>
                                                     <td><?php echo htmlspecialchars($distributor->role); ?></td>
                                                     <td>
-                                                        <a href="<?= base_url('showing-distributor-remaining-data/' . $distributor->id); ?>"
+                                                        <a href="<?= base_url('showing-distributors-remaining-data/' . $distributor->id); ?>"
                                                         class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                             <i class="fas fa-eye me-1"></i> 
                                                         </a>
