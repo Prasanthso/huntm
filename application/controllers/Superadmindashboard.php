@@ -36,12 +36,12 @@ class Superadmindashboard extends CI_Controller {
             ];
             $this->session->set_userdata($session_data);
             error_log("Session: " . print_r($session_data, true));
-            redirect('Superadmindashboard/dashboard');
+            redirect('super-admin-dashboard');
         } 
         else {
             // Invalid credentials
             $this->session->set_flashdata('error', 'Invalid email or password');
-            redirect('Superadmindashboard/login');
+            redirect('super-admin-login');
         }
     }
 
@@ -90,7 +90,7 @@ class Superadmindashboard extends CI_Controller {
             } else {
                 $this->session->set_flashdata('error', 'Failed to create admin. Please try again.');
             }
-            redirect('Superadmindashboard/create_admin');
+            redirect('super-admin-create-admin');
         }
     }
 
@@ -131,7 +131,7 @@ class Superadmindashboard extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Failed to delete admin. Please try again.');
         }
-        redirect('Superadmindashboard/get_admin_data');
+        redirect('get-admin-data');
     }
 
     public function get_distributor_data() {
@@ -170,7 +170,7 @@ class Superadmindashboard extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Failed to delete distributor. Please try again.');
         }
-        redirect('Superadmindashboard/get_distributor_data');
+        redirect('get-distributors-data');
     }
 
     public function get_staff_data(){
@@ -208,7 +208,7 @@ class Superadmindashboard extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Failed to delete staff. Please try again.');
         }
-        redirect('Superadmindashboard/get_staff_data');
+        redirect('get-staff-data');
     }
 
     public function get_distributor_limits()
@@ -232,7 +232,7 @@ class Superadmindashboard extends CI_Controller {
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
-            redirect('Superadmindashboard/get_distributor_limits');
+            redirect('get-distributor-limits');
         } else {
             $distributor_limit = $this->input->post('distributor_limit');
             $distributor_id = $this->input->post('distributor_id');
@@ -244,7 +244,7 @@ class Superadmindashboard extends CI_Controller {
             } else {
                 $this->session->set_flashdata('error', 'No changes made or failed to update distributor limit.');
             }
-            redirect('Superadmindashboard/get_distributor_limits');
+            redirect('get-distributor-limits');
         }
     }
     
@@ -252,6 +252,6 @@ class Superadmindashboard extends CI_Controller {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('Superadmindashboard/login');
+        redirect('super-admin-login');
     }
 }

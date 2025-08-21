@@ -155,3 +155,52 @@ $route['user_profile_signup_submit'] = 'User_profile/process_signup';
 $route['user_profile_login'] = 'User_profile/login_form';
 $route['user_profile_login_submit'] = 'User_profile/process_login';
 $route['admin_data'] = 'Admindashboard/get_admin_data';
+
+// Super Admin Routes
+$route['super-admin-login'] = 'Superadmindashboard/login';
+$route['super-admin-login-submit'] = 'Superadmindashboard/process_login';
+$route['super-admin-dashboard'] = 'Superadmindashboard/dashboard';
+$route['super-admin-create-admin'] = 'Superadmindashboard/create_admin';
+$route['get-admin-data'] = 'Superadmindashboard/get_admin_data';
+$route['showing-admin-remaining-data/(:any)'] = 'Superadmindashboard/showing_admin_remaining_data/$1';
+$route['delete-admin/(:any)'] = 'Superadmindashboard/delete_admin/$1';
+$route['get-distributors-data'] = 'Superadmindashboard/get_distributor_data';
+$route['showing-distributor-remaining-data/(:any)'] = 'Superadmindashboard/showing_distributor_remaining_data/$1';
+$route['delete-distributor/(:any)'] = 'Superadmindashboard/delete_distributor/$1';
+$route['get-staff-data'] = 'Superadmindashboard/get_staff_data';
+$route['showing-staff-remaining-data/(:any)'] = 'Superadmindashboard/showing_staff_remaining_data/$1';
+$route['delete-staff/(:any)'] = 'Superadmindashboard/delete_staff/$1';
+$route['get-distributor-limits'] = 'Superadmindashboard/get_distributor_limits';
+$route['update-distributor-limits'] = 'Superadmindashboard/update_distributor_limits';
+$route['logout'] = 'Superadmindashboard/logout';
+
+
+//Admin Routes
+$route['admin-dashboard'] = 'Admindashboard/dashboard';
+$route['admin-profile'] = 'Admindashboard/profile';
+$route['submit-data'] = 'Admindashboard/add';
+$route['create-distributor'] = 'Admindashboard/create_distributor';
+$route['assign-same-pages-to-all-staff'] = 'Admindashboard/assign_same_pages_to_all_staff';
+$route['get-distributor-data'] = 'Admindashboard/get_distributor_data';
+$route['showing-distributor-remaining-data/(:any)'] = 'Admindashboard/showing_distributor_remaining_data/$1';
+$route['get-staff-limits'] = 'Admindashboard/get_staff_limits';
+$route['update-staff-limits'] = 'Admindashboard/update_staff_limits';
+$route['delete-distributors/(:any)'] = 'Admindashboard/delete_distributor/$1';
+$route['admin-logout'] = 'Admindashboard/logout';
+
+
+//Distributor Routes
+$route['distributor-dashboard'] = 'Distributordashboard/dashboard';
+$route['distributor-profile'] = 'Distributordashboard/profile';
+$route['submit-distributor-data'] = 'Distributordashboard/add';
+$route['create-staff'] = 'Distributordashboard/create_staff';
+$route['get-staffs-data'] = 'Distributordashboard/get_staff_data';
+$route['showing-staffs-remaining-data/(:any)'] = 'Distributordashboard/showing_staff_remaining_data/$1';
+$route['delete-staffs/(:any)'] = 'Distributordashboard/delete_staff/$1';
+$route['distributor-logout'] = 'Distributordashboard/logout';
+
+
+//Pages
+$route['terms-of-use'] = 'Pages/termofuse';
+$route['terms-and-conditions'] = 'Pages/termsandconditions';
+$route['privacy-policy'] = 'Pages/privacy_policy';

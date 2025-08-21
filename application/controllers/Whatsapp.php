@@ -1,94 +1,83 @@
 <?php
-class Whatsapp extends CI_Controller
-{
-    private $accessToken = 'EAAVGOItJBl8BPP89pQhfnVJOi59vezPfxZClKII4MEaWiuRPeVZAg3jhEiX5HWCz9tZBFOPWZBZCJi7VEEZCbFAADOJZAw89qlyGZA1ZByeg7vwC9DZAvY5Qiwuz3B9ZC3t83QB7myFxGuMDsJlmxexlPhi5nh44rMCSIj0xjZB1LXi7ZBNxD95FJuo6XqSG04vaCqzOIZAp0wPuAVZAIx29pktoUaCjxUHBTgUGQTCFkKxNVfY82QZD'; // Use token from your screenshot
-    private $phoneNumberId = '718395394693618';
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-    public function __construct()
-    {
+class Whatsapp extends CI_Controller {
+
+    private $api_key;
+    private $base_url;
+
+    public function __construct() {
         parent::__construct();
-        $this->load->model('Customer_model');
+        $this->load->model('Whatsapp_model');
+        $this->load->library('session');
+
+        // ✅ Authentication & Base URL
+        $this->api_key  = "08fc4fffd6d31a01e1a180b7616d8e96790358b67adc064554fed640f91bccb7aa53f60b022e8adccb668554691d6ae8";
+        $this->base_url = "https://api.talkingshops.com/v1";
     }
 
-    public function index()
-    {
-        $data['customers'] = $this->Customer_model->get_customers();
-        $this->load->view('whatsapp_view', $data);
+    // Load users
+    public function index() {
+        $data['users'] = $this->Whatsapp_model->get_users();
+        $this->load->view('send_whatsapp', $data);
     }
 
-    public function send_message($id = null)
-{
-    echo "DEBUG: Received ID = " . $id . "<br>";
+    // Send free-form text message
+    public function send_message() {
+        $user_id = $this->input->post('user_id');
+        $user = $this->Whatsapp_model->get_user_by_id($user_id);
 
-    if (!$id) {
-        echo "Customer ID is required.";
-        return;
-    }
-
-    $customer = $this->Customer_model->get_customer($id);
-
-    if (!$customer) {
-        echo "Customer not found.";
-        return;
-    }
-
-    $phone = $this->format_phone_number($customer->phone);
-    if (!$phone) {
-        echo "Invalid phone number.";
-        return;
-    }
-
-    $url = 'https://graph.facebook.com/v19.0/' . $this->phoneNumberId . '/messages';
-
-    $payload = [
-        "messaging_product" => "whatsapp",
-        "to" => $phone,
-        "type" => "template",
-        "template" => [
-            "name" => "customer_details",
-            "language" => ["code" => "en"], // ✅ correct language code
-            "components" => [[
-                "type" => "body",
-                "parameters" => [
-                    ["type" => "text", "text" => $customer->name],
-                    ["type" => "text", "text" => $customer->customer_id],
-                    ["type" => "text", "text" => "₹" . number_format($customer->amount, 2)]
-                ]
-            ]]
-        ]
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $this->accessToken,
-        'Content-Type: application/json'
-    ]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    $response = curl_exec($ch);
-    if ($response === false) {
-        echo "cURL Error: " . curl_error($ch);
-        curl_close($ch);
-        return;
-    }
-    curl_close($ch);
-
-    $result = json_decode($response, true);
-    echo "<pre>WhatsApp API Response:\n";
-    print_r($result);
-}
-
-
-
-    private function format_phone_number($phone)
-    {
-        $phone = preg_replace('/\D/', '', $phone);
-        if (strlen($phone) === 10) {
-            return '+91' . $phone;
-        } elseif (strlen($phone) === 12 && substr($phone, 0, 2) === '91') {
-            return '+' . $phone;
+        if (!$user) {
+            $this->session->set_flashdata('error', 'User not found');
+            redirect('whatsapp');
         }
-        return false;
+
+        $recipient = $user['phone']; // number with country code
+
+        // ✅ TalkingShops text message endpoint
+        $url = $this->base_url . "/messages/text";
+
+        // ✅ Payload for free-form text
+        $payload = [
+            "recipient" => $recipient,
+            "message"   => "Hello " . $user['name'] . ", this is a test message from TalkingShops API."
+        ];
+
+        // 🔥 CURL request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "x-tenant-api-key: {$this->api_key}"
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+        $response = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $api_response = json_decode($response, true);
+
+        // ✅ Save to DB if success
+        if (isset($api_response['message_id'])) {
+            $data_insert = [
+                'user_id'    => $user['id'],
+                'message_id' => $api_response['message_id'],
+                'status'     => isset($api_response['status']) ? $api_response['status'] : 'queued',
+                'sent_at'    => date('Y-m-d H:i:s')
+            ];
+            $this->db->insert('whatsapp_messages', $data_insert);
+        }
+
+        // ✅ Show response
+        if (in_array($httpcode, [200,201,202])) {
+            $this->session->set_flashdata('success', 'Message sent successfully. Name: ' . $user['name']);
+        } else {
+            $this->session->set_flashdata('error', 'Failed to send message: ' . $response);
+        }
+
+        redirect('whatsapp');
     }
 }

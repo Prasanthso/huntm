@@ -62,7 +62,7 @@ class Admindashboard extends CI_Controller {
 
             if ($this->form_validation->run() === FALSE) {
                 $this->session->set_flashdata('error', 'Please correct the errors in the form.');
-                redirect('AdminDashboard/profile');
+                redirect('admin-profile');
             } 
             else {
                 $data = [
@@ -82,15 +82,15 @@ class Admindashboard extends CI_Controller {
                 $update = $this->Admindashboard_model->update_admin_data($admin_id, $data);
                 if ($update) {
                     $this->session->set_flashdata('success', 'Profile updated successfully.');
-                    redirect('AdminDashboard/profile');
+                    redirect('admin-profile');
                 } else {
                     $this->session->set_flashdata('error', 'Failed to update profile. No matching record found or database error.');
-                    redirect('AdminDashboard/profile');
+                    redirect('admin-profile');
                 }
             }
         } else {
             $this->session->set_flashdata('error', 'No data submitted.');
-            redirect('AdminDashboard/profile');
+            redirect('admin-profile');
         }
     }
 
@@ -180,7 +180,7 @@ class Admindashboard extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Failed to create distributor. Please try again.');
         }
-        redirect('Admindashboard/create_distributor');
+        redirect('create-distributor');
     }
 }
 
@@ -208,7 +208,7 @@ class Admindashboard extends CI_Controller {
 
             // Flash success message and reload
             $this->session->set_flashdata('success', 'Pages assigned to all staff successfully.');
-            redirect('Admindashboard/assign_same_pages_to_all_staff');
+            redirect('assign-same-pages-to-all-staff');
         }
 
         // 4. Get selected pages from DB (from first staff as reference)
@@ -271,7 +271,7 @@ class Admindashboard extends CI_Controller {
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', 'Invalid input. Please try again.');
-            redirect('Admindashboard/get_staff_limits');
+            redirect('get-staff-limits');
         } else {
             $staff_limit = $this->input->post('staff_limit');
             $distributor_id = $this->input->post('distributor_id');
@@ -281,7 +281,7 @@ class Admindashboard extends CI_Controller {
             } else {
                 $this->session->set_flashdata('error', 'Failed to update staff limit. Please try again.');
             }
-            redirect('Admindashboard/get_staff_limits');
+            redirect('get-staff-limits');
         }
     }
     
@@ -304,7 +304,7 @@ class Admindashboard extends CI_Controller {
             $this->session->set_flashdata('error', 'Failed to delete distributor. Please try again.');
         }
 
-        redirect('Admindashboard/get_distributor_data');
+        redirect('get-distributor-data');
     }
 
     public function logout() {

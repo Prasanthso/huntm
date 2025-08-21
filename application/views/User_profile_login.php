@@ -319,10 +319,16 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <p>&copy; <?php echo date('Y'); ?> Huntm Customer Engagement Platform. All rights reserved.</p>
+                <p class="mb-2">&copy; <?php echo date('Y'); ?> Huntm Customer Engagement Platform. All rights reserved.</p>
+                <div>
+                    <a href="<?php echo base_url('terms-of-use'); ?>" class="text-white text-decoration-none me-3">Terms of Use</a>
+                    <a href="<?php echo base_url('terms-and-conditions'); ?>" class="text-white text-decoration-none me-3">Terms &amp; Conditions</a>
+                    <a href="<?php echo base_url('privacy-policy'); ?>" class="text-white text-decoration-none">Privacy Policy</a>
+                </div>
             </div>
         </div>
     </footer>
+
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -442,24 +448,24 @@
 
     <!-- Login Error Modal -->
     <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title" id="loginErrorModalLabel">
-            <i class="fas fa-exclamation-circle me-2"></i> Login Error
-            </h5>
-            <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="loginErrorModalLabel">
+                <i class="fas fa-exclamation-circle me-2"></i> Login Error
+                </h5>
+                <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+            </div>
+            <div class="modal-body">
+                <?php if($this->session->flashdata('error')): ?>
+                <?php echo $this->session->flashdata('error'); ?>
+                <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
         </div>
-        <div class="modal-body">
-            <?php if($this->session->flashdata('error')): ?>
-            <?php echo $this->session->flashdata('error'); ?>
-            <?php endif; ?>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-        </div>
-    </div>
     </div>
 
     <?php if($this->session->flashdata('error')): ?>
@@ -470,7 +476,5 @@
         });
         </script>
     <?php endif; ?>
-
-
 </body>
 </html>

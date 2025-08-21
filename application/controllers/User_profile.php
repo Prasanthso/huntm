@@ -49,10 +49,10 @@ class User_profile extends CI_Controller {
             // Redirect based on role
             switch ($user->role) {
                 case 'admin':
-                    redirect('admindashboard/dashboard');
+                    redirect('admin-dashboard');
                     break;
                 case 'distributor':
-                    redirect('distributordashboard/dashboard');
+                    redirect('distributor-dashboard');
                     break;
                 case 'staff':
                     redirect('dashboard');  // make sure this route exists

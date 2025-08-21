@@ -600,7 +600,7 @@
             </button>
             <h1 class="header-title">LSA Admin Portal</h1>
         </div>
-        <!-- <a href="<?php echo base_url('AdminDashboard/dashboard'); ?>" class="header-brand">
+        <!-- <a href="<?php echo base_url('admin-dashboard'); ?>" class="header-brand">
             <img src="<?php echo base_url(); ?>Image/Huntm-logo.svg" alt="Huntm Logo">
             <span>LSA Admin</span>
         </a> -->
@@ -620,42 +620,42 @@
         <div class="sidebar-menu">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="<?php echo base_url('AdminDashboard/dashboard'); ?>" 
+                    <a href="<?php echo base_url('admin-dashboard'); ?>" 
                        class="nav-link <?php echo ($method == 'admindashboard') ? 'active' : ''; ?>">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url('AdminDashboard/profile'); ?>" 
+                    <a href="<?php echo base_url('admin-profile'); ?>" 
                        class="nav-link <?php echo ($method == 'profile')? 'active' : ''; ?>">
                         <i class="fas fa-user-cog"></i>
                         <span>My Profile</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url('AdminDashboard/create_distributor'); ?>" 
+                    <a href="<?php echo base_url('create-distributor'); ?>" 
                        class="nav-link <?php echo ($method == 'create_distributor') ? 'active' : ''; ?>">
                         <i class="fas fa-user-plus"></i>
                         <span>Create Distributor</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url('AdminDashboard/get_distributor_data'); ?>" 
+                    <a href="<?php echo base_url('get-distributor-data'); ?>" 
                        class="nav-link <?php echo ($method == 'get_distributor_data') ? 'active' : ''; ?>">
                         <i class="fas fa-users-cog"></i>
                         <span>Manage Distributor</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url('AdminDashboard/assign_same_pages_to_all_staff'); ?>" 
+                    <a href="<?php echo base_url('assign-same-pages-to-all-staff'); ?>" 
                        class="nav-link <?php echo ($method == 'assign_same_pages_to_all_staff') ? 'active' : ''; ?>">
                         <i class="fas fa-tasks"></i>
                         <span>Manage Pages</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url('AdminDashboard/get_staff_limits'); ?>" 
+                    <a href="<?php echo base_url('get-staff-limits'); ?>" 
                        class="nav-link <?php echo ($method == 'get_staff_limits') ? 'active' : ''; ?>">
                         <i class="bi bi-arrow-clockwise"></i>
                         <span>Update Staff Limits</span>
@@ -684,7 +684,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="<?= base_url('Admindashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+                    <a href="<?= base_url('admin-logout'); ?>" class="btn btn-danger">Logout</a>
                 </div>
             </div>
         </div>
@@ -753,7 +753,7 @@
                                         <i class="fas fa-user-tag me-2 text-muted"></i>
                                         <span class="badge bg-primary"><?php echo htmlspecialchars($admin_data->role ?? 'N/A'); ?></span>
                                     </div>
-                                    <a href="<?php echo base_url('AdminDashboard/profile'); ?>" class="btn btn-primary btn-sm">
+                                    <a href="<?php echo base_url('admin-profile'); ?>" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit me-1"></i> Edit Profile
                                     </a>
                                 </div>
@@ -784,7 +784,7 @@
                                     <?php echo $this->session->flashdata('success'); ?>
                                 </div>
                             <?php endif; ?>
-                            <form id="profileForm" method="post" action="<?php echo base_url('AdminDashboard/add'); ?>">
+                            <form id="profileForm" method="post" action="<?php echo base_url('submit-data'); ?>">
                                 <h5 class="mb-4"><i class="fas fa-user me-2 text-primary"></i>Basic Information</h5>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
@@ -892,7 +892,7 @@
                                     You have created <?php echo $current_distributor_count; ?> out of <?php echo $distributor_limit; ?> allowed distributor accounts.
                                 </div>
                             <?php endif; ?>
-                            <?php echo form_open('Admindashboard/create_distributor'); ?>
+                            <?php echo form_open('create-distributor'); ?>
                                 <div class="mb-3">
                                     <label for="full_name" class="form-label"><i class="fas fa-user me-1 text-muted"></i>Full Name</label>
                                     <input type="text" class="form-control <?php echo form_error('full_name') ? 'is-invalid' : ''; ?>" 
@@ -997,7 +997,7 @@
                                                     <td><?= htmlspecialchars($distributor->email); ?></td>
                                                     <td class="text-capitalize"><?= htmlspecialchars($distributor->role); ?></td>
                                                     <td>
-                                                        <a href="<?= base_url('Admindashboard/showing_distributor_remaining_data/' . $distributor->id); ?>"
+                                                        <a href="<?= base_url('showing-distributor-remaining-data/' . $distributor->id); ?>"
                                                         class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                             <i class="fas fa-eye me-1"></i> 
                                                         </a>
@@ -1046,7 +1046,7 @@
                     deleteModal.addEventListener('show.bs.modal', function (event) {
                         const button = event.relatedTarget;
                         const distributorId = button.getAttribute('data-id');
-                        const deleteUrl = "<?= base_url('Admindashboard/delete_distributor/') ?>" + distributorId;
+                        const deleteUrl = "<?= base_url('delete-distributors/') ?>" + distributorId;
                         confirmBtn.setAttribute('href', deleteUrl);
                     });
                 </script>
@@ -1205,7 +1205,7 @@
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form method="post" action="<?php echo base_url('Admindashboard/update_staff_limits'); ?>">
+                            <form method="post" action="<?php echo base_url('update-staff-limits'); ?>">
                                 <div class="modal-body">
                                     <input type="hidden" name="distributor_id" id="modal_distributor_id">
                                     <div class="mb-3">

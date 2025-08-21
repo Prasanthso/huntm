@@ -581,6 +581,13 @@
             from { left: 0; }
             to { left: calc(-1 * var(--sidebar-width))); }
         }
+
+        /* Whatsapp Icon Style */
+        .whatsapp_icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -607,8 +614,8 @@
 
     <!-- Sidebar -->
      
-    <div id="sidebar">
-        <div class="list-group list-group-flush">
+    <div id="sidebar" class="mt-0">
+        <div class="list-group list-group-flush mt-2">
             <a href="<?php echo base_url('dashboard'); ?>" class="list-group-item list-group-item-action <?php echo ($method == 'dashboard') ? 'active' : ''; ?>">
                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
             </a>
@@ -2019,6 +2026,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th>Total Customers</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -2151,6 +2159,41 @@
                             $('.content-section').scrollTop(0);
                         }
 
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const start = (currentAreaPage - 1) * recordsPerPage;
+                        //     const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                        //     const pageAreas = areaBreakdownData.slice(start, end);
+                        //     const tableBody = $("#areaBreakdownBody");
+                            
+                        //     tableBody.empty();
+                            
+                        //     if (pageAreas.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageAreas.forEach(item => {
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${item.area}">${item.area}</td>
+                        //                     <td>${item.total}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination info
+                        //     $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        // }
+
                         function updateAreaBreakdownTable() {
                             const start = (currentAreaPage - 1) * recordsPerPage;
                             const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
@@ -2160,13 +2203,23 @@
                             tableBody.empty();
                             
                             if (pageAreas.length === 0) {
-                                tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageAreas.forEach(item => {
                                     tableBody.append(`
                                         <tr>
                                             <td class="clickabled area-click" data-area="${item.area}">${item.area}</td>
                                             <td>${item.total}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
@@ -2177,6 +2230,38 @@
                             $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
                             $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
                         }
+
+                        // Tooltip logic
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -2207,7 +2292,7 @@
                             tableBody.empty();
                             
                             if (pageRows.length === 0) {
-                                tableBody.html('<tr><td colspan="6" class="text-center">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="6" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageRows.forEach(customer => {
                                     const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge bg-success' : 'badge bg-primary';
@@ -2373,6 +2458,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th>Connection Count</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -2502,6 +2588,41 @@
                             $('.content-section').scrollTop(0);
                         }
 
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const start = (currentAreaPage - 1) * recordsPerPage;
+                        //     const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                        //     const pageAreas = areaBreakdownData.slice(start, end);
+                        //     const tableBody = $("#areaBreakdownBody");
+                            
+                        //     tableBody.empty();
+                            
+                        //     if (pageAreas.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageAreas.forEach(({ area, total }) => {
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${area}">${area}</td>
+                        //                     <td>${total}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination info
+                        //     $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        // }
+
                         function updateAreaBreakdownTable() {
                             const start = (currentAreaPage - 1) * recordsPerPage;
                             const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
@@ -2511,13 +2632,23 @@
                             tableBody.empty();
                             
                             if (pageAreas.length === 0) {
-                                tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageAreas.forEach(({ area, total }) => {
                                     tableBody.append(`
                                         <tr>
                                             <td class="clickabled area-click" data-area="${area}">${area}</td>
                                             <td>${total}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
@@ -2528,6 +2659,40 @@
                             $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
                             $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
                         }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -2819,6 +2984,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th>Customer Count</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -2959,6 +3125,54 @@
                             viewStack.push(currentView);
                             currentView = 'area';
                         }
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownView() {
+                        //     const totalRecords = areaBreakdownData.length;
+                        //     const totalPages = Math.ceil(totalRecords / recordsPerPage);
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
+                        //     const pageData = areaBreakdownData.slice(startIdx, endIdx);
+
+                        //     const $tbody = $('#areaBreakdownBody');
+                        //     $tbody.empty();
+
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="2" class="text-center">No areas found</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+
+                        //         // Rebind click events
+                        //         $('.area-link').off('click').on('click', function() {
+                        //             const area = $(this).data('area');
+                        //             showCustomerDetails(area);
+                        //         });
+                        //     }
+
+                        //     // Update pagination controls
+                        //     const startRecord = startIdx + 1;
+                        //     const endRecord = endIdx;
+                        //     $('#areaPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
+
+                        //     // Update pagination controls
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage <= 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
+                        // }
 
                         function updateAreaBreakdownView() {
                             const totalRecords = areaBreakdownData.length;
@@ -2971,7 +3185,7 @@
                             $tbody.empty();
 
                             if (pageData.length === 0) {
-                                $tbody.append('<tr><td colspan="2" class="text-center">No areas found</td></tr>');
+                                $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
                                     $tbody.append(`
@@ -2980,6 +3194,16 @@
                                                 ${escapeHtml(item.area)}
                                             </td>
                                             <td>${item.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
@@ -2995,11 +3219,42 @@
                             const startRecord = startIdx + 1;
                             const endRecord = endIdx;
                             $('#areaPageRange').text(`${startRecord}-${endRecord} of ${totalRecords}`);
-
-                            // Update pagination controls
                             $('#prevAreaPage').toggleClass('disabled', currentAreaPage <= 1);
                             $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= totalPages);
                         }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -3258,6 +3513,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th>Pending KYC Count</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -3380,16 +3636,53 @@
                             $('#customerDetailsView').hide();
                         }
 
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const $tbody = $('#areaBreakdownBody');
+                            
+                        //     $tbody.empty();
+                            
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        // }
+
                         function updateAreaBreakdownTable() {
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
                             const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
                             const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
                             const $tbody = $('#areaBreakdownBody');
-                            
+
                             $tbody.empty();
-                            
+
                             if (pageData.length === 0) {
-                                $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                                $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
                                     $tbody.append(`
@@ -3398,16 +3691,60 @@
                                                 ${escapeHtml(item.area)}
                                             </td>
                                             <td>${item.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
                             }
-                            
+
                             // Update pagination controls
                             $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
                             $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
                             $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
                         }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                    tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                                }
+                            });
+
+                            document.addEventListener("mouseout", function (e) {
+                                if (e.target.classList.contains("whatsapp_icon")) {
+                                    const tooltip = document.querySelector(".custom-tooltip");
+                                    if (tooltip) tooltip.remove();
+                                }
+                            });
+
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -3451,7 +3788,7 @@
                             $tbody.empty();
                             
                             if (pageData.length === 0) {
-                                $tbody.append('<tr><td colspan="7" class="text-center">No data available</td></tr>');
+                                $tbody.append('<tr><td colspan="7" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(customer => {
                                     const statusBadge = getStatusBadge(customer.Consumer_Sub_Status);
@@ -3645,6 +3982,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th>Due Count</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -3763,16 +4101,53 @@
                             currentView = 'area';
                         }
 
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const $tbody = $('#areaBreakdownBody');
+                            
+                        //     $tbody.empty();
+                            
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        // }
+
                         function updateAreaBreakdownTable() {
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
                             const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
                             const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
                             const $tbody = $('#areaBreakdownBody');
-                            
+
                             $tbody.empty();
-                            
+
                             if (pageData.length === 0) {
-                                $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                                $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
                                     $tbody.append(`
@@ -3781,16 +4156,60 @@
                                                 ${escapeHtml(item.area)}
                                             </td>
                                             <td>${item.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
                             }
-                            
+
                             // Update pagination controls
                             $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
                             $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
                             $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
                         }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -3836,7 +4255,7 @@
                             $tbody.empty();
                             
                             if (pageData.length === 0) {
-                                $tbody.append('<tr><td colspan="7" class="text-center">No data available</td></tr>');
+                                $tbody.append('<tr><td colspan="7" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(customer => {
                                     // Use status property to match filtering logic
@@ -4049,6 +4468,7 @@
                                             <tr>
                                                 <th>Area Name</th>
                                                 <th>Due Count</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="areaTableBody"></tbody>
@@ -4188,16 +4608,53 @@
                             $('#customerDetailsView').hide();
                         }
 
+                        // Not show an tooltip this below code
+                        
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const tableBody = $("#areaTableBody");
+                            
+                        //     tableBody.empty();
+                            
+                        //     if (pageData.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(areaData => {
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
+                        //                         ${escapeHtml(areaData.area)}
+                        //                     </td>
+                        //                     <td>${areaData.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+                            
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", endIdx >= areaBreakdownData.length);
+                        // }
+
                         function updateAreaBreakdownTable() {
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
                             const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
                             const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
                             const tableBody = $("#areaTableBody");
-                            
+
                             tableBody.empty();
-                            
+
                             if (pageData.length === 0) {
-                                tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(areaData => {
                                     tableBody.append(`
@@ -4206,16 +4663,60 @@
                                                 ${escapeHtml(areaData.area)}
                                             </td>
                                             <td>${areaData.count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width: 40px; height: 40px; cursor: pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
                             }
-                            
+
                             // Update pagination controls
                             $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
                             $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
                             $("#nextAreaPage").toggleClass("disabled", endIdx >= areaBreakdownData.length);
                         }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -4246,7 +4747,7 @@
                             tableBody.empty();
                             
                             if (pageRows.length === 0) {
-                                tableBody.html('<tr><td colspan="7" class="text-center">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="7" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageRows.forEach(customer => {
                                     const statusBadge = getStatusBadge(customer.status);
@@ -4481,6 +4982,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th class="text-center">Missing Phone Count</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -4650,6 +5152,76 @@
                             $('.content-section').scrollTop(0);
                         }
 
+                         // Not show an tooltip this below code
+
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, filteredAreas.length);
+                        //     const tableBody = $("#areaBreakdownBody");
+
+                        //     tableBody.empty();
+
+                        //     // Filter areas based on current scheme and status
+                        //     filteredAreas = areaBreakdownData.filter(area => {
+                        //         let count;
+                        //         if (currentStatus !== 'ALL') {
+                        //             count = area[currentStatus.toLowerCase() + 'Count'];
+                        //             if (count <= 0) return false;
+
+                        //             if (currentScheme !== 'ALL') {
+                        //                 return currentScheme === 'PMUY' ? area.pmuyCount > 0 : area.nonPmuCount > 0;
+                        //             }
+                        //             return true;
+                        //         }
+
+                        //         if (currentScheme !== 'ALL') {
+                        //             count = currentScheme === 'PMUY' ? area.pmuyCount : area.nonPmuCount;
+                        //             return count > 0;
+                        //         }
+
+                        //         return area.totalCount > 0;
+                        //     });
+
+                        //     console.log(`Filtered ${filteredAreas.length} areas for scheme: ${currentScheme}, status: ${currentStatus}`);
+
+                        //     const pageAreas = filteredAreas.slice(startIdx, startIdx + recordsPerPage);
+
+                        //     if (pageAreas.length === 0) {
+                        //         tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
+                        //     } else {
+                        //         pageAreas.forEach(areaData => {
+                        //             let count;
+                        //             if (currentStatus !== 'ALL') {
+                        //                 count = areaData[currentStatus.toLowerCase() + 'Count'];
+                        //             } else {
+                        //                 count = currentScheme === 'PMUY' ? areaData.pmuyCount :
+                        //                     currentScheme === 'Non PMUY' ? areaData.nonPmuCount :
+                        //                     areaData.totalCount;
+                        //             }
+
+                        //             tableBody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
+                        //                         ${escapeHtml(areaData.area)}
+                        //                     </td>
+                        //                     <td class="text-center">${count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
+                        //                         Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+
+                        //     // Update pagination
+                        //     $("#areaPageInfo").text(`${startIdx + 1} - ${endIdx} of ${filteredAreas.length}`);
+                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                        //     $("#nextAreaPage").toggleClass("disabled", endIdx >= filteredAreas.length);
+                        // }
+
                         function updateAreaBreakdownTable() {
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
                             const endIdx = Math.min(startIdx + recordsPerPage, filteredAreas.length);
@@ -4683,7 +5255,7 @@
                             const pageAreas = filteredAreas.slice(startIdx, startIdx + recordsPerPage);
 
                             if (pageAreas.length === 0) {
-                                tableBody.html('<tr><td colspan="2" class="no-data">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="3" class="no-data text-danger">No data available</td></tr>');
                             } else {
                                 pageAreas.forEach(areaData => {
                                     let count;
@@ -4701,6 +5273,16 @@
                                                 ${escapeHtml(areaData.area)}
                                             </td>
                                             <td class="text-center">${count}</td>
+                                            <td>
+                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                    <img src="<?= base_url('Image/w1.png') ?>" 
+                                                        alt="WhatsApp" 
+                                                        class="whatsapp_icon" 
+                                                        style="width:40px;height:40px;cursor:pointer;" 
+                                                        data-tooltip="Send message WhatsApp">
+                                                    Whatsapp
+                                                </a>
+                                            </td>
                                         </tr>
                                     `);
                                 });
@@ -4711,6 +5293,43 @@
                             $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
                             $("#nextAreaPage").toggleClass("disabled", endIdx >= filteredAreas.length);
                         }
+
+                        // ====================
+                        // Tooltip logic (pure JS)
+                        // ====================
+                        
+                        document.addEventListener("mouseover", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltipText = e.target.getAttribute("data-tooltip");
+                                const tooltip = document.createElement("div");
+                                tooltip.className = "custom-tooltip";
+                                tooltip.innerText = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const rect = e.target.getBoundingClientRect();
+                                tooltip.style.position = "absolute";
+                                tooltip.style.background = "#333";
+                                tooltip.style.color = "#fff";
+                                tooltip.style.padding = "5px 8px";
+                                tooltip.style.borderRadius = "4px";
+                                tooltip.style.fontSize = "12px";
+                                tooltip.style.pointerEvents = "none";
+                                tooltip.style.zIndex = "9999";
+
+                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+                                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+
+                                e.target.dataset.tooltipElement = tooltip;
+                            }
+                        });
+
+                        document.addEventListener("mouseout", function (e) {
+                            if (e.target.classList.contains("whatsapp_icon")) {
+                                const tooltip = document.querySelector(".custom-tooltip");
+                                if (tooltip) tooltip.remove();
+                            }
+                        });
+
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -4750,7 +5369,7 @@
                                 $('.content-section').scrollTop(0);
                             } else {
                                 console.error(`No data found for area: ${area}`);
-                                $('#customerTableBody').html('<tr><td colspan="6" class="no-data">No data available for this area</td></tr>');
+                                $('#customerTableBody').html('<tr><td colspan="6" class="no-data text-danger">No data available for this area</td></tr>');
                             }
                         }
 
@@ -4763,7 +5382,7 @@
                             tableBody.empty();
 
                             if (pageRows.length === 0) {
-                                tableBody.html('<tr><td colspan="6" class="no-data">No data available</td></tr>');
+                                tableBody.html('<tr><td colspan="6" class="no-data text-danger">No data available</td></tr>');
                             } else {
                                 pageRows.forEach(customer => {
                                     const statusBadge = getStatusBadge(customer.Consumer_Sub_Status);
@@ -5012,11 +5631,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-danger">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="accessDeniedModalLabel">Access Denied</h5>
+                    <h5 class="modal-title" id="accessDeniedModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Access Denied</h5>
                     <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body text-center">
-                    You do not have permission to access this page.
+                    You do not have permission to access this page. Please contact your admin for assistance.
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>

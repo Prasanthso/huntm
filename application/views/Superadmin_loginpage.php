@@ -289,7 +289,7 @@
                             <h2><i class="fas fa-sign-in-alt me-2"></i>Account Login</h2>
                         </div>
                         <div class="auth-body">
-                            <form id="loginForm" action="<?php echo site_url('Superadmindashboard/process_login'); ?>" method="post">
+                            <form id="loginForm" action="<?php echo site_url('super-admin-login-submit'); ?>" method="post">
                                 <div class="form-group">
                                     <label for="email" class="form-label">Email Address</label>
                                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>

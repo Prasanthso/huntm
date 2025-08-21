@@ -590,33 +590,33 @@
             <h4><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h4>
         </div>
         <div class="list-group list-group-flush flex-grow-1">
-            <a href="<?php echo base_url('Superadmindashboard/dashboard'); ?>" 
+            <a href="<?php echo base_url('super-admin-dashboard'); ?>" 
                class="list-group-item list-group-item-action <?php echo ($method == 'superadmindashboard') ? 'active' : ''; ?>">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="<?php echo base_url('Superadmindashboard/create_admin'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/create_admin')) ? 'active' : ''; ?>">
+            <a href="<?php echo base_url('super-admin-create-admin'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('super-admin-create-admin')) ? 'active' : ''; ?>">
                 <i class="fas fa-user-plus"></i>
                 <span>Create Admin</span>
             </a>
-            <a href="<?php echo base_url('Superadmindashboard/get_admin_data'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/get_admin_data')) ? 'active' : ''; ?>">
+            <a href="<?php echo base_url('get-admin-data'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('get-admin-data')) ? 'active' : ''; ?>">
                 <i class="fas fa-users-cog"></i>
                 <span>Manage Admins</span>
             </a>
-            <a href="<?php echo base_url('Superadmindashboard/get_distributor_data'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/get_distributor_data')) ? 'active' : ''; ?>">
+            <a href="<?php echo base_url('get-distributors-data'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('get-distributors-data')) ? 'active' : ''; ?>">
                 <i class="fas fa-users-cog"></i>
                 <span>Manage Distributor</span>
             </a>
-            <a href="<?php echo base_url('Superadmindashboard/get_staff_data'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/get_staff_data')) ? 'active' : ''; ?>">
+            <a href="<?php echo base_url('get-staff-data'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('get-staff-data')) ? 'active' : ''; ?>">
                 <i class="fas fa-users-cog"></i>
                 <span>Manage Staff</span>
             </a>
-            <a href="<?php echo base_url('Superadmindashboard/get_distributor_limits'); ?>" 
-               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/get_distributor_limits')) ? 'active' : ''; ?>">
+            <a href="<?php echo base_url('get-distributor-limits'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('get-distributor-limits')) ? 'active' : ''; ?>">
                 <i class="bi bi-arrow-clockwise"></i>
                 <span>Update Distributor Limits</span>
             </a>
@@ -642,7 +642,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="<?= base_url('Superadmindashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+                    <a href="<?= base_url('logout'); ?>" class="btn btn-danger">Logout</a>
                 </div>
             </div>
         </div>
@@ -657,7 +657,7 @@
                         <h1 class="mb-4">Dashboard Overview</h1>
                         <div class="row g-4">
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/get_admin_data'); ?>'">
+                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('get-admin-data'); ?>'">
                                     <div class="card-body">
                                         <h6><i class="fas fa-users me-2"></i> Admin Details</h6>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -671,7 +671,7 @@
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/create_admin'); ?>'">
+                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('super-admin-create-admin'); ?>'">
                                     <div class="card-body">
                                         <h6><i class="fas fa-user-plus me-2"></i> Create Admin</h6>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -685,7 +685,7 @@
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/get_distributor_data'); ?>'">
+                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('get-distributors-data'); ?>'">
                                     <div class="card-body">
                                         <h6><i class="fas fa-users-cog me-2"></i> Distributors Details</h6>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -699,7 +699,7 @@
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('Superadmindashboard/get_staff_data'); ?>'">
+                                <div class="card dashboard-card" onclick="window.location.href='<?php echo base_url('get-staff-data'); ?>'">
                                     <div class="card-body">
                                         <h6><i class="fas fa-users-cog me-2"></i> Staff Details</h6>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -739,7 +739,7 @@
                                                     <td><?php echo htmlspecialchars($admin->email); ?></td>
                                                     <td><?php echo htmlspecialchars($admin->role); ?></td>
                                                     <td>
-                                                        <a href="<?php echo base_url('Superadmindashboard/showing_admin_remaining_data/' . $admin->id); ?>" class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                        <a href="<?php echo base_url('showing-admin-remaining-data/' . $admin->id); ?>" class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                             <i class="fas fa-eye me-1"></i>
                                                         </a>
                                                         
@@ -784,7 +784,7 @@
                     deleteModal.addEventListener('show.bs.modal', function (event) {
                         const button = event.relatedTarget;
                         const adminId = button.getAttribute('data-id');
-                        const deleteUrl = "<?= base_url('Superadmindashboard/delete_admin/') ?>" + adminId;
+                        const deleteUrl = "<?= base_url('delete-admin/') ?>" + adminId;
                         confirmBtn.setAttribute('href', deleteUrl);
                     });
                 </script>        
@@ -904,7 +904,7 @@
                                                     <td><?php echo htmlspecialchars($distributor->email); ?></td>
                                                     <td><?php echo htmlspecialchars($distributor->role); ?></td>
                                                     <td>
-                                                        <a href="<?= base_url('Superadmindashboard/showing_distributor_remaining_data/' . $distributor->id); ?>"
+                                                        <a href="<?= base_url('showing-distributor-remaining-data/' . $distributor->id); ?>"
                                                         class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                             <i class="fas fa-eye me-1"></i> 
                                                         </a>
@@ -951,7 +951,7 @@
                     deleteModal.addEventListener('show.bs.modal', function (event) {
                         const button = event.relatedTarget;
                         const distributorId = button.getAttribute('data-id');
-                        const deleteUrl = "<?= base_url('Superadmindashboard/delete_distributor/') ?>" + distributorId;
+                        const deleteUrl = "<?= base_url('delete-distributor/') ?>" + distributorId;
                         confirmBtn.setAttribute('href', deleteUrl);
                     });
                 </script>
@@ -1071,7 +1071,7 @@
                                                     <td><?php echo htmlspecialchars($staff->Email); ?></td>
                                                     <td><?php echo htmlspecialchars($staff->role); ?></td>
                                                     <td>
-                                                        <a href="<?= base_url('Superadmindashboard/showing_staff_remaining_data/' . $staff->id); ?>"
+                                                        <a href="<?= base_url('showing-staff-remaining-data/' . $staff->id); ?>"
                                                         class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                             <i class="fas fa-eye me-1"></i> 
                                                         </a>
@@ -1118,7 +1118,7 @@
                         deleteModal.addEventListener('show.bs.modal', function (event) {
                             const button = event.relatedTarget;
                             const distributorId = button.getAttribute('data-id');
-                            const deleteUrl = "<?= base_url('Superadmindashboard/delete_staff/') ?>" + distributorId;
+                            const deleteUrl = "<?= base_url('delete-staff/') ?>" + distributorId;
                             confirmBtn.setAttribute('href', deleteUrl);
                         });
                     </script>
@@ -1266,7 +1266,7 @@
                     <!-- Update Distributor Limit Modal -->
                     <div class="modal fade" id="updateDistributorLimitModal" tabindex="-1" aria-labelledby="updateDistributorLimitModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form method="post" action="<?= base_url('Superadmindashboard/update_distributor_limits'); ?>">
+                            <form method="post" action="<?= base_url('update-distributor-limits'); ?>">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title"><i class="fas fa-users-cog me-2 text-primary"></i>Update Distributor Limit</h5>
@@ -1322,7 +1322,7 @@
                                     <h2><i class="fas fa-user-plus text-dark"></i> New Admin Account</h2>
                                     <p class="text-muted">Create a new administrator account</p>
                                 </div>
-                                <?php echo form_open('Superadmindashboard/create_admin'); ?>
+                                <?php echo form_open('super-admin-create-admin'); ?>
                                     <div class="mb-3 ">
                                         <label for="full_name" class="form-label"><i class="fas fa-user me-1 text-gray-500"></i> Full Name</label>
                                         <input type="text" class="form-control <?php echo form_error('full_name') ? 'is-invalid' : ''; ?>" 
