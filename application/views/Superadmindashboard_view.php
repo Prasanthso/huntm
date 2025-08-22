@@ -705,7 +705,7 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
                                                 <p>View and manage</p>
-                                                <p>all distributor accounts</p>
+                                                <p>all staff accounts</p>
                                             </div>
                                             <i class="fas fa-chevron-right text-muted"></i>
                                         </div>
