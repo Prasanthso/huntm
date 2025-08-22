@@ -61,7 +61,7 @@ class Superadmindashboard extends CI_Controller {
         $data['method'] = "superadmindashboard";
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['admin'] = $admin_data;
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function create_admin() {
@@ -74,7 +74,7 @@ class Superadmindashboard extends CI_Controller {
 
         if ($this->form_validation->run() == FALSE) {
             $data['method'] = 'create_admin';
-            $this->load->view('Superadmindashboard_view', $data);
+            $this->load->view('superadmindashboard_view', $data);
         } else {
             $admin_data = array(
                 'full_name' => $this->input->post('full_name'),
@@ -99,7 +99,7 @@ class Superadmindashboard extends CI_Controller {
         $data['admin_data'] = $this->Superadmindashboard_model->get_admin_data();
         $data['method'] = 'get_admin_data';
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function showing_admin_remaining_data($admin_id) {
@@ -114,7 +114,7 @@ class Superadmindashboard extends CI_Controller {
         $data['admin_data'] = $this->Superadmindashboard_model->get_remaining_admin_data($admin_id);
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_admin_remaining_data';
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function delete_admin($admin_id) {
@@ -139,7 +139,7 @@ class Superadmindashboard extends CI_Controller {
         $data['distributor_data'] = $this->Superadmindashboard_model->get_distributor_data();
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_distributor_data';
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function showing_distributor_remaining_data($distributor_id) {
@@ -153,7 +153,7 @@ class Superadmindashboard extends CI_Controller {
         $data['distributor_data'] = $this->Superadmindashboard_model->get_remaining_distributor_data($distributor_id);
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_distributor_remaining_data';
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function delete_distributor($distributor_id) {
@@ -177,7 +177,7 @@ class Superadmindashboard extends CI_Controller {
         $data['staff_data'] = $this->Superadmindashboard_model->get_staff_data();
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_staff_data';
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function showing_staff_remaining_data($staff_id) {
@@ -191,7 +191,7 @@ class Superadmindashboard extends CI_Controller {
         $data['staff_data'] = $this->Superadmindashboard_model->get_remaining_staff_data($staff_id);
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'showing_staff_remaining_data';
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function delete_staff($staff_id) {
@@ -217,7 +217,7 @@ class Superadmindashboard extends CI_Controller {
         $data['get_distributor_limits'] = $this->Superadmindashboard_model->get_distributor_limits($admin_id);
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_distributor_limits';
-        $this->load->view('Superadmindashboard_view', $data);
+        $this->load->view('superadmindashboard_view', $data);
     }
 
     public function update_distributor_limits()

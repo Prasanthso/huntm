@@ -162,7 +162,7 @@ class Admindashboard extends CI_Controller {
             'limit_reached' => $limit_reached, // This will trigger the modal
             'current_limit' => $admin->distributor_limit
         ];
-        $this->load->view('Admindashboard_view', $data);
+        $this->load->view('admindashboard_view', $data);
     } else {
         $distributor_data = array(
             'full_name' => $this->input->post('full_name'),
@@ -225,7 +225,7 @@ class Admindashboard extends CI_Controller {
         $data['selected_pages'] = $selected_pages;
 
         // 6. Load the view
-        $this->load->view('Admindashboard_view', $data);
+        $this->load->view('admindashboard_view', $data);
     }
 
     
@@ -234,7 +234,7 @@ class Admindashboard extends CI_Controller {
         $data['distributor_data'] = $this->Admindashboard_model->get_distributor_details($admin_id);
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_distributor_data';
-        $this->load->view('Admindashboard_view', $data);
+        $this->load->view('admindashboard_view', $data);
     }
 
     public function showing_distributor_remaining_data($distributor_id) {
@@ -250,7 +250,7 @@ class Admindashboard extends CI_Controller {
         $data['distributor_data'] = $this->Superadmindashboard_model->get_remaining_distributor_data($distributor_id);
          $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'showing_distributor_remaining_data';
-        $this->load->view('Admindashboard_view', $data);
+        $this->load->view('admindashboard_view', $data);
     }
 
     public function get_staff_limits() {
@@ -258,7 +258,7 @@ class Admindashboard extends CI_Controller {
         $data['get_staff_limits'] = $this->Admindashboard_model->get_staff_limits($admin_id);
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_staff_limits';
-        $this->load->view('Admindashboard_view', $data);
+        $this->load->view('admindashboard_view', $data);
     }
 
     public function update_staff_limits() {

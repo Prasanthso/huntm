@@ -108,7 +108,7 @@ class Distributordashboard extends CI_Controller {
             $data['method'] = 'create_staff';
             $data['staff_limit'] = $distributor->staff_limit;
             $data['current_staff_count'] = $current_count;
-            $this->load->view('Distributordashboard_view', $data);
+            $this->load->view('distributordashboard_view', $data);
         } else {
             // Check staff limit before creating
             if ($current_count >= $distributor->staff_limit) {
@@ -145,7 +145,7 @@ class Distributordashboard extends CI_Controller {
         $data['staff_data'] = $this->Distributordashboard_model->get_staff_data($staff_id);
         $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $data['method'] = 'get_staff_data';
-        $this->load->view('Distributordashboard_view', $data);
+        $this->load->view('distributordashboard_view', $data);
     }
 
     public function showing_staff_remaining_data($staff_id) {
@@ -160,7 +160,7 @@ class Distributordashboard extends CI_Controller {
         $data['staff_data'] = $this->Distributordashboard_model->get_remaining_staff_data($staff_id);
         $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $data['method'] = 'showing_staff_remaining_data';
-        $this->load->view('Distributordashboard_view', $data);
+        $this->load->view('distributordashboard_view', $data);
     }
 
     public function delete_staff($staff_id) {
