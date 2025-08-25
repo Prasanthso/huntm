@@ -11,7 +11,7 @@ class Superadmindashboard extends CI_Controller {
         $this->load->library('form_validation');
     }
     public function login() {
-        $this->load->view('Superadmin_loginpage');
+        $this->load->view('superadmin_loginpage');
     }
 
     public function process_login() {
