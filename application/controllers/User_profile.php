@@ -12,7 +12,7 @@ class User_profile extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('User_profile_login');
+        $this->load->view('user_profile_login');
     }
 
     public function login_form() {
