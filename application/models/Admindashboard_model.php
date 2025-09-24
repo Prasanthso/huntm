@@ -12,7 +12,7 @@ class Admindashboard_model extends CI_Model {
         $this->db->from('admin');
         $this->db->where('id', $admin_id);
         $query = $this->db->get();
-        return $query->row(); // ✅ Returns a single object
+        return $query->row(); 
     }
 
    
@@ -138,6 +138,33 @@ public function count_distributors($admin_id) {
                         ->get()
                         ->row();
     }
+
+    public function get_template_content() {
+        $query = $this->db->get('template');
+        return $query->result();
+    }
+
+    public function update_template_content($template_id, $template_name, $template_content) {
+        $data = [
+            'template_name' => $template_name,
+            'template_content' => $template_content
+            // 'updated_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->where('id', $template_id);
+        return $this->db->update('template', $data);
+    }
+
+    public function add_template($template_name, $template_content)
+    {
+        $data = [
+            'template_name' => $template_name,
+            'template_content' => $template_content
+            // 'created_at' => date('Y-m-d H:i:s')
+        ];
+        return $this->db->insert('template', $data);
+    }
+
+
 
 
 }

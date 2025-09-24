@@ -21,7 +21,7 @@
             --sidebar-color: #ecf0f1;
             --sidebar-active-bg: #3498db;
             --content-bg: #f5f7fa;
-            --primary-color: #3498db;
+            --primary-color: #0A517F;
             --secondary-color: #2c3e50;
             --success-color: #2ecc71;
             --danger-color: #e74c3c;
@@ -416,7 +416,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         .table th {
-            background-color: var(--primary-color);
+            background-color: #28a745;
             color: white;
             font-weight: 500;
         }

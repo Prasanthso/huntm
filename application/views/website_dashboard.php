@@ -588,6 +588,49 @@
             height: 40px;
             margin-right: 5px;
         }
+        .form-group-custom {
+                position: relative;
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group-custom label {
+                position: absolute;
+                top: -12px; /* Try -10 to -14 for perfect balance */
+                left: 12px;
+                background: #fff;
+                padding: 0 6px;
+                font-size: 14px; /* Slightly smaller */
+                color: #0A517F;
+                font-weight: 600;
+                pointer-events: none;
+            }
+
+            .form-group-custom input,
+            .form-group-custom select,
+            .form-group-custom textarea {
+                width: 100%;
+                padding: 14px 15px 8px;
+                border: 2px solid #0A517F;
+                border-radius: 12px;
+                font-size: 16px;
+                color: rgba(10, 81, 127, 0.8);
+                outline: none;
+                background-color: #fff;
+                resize: none;
+            }
+
+            .form-group-custom input::placeholder,
+            .form-group-custom textarea::placeholder,
+            .form-group-custom select:invalid {
+                color: rgba(10, 81, 127, 0.6);
+                font-size: 13px;
+            }
+
+            .form-group-custom input[readonly] {
+                /* background-color: #edf5ff; */
+                /* font-weight: bold; */
+                color: #0A517F;
+            }
     </style>
 </head>
 <body>
@@ -1042,210 +1085,473 @@
                     </div>
                 </div>
                 <?php } elseif($method == 'profile') { ?>
-                <div class="row">
+                <section class="row">
                     <div class="col-12">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h2 class="h4 mb-0"><i class="fas fa-user-cog text-primary me-2"></i>Profile Management</h2>
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
-                                </ol>
-                            </nav>
+                            <h2 class="h4 mb-0"><i class="fas fa-user-cog text-dark me-2"></i>Profile Management</h2>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <?php if ($this->session->flashdata('error')): ?>
-                                    <div class="alert alert-danger alert-dismissible fade show mb-4">
-                                        <?php echo $this->session->flashdata('error'); ?>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <?php if ($this->session->flashdata('success')): ?>
-                                    <div class="alert alert-success alert-dismissible fade show mb-4">
-                                        <?php echo $this->session->flashdata('success'); ?>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <?php if ($this->session->flashdata('info')): ?>
-                                    <div class="alert alert-info alert-dismissible fade show mb-4">
-                                        <?php echo $this->session->flashdata('info'); ?>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <form id="profileForm" method="post" action="<?php echo base_url('user/add'); ?>">
-                                    <div class="mb-4">
-                                       <h5 class="mb-3 border-bottom pb-2">
-                                            <i class="fas fa-user me-2 text-primary" style="color: rgba(10, 81, 127, 1);"></i>
-                                            Personal Information
-                                        </h5>
+                <section class="row">
+    <div class="col-lg-8" style="max-width: 100%; width:100%;">
+        <div class="card shadow-sm">
+            <div class="card-body">
 
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="full_name" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" id="full_name" name="full_name" 
-                                                    value="<?php echo htmlspecialchars($distributor_data->full_name ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email" 
-                                                    value="<?php echo htmlspecialchars($distributor_data->Email ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="phone" class="form-label">Whatsapp Number <span class="text-danger">*</span></label>
-                                                <input type="tel" class="form-control <?php echo form_error('phone') ? 'is-invalid' : ''; ?>" 
-                                                    id="phone" name="phone" maxlength="10"
-                                                    value="<?php echo set_value('phone', htmlspecialchars($distributor_data->phone ?? '')); ?>"
-                                                    required>
-                                                <div class="invalid-feedback"><?php echo form_error('phone'); ?></div>
-                                                <small class="form-text text-muted">10 digits only</small>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="sap_code" class="form-label">SAP Code</label>
-                                                <input type="text" class="form-control <?php echo form_error('sap_code') ? 'is-invalid' : ''; ?>" 
-                                                    id="sap_code" name="sap_code" 
-                                                    value="<?php echo set_value('sap_code', htmlspecialchars($distributor_data->sap_code ?? '')); ?>">
-                                                <div class="invalid-feedback"><?php echo form_error('sap_code'); ?></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-4">
-                                        <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-university me-2 text-primary"></i>Bank Details</h5>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                                                <input type="text" class="form-control <?php echo form_error('account_holder_name') ? 'is-invalid' : ''; ?>" 
-                                                    id="account_holder_name" name="account_holder_name" 
-                                                    value="<?php echo set_value('account_holder_name', htmlspecialchars($distributor_data->account_holder_name ?? '')); ?>">
-                                                <div class="invalid-feedback"><?php echo form_error('account_holder_name'); ?></div>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="account_number" class="form-label">Account Number</label>
-                                                <input type="text" class="form-control <?php echo form_error('account_number') ? 'is-invalid' : ''; ?>" 
-                                                    id="account_number" name="account_number" maxlength="18"
-                                                    value="<?php echo set_value('account_number', htmlspecialchars($distributor_data->account_number ?? '')); ?>">
-                                                <div class="invalid-feedback"><?php echo form_error('account_number'); ?></div>
-                                                <small class="form-text text-muted">Maximum 18 digits</small>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="ifsc_code" class="form-label">IFSC Code</label>
-                                                <input type="text" class="form-control <?php echo form_error('ifsc_code') ? 'is-invalid' : ''; ?>" 
-                                                    id="ifsc_code" name="ifsc_code" 
-                                                    value="<?php echo set_value('ifsc_code', htmlspecialchars($distributor_data->ifsc_code ?? '')); ?>">
-                                                <div class="invalid-feedback"><?php echo form_error('ifsc_code'); ?></div>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="bank_name" class="form-label">Bank Name</label>
-                                                <input type="text" class="form-control <?php echo form_error('bank_name') ? 'is-invalid' : ''; ?>" 
-                                                    id="bank_name" name="bank_name" 
-                                                    value="<?php echo set_value('bank_name', htmlspecialchars($distributor_data->bank_name ?? '')); ?>">
-                                                <div class="invalid-feedback"><?php echo form_error('bank_name'); ?></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-4">
-                                        <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Address Details</h5>
-                                        <div class="mb-3">
-                                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
-                                            <textarea class="form-control <?php echo form_error('address') ? 'is-invalid' : ''; ?>" 
-                                                id="address" name="address" rows="3" required><?php echo set_value('address', htmlspecialchars($distributor_data->address ?? '')); ?></textarea>
-                                            <div class="invalid-feedback"><?php echo form_error('address'); ?></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="pin_code" class="form-label">Pin Code <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control <?php echo form_error('pin_code') ? 'is-invalid' : ''; ?>" 
-                                                    id="pin_code" name="pin_code" maxlength="6"
-                                                    value="<?php echo set_value('pin_code', htmlspecialchars($distributor_data->pin_code ?? '')); ?>"
-                                                    required>
-                                                <div class="invalid-feedback"><?php echo form_error('pin_code'); ?></div>
-                                                <small class="form-text text-muted">6 digits only</small>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="city" class="form-label">City <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control <?php echo form_error('city') ? 'is-invalid' : ''; ?>" 
-                                                    id="city" name="city" 
-                                                    value="<?php echo set_value('city', htmlspecialchars($distributor_data->city ?? '')); ?>"
-                                                    required>
-                                                <div class="invalid-feedback"><?php echo form_error('city'); ?></div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="office_mobile" class="form-label">Office Mobile</label>
-                                                <input type="text" class="form-control <?php echo form_error('office_mobile') ? 'is-invalid' : ''; ?>" 
-                                                    id="office_mobile" name="office_mobile" maxlength="10"
-                                                    value="<?php echo set_value('office_mobile', htmlspecialchars($distributor_data->office_mobile ?? '')); ?>">
-                                                <div class="invalid-feedback"><?php echo form_error('office_mobile'); ?></div>
-                                                <small class="form-text text-muted">10 digits only</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="d-flex justify-content-end mt-4">
-                                        <button type="submit" class="btn btn-primary px-4">
-                                            <i class="fas fa-save me-2"></i>Update Profile
-                                        </button>
-                                    </div>
-                                </form>
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert alert-danger alert-dismissible fade show mb-4">
+                        <?php echo $this->session->flashdata('error'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success alert-dismissible fade show mb-4">
+                        <?php echo $this->session->flashdata('success'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('info')): ?>
+                    <div class="alert alert-info alert-dismissible fade show mb-4">
+                        <?php echo $this->session->flashdata('info'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
+                <form id="profileForm" method="post" action="<?php echo base_url('user/add'); ?>">
+
+                    <div class="mb-4">
+                        <h5 class="mb-3 border-bottom pb-2">
+                            <i class="fas fa-user me-2 text-dark" style="color: rgba(10, 81, 127, 1);"></i>
+                            Personal Information
+                        </h5>
+
+                        <section class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="full_name">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" id="full_name" name="full_name" 
+                                        value="<?php echo htmlspecialchars($distributor_data->full_name ?? ''); ?>" 
+                                        placeholder="Full Name" readonly>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <script>
-                    // Client-side validation to remove error when field is filled
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const form = document.getElementById('profileForm');
-                        const inputs = form.querySelectorAll('input, textarea');
-                        
-                        inputs.forEach(input => {
-                            input.addEventListener('input', function() {
-                                if (this.value.trim() !== '') {
-                                    this.classList.remove('is-invalid');
-                                    
-                                    // Remove the error message
-                                    const feedback = this.nextElementSibling;
-                                    if (feedback && feedback.classList.contains('invalid-feedback')) {
-                                        feedback.textContent = '';
-                                    }
-                                }
-                            });
-                        });
-                        
-                        // Phone number validation (digits only)
-                        const phoneInputs = form.querySelectorAll('input[type="tel"]');
-                        phoneInputs.forEach(input => {
-                            input.addEventListener('input', function() {
-                                this.value = this.value.replace(/[^0-9]/g, '');
-                            });
-                        });
-                        
-                        // Account number validation (digits only)
-                        const accountNumber = form.querySelector('input[name="account_number"]');
-                        if (accountNumber) {
-                            accountNumber.addEventListener('input', function() {
-                                this.value = this.value.replace(/[^0-9]/g, '');
-                            });
-                        }
-                        
-                        // Pin code validation (digits only)
-                        const pinCode = form.querySelector('input[name="pin_code"]');
-                        if (pinCode) {
-                            pinCode.addEventListener('input', function() {
-                                this.value = this.value.replace(/[^0-9]/g, '');
-                            });
-                        }
-                    });
-                </script>
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="email">Email <span class="text-danger">*</span></label>
+                                    <input type="email" id="email" name="email" 
+                                        value="<?php echo htmlspecialchars($distributor_data->Email ?? ''); ?>" 
+                                        placeholder="Email" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="phone">Whatsapp Number <span class="text-danger">*</span></label>
+                                    <input type="tel" id="phone" name="phone" maxlength="10"
+                                        class="<?php echo form_error('phone') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('phone', htmlspecialchars($distributor_data->phone ?? '')); ?>"
+                                        placeholder="10 digits only" required
+                                        oninput="validatePhone(this)">
+                                    <div class="invalid-feedback" id="phone-error"><?php echo form_error('phone'); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="sap_code">SAP Code <span class="text-danger">*</span> </label>
+                                    <input type="text" id="sap_code" name="sap_code"
+                                        class="<?php echo form_error('sap_code') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('sap_code', htmlspecialchars($distributor_data->sap_code ?? '')); ?>"
+                                        placeholder="SAP Code"
+                                        oninput="validateSapCode(this)">
+                                    <div class="invalid-feedback" id="sap_code-error"><?php echo form_error('sap_code'); ?></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="mb-3 border-bottom pb-2">
+                            <i class="fas fa-university me-2 text-dark"></i>Bank Details
+                        </h5>
+
+                        <section class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="account_holder_name">Account Holder Name <span class="text-danger">*</span></label>
+                                    <input type="text" id="account_holder_name" name="account_holder_name"
+                                        class="<?php echo form_error('account_holder_name') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('account_holder_name', htmlspecialchars($distributor_data->account_holder_name ?? '')); ?>"
+                                        placeholder="Account Holder Name"
+                                        oninput="validateAccountHolderName(this)">
+                                    <div class="invalid-feedback" id="account_holder_name-error"><?php echo form_error('account_holder_name'); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="account_number">Account Number <span class="text-danger">*</span></label>
+                                    <input type="text" id="account_number" name="account_number" maxlength="18"
+                                        class="<?php echo form_error('account_number') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('account_number', htmlspecialchars($distributor_data->account_number ?? '')); ?>"
+                                        placeholder="Maximum 18 digits"
+                                        oninput="validateAccountNumber(this)">
+                                    <div class="invalid-feedback" id="account_number-error"><?php echo form_error('account_number'); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="ifsc_code">IFSC Code <span class="text-danger">*</span></label>
+                                    <input type="text" id="ifsc_code" name="ifsc_code"
+                                        class="<?php echo form_error('ifsc_code') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('ifsc_code', htmlspecialchars($distributor_data->ifsc_code ?? '')); ?>"
+                                        placeholder="IFSC Code"
+                                        oninput="validateIfscCode(this)">
+                                    <div class="invalid-feedback" id="ifsc_code-error"><?php echo form_error('ifsc_code'); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group-custom">
+                                    <label for="bank_name">Bank Name <span class="text-danger">*</span></label>
+                                    <input type="text" id="bank_name" name="bank_name"
+                                        class="<?php echo form_error('bank_name') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('bank_name', htmlspecialchars($distributor_data->bank_name ?? '')); ?>"
+                                        placeholder="Bank Name"
+                                        oninput="validateBankName(this)">
+                                    <div class="invalid-feedback" id="bank_name-error"><?php echo form_error('bank_name'); ?></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="mb-3 border-bottom pb-2">
+                            <i class="fas fa-map-marker-alt me-2 text-dark"></i>Address Details
+                        </h5>
+
+                        <div class="form-group-custom mb-3">
+                            <label for="address">Address <span class="text-danger">*</span></label>
+                            <textarea id="address" name="address" rows="3" required
+                                class="<?php echo form_error('address') ? 'is-invalid' : ''; ?>"
+                                placeholder="Enter your address"
+                                oninput="validateAddress(this)"><?php echo set_value('address', htmlspecialchars($distributor_data->address ?? '')); ?></textarea>
+                            <div class="invalid-feedback" id="address-error"><?php echo form_error('address'); ?></div>
+                        </div>
+
+                        <section class="row">
+                            <div class="col-md-4">
+                                <div class="form-group-custom">
+                                    <label for="pin_code">Pin Code <span class="text-danger">*</span></label>
+                                    <input type="text" id="pin_code" name="pin_code" maxlength="6"
+                                        class="<?php echo form_error('pin_code') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('pin_code', htmlspecialchars($distributor_data->pin_code ?? '')); ?>"
+                                        placeholder="6 digits only" required
+                                        oninput="validatePinCode(this)">
+                                    <div class="invalid-feedback" id="pin_code-error"><?php echo form_error('pin_code'); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group-custom">
+                                    <label for="city">City <span class="text-danger">*</span></label>
+                                    <input type="text" id="city" name="city"
+                                        class="<?php echo form_error('city') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('city', htmlspecialchars($distributor_data->city ?? '')); ?>"
+                                        placeholder="City" required
+                                        oninput="validateCity(this)">
+                                    <div class="invalid-feedback" id="city-error"><?php echo form_error('city'); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group-custom">
+                                    <label for="office_mobile">Office Mobile <span class="text-danger">*</span></label>
+                                    <input type="text" id="office_mobile" name="office_mobile" maxlength="10"
+                                        class="<?php echo form_error('office_mobile') ? 'is-invalid' : ''; ?>"
+                                        value="<?php echo set_value('office_mobile', htmlspecialchars($distributor_data->office_mobile ?? '')); ?>"
+                                        placeholder="10 digits only"
+                                        oninput="validateOfficeMobile(this)">
+                                    <div class="invalid-feedback" id="office_mobile-error"><?php echo form_error('office_mobile'); ?></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save me-2"></i>Update Profile
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Function to validate phone number
+function validatePhone(input) {
+    const errorElement = document.getElementById('phone-error');
+    const phonePattern = /^[0-9]{10}$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Whatsapp number is required';
+        return false;
+    } else if (!phonePattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Please enter a valid 10-digit number';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate SAP code
+function validateSapCode(input) {
+    const errorElement = document.getElementById('sap_code-error');
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'SAP code is required';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate account holder name
+function validateAccountHolderName(input) {
+    const errorElement = document.getElementById('account_holder_name-error');
+    const namePattern = /^[a-zA-Z\s]+$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Account holder name is required';
+        return false;
+    } else if (!namePattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Name can only contain letters and spaces';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate account number
+function validateAccountNumber(input) {
+    const errorElement = document.getElementById('account_number-error');
+    const accountPattern = /^[0-9]{9,18}$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Account number is required';
+        return false;
+    } else if (!accountPattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Please enter a valid account number (9-18 digits)';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate IFSC code
+function validateIfscCode(input) {
+    const errorElement = document.getElementById('ifsc_code-error');
+    const ifscPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'IFSC code is required';
+        return false;
+    } else if (!ifscPattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Please enter a valid IFSC code (e.g., ABCD0123456)';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate bank name
+function validateBankName(input) {
+    const errorElement = document.getElementById('bank_name-error');
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Bank name is required';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate address
+// function validateAddress(input) {
+//     const errorElement = document.getElementById('address-error');
+    
+//     if (input.value.trim() === '') {
+//         input.classList.add('is-invalid');
+//         errorElement.textContent = 'Address is required';
+//         return false;
+//     } else if (input.value.trim().length < 10) {
+//         input.classList.add('is-invalid');
+//         errorElement.textContent = 'Address should be at least 10 characters long';
+//         return false;
+//     } else {
+//         input.classList.remove('is-invalid');
+//         errorElement.textContent = '';
+//         return true;
+//     }
+// }
+
+// Function to validate pin code
+function validatePinCode(input) {
+    const errorElement = document.getElementById('pin_code-error');
+    const pincodePattern = /^[0-9]{6}$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Pin code is required';
+        return false;
+    } else if (!pincodePattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Please enter a valid 6-digit pin code';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate city
+function validateCity(input) {
+    const errorElement = document.getElementById('city-error');
+    const cityPattern = /^[a-zA-Z\s]+$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'City is required';
+        return false;
+    } else if (!cityPattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'City name can only contain letters and spaces';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Function to validate office mobile
+function validateOfficeMobile(input) {
+    const errorElement = document.getElementById('office_mobile-error');
+    const phonePattern = /^[0-9]{10}$/;
+    
+    if (input.value.trim() === '') {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Office mobile number is required';
+        return false;
+    } else if (!phonePattern.test(input.value)) {
+        input.classList.add('is-invalid');
+        errorElement.textContent = 'Please enter a valid 10-digit office number';
+        return false;
+    } else {
+        input.classList.remove('is-invalid');
+        errorElement.textContent = '';
+        return true;
+    }
+}
+
+// Add event listeners to all input fields to validate on input
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone');
+    const sapCodeInput = document.getElementById('sap_code');
+    const accountHolderInput = document.getElementById('account_holder_name');
+    const accountNumberInput = document.getElementById('account_number');
+    const ifscInput = document.getElementById('ifsc_code');
+    const bankNameInput = document.getElementById('bank_name');
+    const addressInput = document.getElementById('address');
+    const pinCodeInput = document.getElementById('pin_code');
+    const cityInput = document.getElementById('city');
+    const officeMobileInput = document.getElementById('office_mobile');
+    
+    // Add input event listeners
+    if (phoneInput) phoneInput.addEventListener('input', function() { validatePhone(this); });
+    if (sapCodeInput) sapCodeInput.addEventListener('input', function() { validateSapCode(this); });
+    if (accountHolderInput) accountHolderInput.addEventListener('input', function() { validateAccountHolderName(this); });
+    if (accountNumberInput) accountNumberInput.addEventListener('input', function() { validateAccountNumber(this); });
+    if (ifscInput) ifscInput.addEventListener('input', function() { validateIfscCode(this); });
+    if (bankNameInput) bankNameInput.addEventListener('input', function() { validateBankName(this); });
+    if (addressInput) addressInput.addEventListener('input', function() { validateAddress(this); });
+    if (pinCodeInput) pinCodeInput.addEventListener('input', function() { validatePinCode(this); });
+    if (cityInput) cityInput.addEventListener('input', function() { validateCity(this); });
+    if (officeMobileInput) officeMobileInput.addEventListener('input', function() { validateOfficeMobile(this); });
+    
+    // Add form submission validation
+    const form = document.getElementById('profileForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            if (phoneInput) isValid = validatePhone(phoneInput) && isValid;
+            if (sapCodeInput) isValid = validateSapCode(sapCodeInput) && isValid;
+            if (accountHolderInput) isValid = validateAccountHolderName(accountHolderInput) && isValid;
+            if (accountNumberInput) isValid = validateAccountNumber(accountNumberInput) && isValid;
+            if (ifscInput) isValid = validateIfscCode(ifscInput) && isValid;
+            if (bankNameInput) isValid = validateBankName(bankNameInput) && isValid;
+            if (addressInput) isValid = validateAddress(addressInput) && isValid;
+            if (pinCodeInput) isValid = validatePinCode(pinCodeInput) && isValid;
+            if (cityInput) isValid = validateCity(cityInput) && isValid;
+            if (officeMobileInput) isValid = validateOfficeMobile(officeMobileInput) && isValid;
+            
+            if (!isValid) {
+                e.preventDefault();
+                // Scroll to the first error
+                const firstError = document.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    }
+});
+</script>
+
+<style>
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+
+</style>
 
             <!-- Other sections would follow the same responsive pattern -->
             <?php } elseif ($method == 'invoice_order') { ?>
@@ -1942,7 +2248,7 @@
                     });
                 </script>
                     
-                    <!-- Display customer strength -->
+                <!---------------------------- Customer Strenght Data  -------------------------------------------------------- -->
                 <?php } elseif($method == 'customer_strength') { ?>
                 <div class="dashboard-back-btn">
                     <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
@@ -2026,7 +2332,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th>Total Customers</th>
-                                            <th>Action</th>
+                                            <!-- <th>Action</th> -->
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -2210,16 +2516,7 @@
                                         <tr>
                                             <td class="clickabled area-click" data-area="${item.area}">${item.area}</td>
                                             <td>${item.total}</td>
-                                            <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
-                                                    <img src="<?= base_url('Image/w1.png') ?>" 
-                                                        alt="WhatsApp" 
-                                                        class="whatsapp_icon" 
-                                                        style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
-                                                    Whatsapp
-                                                </a>
-                                            </td>
+                                            
                                         </tr>
                                     `);
                                 });
@@ -2374,7 +2671,7 @@
                         });
                     });
                 </script>
-                        
+                <!---------------------------- SBC Data  -------------------------------------------------------- -->
                 <?php } elseif($method == 'sbc_data_display') { ?>
                 <div class="dashboard-back-btn">
                     <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-primary">
@@ -2588,41 +2885,6 @@
                             $('.content-section').scrollTop(0);
                         }
 
-                         // Not show an tooltip this below code
-
-                        // function updateAreaBreakdownTable() {
-                        //     const start = (currentAreaPage - 1) * recordsPerPage;
-                        //     const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
-                        //     const pageAreas = areaBreakdownData.slice(start, end);
-                        //     const tableBody = $("#areaBreakdownBody");
-                            
-                        //     tableBody.empty();
-                            
-                        //     if (pageAreas.length === 0) {
-                        //         tableBody.html('<tr><td colspan="2" class="text-center">No data available</td></tr>');
-                        //     } else {
-                        //         pageAreas.forEach(({ area, total }) => {
-                        //             tableBody.append(`
-                        //                 <tr>
-                        //                     <td class="clickabled area-click" data-area="${area}">${area}</td>
-                        //                     <td>${total}</td>
-                        //                     <td>
-                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
-                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
-                        //                         Whatsapp
-                        //                         </a>
-                        //                     </td>
-                        //                 </tr>
-                        //             `);
-                        //         });
-                        //     }
-                            
-                        //     // Update pagination info
-                        //     $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
-                        //     $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
-                        //     $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
-                        // }
-
                         function updateAreaBreakdownTable() {
                             const start = (currentAreaPage - 1) * recordsPerPage;
                             const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
@@ -2634,18 +2896,44 @@
                             if (pageAreas.length === 0) {
                                 tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
+                                // pageAreas.forEach(({ area, total }) => {
+                                //     // Create WhatsApp URL with filter parameters
+                                //     const whatsappUrl = `<?php echo base_url('SBC_data/sending_messaging'); ?>?status=${currentStatus}&scheme=${currentScheme}&area=${encodeURIComponent(area)}`;
+                                    
+                                //     tableBody.append(`
+                                //         <tr>
+                                //             <td class="clickabled area-click" data-area="${area}">${area}</td>
+                                //             <td>${total}</td>
+                                //             <td>
+                                //                 <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
+                                //                    data-status="${currentStatus}" data-scheme="${currentScheme}" data-area="${area}">
+                                //                     <img src="<?= base_url('Image/w1.png') ?>" 
+                                //                         alt="WhatsApp" 
+                                //                         class="whatsapp_icon" 
+                                //                         style="width: 40px; height: 40px; cursor: pointer;" 
+                                //                         data-tooltip="Send WhatsApp message to ${area} (${currentStatus} - ${currentScheme})">
+                                //                     Whatsapp
+                                //                 </a>
+                                //             </td>
+                                //         </tr>
+                                //     `);
+                                // });
                                 pageAreas.forEach(({ area, total }) => {
+                                    // Create WhatsApp URL with filter parameters
+                                    const whatsappUrl = `<?php echo base_url('SBC_data/sending_messaging'); ?>?status=${currentStatus}&scheme=${currentScheme}&area=${encodeURIComponent(area)}`;
+                                    
                                     tableBody.append(`
                                         <tr>
                                             <td class="clickabled area-click" data-area="${area}">${area}</td>
                                             <td>${total}</td>
                                             <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
+                                                data-status="${currentStatus}" data-scheme="${currentScheme}" data-area="${area}">
                                                     <img src="<?= base_url('Image/w1.png') ?>" 
                                                         alt="WhatsApp" 
                                                         class="whatsapp_icon" 
                                                         style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
+                                                        data-tooltip="Send WhatsApp message to ${area} (${currentStatus} - ${currentScheme})">
                                                     Whatsapp
                                                 </a>
                                             </td>
@@ -2692,7 +2980,6 @@
                                 if (tooltip) tooltip.remove();
                             }
                         });
-
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -2758,10 +3045,10 @@
                         }
 
                         // Event handlers
-                        $(document).on('click', '.clickabled:not(.area-click)', function() {
+                        $(document).on('click', '.clickabled:not(.area-click):not(.whatsapp-link)', function() {
                             const status = $(this).data('status') || 'ALL';
                             const scheme = $(this).data('scheme') || 'ALL';
-                            console.log('Clicked:', status, scheme); // Debug: Log click event
+                            console.log('Clicked:', status, scheme);
                             showAreaBreakdown(status, scheme);
                         });
                         
@@ -2816,6 +3103,7 @@
                     });
                 </script>
 
+                <!---------------------------- NIll Refill Data  -------------------------------------------------------- -->
                 <?php } elseif ($method == 'nil_refill_report') { ?>
                 <div class="container4">
                     <div class="dashboard-back-btn back_dashborad">
@@ -3188,6 +3476,9 @@
                                 $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
+                                    // Create WhatsApp URL with filter parameters for Nil Refill
+                                    const whatsappUrl = `<?php echo base_url('NilRefill/sending_messaging'); ?>?status=${currentStatus}&period=${currentPeriod}&scheme=${currentScheme}&area=${encodeURIComponent(item.area)}`;
+                                    
                                     $tbody.append(`
                                         <tr>
                                             <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
@@ -3195,12 +3486,13 @@
                                             </td>
                                             <td>${item.count}</td>
                                             <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
+                                                data-status="${currentStatus}" data-period="${currentPeriod}" data-scheme="${currentScheme}" data-area="${item.area}">
                                                     <img src="<?= base_url('Image/w1.png') ?>" 
                                                         alt="WhatsApp" 
                                                         class="whatsapp_icon" 
                                                         style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
+                                                        data-tooltip="Send WhatsApp message to ${item.area} (${currentStatus} - ${getPeriodText(currentPeriod)} - ${currentScheme === 'pmuy' ? 'PMUY' : 'Non-PMUY'})">
                                                     Whatsapp
                                                 </a>
                                             </td>
@@ -3362,7 +3654,8 @@
                         }
 
                         // Click handler for summary table cells
-                        $('.clickabled[data-status][data-period][data-scheme]').on('click', function() {
+                        // Click handler for summary table cells - exclude whatsapp links
+                        $('.clickabled[data-status][data-period][data-scheme]:not(.whatsapp-link)').on('click', function() {
                             const status = $(this).data('status');
                             const period = $(this).data('period');
                             const scheme = $(this).data('scheme');
@@ -3428,7 +3721,7 @@
                         });
                     });
                 </script>
-
+                <!---------------------------- KYC Data  -------------------------------------------------------- -->
                 <?php } elseif($method == 'kyc_data') { ?>
                 <div class="container5">
                     <div class="dashboard-back-btn back_dashborad">
@@ -3590,6 +3883,20 @@
                             $('#customerDetailsView').hide();
                         }
 
+                        function processData() {
+                            allCustomers.forEach(customer => {
+                                // Normalize status to uppercase, default to 'ACTIVE'
+                                customer.consumer_status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
+                                // Normalize scheme to 'PMUY' or 'NON PMUY'
+                                const scheme = (customer.Scheme_Selected || '').toUpperCase().trim();
+                                customer.Scheme_Selected = scheme == 'NON_PMUY' ? 'NON_PMUY' : 'PMUY';
+                                // Default Area_Name to 'Unknown'
+                                customer.Area_Name = customer.Area_Name || 'Unknown';
+                            });
+                            // Debug: Log normalized data
+                            console.log('Normalized allCustomers:', allCustomers);
+                        }
+                        
                         function showAreaBreakdown(status, scheme) {
                             currentStatus = status;
                             currentScheme = scheme;
@@ -3673,6 +3980,44 @@
                         //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
                         // }
 
+                        // function updateAreaBreakdownTable() {
+                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
+                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
+                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
+                        //     const $tbody = $('#areaBreakdownBody');
+
+                        //     $tbody.empty();
+
+                        //     if (pageData.length === 0) {
+                        //         $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                        //     } else {
+                        //         pageData.forEach(item => {
+                        //             $tbody.append(`
+                        //                 <tr>
+                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
+                        //                         ${escapeHtml(item.area)}
+                        //                     </td>
+                        //                     <td>${item.count}</td>
+                        //                     <td>
+                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
+                        //                             <img src="<?= base_url('Image/w1.png') ?>" 
+                        //                                 alt="WhatsApp" 
+                        //                                 class="whatsapp_icon" 
+                        //                                 style="width: 40px; height: 40px; cursor: pointer;" 
+                        //                                 data-tooltip="Send message WhatsApp">
+                        //                             Whatsapp
+                        //                         </a>
+                        //                     </td>
+                        //                 </tr>
+                        //             `);
+                        //         });
+                        //     }
+
+                        //     // Update pagination controls
+                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
+                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                        // }
                         function updateAreaBreakdownTable() {
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
                             const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
@@ -3685,6 +4030,9 @@
                                 $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
+                                    // Create WhatsApp URL with filter parameters
+                                    const whatsappUrl = `<?php echo base_url('KYC_data/sending_messaging'); ?>?status=${currentStatus}&scheme=${currentScheme}&area=${encodeURIComponent(item.area)}`;
+                                    
                                     $tbody.append(`
                                         <tr>
                                             <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
@@ -3692,12 +4040,13 @@
                                             </td>
                                             <td>${item.count}</td>
                                             <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
+                                                data-status="${currentStatus}" data-scheme="${currentScheme}" data-area="${item.area}">
                                                     <img src="<?= base_url('Image/w1.png') ?>" 
                                                         alt="WhatsApp" 
                                                         class="whatsapp_icon" 
                                                         style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
+                                                        data-tooltip="Send WhatsApp message to ${item.area} (${currentStatus} - ${currentScheme})">
                                                     Whatsapp
                                                 </a>
                                             </td>
@@ -3897,7 +4246,7 @@
                     });
                 </script>
 
-
+                <!---------------------------- MI Due Data  -------------------------------------------------------- -->
                 <?php } elseif ($method == 'midue') { ?>
                 <div class="container4">
                     <div class="dashboard-back-btn back_dashborad">
@@ -4139,17 +4488,22 @@
                         // }
 
                         function updateAreaBreakdownTable() {
+                            const totalRecords = areaBreakdownData.length;
+                            const totalPages = Math.ceil(totalRecords / recordsPerPage);
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
-                            const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
-                            const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
-                            const $tbody = $('#areaBreakdownBody');
+                            const endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
+                            const pageData = areaBreakdownData.slice(startIdx, endIdx);
 
+                            const $tbody = $('#areaBreakdownBody');
                             $tbody.empty();
 
                             if (pageData.length === 0) {
                                 $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
+                                    // Create WhatsApp URL with filter parameters for MI Due
+                                    const whatsappUrl = `<?php echo base_url('MI_due_data/sending_messaging'); ?>?status=${currentStatus}&scheme=${currentScheme}&area=${encodeURIComponent(item.area)}`;
+                                    
                                     $tbody.append(`
                                         <tr>
                                             <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
@@ -4157,24 +4511,31 @@
                                             </td>
                                             <td>${item.count}</td>
                                             <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
+                                                data-status="${currentStatus}" data-scheme="${currentScheme}" data-area="${item.area}">
                                                     <img src="<?= base_url('Image/w1.png') ?>" 
                                                         alt="WhatsApp" 
                                                         class="whatsapp_icon" 
                                                         style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
+                                                        data-tooltip="Send WhatsApp message to ${item.area} (${currentStatus} - ${currentScheme === 'PMUY' ? 'PMUY' : 'Non-PMUY'})">
                                                     Whatsapp
                                                 </a>
                                             </td>
                                         </tr>
                                     `);
                                 });
+
+                                // Rebind click events
+                                $('.area-link').off('click').on('click', function() {
+                                    const area = $(this).data('area');
+                                    showCustomerDetails(area);
+                                });
                             }
 
                             // Update pagination controls
-                            $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
+                            $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${totalRecords}`);
                             $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
-                            $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
+                            $('#nextAreaPage').toggleClass('disabled', endIdx >= totalRecords);
                         }
 
                         // ====================
@@ -4329,7 +4690,8 @@
                         }
 
                         // Event listeners
-                        $('.clickabled').on('click', function() {
+                        // Event listeners - exclude whatsapp links
+                        $('.clickabled:not(.whatsapp-link)').on('click', function() {
                             const status = $(this).data('status') || 'ALL';
                             const scheme = $(this).data('scheme') || 'ALL';
                             showAreaBreakdown(status, scheme);
@@ -4384,7 +4746,7 @@
                         });
                     });
                 </script>
-
+                <!---------------------------- Hose Due Data  -------------------------------------------------------- -->
                 <?php } elseif ($method == 'hosedue') { ?>
                 <div class="container4">
                     <div class="dashboard-back-btn back_dashborad mb-3">
@@ -4657,6 +5019,9 @@
                                 tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(areaData => {
+                                    // Create WhatsApp URL with filter parameters for Hose Due
+                                    const whatsappUrl = `<?php echo base_url('Hosedue_data/sending_messaging'); ?>?status=${currentStatus}&scheme=${currentScheme}&area=${encodeURIComponent(areaData.area)}`;
+                                    
                                     tableBody.append(`
                                         <tr>
                                             <td class="clickabled area-click" data-area="${escapeHtml(areaData.area)}">
@@ -4664,24 +5029,32 @@
                                             </td>
                                             <td>${areaData.count}</td>
                                             <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
+                                                <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
+                                                data-status="${currentStatus}" data-scheme="${currentScheme}" data-area="${areaData.area}">
                                                     <img src="<?= base_url('Image/w1.png') ?>" 
                                                         alt="WhatsApp" 
                                                         class="whatsapp_icon" 
                                                         style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
+                                                        data-tooltip="Send WhatsApp message to ${areaData.area} (${currentStatus} - ${currentScheme})">
                                                     Whatsapp
                                                 </a>
                                             </td>
                                         </tr>
                                     `);
                                 });
+
+                                // Rebind click events
+                                $('.area-click').off('click').on('click', function() {
+                                    showCustomerDetails($(this).data('area'));
+                                });
                             }
 
                             // Update pagination controls
-                            $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
-                            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
-                            $("#nextAreaPage").toggleClass("disabled", endIdx >= areaBreakdownData.length);
+                            const startRecord = startIdx + 1;
+                            const endRecord = endIdx;
+                            $('#areaPageInfo').text(`${startRecord}-${endRecord} of ${areaBreakdownData.length}`);
+                            $('#prevAreaPage').toggleClass('disabled', currentAreaPage <= 1);
+                            $('#nextAreaPage').toggleClass('disabled', currentAreaPage >= Math.ceil(areaBreakdownData.length / recordsPerPage));
                         }
 
                         // ====================
@@ -4799,13 +5172,12 @@
                         }
 
                         // Event listeners
-                        $(document).on('click', '.clickabled[data-scheme][data-status]', function() {
+                        // Event listeners - exclude whatsapp links
+                        $('.clickabled[data-scheme][data-status]:not(.whatsapp-link)').on('click', function() {
                             const scheme = $(this).data('scheme');
                             const status = $(this).data('status');
                             
-                            // Handle "ALL" scheme case
                             if (scheme === 'ALL') {
-                                // For ALL scheme, we need to combine PMUY and NON_PMUY data
                                 showCombinedAreaBreakdown(status);
                             } else {
                                 showAreaBreakdown(scheme, status);
@@ -4897,7 +5269,7 @@
                         });
                     });
                 </script>
-
+                <!---------------------------- Phone Number Missing Data  -------------------------------------------------------- -->
                 <?php } elseif ($method == 'phonenumber') { ?>
                 <div class="container4">            
                     <div class="dashboard-back-btn back_dashborad">
@@ -4982,7 +5354,7 @@
                                         <tr>
                                             <th>Area Name</th>
                                             <th class="text-center">Missing Phone Count</th>
-                                            <th>Action</th>
+                                            <!-- <th>Action</th> -->
                                         </tr>
                                     </thead>
                                     <tbody id="areaBreakdownBody"></tbody>
@@ -5273,16 +5645,7 @@
                                                 ${escapeHtml(areaData.area)}
                                             </td>
                                             <td class="text-center">${count}</td>
-                                            <td>
-                                                <a href="#" class="clickabled" style="text-decoration: none;">
-                                                    <img src="<?= base_url('Image/w1.png') ?>" 
-                                                        alt="WhatsApp" 
-                                                        class="whatsapp_icon" 
-                                                        style="width:40px;height:40px;cursor:pointer;" 
-                                                        data-tooltip="Send message WhatsApp">
-                                                    Whatsapp
-                                                </a>
-                                            </td>
+                                            
                                         </tr>
                                     `);
                                 });
@@ -5665,3 +6028,14 @@
 
 </body>
 </html>
+
+<!-- <td>
+        <a href="#" class="clickabled" style="text-decoration: none;">
+            <img src="<?= base_url('Image/w1.png') ?>" 
+            alt="WhatsApp" 
+            class="whatsapp_icon" 
+            style="width:40px;height:40px;cursor:pointer;" 
+            data-tooltip="Send message WhatsApp">
+            Whatsapp
+        </a>
+    </td> -->

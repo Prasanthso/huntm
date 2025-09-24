@@ -30,62 +30,126 @@ class Distributordashboard extends CI_Controller {
         $this->load->view('distributordashboard_view', $data);
     }
 
-    public function add() {
-        $distributor_id = $this->session->userdata('user_id');
+    // public function add() {
+    //     $distributor_id = $this->session->userdata('user_id');
 
-        if (!$distributor_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
-            redirect('login');
-        }
+    //     if (!$distributor_id) {
+    //         $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
+    //         redirect('login');
+    //     }
         
-        if ($this->input->post()) {
-            // Set validation rules
-            $this->form_validation->set_rules('phone', 'Phone', 'trim|numeric|min_length[10]|max_length[15]');
-            $this->form_validation->set_rules('sap_code', 'SAP Code', 'trim|alpha_numeric');
-            $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|alpha_numeric_spaces');
-            $this->form_validation->set_rules('account_number', 'Account Number', 'trim|numeric');
-            $this->form_validation->set_rules('ifsc_code', 'IFSC Code', 'trim|alpha_numeric');
-            $this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|alpha_numeric_spaces');
-            $this->form_validation->set_rules('address', 'Address', 'trim');
-            $this->form_validation->set_rules('pin_code', 'Pin Code', 'trim|numeric|exact_length[6]');
-            $this->form_validation->set_rules('city', 'City', 'trim|alpha_numeric_spaces');
-            $this->form_validation->set_rules('office_mobile', 'Office Mobile', 'trim|numeric|min_length[10]|max_length[15]');
+    //     if ($this->input->post()) {
+    //         // Set validation rules
+    //         $this->form_validation->set_rules('phone', 'Phone', 'trim|numeric|exact_length[10]');
+    //         $this->form_validation->set_rules('sap_code', 'SAP Code', 'trim|alpha_numeric');
+    //         $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|alpha_numeric_spaces');
+    //         $this->form_validation->set_rules('account_number', 'Account Number', 'trim|numeric');
+    //         $this->form_validation->set_rules('ifsc_code', 'IFSC Code', 'trim|alpha_numeric');
+    //         $this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|alpha_numeric_spaces');
+    //         $this->form_validation->set_rules('address', 'Address', 'trim');
+    //         $this->form_validation->set_rules('pin_code', 'Pin Code', 'trim|numeric|exact_length[6]');
+    //         $this->form_validation->set_rules('city', 'City', 'trim|alpha_numeric_spaces');
+    //         $this->form_validation->set_rules('office_mobile', 'Office Mobile', 'trim|numeric|exact_length[10]');
+    //         $this->form_validation->set_rules('office_mobile2', 'Office Mobile 2', 'trim|numeric|exact_length[10]');
 
-            if ($this->form_validation->run() === FALSE) {
-                $this->session->set_flashdata('error', 'Please correct the errors in the form.');
-                redirect('Distributordashboard/profile');
-            } 
-            else {
-                $data = [
-                    'phone' => $this->input->post('phone', TRUE) ?: NULL,
-                    'sap_code' => $this->input->post('sap_code', TRUE) ?: NULL,
-                    'account_holder_name' => $this->input->post('account_holder_name', TRUE) ?: NULL,
-                    'account_number' => $this->input->post('account_number', TRUE) ?: NULL,
-                    'ifsc_code' => $this->input->post('ifsc_code', TRUE) ?: NULL,
-                    'bank_name' => $this->input->post('bank_name', TRUE) ?: NULL,
-                    'address' => $this->input->post('address', TRUE) ?: NULL,
-                    'pin_code' => $this->input->post('pin_code', TRUE) ?: NULL,
-                    'city' => $this->input->post('city', TRUE) ?: NULL,
-                    'office_mobile' => $this->input->post('office_mobile', TRUE) ?: NULL
-                ];
 
-                // Debug POST data (remove after testing)
-                // echo '<pre>'; print_r($data); echo '</pre>'; exit;
+    //         if ($this->form_validation->run() === FALSE) {
+    //             $this->session->set_flashdata('error', 'Please correct the errors in the form.');
+    //             redirect('Distributordashboard/profile');
+    //         } 
+    //         else {
+    //             $data = [
+    //                 'phone' => $this->input->post('phone', TRUE) ?: NULL,
+    //                 'sap_code' => $this->input->post('sap_code', TRUE) ?: NULL,
+    //                 'account_holder_name' => $this->input->post('account_holder_name', TRUE) ?: NULL,
+    //                 'account_number' => $this->input->post('account_number', TRUE) ?: NULL,
+    //                 'ifsc_code' => $this->input->post('ifsc_code', TRUE) ?: NULL,
+    //                 'bank_name' => $this->input->post('bank_name', TRUE) ?: NULL,
+    //                 'address' => $this->input->post('address', TRUE) ?: NULL,
+    //                 'pin_code' => $this->input->post('pin_code', TRUE) ?: NULL,
+    //                 'city' => $this->input->post('city', TRUE) ?: NULL,
+    //                 'office_mobile' => $this->input->post('office_mobile', TRUE) ?: NULL,
+    //                 'office_mobile2' => $this->input->post('office_mobile2', TRUE) ?: NULL
+    //             ];
 
-                $update = $this->Distributordashboard_model->update_distributor_data($distributor_id, $data);
-                if ($update) {
-                    $this->session->set_flashdata('success', 'Profile updated successfully.');
-                    redirect('Distributordashboard/profile');
-                } else {
-                    $this->session->set_flashdata('error', 'Failed to update profile. No matching record found or database error.');
-                    redirect('Distributordashboard/profile');
-                }
-            }
+    //             // Debug POST data (remove after testing)
+    //             // echo '<pre>'; print_r($data); echo '</pre>'; exit;
+
+    //             $update = $this->Distributordashboard_model->update_distributor_data($distributor_id, $data);
+    //             if ($update) {
+    //                 $this->session->set_flashdata('success', 'Profile updated successfully.');
+    //                 redirect('Distributordashboard/profile');
+    //             } else {
+    //                 $this->session->set_flashdata('error', 'Failed to update profile. No matching record found or database error.');
+    //                 redirect('Distributordashboard/profile');
+    //             }
+    //         }
+    //     } else {
+    //         $this->session->set_flashdata('error', 'No data submitted.');
+    //         redirect('Distributordashboard/profile');
+    //     }
+    // }
+    public function add() {
+    $distributor_id = $this->session->userdata('user_id');
+
+    if (!$distributor_id) {
+        $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
+        redirect('login');
+    }
+
+    if ($this->input->post()) {
+        // Clean inputs (remove non-numeric characters for phone numbers)
+        $_POST['phone']         = preg_replace('/\D/', '', $_POST['phone']);
+        $_POST['office_mobile'] = preg_replace('/\D/', '', $_POST['office_mobile']);
+        $_POST['office_mobile2'] = preg_replace('/\D/', '', $_POST['office_mobile2']);
+
+        // Set validation rules
+        $this->form_validation->set_rules('phone', 'Phone', 'trim|numeric|exact_length[10]');
+        $this->form_validation->set_rules('sap_code', 'SAP Code', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|alpha_numeric_spaces');
+        $this->form_validation->set_rules('account_number', 'Account Number', 'trim|numeric');
+        $this->form_validation->set_rules('ifsc_code', 'IFSC Code', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|alpha_numeric_spaces');
+        $this->form_validation->set_rules('address', 'Address', 'trim');
+        $this->form_validation->set_rules('pin_code', 'Pin Code', 'trim|numeric|exact_length[6]');
+        $this->form_validation->set_rules('city', 'City', 'trim|alpha_numeric_spaces');
+        $this->form_validation->set_rules('office_mobile', 'Office Mobile', 'trim|numeric|exact_length[10]');
+        $this->form_validation->set_rules('office_mobile2', 'Office Mobile 2', 'trim|numeric|exact_length[10]');
+
+        if ($this->form_validation->run() === FALSE) {
+            $this->session->set_flashdata('error', 'Please correct the errors in the form.');
+            redirect('Distributordashboard/profile');
         } else {
-            $this->session->set_flashdata('error', 'No data submitted.');
+            $data = [
+                'phone' => $this->input->post('phone', TRUE) ?: NULL,
+                'sap_code' => $this->input->post('sap_code', TRUE) ?: NULL,
+                'account_holder_name' => $this->input->post('account_holder_name', TRUE) ?: NULL,
+                'account_number' => $this->input->post('account_number', TRUE) ?: NULL,
+                'ifsc_code' => $this->input->post('ifsc_code', TRUE) ?: NULL,
+                'bank_name' => $this->input->post('bank_name', TRUE) ?: NULL,
+                'address' => $this->input->post('address', TRUE) ?: NULL,
+                'pin_code' => $this->input->post('pin_code', TRUE) ?: NULL,
+                'city' => $this->input->post('city', TRUE) ?: NULL,
+                'office_mobile' => $this->input->post('office_mobile', TRUE) ?: NULL,
+                'office_mobile2' => $this->input->post('office_mobile2', TRUE) ?: NULL
+            ];
+
+            $update = $this->Distributordashboard_model->update_distributor_data($distributor_id, $data);
+
+            if ($update) {
+                $this->session->set_flashdata('success', 'Profile updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to update profile. No matching record found or database error.');
+            }
             redirect('Distributordashboard/profile');
         }
+    } else {
+        $this->session->set_flashdata('error', 'No data submitted.');
+        redirect('Distributordashboard/profile');
     }
+}
+
+
 
     public function create_staff() {
         // Check if distributor is logged in

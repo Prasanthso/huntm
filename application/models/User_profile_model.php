@@ -96,4 +96,41 @@ class User_profile_model extends CI_Model
     error_log("No user found for $email in any table");
     return false;
 }
+
+public function get_user_by_email($email) {
+        $tables = ['admin', 'distributor', 'user'];
+        foreach ($tables as $table) {
+            $this->db->where('email', $email);
+            $query = $this->db->get($table);
+            if ($query->num_rows() > 0) {
+                return $query->row();
+            }
+        }
+        return false;
+    }
+
+    public function update_password($email, $hashed_pass)
+    {
+        $tables = ['admin', 'distributor', 'user'];
+
+        foreach ($tables as $table) {
+            $this->db->where('email', $email);
+            $this->db->set('password', $hashed_pass);
+            $this->db->update($table);
+
+            if ($this->db->affected_rows() > 0) {
+                return true;
+            }
+        }
+
+        return false; 
+    }
+
+
+    public function get_user_email()
+    {
+        return $this->session->tempdata('reset_email');
+    }
+
+
 }

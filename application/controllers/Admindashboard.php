@@ -307,6 +307,73 @@ class Admindashboard extends CI_Controller {
         redirect('get-distributor-data');
     }
 
+    
+    public function get_template_content() {
+        $admin_id = $this->session->userdata('user_id');
+        if (!$admin_id) {
+            redirect('login');
+        }
+        
+        $data['templates'] = $this->Admindashboard_model->get_template_content();
+        $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
+        $data['method'] = 'get_template_content';
+        $this->load->view('admindashboard_view', $data);
+    }
+
+    public function update_template_content() {
+        $admin_id = $this->session->userdata('user_id');
+        if (!$admin_id) {
+            redirect('login');
+        }
+
+        $this->form_validation->set_rules('template_id', 'Template ID', 'required|trim');
+        $this->form_validation->set_rules('template_name', 'Template Name', 'required|trim');
+        $this->form_validation->set_rules('template_content', 'Template Content', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', 'All fields are required.');
+            redirect('AdminDashboard/get_template_content');
+        } else {
+            $template_id = $this->input->post('template_id');
+            $template_name = $this->input->post('template_name');
+            $template_content = $this->input->post('template_content');
+
+            if ($this->Admindashboard_model->update_template_content($template_id, $template_name, $template_content)) {
+                $this->session->set_flashdata('success', 'Template updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to update template. Please try again.');
+            }
+            redirect('AdminDashboard/get_template_content');
+        }
+    }
+
+    public function add_template()
+    {
+        $admin_id = $this->session->userdata('user_id');
+        if (!$admin_id) {
+            redirect('login');
+        }
+
+        $this->form_validation->set_rules('template_name', 'Template Name', 'required|trim');
+        $this->form_validation->set_rules('template_content', 'Template Content', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', 'All fields are required.');
+        } else {
+            $template_name = $this->input->post('template_name');
+            $template_content = $this->input->post('template_content');
+
+            if ($this->Admindashboard_model->add_template($template_name, $template_content)) {
+                $this->session->set_flashdata('success', 'Template added successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to add template. Please try again.');
+            }
+        }
+        redirect('AdminDashboard/get_template_content');
+    }
+
+
+
     public function logout() {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();

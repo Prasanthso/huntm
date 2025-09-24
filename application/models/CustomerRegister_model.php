@@ -763,16 +763,13 @@ class CustomerRegister_model extends CI_Model {
                 $stats[$status]['total']++;
                 $stats[$status][$scheme_key]++;
             }
-
-            // Calculate percentages based on total customers with missing phone numbers
+            // Calculate percentages
             $total_missing = $stats['total']['total'];
             if ($total_missing > 0) {
-                // Total percentages
-                $stats['total']['total_percent'] = 100; // Always 100% for total
+                $stats['total']['total_percent'] = 100; 
                 $stats['total']['pmuy_percent'] = round(($stats['total']['pmuy'] / $total_missing) * 100, 2);
                 $stats['total']['non_pmuy_percent'] = round(($stats['total']['non_pmuy'] / $total_missing) * 100, 2);
 
-                // Status-specific percentages
                 foreach (['active', 'suspended', 'deactivated'] as $status) {
                     $stats[$status]['total_percent'] = round(($stats[$status]['total'] / $total_missing) * 100, 2);
                     $stats[$status]['pmuy_percent'] = round(($stats[$status]['pmuy'] / $total_missing) * 100, 2);
@@ -805,5 +802,231 @@ class CustomerRegister_model extends CI_Model {
         return [];
     }
 
+
+    /////////////////////Sending Message with Whatsapp API/////////////////////////////
+    public function get_sbc_customer_details() {
+        $userid = $this->session->userdata('user_id');
+        $query = $this->db->select("*")
+                          ->from("customer_register c")
+                          ->where('userid', $userid)
+                          ->where('c.Consumer_Category', 'domestic')
+                          ->where_in('c.Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED'])
+                          ->where('c.Consumer_Type', 'Single Bottle Connection')
+                          ->get();
+        return $query->result_array(); 
+    }
+
+    public function get_distributor_name() {
+        $userid = $this->session->userdata('user_id');
+        $query = $this->db->select("Distributor_Name")
+                          ->from("customer_register")
+                          ->where('userid', $userid)
+                          ->get();
+        return $query->row_array(); 
+    }
+
+    public function get_distributor_number() {
+        // $userid = $this->session->userdata('user_id');
+        $query = $this->db->select("office_mobile, office_mobile2")
+                          ->from("distributor")
+                        //   ->where('userid', $userid)
+                          ->get();
+        return $query->row_array(); // single row
+    }
+
+    public function get_template_by_name($template_name) {
+        return $this->db->where('template_name', $template_name)
+                        ->get('template')
+                        ->row_array();
+    }
+
+    public function get_kyc_customer_details() {
+        $userid = $this->session->userdata('user_id');
+        $query = $this->db->select("*")
+                          ->from("customer_register c")
+                          ->where('userid', $userid)
+                          ->where('c.Consumer_Category', 'domestic')
+                          ->where_in('c.Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED'])
+                          ->where('c.KYC_Number', '')
+                          ->get();
+        return $query->result_array(); // multiple users
+    }
+
+    public function get_nilrefill_customer_details() {
+        $userid = $this->session->userdata('user_id');
+
+        $this->db->select('
+        Consumer_ID,
+        Area_Name,
+        Consumer_Number,
+        Consumer_Name,
+        Phone_Number,
+        Scheme_Selected,
+        Last_Refill_Date,
+        Consumer_Category,
+        Consumer_Sub_Status,
+        Distributor_Name   
+    ');
+        $this->db->from('customer_register c');
+        $this->db->where('c.Consumer_Category', 'domestic');
+        $this->db->where('c.userid', $userid);
+        $this->db->where('c.Last_Refill_Date IS NOT NULL');
+        $this->db->where_in('c.Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('c.Consumer_ID');
+        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            
+            foreach ($result as &$row) {
+                // Normalize scheme
+                $row['Scheme_Selected'] = $this->normalize_scheme($row['Scheme_Selected']);
+                
+                // Calculate days since last refill
+                try {
+                    $last_refill = new DateTime($row['Last_Refill_Date']);
+                    $current_date = new DateTime();
+                    $interval = $current_date->diff($last_refill);
+                    $row['days_since_refill'] = $interval->days;
+                    $row['months_since_refill'] = $interval->y * 12 + $interval->m;
+                } catch (Exception $e) {
+                    $row['days_since_refill'] = null;
+                    $row['months_since_refill'] = null;
+                }
+                
+                // Ensure values are standardized
+                $row['Area_Name'] = $row['Area_Name'] ?: 'Unknown';
+                $row['Consumer_Sub_Status'] = $row['Consumer_Sub_Status'] 
+                    ? strtoupper($row['Consumer_Sub_Status']) 
+                    : 'UNKNOWN';
+            }
+            
+            return $result;
+        }
+        
+        return [];
+    }
+
+    public function get_hose_customer_details() {
+        $userid = $this->session->userdata('user_id');
+        
+        $this->db->select('
+            c.Consumer_ID,
+            c.Area_Name,
+            c.Consumer_Number,
+            c.Consumer_Name,
+            c.Phone_Number,
+            c.Scheme_Selected,
+            c.Consumer_Sub_Status,
+            c.Tube_Change_Date,
+            c.Tube_Change_Due_Date,
+            c.Distributor_Name
+        ');
+        $this->db->from('customer_register c');
+        // $this->db->join('distributor d', 'c.Distributor_ID = d.Distributor_ID', 'left');
+        $this->db->where('c.Consumer_Category', 'domestic');
+        $this->db->where('c.userid', $userid);
+        $this->db->where_in('c.Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->group_by('c.Consumer_ID');
+        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $today = date('Y-m-d');
+            
+            foreach ($result as &$row) {
+                // Normalize scheme name
+                $scheme = strtolower(trim($row['Scheme_Selected']));
+                $row['Scheme_Selected'] = in_array($scheme, ['ujjwala', 'ujjwala - extended']) ? 'PMUY' : 'NON_PMUY';
+                
+                // Normalize status
+                $row['Consumer_Sub_Status'] = strtoupper($row['Consumer_Sub_Status']);
+                
+                // Calculate hose status
+                $lastChanged = $row['Tube_Change_Date'] ?? $row['Tube_Change_Due_Date'] ?? null;
+                $row['last_change_date'] = $lastChanged;
+
+                if (empty($lastChanged)) {
+                    $row['hose_status'] = 'Due';
+                    $row['days_overdue'] = 'N/A';
+                } else {
+                    $lastChangedDate = new DateTime($lastChanged);
+                    $todayDate = new DateTime($today);
+                    $interval = $todayDate->diff($lastChangedDate);
+                    $daysSinceChange = $interval->days;
+
+                    $row['hose_status'] = ($daysSinceChange > 730) ? 'Due' : 'OK';
+                    $row['days_since_change'] = $daysSinceChange;
+                    $row['days_overdue'] = ($daysSinceChange > 730) ? $daysSinceChange - 730 : 0;
+                }
+                
+                // Set default values
+                $row['Area_Name'] = $row['Area_Name'] ?: 'Unknown';
+                $row['Distributor_Name'] = $row['Distributor_Name'] ?: 'Unknown Distributor';
+            }
+            
+            return $result;
+        }
+        
+        return [];
+    }
+
+    public function get_midue_customer_details() {
+    $userid = $this->session->userdata('user_id');
     
+    $this->db->select("
+        c.Consumer_ID,
+        c.Area_Name,
+        c.Consumer_Number,
+        c.Consumer_Name,
+        c.Phone_Number,
+        c.Consumer_Sub_Status as status,
+        c.Mandatory_Inspection_Date,
+        c.Distributor_Name,
+        CASE 
+            WHEN LOWER(TRIM(c.Scheme_Selected)) IN ('ujjwala', 'ujjwala - extended') THEN 'PMUY'
+            ELSE 'Non PMUY'
+        END AS scheme_type
+    ");
+    
+    $this->db->from('customer_register c');
+    // $this->db->join('distributor d', 'c.Distributor_ID = d.Distributor_ID', 'left');
+    $this->db->where('c.Consumer_Category', 'domestic');
+    $this->db->where('c.userid', $userid);
+    $this->db->where_in('c.Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+    
+    // MI Due filter (within last 5 years)
+    $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+    $today = date('Y-m-d');
+    
+    $this->db->group_start();
+    $this->db->where("STR_TO_DATE(c.Mandatory_Inspection_Date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+    $this->db->or_where("STR_TO_DATE(c.Mandatory_Inspection_Date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+    $this->db->or_where("STR_TO_DATE(c.Mandatory_Inspection_Date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+    $this->db->group_end();
+    
+    $this->db->group_by('c.Consumer_ID');
+    
+    $query = $this->db->get();
+    
+    if ($query->num_rows() > 0) {
+        $result = $query->result_array();
+        
+        foreach ($result as &$row) {
+            // Normalize status
+            $row['status'] = strtoupper($row['status'] ?? 'ACTIVE');
+            
+            // Set default values
+            $row['Area_Name'] = $row['Area_Name'] ?: 'Unknown';
+            $row['Distributor_Name'] = $row['Distributor_Name'] ?: 'Unknown Distributor';
+        }
+        
+        return $result;
+    }
+    
+    return [];
+}
+  
 }

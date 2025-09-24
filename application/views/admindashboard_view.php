@@ -16,7 +16,7 @@
             --sidebar-width: 260px;
             --sidebar-collapsed-width: 80px;
             --header-height: 70px;
-            --sidebar-bg: #2c3e50;
+            --sidebar-bg: #0A517F;
             --sidebar-color: #e0e0e0;
             --sidebar-active-bg: rgba(52, 152, 219, 0.2);
             --content-bg: #f8f9fa;
@@ -32,11 +32,12 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
             background-color: var(--content-bg);
-            color: var(--text-color);
+            color: #333;
             min-height: 100vh;
-            margin: 0;
+            margin: 0;;
         }
 
         /* Header Styles */
@@ -86,7 +87,7 @@
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            color: var(--primary-color);
+            color: #0A517F;
             border: 1px solid var(--border-color);
             font-size: 1rem;
         }
@@ -138,7 +139,7 @@
 
         .app-sidebar.expanded .sidebar-header {
             padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.1);
+            background: #0A517F;
         }
 
         .sidebar-header h4 {
@@ -253,43 +254,93 @@
 
         /* Dashboard Cards */
         .dashboard-card {
-            border-radius: 6px;
+            border-radius: 20px;
             border: none;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--box-shadow);
             transition: var(--transition);
+            cursor: pointer;
             height: 100%;
+            border-left: 4px solid #0A517F;
+            border-right: 4px solid #0A517F;
             background-color: white;
-            border-top: 3px solid var(--primary-color);
+            overflow: hidden;
         }
 
         .dashboard-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .dashboard-card .card-header {
-            background-color: transparent;
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.25rem;
+            background-color: white;
+            border-bottom: 1px solid var(--light-gray);
+            padding: 15px 20px;
+            font-weight: 500;
+            color: var(--dark-gray);
             display: flex;
             align-items: center;
         }
 
         .dashboard-card .card-header i {
-            margin-right: 0.75rem;
-            color: var(--primary-color);
+            color: #0A517F;
+            margin-right: 10px;
             font-size: 1.1rem;
         }
 
-        .dashboard-card .card-header .card-title {
-            font-weight: 500;
-            color: var(--secondary-color);
-            margin-bottom: 0;
-            font-size: 1rem;
+        .dashboard-card .card-body {
+            padding: 20px;
         }
 
-        .dashboard-card .card-body {
-            padding: 1.5rem;
+        .dashboard-card h5 {
+            color: var(--dark-gray);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .dashboard-card .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-card .detail-item i {
+            margin-right: 10px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            min-width: 20px;
+        }
+
+        .dashboard-card .detail-item span {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .badge-custom {
+            background-color: #0A517F;
+            color: white;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions .btn {
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: left;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .quick-actions .btn i {
+            margin-right: 8px;
+            font-size: 0.9rem;
         }
 
         /* Form Styling */
@@ -298,7 +349,7 @@
             padding: 2.5rem;
             border-radius: 6px;
             box-shadow: var(--card-shadow);
-            border-top: 3px solid var(--primary-color);
+            border-top: 3px solid #0A517F;
         }
 
         .form-container h2 {
@@ -338,28 +389,31 @@
         }
 
         /* Buttons */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
+        .btn-primary {
+            background-color: var(--sidebar-bg);
+            border-color: var(--sidebar-bg);
+            padding: 12px 25px;
+            border-radius: 8px;
             font-weight: 500;
             transition: var(--transition);
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            color: white;
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
+            background-color: var(--sidebar-bg);
+            border-color: var(--sidebar-bg);
+            transform: translateY(-2px);
+            color: white;
         }
 
-        .btn i {
-            margin-right: 0.5rem;
-            font-size: 0.95rem;
+        .btn-outline-primary {
+            border-color: var(--sidebar-bg);
+            color: var(--sidebar-bg);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--sidebar-bg);
+            color: white;
         }
 
         /* Breadcrumb */
@@ -447,7 +501,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         .table th {
-            background-color: var(--primary-color);
+            background-color: #28a745;
             color: white;
             font-weight: 500;
         }
@@ -457,7 +511,8 @@
         }
 
         .table tr:hover td {
-            background-color: #e2f1ff;
+            background-color: 	#cfecf7;
+
         }
 
         /* Responsive Adjustments */
@@ -589,6 +644,50 @@
         .toggle-btn:hover {
             color: var(--primary-color);
         }
+
+            .form-group-custom {
+                position: relative;
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group-custom label {
+                position: absolute;
+                top: -12px; 
+                left: 12px;
+                background: #fff;
+                padding: 0 6px;
+                font-size: 14px;
+                color: #0A517F;
+                font-weight: 600;
+                pointer-events: none;
+            }
+
+            .form-group-custom input,
+            .form-group-custom select,
+            .form-group-custom textarea {
+                width: 100%;
+                padding: 14px 15px 8px;
+                border: 2px solid #0A517F;
+                border-radius: 12px;
+                font-size: 16px;
+                color: rgba(10, 81, 127, 0.8);
+                outline: none;
+                background-color: #fff;
+                resize: none;
+            }
+
+            .form-group-custom input::placeholder,
+            .form-group-custom textarea::placeholder,
+            .form-group-custom select:invalid {
+                color: rgba(10, 81, 127, 0.6);
+                font-size: 13px;
+            }
+
+            .form-group-custom input[readonly] {
+                /* background-color: #edf5ff; */
+                /* font-weight: bold; */
+                color: #0A517F;
+            }
     </style>
 </head>
 <body>
@@ -617,7 +716,7 @@
         <div class="sidebar-header">
             <h4>Menu</h4>
         </div>
-        <div class="sidebar-menu">
+        <div class="sidebar-menu" style="background-color: #0A517F;">
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="<?php echo base_url('admin-dashboard'); ?>" 
@@ -636,7 +735,7 @@
                 <li class="nav-item">
                     <a href="<?php echo base_url('create-distributor'); ?>" 
                        class="nav-link <?php echo ($method == 'create_distributor') ? 'active' : ''; ?>">
-                        <i class="fas fa-user-plus"></i>
+                        <i class="fas fa-user-plus text-white me-4"></i>
                         <span>Create Distributor</span>
                     </a>
                 </li>
@@ -666,7 +765,7 @@
         <div class="sidebar-footer">
             <a class="logout-btn" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Sign Out</span>
+                <span>Log Out</span>
             </a>
         </div>
     </aside>
@@ -722,21 +821,22 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="page-title mb-0">
                     <?php if ($method == "admindashboard") : ?>
-                        <i class="fas fa-tachometer-alt text-primary me-2"></i>Dashboard Overview
+                        <i class="fas fa-tachometer-alt text-dark me-2"></i>Dashboard Overview
                     <?php elseif ($method == "profile") : ?>
-                        <i class="fas fa-user-cog text-primary me-2"></i>Profile Management
+                        <i class="fas fa-user-cog text-dark me-2"></i>Profile Management
                     <?php elseif ($method == "create_distributor") : ?>
-                        <i class="fas fa-user-plus text-primary me-2"></i>Create New Distributor
+                        <i class="fas fa-user-plus text-dark me-2"></i>Create New Distributor
                     <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
-                        <i class="fas fa-tasks text-primary me-2"></i>Page Management
+                        <i class="fas fa-tasks text-dark me-2"></i>Page Management
                     <?php endif; ?>
                 </h2>
             </div>
 
             <!-- Dashboard Content -->
             <?php if ($method == "admindashboard") : ?>
-                <div class="row">
+                <div class="row fade-in">
                     <?php if (!empty($admin_data)) : ?>
+                        <!-- Admin Profile -->
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="dashboard-card h-100">
                                 <div class="card-header">
@@ -744,17 +844,62 @@
                                     <span class="card-title">Admin Profile</span>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="text-primary mb-3"><?php echo htmlspecialchars($admin_data->full_name ?? 'N/A'); ?></h5>
-                                    <div class="mb-2">
-                                        <i class="fas fa-envelope me-2 text-muted"></i>
+                                    <h5 class="card-title"><?php echo htmlspecialchars($admin_data->full_name ?? 'N/A'); ?></h5>
+                                    <div class="detail-item">
+                                        <i class="fas fa-envelope"></i>
                                         <span><?php echo htmlspecialchars($admin_data->email ?? 'N/A'); ?></span>
                                     </div>
-                                    <div class="mb-4">
-                                        <i class="fas fa-user-tag me-2 text-muted"></i>
-                                        <span class="badge bg-primary"><?php echo htmlspecialchars($admin_data->role ?? 'N/A'); ?></span>
+                                    <div class="detail-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span><?php echo htmlspecialchars($admin_data->phone ?? 'N/A'); ?></span>
                                     </div>
-                                    <a href="<?php echo base_url('admin-profile'); ?>" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-edit me-1"></i> Edit Profile
+                                    <div class="detail-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span><?php echo htmlspecialchars($admin_data->city ?? 'N/A'); ?></span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <span class="badge-custom"><?php echo htmlspecialchars($admin_data->role ?? 'N/A'); ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="dashboard-card h-100">
+                                <div class="card-header">
+                                    <i class="fas fa-building"></i>
+                                    <span>Bank Details</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="detail-item">
+                                        <i class="fas fa-barcode"></i>
+                                        <span>SAP Code: <?php echo htmlspecialchars($admin_data->sap_code ?? 'N/A'); ?></span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-university"></i>
+                                        <span>Bank: <?php echo htmlspecialchars($admin_data->bank_name ?? 'N/A'); ?></span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>Account: ••••<?php echo !empty($admin_data->account_number) ? substr($admin_data->account_number, -4) : 'N/A'; ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="dashboard-card h-100">
+                                <div class="card-header">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>Quick Actions</span>
+                                </div>
+                                <div class="card-body quick-actions">
+                                    <a href="<?php echo base_url('Admindashboard/profile'); ?>" class="btn btn-outline-primary">
+                                        <i class="fas fa-user-edit"></i> Update Profile
+                                    </a>
+                                    <a href="<?php echo base_url('Admindashboard/create_distributor'); ?>" class="btn btn-outline-primary">
+                                        <i class="fas fa-user-plus" style="color: #0A517F;"></i> Add Distributor
+                                    </a>
+                                    <a href="<?php echo base_url('Admindashboard/get_template_content'); ?>" class="btn btn-outline-primary">
+                                        <i class="fas fa-file-invoice"></i> Create New Template
                                     </a>
                                 </div>
                             </div>
@@ -769,106 +914,138 @@
                 </div>
 
             <?php elseif ($method == "profile") : ?>
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
+                <section>
+                    <div class="col-lg-8 w-100">
                         <div class="form-container">
-                            <?php if ($this->session->flashdata('error')) : ?>
-                                <div class="alert alert-danger mb-4">
-                                    <i class="fas fa-exclamation-circle me-2"></i>
-                                    <?php echo $this->session->flashdata('error'); ?>
-                                </div>
-                            <?php endif; ?>
-                            <?php if ($this->session->flashdata('success')) : ?>
-                                <div class="alert alert-success mb-4">
-                                    <i class="fas fa-check-circle me-2"></i>
-                                    <?php echo $this->session->flashdata('success'); ?>
-                                </div>
-                            <?php endif; ?>
                             <form id="profileForm" method="post" action="<?php echo base_url('submit-data'); ?>">
-                                <h5 class="mb-4"><i class="fas fa-user me-2 text-primary"></i>Basic Information</h5>
+
+                                <!-- Basic Information -->
+                                <h5 class="mb-4"><i class="fas fa-user me-2 text-dark"></i>Basic Information</h5>
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="full_name" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="full_name" name="full_name" 
-                                            value="<?php echo htmlspecialchars($admin_data->full_name ?? ''); ?>" readonly>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="full_name">Full Name <span class="text-danger">*</span></label>
+                                            <input type="text" id="full_name" name="full_name" 
+                                                value="<?php echo htmlspecialchars($admin_data->full_name ?? ''); ?>" 
+                                                class="form-control" readonly />
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" 
-                                            value="<?php echo htmlspecialchars($admin_data->email ?? ''); ?>" readonly>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="email">Email Id <span class="text-danger">*</span></label>
+                                            <input type="email" id="email" name="email" 
+                                                value="<?php echo htmlspecialchars($admin_data->email ?? ''); ?>" 
+                                                class="form-control" readonly />
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" 
-                                            value="<?php echo htmlspecialchars($admin_data->phone ?? ''); ?>" oninput="validatePhone(this)">
-                                        <div class="invalid-feedback" id="phone-error"><?php echo form_error('phone'); ?></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="phone">Phone <span class="text-danger">*</span></label>
+                                            <input type="text" id="phone" name="phone" 
+                                                value="<?php echo htmlspecialchars($admin_data->phone ?? ''); ?>" 
+                                                class="form-control" oninput="validatePhone(this)" />
+                                            <div class="error-message text-danger small mt-1" id="phone_error"><?php echo form_error('phone'); ?></div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="sap_code" class="form-label">SAP Code</label>
-                                        <input type="text" class="form-control" id="sap_code" name="sap_code" 
-                                            value="<?php echo htmlspecialchars($admin_data->sap_code ?? ''); ?>" oninput="validateSapCode(this)">
-                                        <div class="invalid-feedback" id="sap_code-error"><?php echo form_error('sap_code'); ?></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="sap_code">SAP Code <span class="text-danger">*</span></label>
+                                            <input type="text" id="sap_code" name="sap_code" 
+                                                value="<?php echo htmlspecialchars($admin_data->sap_code ?? ''); ?>" 
+                                                class="form-control" oninput="validateSapCode(this)" />
+                                            <div class="error-message text-danger small mt-1" id="sap_code_error"><?php echo form_error('sap_code'); ?></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <hr class="section-divider">
-                                <h5 class="mb-4"><i class="fas fa-university me-2 text-primary"></i>Bank Details</h5>
+
+                                <!-- Bank Details -->
+                                <hr class="section-divider" style="border: 1px solid #0A517F;">
+                                <h5 class="mb-4"><i class="fas fa-university me-2 text-dark"></i>Bank Details</h5>
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                                        <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
-                                            value="<?php echo htmlspecialchars($admin_data->account_holder_name ?? ''); ?>" oninput="validateAccountHolderName(this)">
-                                        <div class="invalid-feedback" id="account_holder_name-error"><?php echo form_error('account_holder_name'); ?></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="account_holder_name">Account Holder Name <span class="text-danger">*</span></label>
+                                            <input type="text" id="account_holder_name" name="account_holder_name" 
+                                                value="<?php echo htmlspecialchars($admin_data->account_holder_name ?? ''); ?>" 
+                                                class="form-control" oninput="validateAccountHolderName(this)" />
+                                            <div class="error-message text-danger small mt-1" id="account_holder_name_error"><?php echo form_error('account_holder_name'); ?></div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="account_number" class="form-label">Account Number</label>
-                                        <input type="text" class="form-control" id="account_number" name="account_number" 
-                                            value="<?php echo htmlspecialchars($admin_data->account_number ?? ''); ?>" oninput="validateAccountNumber(this)">
-                                        <div class="invalid-feedback" id="account_number-error"><?php echo form_error('account_number'); ?></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="account_number">Account Number <span class="text-danger">*</span></label>
+                                            <input type="text" id="account_number" name="account_number" 
+                                                value="<?php echo htmlspecialchars($admin_data->account_number ?? ''); ?>" 
+                                                class="form-control" oninput="validateAccountNumber(this)" />
+                                            <div class="error-message text-danger small mt-1" id="account_number_error"><?php echo form_error('account_number'); ?></div>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ifsc_code" class="form-label">IFSC Code</label>
-                                        <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
-                                            value="<?php echo htmlspecialchars($admin_data->ifsc_code ?? ''); ?>" oninput="validateIfscCode(this)">
-                                        <div class="invalid-feedback" id="ifsc_code-error"><?php echo form_error('ifsc_code'); ?></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="ifsc_code">IFSC Code <span class="text-danger">*</span></label>
+                                            <input type="text" id="ifsc_code" name="ifsc_code" 
+                                                value="<?php echo htmlspecialchars($admin_data->ifsc_code ?? ''); ?>" 
+                                                class="form-control" oninput="validateIfscCode(this)" />
+                                            <div class="error-message text-danger small mt-1" id="ifsc_code_error"><?php echo form_error('ifsc_code'); ?></div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="bank_name" class="form-label">Bank Name</label>
-                                        <input type="text" class="form-control" id="bank_name" name="bank_name" 
-                                            value="<?php echo htmlspecialchars($admin_data->bank_name ?? ''); ?>" oninput="validateBankName(this)">
-                                        <div class="invalid-feedback" id="bank_name-error"><?php echo form_error('bank_name'); ?></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label for="bank_name">Bank Name <span class="text-danger">*</span></label>
+                                            <input type="text" id="bank_name" name="bank_name" 
+                                                value="<?php echo htmlspecialchars($admin_data->bank_name ?? ''); ?>" 
+                                                class="form-control" oninput="validateBankName(this)" />
+                                            <div class="error-message text-danger small mt-1" id="bank_name_error"><?php echo form_error('bank_name'); ?></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <hr class="section-divider">
-                                <h5 class="mb-4"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Address Details</h5>
-                                <div class="mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <textarea class="form-control" id="address" name="address" rows="3" oninput="validateAddress(this)"><?php echo htmlspecialchars($admin_data->address ?? ''); ?></textarea>
-                                    <div class="invalid-feedback" id="address-error"><?php echo form_error('address'); ?></div>
+
+                                <!-- Address Details -->
+                                <hr class="section-divider" style="border: 1px solid #0A517F;">
+                                <h5 class="mb-4"><i class="fas fa-map-marker-alt me-2 text-dark"></i>Address Details</h5>
+                                <div class="form-group-custom">
+                                    <label for="address">Address <span class="text-danger">*</span></label>
+                                    <textarea id="address" name="address" rows="3" 
+                                        class="form-control" oninput="validateAddress(this)"><?php echo htmlspecialchars($admin_data->address ?? ''); ?></textarea>
+                                    <div class="error-message text-danger small mt-1" id="address_error"><?php echo form_error('address'); ?></div>
                                 </div>
+
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="pin_code" class="form-label">Pin Code</label>
-                                        <input type="text" class="form-control" id="pin_code" name="pin_code" 
-                                            value="<?php echo htmlspecialchars($admin_data->pin_code ?? ''); ?>" oninput="validatePinCode(this)">
-                                        <div class="invalid-feedback" id="pin_code-error"><?php echo form_error('pin_code'); ?></div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label for="pin_code">Pin Code <span class="text-danger">*</span></label>
+                                            <input type="text" id="pin_code" name="pin_code" 
+                                                value="<?php echo htmlspecialchars($admin_data->pin_code ?? ''); ?>" 
+                                                class="form-control" oninput="validatePinCode(this)" />
+                                            <div class="error-message text-danger small mt-1" id="pin_code_error"><?php echo form_error('pin_code'); ?></div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="city" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="city" name="city" 
-                                            value="<?php echo htmlspecialchars($admin_data->city ?? ''); ?>" oninput="validateCity(this)">
-                                        <div class="invalid-feedback" id="city-error"><?php echo form_error('city'); ?></div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label for="city">City <span class="text-danger">*</span></label>
+                                            <input type="text" id="city" name="city" 
+                                                value="<?php echo htmlspecialchars($admin_data->city ?? ''); ?>" 
+                                                class="form-control" oninput="validateCity(this)" />
+                                            <div class="error-message text-danger small mt-1" id="city_error"><?php echo form_error('city'); ?></div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="office_mobile" class="form-label">Office Mobile</label>
-                                        <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
-                                            value="<?php echo htmlspecialchars($admin_data->office_mobile ?? ''); ?>" oninput="validateOfficeMobile(this)">
-                                        <div class="invalid-feedback" id="office_mobile-error"><?php echo form_error('office_mobile'); ?></div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label for="office_mobile">Office Mobile <span class="text-danger">*</span></label>
+                                            <input type="text" id="office_mobile" name="office_mobile" 
+                                                value="<?php echo htmlspecialchars($admin_data->office_mobile ?? ''); ?>" 
+                                                class="form-control" oninput="validateOfficeMobile(this)" />
+                                            <div class="error-message text-danger small mt-1" id="office_mobile_error"><?php echo form_error('office_mobile'); ?></div>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="d-flex justify-content-end mt-4">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-save me-1"></i> Update Profile
@@ -877,14 +1054,201 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </section>
+
+                <script>
+                    // Validation functions for each field
+                    function validatePhone(input) {
+                        const errorElement = document.getElementById('phone_error');
+                        const phonePattern = /^[0-9]{10}$/;
+                        
+                        if (!phonePattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Please enter a valid 10-digit phone number';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateSapCode(input) {
+                        const errorElement = document.getElementById('sap_code_error');
+                        
+                        if (input.value.trim() === '') {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'SAP Code is required';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateAccountHolderName(input) {
+                        const errorElement = document.getElementById('account_holder_name_error');
+                        const namePattern = /^[a-zA-Z\s]+$/;
+                        
+                        if (!namePattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Please enter a valid account holder name (letters and spaces only)';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateAccountNumber(input) {
+                        const errorElement = document.getElementById('account_number_error');
+                        const accountPattern = /^[0-9]{9,18}$/;
+                        
+                        if (!accountPattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Please enter a valid account number (9-18 digits)';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateIfscCode(input) {
+                        const errorElement = document.getElementById('ifsc_code_error');
+                        const ifscPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+                        
+                        if (!ifscPattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Please enter a valid IFSC code (e.g., ABCD0123456)';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateBankName(input) {
+                        const errorElement = document.getElementById('bank_name_error');
+                        
+                        if (input.value.trim() === '') {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Bank name is required';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateAddress(input) {
+                        const errorElement = document.getElementById('address_error');
+                        
+                        if (input.value.trim() === '') {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Address is required';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validatePinCode(input) {
+                        const errorElement = document.getElementById('pin_code_error');
+                        const pincodePattern = /^[1-9][0-9]{5}$/;
+                        
+                        if (!pincodePattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Please enter a valid 6-digit pin code';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateCity(input) {
+                        const errorElement = document.getElementById('city_error');
+                        
+                        if (input.value.trim() === '') {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'City is required';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    function validateOfficeMobile(input) {
+                        const errorElement = document.getElementById('office_mobile_error');
+                        const phonePattern = /^[0-9]{10}$/;
+                        
+                        if (!phonePattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            errorElement.textContent = 'Please enter a valid 10-digit office mobile number';
+                        } else {
+                            input.classList.remove('is-invalid');
+                            errorElement.textContent = '';
+                        }
+                    }
+
+                    // Form submission validation
+                    document.getElementById('profileForm').addEventListener('submit', function(e) {
+                        let isValid = true;
+                        
+                        // Validate all fields before submission
+                        const phone = document.getElementById('phone');
+                        if (!/^[0-9]{10}$/.test(phone.value)) {
+                            phone.classList.add('is-invalid');
+                            document.getElementById('phone_error').textContent = 'Please enter a valid 10-digit phone number';
+                            isValid = false;
+                        }
+                        
+                        const sapCode = document.getElementById('sap_code');
+                        if (sapCode.value.trim() === '') {
+                            sapCode.classList.add('is-invalid');
+                            document.getElementById('sap_code_error').textContent = 'SAP Code is required';
+                            isValid = false;
+                        }
+                        
+                        // Add validation for all other fields
+                        
+                        if (!isValid) {
+                            e.preventDefault();
+                            // Scroll to the first error
+                            const firstError = document.querySelector('.is-invalid');
+                            if (firstError) {
+                                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }
+                    });
+
+                    // Initialize validation on page load for any existing values
+                    document.addEventListener('DOMContentLoaded', function() {
+                        validatePhone(document.getElementById('phone'));
+                        validateSapCode(document.getElementById('sap_code'));
+                        validateAccountHolderName(document.getElementById('account_holder_name'));
+                        validateAccountNumber(document.getElementById('account_number'));
+                        validateIfscCode(document.getElementById('ifsc_code'));
+                        validateBankName(document.getElementById('bank_name'));
+                        validateAddress(document.getElementById('address'));
+                        validatePinCode(document.getElementById('pin_code'));
+                        validateCity(document.getElementById('city'));
+                        validateOfficeMobile(document.getElementById('office_mobile'));
+                    });
+                </script>
+
+                <style>
+                    .is-invalid {
+                        border-color: #dc3545 !important;
+                    }
+
+                    .error-message {
+                        display: block;
+                        min-height: 20px;
+                        font-size: 0.875rem;
+                    }
+                </style>
 
             <?php elseif ($method == "create_distributor") : ?>
-                <div class="row">
+                <section class="fade-in">
                     <div class="col-lg-8 mx-auto">
                         <div class="form-container">
-                            <h2><i class="fas fa-user-plus me-2 text-primary"></i>New Distributor Account</h2>
+                            <h2><i class="fas fa-user-plus me-2 text-dark"></i> New Distributor Account</h2>
                             <p class="text-muted">Create a new distributor member account</p>
+
                             <!-- Distributor Limit Indicator -->
                             <?php if (isset($distributor_limit) && isset($current_distributor_count)): ?>
                                 <div class="alert alert-info">
@@ -892,47 +1256,121 @@
                                     You have created <?php echo $current_distributor_count; ?> out of <?php echo $distributor_limit; ?> allowed distributor accounts.
                                 </div>
                             <?php endif; ?>
+
                             <?php echo form_open('create-distributor'); ?>
-                                <div class="mb-3">
-                                    <label for="full_name" class="form-label"><i class="fas fa-user me-1 text-muted"></i>Full Name</label>
-                                    <input type="text" class="form-control <?php echo form_error('full_name') ? 'is-invalid' : ''; ?>" 
-                                        id="full_name" name="full_name" value="<?php echo set_value('full_name'); ?>" required>
-                                    <?php echo form_error('full_name', '<div class="invalid-feedback">', '</div>'); ?>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label"><i class="fas fa-envelope me-1 text-muted"></i>Email</label>
-                                    <input type="email" class="form-control <?php echo form_error('email') ? 'is-invalid' : ''; ?>" 
-                                        id="email" name="email" value="<?php echo set_value('email'); ?>" required>
-                                    <?php echo form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label"><i class="fas fa-lock me-1 text-muted"></i>Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control <?php echo form_error('password') ? 'is-invalid' : ''; ?>" 
-                                            id="password" name="password" required>
-                                        <button class="btn btn-outline-secondary password-toggle" type="button" id="togglePassword">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <?php echo form_error('password', '<div class="invalid-feedback">', '</div>'); ?>
+
+                                <section class="form-section" style="padding-top: 10px;">
+                                    <div class="form-group-custom">
+                                        <label for="full_name"><i class="fas fa-user me-1 text-muted"></i> Full Name <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                            class="form-control <?php echo form_error('full_name') ? 'is-invalid' : ''; ?>"
+                                            id="full_name"
+                                            name="full_name"
+                                            value="<?php echo set_value('full_name'); ?>"
+                                            required>
+                                        <?php echo form_error('full_name', '<div class="invalid-feedback">', '</div>'); ?>
                                     </div>
-                                    <small class="text-muted">Password must be at least 8 characters long</small>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="staff_limit" class="form-label"><i class="fas fa-users me-1 text-muted"></i>Staff Limit</label>
-                                    <input type="number" class="form-control <?php echo form_error('staff_limit') ? 'is-invalid' : ''; ?>" 
-                                        id="staff_limit" name="staff_limit" value="<?php echo set_value('staff_limit', 5); ?>" min="1" required>
-                                    <?php echo form_error('staff_limit', '<div class="invalid-feedback">', '</div>'); ?>
-                                    <small class="text-muted">Maximum number of staff this distributor can create</small>
-                                </div>
+                                </section>
+
+                                <section class="form-section">
+                                    <div class="form-group-custom">
+                                        <label for="email"><i class="fas fa-envelope me-1 text-muted"></i> Email <span class="text-danger">*</span></label>
+                                        <input type="email"
+                                            class="form-control <?php echo form_error('email') ? 'is-invalid' : ''; ?>"
+                                            id="email"
+                                            name="email"
+                                            value="<?php echo set_value('email'); ?>"
+                                            required>
+                                        <?php echo form_error('email', '<div class="invalid-feedback">', '</div>'); ?>
+                                    </div>
+                                </section>
+
+                                <section class="form-section" style="background-color: none;">
+                                    <div class="form-group-custom position-relative">
+                                        <label for="password" class="floating-label">
+                                            <i class="fas fa-lock me-1 text-muted"></i> Password <span class="text-danger">*</span>
+                                        </label>
+                                        
+                                        <div class="input-group custom-input-group">
+                                            <input type="password"
+                                                class="form-control border-0 <?php echo form_error('password') ? 'is-invalid' : ''; ?>"
+                                                id="password"
+                                                name="password"
+                                                required>
+                                            <button class="btn btn-outline-secondary password-toggle" type="button" id="togglePassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+
+                                        <?php echo form_error('password', '<div class="invalid-feedback d-block">', '</div>'); ?>
+                                        <small class="text-muted">Password must be at least 8 characters long</small>
+                                    </div>
+
+                                </section>
+
+                                <section class="form-section">
+                                    <div class="form-group-custom">
+                                        <label for="staff_limit"><i class="fas fa-users me-1 text-muted"></i> Staff Limit <span class="text-danger">*</span></label>
+                                        <input type="number"
+                                            class="form-control <?php echo form_error('staff_limit') ? 'is-invalid' : ''; ?>"
+                                            id="staff_limit"
+                                            name="staff_limit"
+                                            value="<?php echo set_value('staff_limit', 5); ?>"
+                                            min="1"
+                                            required>
+                                        <?php echo form_error('staff_limit', '<div class="invalid-feedback">', '</div>'); ?>
+                                        <small class="text-muted">Maximum number of staff this distributor can create</small>
+                                    </div>
+                                </section>
+
                                 <div class="d-grid mt-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-user-plus me-2"></i>Create Distributor
+                                    <button type="submit" class="btn btn-primary" style="background-color: #0A517F;">
+                                        <i class="fas fa-user-plus me-2"></i> Create Distributor
                                     </button>
                                 </div>
+
                             <?php echo form_close(); ?>
                         </div>
                     </div>
-                </div>
+                </section>
+                
+                <style>
+                    .form-group-custom {
+                        position: relative;
+                        margin-bottom: 1.5rem;
+                    }
+
+                    .floating-label {
+                        position: absolute;
+                        top: -18px;
+                        left: 12px;
+                        background: #fff;
+                        padding: 0 6px;
+                        font-size: 14px;
+                        color: #0A517F;
+                        font-weight: 500;
+                        pointer-events: none;
+                        z-index: 2;
+                    }
+
+                    .custom-input-group {
+                        border: 2px solid #0A517F;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        background-color: #f5faff;
+                    }
+
+                    .custom-input-group .form-control {
+                        border: none;
+                        border-radius: 0;
+                        padding: 14px 15px;
+                        background-color: #f5faff;
+                        font-size: 16px;
+                        color: rgba(10, 81, 127, 0.6);
+                        outline: none;
+                        box-shadow: none;
+                    }
+                </style>
 
                 <!-- Limit Reached Modal -->
                 <div class="modal fade" id="limitReachedModal" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
@@ -959,7 +1397,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h4 class="mb-4 fw-bold text-dark">
-                            <i class="fas fa-users me-2 text-primary"></i> Distributor Details
+                            <i class="fas fa-users me-2 text-dark"></i> Distributor Details
                         </h4>
 
                         <!-- Flash messages -->
@@ -1053,101 +1491,145 @@
 
                 
             <?php elseif ($method == "showing_distributor_remaining_data") : ?>
-                <div class="row">
-                    <div class="col-12 pt-0">
-                        <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                    </div>
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Distributor Full Details</h2>
-                                <form>
-                                    <?php foreach ($distributor_data as $distributor): ?>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="full_name" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" id="full_name" name="full_name" 
-                                                    value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email" 
-                                                    value="<?php echo htmlspecialchars($distributor->email ?? ''); ?>" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="phone" class="form-label">Phone</label>
-                                                <input type="text" class="form-control" id="phone" name="phone" 
-                                                    value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="sap_code" class="form-label">SAP Code</label>
-                                                <input type="text" class="form-control" id="sap_code" name="sap_code" 
-                                                    value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
+                <div class="col-12 pt-0">
+                    <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h2 class="mb-4"><i class="fas fa-user-cog me-2"></i>Distributor Full Details</h2>
+
+                            <form>
+                                <?php foreach ($distributor_data as $distributor): ?>
+
+                                    <!-- Full Name & Email -->
+                                    <section class="row mt-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="full_name">Full Name</label>
+                                                <input type="text" id="full_name" name="full_name"
+                                                    value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>"
+                                                    readonly>
                                             </div>
                                         </div>
-                                        <h5 class="section-header"><i class="fas fa-university me-2"></i>Bank Details</h5>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                                                <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
-                                                    value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="account_number" class="form-label">Account Number</label>
-                                                <input type="text" class="form-control" id="account_number" name="account_number" 
-                                                    value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="email">Email</label>
+                                                <input type="email" id="email" name="email"
+                                                    value="<?php echo htmlspecialchars($distributor->email ?? ''); ?>"
+                                                    readonly>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="ifsc_code" class="form-label">IFSC Code</label>
-                                                <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
-                                                    value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="bank_name" class="form-label">Bank Name</label>
-                                                <input type="text" class="form-control" id="bank_name" name="bank_name" 
-                                                    value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
-                                            </div>
-                                        </div>
-                                        <h5 class="section-header"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
-                                        <div class="mb-3">
-                                            <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="pin_code" class="form-label">Pin Code</label>
-                                                <input type="text" class="form-control" id="pin_code" name="pin_code" 
-                                                    value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="city" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="city" name="city" 
-                                                    value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="office_mobile" class="form-label">Office Mobile</label>
-                                                <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
-                                                    value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
+                                    </section>
+
+                                    <!-- Phone & SAP Code -->
+                                    <section class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="phone">Phone</label>
+                                                <input type="text" id="phone" name="phone"
+                                                    value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>"
+                                                    readonly>
                                             </div>
                                         </div>
-                                    <?php endforeach; ?>
-                                </form>
-                            </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="sap_code">SAP Code</label>
+                                                <input type="text" id="sap_code" name="sap_code"
+                                                    value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <!-- Bank Details -->
+                                    <h5 class="section-header mb-4"><i class="fas fa-university me-2"></i>Bank Details</h5>
+                                    <section class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="account_holder_name">Account Holder Name</label>
+                                                <input type="text" id="account_holder_name" name="account_holder_name"
+                                                    value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="account_number">Account Number</label>
+                                                <input type="text" id="account_number" name="account_number"
+                                                    value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="ifsc_code">IFSC Code</label>
+                                                <input type="text" id="ifsc_code" name="ifsc_code"
+                                                    value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group-custom">
+                                                <label for="bank_name">Bank Name</label>
+                                                <input type="text" id="bank_name" name="bank_name"
+                                                    value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <!-- Address -->
+                                    <h5 class="section-header mb-4"><i class="fas fa-map-marker-alt me-2"></i>Address Details</h5>
+                                    <div class="form-group-custom">
+                                        <label for="address">Address</label>
+                                        <textarea id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
+                                    </div>
+
+                                    <!-- Pin Code, City, Office Mobile -->
+                                    <section class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group-custom">
+                                                <label for="pin_code">Pin Code</label>
+                                                <input type="text" id="pin_code" name="pin_code"
+                                                    value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group-custom">
+                                                <label for="city">City</label>
+                                                <input type="text" id="city" name="city"
+                                                    value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group-custom">
+                                                <label for="office_mobile">Office Mobile</label>
+                                                <input type="text" id="office_mobile" name="office_mobile"
+                                                    value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                <?php endforeach; ?>
+                            </form>
                         </div>
                     </div>
                 </div>
-
             <?php elseif ($method == "get_staff_limits") : ?>
                 <div class="row">
                     <div class="col-12">
                         <h4 class="mb-4 fw-bold text-dark">
-                            <i class="bi bi-arrow-clockwise me-2 text-primary"></i> Update Staff Limit
+                            <i class="bi bi-arrow-clockwise me-2 text-dark"></i> Update Staff Limit
                         </h4>
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
@@ -1238,12 +1720,146 @@
                         </div>
                     </div>
                 </div>
+            <?php elseif ($method == "get_template_content") : ?>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" class="btn mb-3" style="background-color: black; color: white"><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white;"><i class="bi bi-arrow-left me-2"></i>Back To Dashboard</a></button>
+                    </div>
+                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold text-dark mb-0">
+                                <i class="bi bi-arrow-clockwise me-2 text-primary"></i> Update Template Content
+                            </h4>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTemplateModal">
+                                <i class="bi bi-plus-circle me-1"></i> Add Template
+                            </button>
+                        </div>
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered mb-0 align-middle text-center">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th scope="col">S.No</th>
+                                                <th scope="col">Template Name</th>
+                                                <th scope="col">Template Content</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $serialNo = 1; ?>
+                                            <?php foreach ($templates as $template): ?>
+                                                <tr>
+                                                    <td><?= $serialNo++; ?></td>
+                                                    <td><?= htmlspecialchars($template->template_name); ?></td>
+                                                    <td><?= htmlspecialchars($template->template_content); ?></td>
+                                                    <td>
+                                                        <button type="button"
+                                                            class="btn btn-primary btn-sm edit-template-btn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editTemplateModal"
+                                                            data-id="<?= $template->id; ?>"
+                                                            data-name="<?= htmlspecialchars($template->template_name); ?>"
+                                                            data-content="<?= htmlspecialchars($template->template_content); ?>">
+                                                            <i class="fas fa-edit me-1"></i> Edit Content
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Add Template Modal -->
+                <div class="modal fade" id="addTemplateModal" tabindex="-1" aria-labelledby="addTemplateModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addTemplateModalLabel">Add New Template</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addTemplateForm" action="<?= base_url('AdminDashboard/add_template'); ?>" method="post">
+                            <div class="mb-3">
+                                <label for="new_template_name" class="form-label">Template Name</label>
+                                <input type="text" class="form-control" id="new_template_name" name="template_name" required>
+                                <small class="text-danger">Note: Template Name that should be match with meta approval template</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new_template_content" class="form-label">Template Content</label>
+                                <textarea class="form-control" id="new_template_content" name="template_content" rows="4" required></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success">Add Template</button>
+                            </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Updated Template Content Modal -->
+                <div class="modal fade" id="editTemplateModal" tabindex="-1" aria-labelledby="editTemplateModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editTemplateModalLabel">Edit Template Content</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editTemplateForm" action="<?= base_url('AdminDashboard/update_template_content'); ?>" method="post">
+                                    <input type="hidden" name="template_id" id="template_id">
+                                    <div class="mb-3">
+                                        <label for="template_name" class="form-label">Template Name</label>
+                                        <input type="text" class="form-control" id="template_name" name="template_name" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="template_content" class="form-label">Template Content</label>
+                                        <textarea class="form-control" id="template_content" name="template_content" rows="4" required></textarea>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Update Template</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // JavaScript to populate modal with data
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const editButtons = document.querySelectorAll('.edit-template-btn');
+                        const templateIdInput = document.getElementById('template_id');
+                        const templateNameInput = document.getElementById('template_name');
+                        const templateContentInput = document.getElementById('template_content');
+                        
+                        editButtons.forEach(button => {
+                            button.addEventListener('click', function() {
+                                const id = this.getAttribute('data-id');
+                                const name = this.getAttribute('data-name');
+                                const content = this.getAttribute('data-content');
+                                
+                                templateIdInput.value = id;
+                                templateNameInput.value = name;
+                                templateContentInput.value = content;
+                            });
+                        });
+                    });
+                </script>
             <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
                         <div class="form-container">
-                            <h3 class="mb-4"><i class="fas fa-file-alt me-2 text-primary"></i>Available Pages</h3>
+                            <h3 class="mb-4"><i class="fas fa-file-alt me-2 text-dark"></i>Available Pages</h3>
                             <form method="post">
                                 <div class="list-group mb-4">
                                     <?php foreach ($all_pages as $page) : ?>

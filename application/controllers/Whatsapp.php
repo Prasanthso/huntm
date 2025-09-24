@@ -9,75 +9,196 @@ class Whatsapp extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Whatsapp_model');
+        $this->load->model('CustomerRegister_model');
         $this->load->library('session');
 
-        // ✅ Authentication & Base URL
-        $this->api_key  = "08fc4fffd6d31a01e1a180b7616d8e96790358b67adc064554fed640f91bccb7aa53f60b022e8adccb668554691d6ae8";
-        $this->base_url = "https://api.talkingshops.com/v1";
+        $this->api_key  = "EAAEURNpv0l0BPbOMkhIclQTDaXZCKurZCFTYbPWKAsL9fP8uZA1EjkWRd6mUzv8tGpgimx3zXP2kUs1HKMFdlUYCA3Rv62x2XYORdcf2sZAKTboVtoYgeb7Af6eKY9j3WFvwIcotgF6ZCB41d97O6sJLHbBAnuuOZAIsGzIu3PG7lUp9ZCgb5tywoeUMve2sQZDZD";
+        $this->base_url = "https://graph.facebook.com/v22.0/";
     }
 
-    // Load users
     public function index() {
-        $data['users'] = $this->Whatsapp_model->get_users();
+        $data['areas'] = $this->Whatsapp_model->get_area_distribution();
         $this->load->view('send_whatsapp', $data);
     }
 
-    // Send free-form text message
-    public function send_message() {
-        $user_id = $this->input->post('user_id');
-        $user = $this->Whatsapp_model->get_user_by_id($user_id);
+    public function sending_message() {
+    $area = $this->input->get('area');  
 
-        if (!$user) {
-            $this->session->set_flashdata('error', 'User not found');
-            redirect('whatsapp');
+    if (!$area) {
+        $this->session->set_flashdata('error', 'Area not specified.');
+        redirect('whatsapp');
+    }
+
+    $template_name = "mi_due_data_template"; 
+
+    $template = $this->Whatsapp_model->get_template_by_name($template_name);
+
+    if (empty($template)) {
+        $this->session->set_flashdata('error', "Template not found in DB: {$template_name}");
+        redirect('whatsapp');
+    }
+
+    $users  = $this->Whatsapp_model->get_users_by_area($area);
+    $distributor_number = $this->CustomerRegister_model->get_distributor_number();
+
+    if (empty($users)) {
+        $this->session->set_flashdata('error', "No users found in area: {$area}");
+        redirect('whatsapp');
+    }
+
+    $template_content = $template['template_content'];
+
+    $success = 0;
+    $fail    = 0;
+
+    function clean_whatsapp_text($text) {
+        $text = preg_replace('/[\r\n\t]+/', ' ', $text);   
+        $text = preg_replace('/\s{2,}/', ' ', $text);      
+        return trim($text);
+    }
+
+    foreach ($users as $user) {
+        $recipient = preg_replace('/\D/', '', $user['phone']);
+
+        if (strlen($recipient) < 12) {
+            log_message('error', "❌ Invalid phone number for user {$user['id']}: {$user['phone']} (Cleaned: {$recipient})");
+            continue;
         }
 
-        $recipient = $user['phone']; // number with country code
-
-        // ✅ TalkingShops text message endpoint
-        $url = $this->base_url . "/messages/text";
-
-        // ✅ Payload for free-form text
+        $url = $this->base_url . "739878672549065/messages";
         $payload = [
-            "recipient" => $recipient,
-            "message"   => "Hello " . $user['name'] . ", this is a test message from TalkingShops API."
+            "messaging_product" => "whatsapp",
+            "to" => $recipient,
+            "type" => "template",
+            "template" => [
+                "name" => $template_name,
+                "language" => ["code" => "en_US"],
+                "components" => [[
+                    "type" => "body",
+                    "parameters" => [
+                        ["type" => "text", "text" => clean_whatsapp_text($user['name'])], 
+                        ["type" => "text", "text" => clean_whatsapp_text($user['Consumer_Number'])],
+                        ["type" => "text", "text" => clean_whatsapp_text($user['Last_Refill_Date'])],
+                        ["type" => "text", "text" => clean_whatsapp_text($template_content)], 
+                        ["type" => "text", "text" => clean_whatsapp_text($user['Distributor_Name'])], 
+                        ["type" => "text", "text" => clean_whatsapp_text($distributor_number['office_mobile'])], 
+                        ["type" => "text", "text" => clean_whatsapp_text($distributor_number['office_mobile2'])]
+                    ]
+                ]]
+            ]
         ];
 
-        // 🔥 CURL request
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Content-Type: application/json",
-            "x-tenant-api-key: {$this->api_key}"
+            "Authorization: Bearer {$this->api_key}"
         ]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 
         $response = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
         curl_close($ch);
 
         $api_response = json_decode($response, true);
 
-        // ✅ Save to DB if success
-        if (isset($api_response['message_id'])) {
-            $data_insert = [
+        if (isset($api_response['messages'][0]['id'])) {
+            $this->db->insert('whatsapp_messages', [
                 'user_id'    => $user['id'],
-                'message_id' => $api_response['message_id'],
-                'status'     => isset($api_response['status']) ? $api_response['status'] : 'queued',
-                'sent_at'    => date('Y-m-d H:i:s')
-            ];
-            $this->db->insert('whatsapp_messages', $data_insert);
-        }
-
-        // ✅ Show response
-        if (in_array($httpcode, [200,201,202])) {
-            $this->session->set_flashdata('success', 'Message sent successfully. Name: ' . $user['name']);
+                'message_id' => $api_response['messages'][0]['id'],
+                'status'     => 'sent',
+                'sent_at' => (new DateTime('now', new DateTimeZone('Asia/Kolkata')))->format('Y-m-d H:i:s')
+            ]);
+            $success++;
         } else {
-            $this->session->set_flashdata('error', 'Failed to send message: ' . $response);
+            $fail++;
+            log_message('error', "❌ Failed to send to {$recipient}. HTTP: {$http_code}, Response: {$response}, CurlError: {$curl_error}");
         }
-
-        redirect('whatsapp');
     }
+
+    $this->session->set_flashdata('success', "✅ Sent to {$success} users in {$area}. ❌ Failed for {$fail}.");
+    redirect('whatsapp');
+}
+
+
+    // public function sending_message() {
+    //     $user_id = $this->session->userdata('user_id');
+    //     $area = $this->input->get('area'); 
+    //     $customer_details = $this->CustomerRegister_model->get_customer_details();
+    //     $distributor_number   = $this->CustomerRegister_model->get_distributor_number();
+    //     $users  = $this->Whatsapp_model->get_users_by_area($area);
+    //     $template_name = "sbc_data_template";
+    //     $template = $this->CustomerRegister_model->get_template_by_name($template_name);
+    //     if (empty($template)) {
+    //         $this->session->set_flashdata('error', "Template not found in DB: {$template_name}");
+    //         redirect('whatsapp');
+    //     }
+    //     $template_content = $template['template_content'];
+    //     $success = 0;
+    //     $fail    = 0;
+
+    //     foreach ($customer_details as $customer) {
+    //         // $recipient = "91" . $customer['Phone_Number'];
+    //         $recipient = $user['phone'];
+    //         $url = $this->base_url . "739878672549065/messages";
+
+    //         $payload = [
+    //             "messaging_product" => "whatsapp",
+    //             "to" => $recipient,
+    //             "type" => "template",
+    //             "template" => [
+    //                 "name" => $template_name,
+    //                 "language" => [
+    //                     "code" => "en_US"
+    //                 ],
+    //                 "components" => [[
+    //                     "type" => "body",
+    //                     "parameters" => [
+    //                         ["type" => "text", "text" => $customer['Consumer_Name']],
+    //                         ["type" => "text", "text" => $customer['Consumer_Number']],
+    //                         ["type" => "text", "text" => $template_content],
+    //                         ["type" => "text", "text" => $distributor_number['office_mobile']],
+    //                         ["type" => "text", "text" => $distributor_number['office_mobile2']]
+    //                     ]
+    //                 ]]
+    //             ]
+    //         ];
+
+    //         $ch = curl_init();
+    //         curl_setopt($ch, CURLOPT_URL, $url);
+    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //         curl_setopt($ch, CURLOPT_POST, true);
+    //         curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //             "Content-Type: application/json",
+    //             "Authorization: Bearer {$this->api_key}"
+    //         ]);
+    //         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+    //         $response = curl_exec($ch);
+    //         curl_close($ch);
+
+    //         $api_response = json_decode($response, true);
+
+    //         // Debugging log (check application/logs/log-*.php if fails)
+    //         log_message('error', 'WhatsApp API Response: ' . $response);
+
+    //         if (isset($api_response['messages'][0]['id'])) {
+    //             $this->db->insert('whatsapp_messages', [
+    //                 'user_id'    => $user_id,
+    //                 'message_id' => $api_response['messages'][0]['id'],
+    //                 'status'     => 'sent',
+    //                 'sent_at'    => date('Y-m-d H:i:s')
+    //             ]);
+    //             $success++;
+    //         } else {
+    //             $fail++;
+    //         }
+    //     }
+
+    //     $this->session->set_flashdata('success', "✅ Sent to {$success} users. ❌ Failed for {$fail}.");
+    //     redirect('whatsapp');
+    // }
 }
