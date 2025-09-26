@@ -12,6 +12,8 @@ class User_profile extends CI_Controller {
         $this->load->library('session');
         $this->load->library('form_validation');
         $this->load->library('email');
+        $this->session->sess_expiration = 20;
+        $this->session->sess_expire_on_close = TRUE;
     }
 
     public function index() {
@@ -58,14 +60,14 @@ class User_profile extends CI_Controller {
                     redirect('distributor-dashboard');
                     break;
                 case 'staff':
-                    redirect('dashboard');  // make sure this route exists
+                    redirect('dashboard'); 
                     break;
                 default:
                     echo "Unknown role: " . $user->role;
             }
         } else {
             $this->session->set_flashdata('error', 'Invalid email or password');
-            redirect('user_profile/login_form'); // or your login route
+            redirect('user_profile/login_form');
         }
 
     }
@@ -178,6 +180,6 @@ class User_profile extends CI_Controller {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('user_profile/process_login');
+        redirect('user_profile/login_form');
     }
 }

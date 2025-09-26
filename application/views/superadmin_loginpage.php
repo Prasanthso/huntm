@@ -304,7 +304,7 @@
                                 </div>
                                 
                                 <div class="forgot-password">
-                                    <a href="#">Forgot your password?</a>
+                                    <a href="<?php echo base_url('User_profile/forgot_password_form'); ?>">Forgot your password?</a>
                                 </div>
                                 
                                 <button type="submit" class="btn btn-auth mt-2">Login to Dashboard</button>

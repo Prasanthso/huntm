@@ -105,7 +105,7 @@
             position: fixed;
             top: var(--header-height);
             left: 0;
-            background: var(--sidebar-bg);
+            background: #2c3e50;
             color: var(--sidebar-color);
             transition: var(--transition);
             z-index: 1020;
@@ -384,7 +384,7 @@
         }
 
         .form-control:focus {
-            border-color: var(--primary-color);
+            border-color: #0A517F;
             box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.15);
         }
 
@@ -713,10 +713,10 @@
 
     <!-- Sidebar -->
     <aside class="app-sidebar" id="sidebar">
-        <div class="sidebar-header">
+        <div class="sidebar-header" style="background-color: #2c3e50;">
             <h4>Menu</h4>
         </div>
-        <div class="sidebar-menu" style="background-color: #0A517F;">
+        <div class="sidebar-menu" style="background-color: #2c3e50;">
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="<?php echo base_url('admin-dashboard'); ?>" 

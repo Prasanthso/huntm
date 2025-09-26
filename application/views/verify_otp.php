@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary-color: #4e73df;
+            --primary-color: #0A517F;
             --secondary-color: #6c757d;
             --success-color: #1cc88a;
             --danger-color: #e74a3b;
@@ -103,7 +103,7 @@
         .btn-verify {
             padding: 12px 30px;
             font-weight: 600;
-            background: linear-gradient(120deg, var(--primary-color), var(--gradient-end));
+            background: #0A517F;
             border: none;
             border-radius: 8px;
             transition: all 0.3s;
