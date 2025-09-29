@@ -2679,657 +2679,657 @@ document.addEventListener('DOMContentLoaded', function() {
                     </a>
                 </div>
                 <div class="container4">
-    <!-- Fixed Summary Section -->
-    <div class="sbc_summary">
-        <h2 class="text-center mb-4">SBC Data Report</h2>
-        <div class="table-responsive">
-            <table class="table table table-bordered summary-table" id="summaryTable">
-                <thead>
-                    <tr class="header-row">
-                        <th rowspan="2" class="text-center">Quantity/Percent</th>
-                        <th colspan="3" class="text-center">ACTIVE</th>
-                        <th colspan="3" class="text-center">SUSPENDED</th>
-                        <th colspan="3" class="text-center">DEACTIVATED</th>
-                        <th colspan="3" class="text-center">TOTAL</th>
-                    </tr>
-                    <tr>
-                        <th class="text-center">PMUY</th>
-                        <th class="text-center">NON PMUY</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">PMUY</th>
-                        <th class="text-center">NON PMUY</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">PMUY</th>
-                        <th class="text-center">NON PMUY</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">PMUY</th>
-                        <th class="text-center">NON PMUY</th>
-                        <th class="text-center">Total</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryTableBody">
-                    <tr>
-                        <td class="text-center">Quantity</td>
-                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
-                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">Percent</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <!-- Scrollable Content Section -->
-    <div class="content-section">
-        <!-- Area Breakdown Table -->
-        <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
-            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
-            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
-            <div class="table-responsive">
-                <table class="table table table-bordered area-table">
-                    <thead>
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Connection Count</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="areaBreakdownBody"></tbody>
-                </table>
-            </div>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
-                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <!-- Customer Details Table -->
-        <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
-            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
-            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
-            <div class="table-responsive">
-                <table class="table table table-bordered table_area">
-                    <thead>
-                        <tr>
-                            <th>Area Name</th>
-                            <th>Consumer Number</th>
-                            <th>Consumer Name</th>
-                            <th>Phone Number</th>
-                            <th>Scheme</th>
-                            <th>Consumer Type</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="customerTableBody"></tbody>
-                </table>
-            </div>
-            <nav>
-                <ul class="pagination justify-content-center mt-3">
-                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
-                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function () {
-    // Pagination variables
-    let currentPage = 1;
-    let currentAreaPage = 1;
-    const recordsPerPage = 10;
-    
-    // Data variables
-    let allCustomers = <?= json_encode($sbc_data ?? []) ?>;
-    let filteredCustomers = [];
-    let areaBreakdownData = [];
-    let currentScheme = null;
-    let currentStatus = null;
-    let currentArea = null;
-
-    // WhatsApp sending variables for large volumes
-    let isSending = false;
-    let currentBatch = 0;
-    let totalBatches = 0;
-    let totalCustomers = 0;
-    let successCount = 0;
-    let failCount = 0;
-    let startTime = null;
-    let pauseSending = false;
-
-    // Initialize the view
-    initView();
-
-    function initView() {
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-        
-        if (allCustomers && allCustomers.length > 0) {
-            processData();
-        }
-    }
-
-    function processData() {
-        allCustomers.forEach(customer => {
-            customer.consumer_status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
-            const scheme = (customer.Scheme_Selected || '').toUpperCase().trim();
-            customer.Scheme_Selected = scheme == 'NON_PMUY' ? 'NON_PMUY' : 'PMUY';
-            customer.Area_Name = customer.Area_Name || 'Unknown';
-        });
-    }
-
-    function showAreaBreakdown(status, scheme) {
-        currentStatus = status;
-        currentScheme = scheme;
-        
-        filteredCustomers = allCustomers.filter(customer => {
-            const statusMatch = (status === 'ALL') ? true : customer.consumer_status === status;
-            const schemeMatch = (scheme === 'ALL') ? true :
-                            (scheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
-                            customer.Scheme_Selected === 'NON_PMUY';
-            
-            return statusMatch && schemeMatch;
-        });
-        
-        const areaStats = {};
-        filteredCustomers.forEach(customer => {
-            const area = customer.Area_Name;
-            areaStats[area] = (areaStats[area] || 0) + 1;
-        });
-        
-        areaBreakdownData = Object.entries(areaStats)
-            .map(([area, count]) => ({ area, total: count }))
-            .sort((a, b) => b.total - a.total);
-        
-        $('#areaBreakdownTitle').text(`SBC Connections (${status} - ${scheme}) by Area`);
-        currentAreaPage = 1;
-        updateAreaBreakdownTable();
-        
-        $('#areaBreakdownView').show();
-        $('#customerDetailsView').hide();
-        $('.content-section').scrollTop(0);
-    }
-
-    function updateAreaBreakdownTable() {
-        const start = (currentAreaPage - 1) * recordsPerPage;
-        const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
-        const pageAreas = areaBreakdownData.slice(start, end);
-        const tableBody = $("#areaBreakdownBody");
-        
-        tableBody.empty();
-        
-        if (pageAreas.length === 0) {
-            tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
-        } else {
-            pageAreas.forEach(({ area, total }) => {
-                tableBody.append(`
-                    <tr>
-                        <td class="clickabled area-click" data-area="${area}">${area}</td>
-                        <td>${total}</td>
-                        <td>
-                            <button class="btn btn-success btn-sm send-whatsapp-batch" 
-                                data-status="${currentStatus}" 
-                                data-scheme="${currentScheme}" 
-                                data-area="${area}"
-                                style="background: #25D366; border-color: #25D366;">
-                                <i class="fas fa-paper-plane"></i> Send WhatsApp
-                            </button>
-                            <div class="progress mt-2" style="display: none; height: 10px;">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                     role="progressbar" style="width: 0%"></div>
-                            </div>
-                            <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-        
-        $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
-        $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
-        $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
-    }
-
-    // WhatsApp Batch Sending Function for Large Volumes
-    function sendWhatsAppBatch(status, scheme, area, button) {
-        if (isSending) {
-            if (pauseSending) {
-                // Resume sending
-                pauseSending = false;
-                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                sendNextBatch(status, scheme, area, button);
-            } else {
-                // Pause sending
-                pauseSending = true;
-                button.innerHTML = '<i class="fas fa-play"></i> Resume';
-                updateStatus('⏸️ Sending paused. Click Resume to continue.');
-            }
-            return;
-        }
-
-        const progressBar = button.nextElementSibling;
-        const statusDiv = progressBar.nextElementSibling;
-        const batchSize = 2; // Very small batches for large volumes
-
-        if (!confirm(`Send WhatsApp to ${area} (${status} - ${scheme})?\n\n• Large volume: ${batchSize} messages per batch\n• Estimated time: Several hours for 9000+ customers\n• You can pause/resume anytime`)) {
-            return;
-        }
-
-        isSending = true;
-        pauseSending = false;
-        currentBatch = 0;
-        successCount = 0;
-        failCount = 0;
-        totalCustomers = 0;
-        startTime = new Date();
-
-        // Disable other buttons
-        $('.send-whatsapp-batch').not(button).prop('disabled', true);
-        
-        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        progressBar.style.display = 'block';
-        statusDiv.style.display = 'block';
-        statusDiv.innerHTML = 'Counting customers...';
-
-        // Get total count first
-        $.ajax({
-            url: '<?php echo base_url('SBC_data/get_customers_for_messaging'); ?>',
-            type: 'GET',
-            data: { status: status, scheme: scheme, area: area },
-            success: function(response) {
-                if (response.success) {
-                    totalCustomers = response.total_customers;
-                    totalBatches = Math.ceil(totalCustomers / batchSize);
-                    
-                    if (totalCustomers === 0) {
-                        statusDiv.innerHTML = '<span class="text-danger">No customers found.</span>';
-                        resetButton(button, progressBar, statusDiv);
-                        return;
-                    }
-
-                    const estimatedTime = calculateTotalTime(totalCustomers, batchSize);
-                    statusDiv.innerHTML = `
-                        <div style="text-align: left;">
-                            <strong>Large Volume Detected: ${totalCustomers.toLocaleString()} customers</strong><br>
-                            • Batches: ${totalBatches} batches of ${batchSize}<br>
-                            • Estimated time: ${estimatedTime}<br>
-                            • You can PAUSE anytime<br>
-                            <small>Starting in 3 seconds...</small>
+                    <!-- Fixed Summary Section -->
+                    <div class="sbc_summary">
+                        <h2 class="text-center mb-4">SBC Data Report</h2>
+                        <div class="table-responsive">
+                            <table class="table table table-bordered summary-table" id="summaryTable">
+                                <thead>
+                                    <tr class="header-row">
+                                        <th rowspan="2" class="text-center">Quantity/Percent</th>
+                                        <th colspan="3" class="text-center">ACTIVE</th>
+                                        <th colspan="3" class="text-center">SUSPENDED</th>
+                                        <th colspan="3" class="text-center">DEACTIVATED</th>
+                                        <th colspan="3" class="text-center">TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">PMUY</th>
+                                        <th class="text-center">NON PMUY</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="summaryTableBody">
+                                    <tr>
+                                        <td class="text-center">Quantity</td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="PMUY"><?= $customer_data['active']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="NON_PMUY"><?= $customer_data['active']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ACTIVE" data-scheme="ALL"><?= $customer_data['active']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="PMUY"><?= $customer_data['suspended']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="NON_PMUY"><?= $customer_data['suspended']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="SUSPENDED" data-scheme="ALL"><?= $customer_data['suspended']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="PMUY"><?= $customer_data['deactivated']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="NON_PMUY"><?= $customer_data['deactivated']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="DEACTIVATED" data-scheme="ALL"><?= $customer_data['deactivated']['total'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="PMUY"><?= $customer_data['total']['pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="NON_PMUY"><?= $customer_data['total']['non_pmuy'] ?? 0 ?></td>
+                                        <td class="clickabled text-center" data-status="ALL" data-scheme="ALL"><?= $customer_data['total']['total'] ?? 0 ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Percent</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['active']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['suspended']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['deactivated']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['non_pmuy'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                        <td class="text-center"><?= $customer_data['total']['total'] ? round(($customer_data['total']['total'] / $customer_data['total']['total']) * 100, 2) : 0 ?>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    `;
+                    </div>
                     
-                    setTimeout(() => {
-                        sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
-                    }, 3000);
-                } else {
-                    statusDiv.innerHTML = '<span class="text-danger">Error counting customers.</span>';
-                    resetButton(button, progressBar, statusDiv);
-                }
-            },
-            error: function(xhr, status, error) {
-                statusDiv.innerHTML = '<span class="text-danger">Error: ' + error + '</span>';
-                resetButton(button, progressBar, statusDiv);
-            }
-        });
-    }
-
-    function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
-        if (pauseSending) {
-            return; // Don't send if paused
-        }
-
-        $.ajax({
-            url: '<?php echo base_url('SBC_data/send_batch_messages'); ?>',
-            type: 'POST',
-            data: {
-                status: status,
-                scheme: scheme,
-                area: area,
-                batch_size: batchSize,
-                current_batch: currentBatch,
-                total_customers: totalCustomers
-            },
-            timeout: 300000, // 5 minute timeout for large batches
-            success: function(response) {
-                if (response.success) {
-                    currentBatch++;
-                    successCount += response.success_count;
-                    failCount += response.fail_count;
-
-                    // Update progress
-                    const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
-                    progressBar.querySelector('.progress-bar').style.width = progress + '%';
-                    
-                    const elapsed = Math.round((new Date() - startTime) / 1000);
-                    const elapsedFormatted = formatTime(elapsed);
-                    const remaining = response.estimated_time_remaining || 'Calculating...';
-                    
-                    let statusHTML = `
-                        <div style="text-align: left; font-size: 14px;">
-                            <strong>Progress: ${progress.toFixed(1)}%</strong><br>
-                            • Batch ${currentBatch}/${totalBatches} completed<br>
-                            • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
-                            • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
-                            • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
-                            <small>${response.batch_info || ''}</small>
-                    `;
-                    
-                    if (response.rate_limit_hit) {
-                        statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
-                    }
-                    
-                    statusHTML += `</div>`;
-                    statusDiv.innerHTML = statusHTML;
-
-                    if (response.completed) {
-                        // Completion
-                        const totalTime = Math.round((new Date() - startTime) / 1000);
-                        statusDiv.innerHTML = `
-                            <div class="text-success" style="text-align: left;">
-                                <strong>✅ COMPLETED!</strong><br>
-                                • Success: ${successCount.toLocaleString()}<br>
-                                • Failed: ${failCount.toLocaleString()}<br>
-                                • Total: ${totalCustomers.toLocaleString()}<br>
-                                • Time: ${formatTime(totalTime)}<br>
-                                • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                    <!-- Scrollable Content Section -->
+                    <div class="content-section">
+                        <!-- Area Breakdown Table -->
+                        <div id="areaBreakdownView" style="display: none;" class="sbc_area_details">
+                            <a href="#" class="back-bttn" id="backToSummary">Back to Summary</a>
+                            <h4 class="text-center mb-4" id="areaBreakdownTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered area-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Connection Count</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="areaBreakdownBody"></tbody>
+                                </table>
                             </div>
-                        `;
-                        progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
-                        resetButton(button, progressBar, statusDiv, true);
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevAreaPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="areaPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextAreaPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Customer Details Table -->
+                        <div id="customerDetailsView" style="display: none;" class="sbc_customer_details">
+                            <a href="#" class="back-bttn" id="backToAreas">Back to Areas</a>
+                            <h4 class="text-center mb-4" id="customerDetailsTitle"></h4>
+                            <div class="table-responsive">
+                                <table class="table table table-bordered table_area">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Name</th>
+                                            <th>Consumer Number</th>
+                                            <th>Consumer Name</th>
+                                            <th>Phone Number</th>
+                                            <th>Scheme</th>
+                                            <th>Consumer Type</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customerTableBody"></tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item"><span class="page-link" id="customerPageInfo">1 - 10 of total page</span></li>
+                                    <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // Pagination variables
+                        let currentPage = 1;
+                        let currentAreaPage = 1;
+                        const recordsPerPage = 10;
                         
-                        // Show completion alert
-                        setTimeout(() => {
-                            alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
-                        }, 1000);
-                    } else {
-                        // Continue with next batch
-                        const delay = response.rate_limit_hit ? 10000 : 3000; // 10s if rate limited, else 3s
-                        setTimeout(() => {
-                            if (!pauseSending) {
-                                sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                        // Data variables
+                        let allCustomers = <?= json_encode($sbc_data ?? []) ?>;
+                        let filteredCustomers = [];
+                        let areaBreakdownData = [];
+                        let currentScheme = null;
+                        let currentStatus = null;
+                        let currentArea = null;
+
+                        // WhatsApp sending variables for large volumes
+                        let isSending = false;
+                        let currentBatch = 0;
+                        let totalBatches = 0;
+                        let totalCustomers = 0;
+                        let successCount = 0;
+                        let failCount = 0;
+                        let startTime = null;
+                        let pauseSending = false;
+
+                        // Initialize the view
+                        initView();
+
+                        function initView() {
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                            
+                            if (allCustomers && allCustomers.length > 0) {
+                                processData();
                             }
-                        }, delay);
+                        }
+
+                        function processData() {
+                            allCustomers.forEach(customer => {
+                                customer.consumer_status = (customer.Consumer_Sub_Status || 'ACTIVE').toUpperCase();
+                                const scheme = (customer.Scheme_Selected || '').toUpperCase().trim();
+                                customer.Scheme_Selected = scheme == 'NON_PMUY' ? 'NON_PMUY' : 'PMUY';
+                                customer.Area_Name = customer.Area_Name || 'Unknown';
+                            });
+                        }
+
+                        function showAreaBreakdown(status, scheme) {
+                            currentStatus = status;
+                            currentScheme = scheme;
+                            
+                            filteredCustomers = allCustomers.filter(customer => {
+                                const statusMatch = (status === 'ALL') ? true : customer.consumer_status === status;
+                                const schemeMatch = (scheme === 'ALL') ? true :
+                                                (scheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
+                                                customer.Scheme_Selected === 'NON_PMUY';
+                                
+                                return statusMatch && schemeMatch;
+                            });
+                            
+                            const areaStats = {};
+                            filteredCustomers.forEach(customer => {
+                                const area = customer.Area_Name;
+                                areaStats[area] = (areaStats[area] || 0) + 1;
+                            });
+                            
+                            areaBreakdownData = Object.entries(areaStats)
+                                .map(([area, count]) => ({ area, total: count }))
+                                .sort((a, b) => b.total - a.total);
+                            
+                            $('#areaBreakdownTitle').text(`SBC Connections (${status} - ${scheme}) by Area`);
+                            currentAreaPage = 1;
+                            updateAreaBreakdownTable();
+                            
+                            $('#areaBreakdownView').show();
+                            $('#customerDetailsView').hide();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                        function updateAreaBreakdownTable() {
+                            const start = (currentAreaPage - 1) * recordsPerPage;
+                            const end = Math.min(start + recordsPerPage, areaBreakdownData.length);
+                            const pageAreas = areaBreakdownData.slice(start, end);
+                            const tableBody = $("#areaBreakdownBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageAreas.length === 0) {
+                                tableBody.html('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
+                            } else {
+                                pageAreas.forEach(({ area, total }) => {
+                                    tableBody.append(`
+                                        <tr>
+                                            <td class="clickabled area-click" data-area="${area}">${area}</td>
+                                            <td>${total}</td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm send-whatsapp-batch" 
+                                                    data-status="${currentStatus}" 
+                                                    data-scheme="${currentScheme}" 
+                                                    data-area="${area}"
+                                                    style="background: #25D366; border-color: #25D366;">
+                                                    <i class="fas fa-paper-plane"></i> Send WhatsApp
+                                                </button>
+                                                <div class="progress mt-2" style="display: none; height: 10px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                        role="progressbar" style="width: 0%"></div>
+                                                </div>
+                                                <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            $("#areaPageInfo").text(`${start + 1} - ${end} of ${areaBreakdownData.length}`);
+                            $("#prevAreaPage").toggleClass("disabled", currentAreaPage === 1);
+                            $("#nextAreaPage").toggleClass("disabled", end >= areaBreakdownData.length);
+                        }
+
+                        // WhatsApp Batch Sending Function for Large Volumes
+                        function sendWhatsAppBatch(status, scheme, area, button) {
+                            if (isSending) {
+                                if (pauseSending) {
+                                    // Resume sending
+                                    pauseSending = false;
+                                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                                    sendNextBatch(status, scheme, area, button);
+                                } else {
+                                    // Pause sending
+                                    pauseSending = true;
+                                    button.innerHTML = '<i class="fas fa-play"></i> Resume';
+                                    updateStatus('⏸️ Sending paused. Click Resume to continue.');
+                                }
+                                return;
+                            }
+
+                            const progressBar = button.nextElementSibling;
+                            const statusDiv = progressBar.nextElementSibling;
+                            const batchSize = 2; // Very small batches for large volumes
+
+                            if (!confirm(`Send WhatsApp to ${area} (${status} - ${scheme})?\n\n• Large volume: ${batchSize} messages per batch\n• Estimated time: Several hours for 9000+ customers\n• You can pause/resume anytime`)) {
+                                return;
+                            }
+
+                            isSending = true;
+                            pauseSending = false;
+                            currentBatch = 0;
+                            successCount = 0;
+                            failCount = 0;
+                            totalCustomers = 0;
+                            startTime = new Date();
+
+                            // Disable other buttons
+                            $('.send-whatsapp-batch').not(button).prop('disabled', true);
+                            
+                            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                            progressBar.style.display = 'block';
+                            statusDiv.style.display = 'block';
+                            statusDiv.innerHTML = 'Counting customers...';
+
+                            // Get total count first
+                            $.ajax({
+                                url: '<?php echo base_url('SBC_data/get_customers_for_messaging'); ?>',
+                                type: 'GET',
+                                data: { status: status, scheme: scheme, area: area },
+                                success: function(response) {
+                                    if (response.success) {
+                                        totalCustomers = response.total_customers;
+                                        totalBatches = Math.ceil(totalCustomers / batchSize);
+                                        
+                                        if (totalCustomers === 0) {
+                                            statusDiv.innerHTML = '<span class="text-danger">No customers found.</span>';
+                                            resetButton(button, progressBar, statusDiv);
+                                            return;
+                                        }
+
+                                        const estimatedTime = calculateTotalTime(totalCustomers, batchSize);
+                                        statusDiv.innerHTML = `
+                                            <div style="text-align: left;">
+                                                <strong>Large Volume Detected: ${totalCustomers.toLocaleString()} customers</strong><br>
+                                                • Batches: ${totalBatches} batches of ${batchSize}<br>
+                                                • Estimated time: ${estimatedTime}<br>
+                                                • You can PAUSE anytime<br>
+                                                <small>Starting in 3 seconds...</small>
+                                            </div>
+                                        `;
+                                        
+                                        setTimeout(() => {
+                                            sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                        }, 3000);
+                                    } else {
+                                        statusDiv.innerHTML = '<span class="text-danger">Error counting customers.</span>';
+                                        resetButton(button, progressBar, statusDiv);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    statusDiv.innerHTML = '<span class="text-danger">Error: ' + error + '</span>';
+                                    resetButton(button, progressBar, statusDiv);
+                                }
+                            });
+                        }
+
+                        function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
+                            if (pauseSending) {
+                                return; // Don't send if paused
+                            }
+
+                            $.ajax({
+                                url: '<?php echo base_url('SBC_data/send_batch_messages'); ?>',
+                                type: 'POST',
+                                data: {
+                                    status: status,
+                                    scheme: scheme,
+                                    area: area,
+                                    batch_size: batchSize,
+                                    current_batch: currentBatch,
+                                    total_customers: totalCustomers
+                                },
+                                timeout: 300000, // 5 minute timeout for large batches
+                                success: function(response) {
+                                    if (response.success) {
+                                        currentBatch++;
+                                        successCount += response.success_count;
+                                        failCount += response.fail_count;
+
+                                        // Update progress
+                                        const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
+                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
+                                        
+                                        const elapsed = Math.round((new Date() - startTime) / 1000);
+                                        const elapsedFormatted = formatTime(elapsed);
+                                        const remaining = response.estimated_time_remaining || 'Calculating...';
+                                        
+                                        let statusHTML = `
+                                            <div style="text-align: left; font-size: 14px;">
+                                                <strong>Progress: ${progress.toFixed(1)}%</strong><br>
+                                                • Batch ${currentBatch}/${totalBatches} completed<br>
+                                                • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
+                                                • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
+                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
+                                                <small>${response.batch_info || ''}</small>
+                                        `;
+                                        
+                                        if (response.rate_limit_hit) {
+                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
+                                        }
+                                        
+                                        statusHTML += `</div>`;
+                                        statusDiv.innerHTML = statusHTML;
+
+                                        if (response.completed) {
+                                            // Completion
+                                            const totalTime = Math.round((new Date() - startTime) / 1000);
+                                            statusDiv.innerHTML = `
+                                                <div class="text-success" style="text-align: left;">
+                                                    <strong>✅ COMPLETED!</strong><br>
+                                                    • Success: ${successCount.toLocaleString()}<br>
+                                                    • Failed: ${failCount.toLocaleString()}<br>
+                                                    • Total: ${totalCustomers.toLocaleString()}<br>
+                                                    • Time: ${formatTime(totalTime)}<br>
+                                                    • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                                                </div>
+                                            `;
+                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
+                                            resetButton(button, progressBar, statusDiv, true);
+                                            
+                                            // Show completion alert
+                                            setTimeout(() => {
+                                                alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
+                                            }, 1000);
+                                        } else {
+                                            // Continue with next batch
+                                            const delay = response.rate_limit_hit ? 10000 : 3000; // 10s if rate limited, else 3s
+                                            setTimeout(() => {
+                                                if (!pauseSending) {
+                                                    sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                                }
+                                            }, delay);
+                                        }
+                                    } else {
+                                        statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
+                                        resetButton(button, progressBar, statusDiv);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
+                                    // Auto-retry after 10 seconds
+                                    setTimeout(() => {
+                                        if (!pauseSending) {
+                                            statusDiv.innerHTML += '<br>Retrying...';
+                                            sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                        }
+                                    }, 10000);
+                                }
+                            });
+                        }
+
+                        function calculateTotalTime(totalCustomers, batchSize) {
+                            const batches = Math.ceil(totalCustomers / batchSize);
+                            const totalSeconds = batches * 5; // 5 seconds per batch
+                            
+                            if (totalSeconds < 3600) {
+                                return Math.ceil(totalSeconds / 60) + ' minutes';
+                            } else {
+                                const hours = Math.floor(totalSeconds / 3600);
+                                const minutes = Math.ceil((totalSeconds % 3600) / 60);
+                                return hours + ' hours ' + minutes + ' minutes';
+                            }
+                        }
+
+                        function formatTime(seconds) {
+                            if (seconds < 60) return seconds + 's';
+                            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
+                            
+                            const hours = Math.floor(seconds / 3600);
+                            const minutes = Math.floor((seconds % 3600) / 60);
+                            return hours + 'h ' + minutes + 'm';
+                        }
+
+                        function updateStatus(message) {
+                            // Find the active status div and update it
+                            $('.batch-status:visible').html(message);
+                        }
+
+                        function resetButton(button, progressBar, statusDiv, completed = false) {
+                            isSending = false;
+                            pauseSending = false;
+                            
+                            // Re-enable all buttons
+                            $('.send-whatsapp-batch').prop('disabled', false);
+                            
+                            if (completed) {
+                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.classList.add('btn-success');
+                                button.classList.remove('btn-warning');
+                            } else {
+                                button.innerHTML = '<i class="fas fa-paper-plane"></i> Send WhatsApp';
+                                button.classList.remove('btn-success', 'btn-warning');
+                            }
+                            
+                            // Keep progress visible for a while
+                            setTimeout(() => {
+                                if (!isSending) {
+                                    progressBar.style.display = 'none';
+                                    progressBar.querySelector('.progress-bar').style.width = '0%';
+                                    statusDiv.style.display = 'none';
+                                }
+                            }, completed ? 30000 : 10000);
+                        }
+
+                        // Event handlers
+                        $(document).on('click', '.clickabled:not(.area-click):not(.whatsapp-link)', function() {
+                            const status = $(this).data('status') || 'ALL';
+                            const scheme = $(this).data('scheme') || 'ALL';
+                            showAreaBreakdown(status, scheme);
+                        });
+                        
+                        $(document).on('click', '.area-click', function() {
+                            const area = $(this).data('area');
+                            showCustomerDetails(area);
+                        });
+
+                        $(document).on('click', '.send-whatsapp-batch', function() {
+                            const status = $(this).data('status');
+                            const scheme = $(this).data('scheme');
+                            const area = $(this).data('area');
+                            sendWhatsAppBatch(status, scheme, area, this);
+                        });
+                        
+                        // Pagination event handlers
+                        $("#prevPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#nextPage").on("click", function(e) {
+                            e.preventDefault();
+                            if ((currentPage * recordsPerPage) < filteredCustomers.length) {
+                                currentPage++;
+                                updateCustomerTable();
+                            }
+                        });
+                        
+                        $("#prevAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if (currentAreaPage > 1) {
+                                currentAreaPage--;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#nextAreaPage").on("click", function(e) {
+                            e.preventDefault();
+                            if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
+                                currentAreaPage++;
+                                updateAreaBreakdownTable();
+                            }
+                        });
+                        
+                        $("#backToSummary").on("click", function(e) {
+                            e.preventDefault();
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').hide();
+                        });
+                        
+                        $("#backToAreas").on("click", function(e) {
+                            e.preventDefault();
+                            showAreaBreakdown(currentStatus, currentScheme);
+                        });
+
+                        function showCustomerDetails(area) {
+                            currentArea = area;
+                            
+                            filteredCustomers = allCustomers.filter(customer => {
+                                const areaMatch = customer.Area_Name === area;
+                                const statusMatch = (currentStatus === 'ALL') ? true : customer.consumer_status === currentStatus;
+                                const schemeMatch = (currentScheme === 'ALL') ? true :
+                                                (currentScheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
+                                                customer.Scheme_Selected === 'NON_PMUY';
+                                
+                                return areaMatch && statusMatch && schemeMatch;
+                            });
+                            
+                            currentPage = 1;
+                            $('#customerDetailsTitle').text(`SBC Customers (${currentStatus} - ${currentScheme}) in ${area}`);
+                            updateCustomerTable();
+                            
+                            $('#areaBreakdownView').hide();
+                            $('#customerDetailsView').show();
+                            $('.content-section').scrollTop(0);
+                        }
+
+                        function updateCustomerTable() {
+                            const start = (currentPage - 1) * recordsPerPage;
+                            const end = Math.min(start + recordsPerPage, filteredCustomers.length);
+                            const pageRows = filteredCustomers.slice(start, end);
+                            const tableBody = $("#customerTableBody");
+                            
+                            tableBody.empty();
+                            
+                            if (pageRows.length === 0) {
+                                tableBody.html('<tr><td colspan="7" class="text-center">No data available</td></tr>');
+                            } else {
+                                pageRows.forEach(customer => {
+                                    const typeClass = customer.Consumer_Type === 'Commercial' ? 'badge-commercial' : 'badge-domestic';
+                                    const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
+                                    const statusClass = customer.consumer_status === 'ACTIVE' ? 'badge-active' : 
+                                                    (customer.consumer_status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived');
+                                    
+                                    tableBody.append(`
+                                        <tr>
+                                            <td>${customer.Area_Name}</td>
+                                            <td>${customer.Consumer_Number || 'N/A'}</td>
+                                            <td>${customer.Consumer_Name || 'N/A'}</td>
+                                            <td>${customer.Phone_Number || 'N/A'}</td>
+                                            <td><span class="badge ${schemeClass}">${customer.Scheme_Selected}</span></td>
+                                            <td><span class="badge_sbc ${typeClass}">${customer.Consumer_Type || 'N/A'}</span></td>
+                                            <td><span class="badge ${statusClass}">${customer.consumer_status}</span></td>
+                                        </tr>
+                                    `);
+                                });
+                            }
+                            
+                            $("#customerPageInfo").text(`${start + 1} - ${end} of ${filteredCustomers.length}`);
+                            $("#prevPage").toggleClass("disabled", currentPage === 1);
+                            $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
+                        }
+                    });
+                </script>
+
+                <style>
+                    .progress-bar-animated {
+                        animation: progress-bar-stripes 1s linear infinite;
                     }
-                } else {
-                    statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
-                    resetButton(button, progressBar, statusDiv);
-                }
-            },
-            error: function(xhr, status, error) {
-                statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
-                // Auto-retry after 10 seconds
-                setTimeout(() => {
-                    if (!pauseSending) {
-                        statusDiv.innerHTML += '<br>Retrying...';
-                        sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+
+                    @keyframes progress-bar-stripes {
+                        0% { background-position: 1rem 0; }
+                        100% { background-position: 0 0; }
                     }
-                }, 10000);
-            }
-        });
-    }
 
-    function calculateTotalTime(totalCustomers, batchSize) {
-        const batches = Math.ceil(totalCustomers / batchSize);
-        const totalSeconds = batches * 5; // 5 seconds per batch
-        
-        if (totalSeconds < 3600) {
-            return Math.ceil(totalSeconds / 60) + ' minutes';
-        } else {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.ceil((totalSeconds % 3600) / 60);
-            return hours + ' hours ' + minutes + ' minutes';
-        }
-    }
+                    .batch-status {
+                        font-size: 12px;
+                        color: #666;
+                        background: #f8f9fa;
+                        padding: 8px;
+                        border-radius: 4px;
+                        border-left: 3px solid #007bff;
+                    }
 
-    function formatTime(seconds) {
-        if (seconds < 60) return seconds + 's';
-        if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
-        
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        return hours + 'h ' + minutes + 'm';
-    }
+                    .btn-success {
+                        background: #25D366;
+                        border-color: #25D366;
+                    }
 
-    function updateStatus(message) {
-        // Find the active status div and update it
-        $('.batch-status:visible').html(message);
-    }
+                    .btn-success:hover:not(:disabled) {
+                        background: #1da851;
+                        border-color: #1da851;
+                    }
 
-    function resetButton(button, progressBar, statusDiv, completed = false) {
-        isSending = false;
-        pauseSending = false;
-        
-        // Re-enable all buttons
-        $('.send-whatsapp-batch').prop('disabled', false);
-        
-        if (completed) {
-            button.innerHTML = '<i class="fas fa-check"></i> Completed';
-            button.classList.add('btn-success');
-            button.classList.remove('btn-warning');
-        } else {
-            button.innerHTML = '<i class="fas fa-paper-plane"></i> Send WhatsApp';
-            button.classList.remove('btn-success', 'btn-warning');
-        }
-        
-        // Keep progress visible for a while
-        setTimeout(() => {
-            if (!isSending) {
-                progressBar.style.display = 'none';
-                progressBar.querySelector('.progress-bar').style.width = '0%';
-                statusDiv.style.display = 'none';
-            }
-        }, completed ? 30000 : 10000);
-    }
+                    .btn-success:disabled {
+                        background: #a0d4b2;
+                        border-color: #a0d4b2;
+                        opacity: 0.6;
+                    }
 
-    // Event handlers
-    $(document).on('click', '.clickabled:not(.area-click):not(.whatsapp-link)', function() {
-        const status = $(this).data('status') || 'ALL';
-        const scheme = $(this).data('scheme') || 'ALL';
-        showAreaBreakdown(status, scheme);
-    });
-    
-    $(document).on('click', '.area-click', function() {
-        const area = $(this).data('area');
-        showCustomerDetails(area);
-    });
+                    .btn-warning {
+                        background: #ffc107;
+                        border-color: #ffc107;
+                    }
 
-    $(document).on('click', '.send-whatsapp-batch', function() {
-        const status = $(this).data('status');
-        const scheme = $(this).data('scheme');
-        const area = $(this).data('area');
-        sendWhatsAppBatch(status, scheme, area, this);
-    });
-    
-    // Pagination event handlers
-    $("#prevPage").on("click", function(e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            updateCustomerTable();
-        }
-    });
-    
-    $("#nextPage").on("click", function(e) {
-        e.preventDefault();
-        if ((currentPage * recordsPerPage) < filteredCustomers.length) {
-            currentPage++;
-            updateCustomerTable();
-        }
-    });
-    
-    $("#prevAreaPage").on("click", function(e) {
-        e.preventDefault();
-        if (currentAreaPage > 1) {
-            currentAreaPage--;
-            updateAreaBreakdownTable();
-        }
-    });
-    
-    $("#nextAreaPage").on("click", function(e) {
-        e.preventDefault();
-        if ((currentAreaPage * recordsPerPage) < areaBreakdownData.length) {
-            currentAreaPage++;
-            updateAreaBreakdownTable();
-        }
-    });
-    
-    $("#backToSummary").on("click", function(e) {
-        e.preventDefault();
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').hide();
-    });
-    
-    $("#backToAreas").on("click", function(e) {
-        e.preventDefault();
-        showAreaBreakdown(currentStatus, currentScheme);
-    });
+                    .progress {
+                        height: 12px;
+                        margin: 8px 0;
+                    }
 
-    function showCustomerDetails(area) {
-        currentArea = area;
-        
-        filteredCustomers = allCustomers.filter(customer => {
-            const areaMatch = customer.Area_Name === area;
-            const statusMatch = (currentStatus === 'ALL') ? true : customer.consumer_status === currentStatus;
-            const schemeMatch = (currentScheme === 'ALL') ? true :
-                            (currentScheme === 'PMUY') ? customer.Scheme_Selected === 'PMUY' :
-                            customer.Scheme_Selected === 'NON_PMUY';
-            
-            return areaMatch && statusMatch && schemeMatch;
-        });
-        
-        currentPage = 1;
-        $('#customerDetailsTitle').text(`SBC Customers (${currentStatus} - ${currentScheme}) in ${area}`);
-        updateCustomerTable();
-        
-        $('#areaBreakdownView').hide();
-        $('#customerDetailsView').show();
-        $('.content-section').scrollTop(0);
-    }
-
-    function updateCustomerTable() {
-        const start = (currentPage - 1) * recordsPerPage;
-        const end = Math.min(start + recordsPerPage, filteredCustomers.length);
-        const pageRows = filteredCustomers.slice(start, end);
-        const tableBody = $("#customerTableBody");
-        
-        tableBody.empty();
-        
-        if (pageRows.length === 0) {
-            tableBody.html('<tr><td colspan="7" class="text-center">No data available</td></tr>');
-        } else {
-            pageRows.forEach(customer => {
-                const typeClass = customer.Consumer_Type === 'Commercial' ? 'badge-commercial' : 'badge-domestic';
-                const schemeClass = customer.Scheme_Selected === 'PMUY' ? 'badge-pmuy' : 'badge-non-pmuy';
-                const statusClass = customer.consumer_status === 'ACTIVE' ? 'badge-active' : 
-                                (customer.consumer_status === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactived');
-                
-                tableBody.append(`
-                    <tr>
-                        <td>${customer.Area_Name}</td>
-                        <td>${customer.Consumer_Number || 'N/A'}</td>
-                        <td>${customer.Consumer_Name || 'N/A'}</td>
-                        <td>${customer.Phone_Number || 'N/A'}</td>
-                        <td><span class="badge ${schemeClass}">${customer.Scheme_Selected}</span></td>
-                        <td><span class="badge_sbc ${typeClass}">${customer.Consumer_Type || 'N/A'}</span></td>
-                        <td><span class="badge ${statusClass}">${customer.consumer_status}</span></td>
-                    </tr>
-                `);
-            });
-        }
-        
-        $("#customerPageInfo").text(`${start + 1} - ${end} of ${filteredCustomers.length}`);
-        $("#prevPage").toggleClass("disabled", currentPage === 1);
-        $("#nextPage").toggleClass("disabled", end >= filteredCustomers.length);
-    }
-});
-</script>
-
-<style>
-.progress-bar-animated {
-    animation: progress-bar-stripes 1s linear infinite;
-}
-
-@keyframes progress-bar-stripes {
-    0% { background-position: 1rem 0; }
-    100% { background-position: 0 0; }
-}
-
-.batch-status {
-    font-size: 12px;
-    color: #666;
-    background: #f8f9fa;
-    padding: 8px;
-    border-radius: 4px;
-    border-left: 3px solid #007bff;
-}
-
-.btn-success {
-    background: #25D366;
-    border-color: #25D366;
-}
-
-.btn-success:hover:not(:disabled) {
-    background: #1da851;
-    border-color: #1da851;
-}
-
-.btn-success:disabled {
-    background: #a0d4b2;
-    border-color: #a0d4b2;
-    opacity: 0.6;
-}
-
-.btn-warning {
-    background: #ffc107;
-    border-color: #ffc107;
-}
-
-.progress {
-    height: 12px;
-    margin: 8px 0;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .batch-status {
-        font-size: 11px;
-    }
-    
-    .table-responsive {
-        font-size: 12px;
-    }
-}
-</style>
+                    /* Responsive design */
+                    @media (max-width: 768px) {
+                        .batch-status {
+                            font-size: 11px;
+                        }
+                        
+                        .table-responsive {
+                            font-size: 12px;
+                        }
+                    }
+                </style>
 
                 <style>
                     .progress-bar-animated {
@@ -4127,6 +4127,16 @@ $(document).ready(function () {
                         let filteredCustomers = [];
                         let areaBreakdownData = [];
 
+                        // WhatsApp sending variables for large volumes
+                        let isSending = false;
+                        let currentBatch = 0;
+                        let totalBatches = 0;
+                        let totalCustomers = 0;
+                        let successCount = 0;
+                        let failCount = 0;
+                        let startTime = null;
+                        let pauseSending = false;
+
                         // Initialize view
                         initView();
 
@@ -4152,8 +4162,6 @@ $(document).ready(function () {
                                 // Default Area_Name to 'Unknown'
                                 customer.Area_Name = customer.Area_Name || 'Unknown';
                             });
-                            // Debug: Log normalized data
-                            console.log('Normalized allCustomers:', allCustomers);
                         }
                         
                         function showAreaBreakdown(status, scheme) {
@@ -4202,81 +4210,6 @@ $(document).ready(function () {
                             $('#customerDetailsView').hide();
                         }
 
-                         // Not show an tooltip this below code
-
-                        // function updateAreaBreakdownTable() {
-                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
-                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
-                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
-                        //     const $tbody = $('#areaBreakdownBody');
-                            
-                        //     $tbody.empty();
-                            
-                        //     if (pageData.length === 0) {
-                        //         $tbody.append('<tr><td colspan="2" class="text-center">No data available</td></tr>');
-                        //     } else {
-                        //         pageData.forEach(item => {
-                        //             $tbody.append(`
-                        //                 <tr>
-                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
-                        //                         ${escapeHtml(item.area)}
-                        //                     </td>
-                        //                     <td>${item.count}</td>
-                        //                     <td>
-                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
-                        //                         <img src="<?= base_url('Image/w1.png') ?>" alt="WhatsApp" class="whatsapp_icon" style=" width: 40px; height: 40px;">
-                        //                         Whatsapp
-                        //                         </a>
-                        //                     </td>
-                        //                 </tr>
-                        //             `);
-                        //         });
-                        //     }
-                            
-                        //     // Update pagination controls
-                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
-                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
-                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
-                        // }
-
-                        // function updateAreaBreakdownTable() {
-                        //     const startIdx = (currentAreaPage - 1) * recordsPerPage;
-                        //     const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
-                        //     const pageData = areaBreakdownData.slice(startIdx, startIdx + recordsPerPage);
-                        //     const $tbody = $('#areaBreakdownBody');
-
-                        //     $tbody.empty();
-
-                        //     if (pageData.length === 0) {
-                        //         $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
-                        //     } else {
-                        //         pageData.forEach(item => {
-                        //             $tbody.append(`
-                        //                 <tr>
-                        //                     <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
-                        //                         ${escapeHtml(item.area)}
-                        //                     </td>
-                        //                     <td>${item.count}</td>
-                        //                     <td>
-                        //                         <a href="#" class="clickabled" style="text-decoration: none;">
-                        //                             <img src="<?= base_url('Image/w1.png') ?>" 
-                        //                                 alt="WhatsApp" 
-                        //                                 class="whatsapp_icon" 
-                        //                                 style="width: 40px; height: 40px; cursor: pointer;" 
-                        //                                 data-tooltip="Send message WhatsApp">
-                        //                             Whatsapp
-                        //                         </a>
-                        //                     </td>
-                        //                 </tr>
-                        //             `);
-                        //         });
-                        //     }
-
-                        //     // Update pagination controls
-                        //     $('#areaPageInfo').text(`${startIdx + 1} - ${endIdx} of ${areaBreakdownData.length}`);
-                        //     $('#prevAreaPage').toggleClass('disabled', currentAreaPage === 1);
-                        //     $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
-                        // }
                         function updateAreaBreakdownTable() {
                             const startIdx = (currentAreaPage - 1) * recordsPerPage;
                             const endIdx = Math.min(startIdx + recordsPerPage, areaBreakdownData.length);
@@ -4289,9 +4222,6 @@ $(document).ready(function () {
                                 $tbody.append('<tr><td colspan="3" class="text-center text-danger">No data available</td></tr>');
                             } else {
                                 pageData.forEach(item => {
-                                    // Create WhatsApp URL with filter parameters
-                                    const whatsappUrl = `<?php echo base_url('KYC_data/sending_messaging'); ?>?status=${currentStatus}&scheme=${currentScheme}&area=${encodeURIComponent(item.area)}`;
-                                    
                                     $tbody.append(`
                                         <tr>
                                             <td class="clickabled area-link" data-area="${escapeHtml(item.area)}">
@@ -4299,15 +4229,18 @@ $(document).ready(function () {
                                             </td>
                                             <td>${item.count}</td>
                                             <td>
-                                                <a href="${whatsappUrl}" class="clickabled whatsapp-link" style="text-decoration: none;" 
-                                                data-status="${currentStatus}" data-scheme="${currentScheme}" data-area="${item.area}">
-                                                    <img src="<?= base_url('Image/w1.png') ?>" 
-                                                        alt="WhatsApp" 
-                                                        class="whatsapp_icon" 
-                                                        style="width: 40px; height: 40px; cursor: pointer;" 
-                                                        data-tooltip="Send WhatsApp message to ${item.area} (${currentStatus} - ${currentScheme})">
-                                                    Whatsapp
-                                                </a>
+                                                <button class="btn btn-success btn-sm send-whatsapp-batch" 
+                                                    data-status="${currentStatus}" 
+                                                    data-scheme="${currentScheme}" 
+                                                    data-area="${item.area}"
+                                                    style="background: #25D366; border-color: #25D366;">
+                                                    <i class="fas fa-paper-plane"></i> Send WhatsApp
+                                                </button>
+                                                <div class="progress mt-2" style="display: none; height: 10px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                        role="progressbar" style="width: 0%"></div>
+                                                </div>
+                                                <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
                                             </td>
                                         </tr>
                                     `);
@@ -4320,39 +4253,236 @@ $(document).ready(function () {
                             $('#nextAreaPage').toggleClass('disabled', endIdx >= areaBreakdownData.length);
                         }
 
-                        // ====================
-                        // Tooltip logic (pure JS)
-                        // ====================
-                        document.addEventListener("mouseover", function (e) {
-                            if (e.target.classList.contains("whatsapp_icon")) {
-                                const tooltipText = e.target.getAttribute("data-tooltip");
-                                const tooltip = document.createElement("div");
-                                tooltip.className = "custom-tooltip";
-                                tooltip.innerText = tooltipText;
-                                document.body.appendChild(tooltip);
+                        // WhatsApp Batch Sending Function for Large Volumes
+                        function sendWhatsAppBatch(status, scheme, area, button) {
+                            if (isSending) {
+                                if (pauseSending) {
+                                    // Resume sending
+                                    pauseSending = false;
+                                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                                    sendNextBatch(status, scheme, area, button);
+                                } else {
+                                    // Pause sending
+                                    pauseSending = true;
+                                    button.innerHTML = '<i class="fas fa-play"></i> Resume';
+                                    updateStatus('⏸️ Sending paused. Click Resume to continue.');
+                                }
+                                return;
+                            }
 
-                                const rect = e.target.getBoundingClientRect();
-                                tooltip.style.position = "absolute";
-                                tooltip.style.background = "#333";
-                                tooltip.style.color = "#fff";
-                                tooltip.style.padding = "5px 8px";
-                                tooltip.style.borderRadius = "4px";
-                                tooltip.style.fontSize = "12px";
-                                tooltip.style.pointerEvents = "none";
-                                tooltip.style.zIndex = "9999";
+                            const progressBar = button.nextElementSibling;
+                            const statusDiv = progressBar.nextElementSibling;
+                            const batchSize = 2; // Very small batches for large volumes
 
-                                tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
-                                    tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+                            if (!confirm(`Send WhatsApp to ${area} (${status} - ${scheme})?\n\n• Large volume: ${batchSize} messages per batch\n• Estimated time: Several hours for 9000+ customers\n• You can pause/resume anytime`)) {
+                                return;
+                            }
+
+                            isSending = true;
+                            pauseSending = false;
+                            currentBatch = 0;
+                            successCount = 0;
+                            failCount = 0;
+                            totalCustomers = 0;
+                            startTime = new Date();
+
+                            // Disable other buttons
+                            $('.send-whatsapp-batch').not(button).prop('disabled', true);
+                            
+                            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                            progressBar.style.display = 'block';
+                            statusDiv.style.display = 'block';
+                            statusDiv.innerHTML = 'Counting customers...';
+
+                            // Get total count first
+                            $.ajax({
+                                url: '<?php echo base_url('KYC_data/get_customers_for_messaging'); ?>',
+                                type: 'GET',
+                                data: { status: status, scheme: scheme, area: area },
+                                success: function(response) {
+                                    if (response.success) {
+                                        totalCustomers = response.total_customers;
+                                        totalBatches = Math.ceil(totalCustomers / batchSize);
+                                        
+                                        if (totalCustomers === 0) {
+                                            statusDiv.innerHTML = '<span class="text-danger">No customers found.</span>';
+                                            resetButton(button, progressBar, statusDiv);
+                                            return;
+                                        }
+
+                                        const estimatedTime = calculateTotalTime(totalCustomers, batchSize);
+                                        statusDiv.innerHTML = `
+                                            <div style="text-align: left;">
+                                                <strong>Large Volume Detected: ${totalCustomers.toLocaleString()} customers</strong><br>
+                                                • Batches: ${totalBatches} batches of ${batchSize}<br>
+                                                • Estimated time: ${estimatedTime}<br>
+                                                • You can PAUSE anytime<br>
+                                                <small>Starting in 3 seconds...</small>
+                                            </div>
+                                        `;
+                                        
+                                        setTimeout(() => {
+                                            sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                        }, 3000);
+                                    } else {
+                                        statusDiv.innerHTML = '<span class="text-danger">Error counting customers.</span>';
+                                        resetButton(button, progressBar, statusDiv);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    statusDiv.innerHTML = '<span class="text-danger">Error: ' + error + '</span>';
+                                    resetButton(button, progressBar, statusDiv);
                                 }
                             });
+                        }
 
-                            document.addEventListener("mouseout", function (e) {
-                                if (e.target.classList.contains("whatsapp_icon")) {
-                                    const tooltip = document.querySelector(".custom-tooltip");
-                                    if (tooltip) tooltip.remove();
+                        function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
+                            if (pauseSending) {
+                                return; // Don't send if paused
+                            }
+
+                            $.ajax({
+                                url: '<?php echo base_url('KYC_data/send_batch_messages'); ?>',
+                                type: 'POST',
+                                data: {
+                                    status: status,
+                                    scheme: scheme,
+                                    area: area,
+                                    batch_size: batchSize,
+                                    current_batch: currentBatch,
+                                    total_customers: totalCustomers
+                                },
+                                timeout: 300000, // 5 minute timeout for large batches
+                                success: function(response) {
+                                    if (response.success) {
+                                        currentBatch++;
+                                        successCount += response.success_count;
+                                        failCount += response.fail_count;
+
+                                        // Update progress
+                                        const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
+                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
+                                        
+                                        const elapsed = Math.round((new Date() - startTime) / 1000);
+                                        const elapsedFormatted = formatTime(elapsed);
+                                        const remaining = response.estimated_time_remaining || 'Calculating...';
+                                        
+                                        let statusHTML = `
+                                            <div style="text-align: left; font-size: 14px;">
+                                                <strong>Progress: ${progress.toFixed(1)}%</strong><br>
+                                                • Batch ${currentBatch}/${totalBatches} completed<br>
+                                                • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
+                                                • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
+                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
+                                                <small>${response.batch_info || ''}</small>
+                                        `;
+                                        
+                                        if (response.rate_limit_hit) {
+                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
+                                        }
+                                        
+                                        statusHTML += `</div>`;
+                                        statusDiv.innerHTML = statusHTML;
+
+                                        if (response.completed) {
+                                            // Completion
+                                            const totalTime = Math.round((new Date() - startTime) / 1000);
+                                            statusDiv.innerHTML = `
+                                                <div class="text-success" style="text-align: left;">
+                                                    <strong>✅ COMPLETED!</strong><br>
+                                                    • Success: ${successCount.toLocaleString()}<br>
+                                                    • Failed: ${failCount.toLocaleString()}<br>
+                                                    • Total: ${totalCustomers.toLocaleString()}<br>
+                                                    • Time: ${formatTime(totalTime)}<br>
+                                                    • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                                                </div>
+                                            `;
+                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
+                                            resetButton(button, progressBar, statusDiv, true);
+                                            
+                                            // Show completion alert
+                                            setTimeout(() => {
+                                                alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
+                                            }, 1000);
+                                        } else {
+                                            // Continue with next batch
+                                            const delay = response.rate_limit_hit ? 10000 : 3000; // 10s if rate limited, else 3s
+                                            setTimeout(() => {
+                                                if (!pauseSending) {
+                                                    sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                                }
+                                            }, delay);
+                                        }
+                                    } else {
+                                        statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
+                                        resetButton(button, progressBar, statusDiv);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
+                                    // Auto-retry after 10 seconds
+                                    setTimeout(() => {
+                                        if (!pauseSending) {
+                                            statusDiv.innerHTML += '<br>Retrying...';
+                                            sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                        }
+                                    }, 10000);
                                 }
                             });
+                        }
 
+                        function calculateTotalTime(totalCustomers, batchSize) {
+                            const batches = Math.ceil(totalCustomers / batchSize);
+                            const totalSeconds = batches * 5; // 5 seconds per batch
+                            
+                            if (totalSeconds < 3600) {
+                                return Math.ceil(totalSeconds / 60) + ' minutes';
+                            } else {
+                                const hours = Math.floor(totalSeconds / 3600);
+                                const minutes = Math.ceil((totalSeconds % 3600) / 60);
+                                return hours + ' hours ' + minutes + ' minutes';
+                            }
+                        }
+
+                        function formatTime(seconds) {
+                            if (seconds < 60) return seconds + 's';
+                            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
+                            
+                            const hours = Math.floor(seconds / 3600);
+                            const minutes = Math.floor((seconds % 3600) / 60);
+                            return hours + 'h ' + minutes + 'm';
+                        }
+
+                        function updateStatus(message) {
+                            // Find the active status div and update it
+                            $('.batch-status:visible').html(message);
+                        }
+
+                        function resetButton(button, progressBar, statusDiv, completed = false) {
+                            isSending = false;
+                            pauseSending = false;
+                            
+                            // Re-enable all buttons
+                            $('.send-whatsapp-batch').prop('disabled', false);
+                            
+                            if (completed) {
+                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.classList.add('btn-success');
+                                button.classList.remove('btn-warning');
+                            } else {
+                                button.innerHTML = '<i class="fas fa-paper-plane"></i> Send WhatsApp';
+                                button.classList.remove('btn-success', 'btn-warning');
+                            }
+                            
+                            // Keep progress visible for a while
+                            setTimeout(() => {
+                                if (!isSending) {
+                                    progressBar.style.display = 'none';
+                                    progressBar.querySelector('.progress-bar').style.width = '0%';
+                                    statusDiv.style.display = 'none';
+                                }
+                            }, completed ? 30000 : 10000);
+                        }
 
                         function showCustomerDetails(area) {
                             currentArea = area;
@@ -4458,6 +4588,13 @@ $(document).ready(function () {
                             const area = $(this).data('area');
                             showCustomerDetails(area);
                         });
+
+                        $(document).on('click', '.send-whatsapp-batch', function() {
+                            const status = $(this).data('status');
+                            const scheme = $(this).data('scheme');
+                            const area = $(this).data('area');
+                            sendWhatsAppBatch(status, scheme, area, this);
+                        });
                         
                         // Pagination controls
                         $('#prevPage').on('click', function(e) {
@@ -4504,6 +4641,63 @@ $(document).ready(function () {
                         });
                     });
                 </script>
+
+                <style>
+                    .progress-bar-animated {
+                        animation: progress-bar-stripes 1s linear infinite;
+                    }
+
+                    @keyframes progress-bar-stripes {
+                        0% { background-position: 1rem 0; }
+                        100% { background-position: 0 0; }
+                    }
+
+                    .batch-status {
+                        font-size: 12px;
+                        color: #666;
+                        background: #f8f9fa;
+                        padding: 8px;
+                        border-radius: 4px;
+                        border-left: 3px solid #007bff;
+                    }
+
+                    .btn-success {
+                        background: #25D366;
+                        border-color: #25D366;
+                    }
+
+                    .btn-success:hover:not(:disabled) {
+                        background: #1da851;
+                        border-color: #1da851;
+                    }
+
+                    .btn-success:disabled {
+                        background: #a0d4b2;
+                        border-color: #a0d4b2;
+                        opacity: 0.6;
+                    }
+
+                    .btn-warning {
+                        background: #ffc107;
+                        border-color: #ffc107;
+                    }
+
+                    .progress {
+                        height: 12px;
+                        margin: 8px 0;
+                    }
+
+                    /* Responsive design */
+                    @media (max-width: 768px) {
+                        .batch-status {
+                            font-size: 11px;
+                        }
+                        
+                        .table-responsive {
+                            font-size: 12px;
+                        }
+                    }
+                </style>
 
                 <!---------------------------- MI Due Data  -------------------------------------------------------- -->
                 <?php } elseif ($method == 'midue') { ?>
