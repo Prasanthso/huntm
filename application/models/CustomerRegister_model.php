@@ -1261,6 +1261,98 @@ class CustomerRegister_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    
+    ///////////////////MI Due Bulk Messaging Methods/////////////////////////////
+    public function get_filtered_mi_customers_chunk($status, $scheme, $area, $limit, $offset = 0) {
+        $userid = $this->session->userdata('user_id');
+        
+        $this->db->select('*');
+        $this->db->from('customer_register');
+        $this->db->where('Consumer_Category', 'domestic');
+        $this->db->where('userid', $userid);
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        
+        // Apply filters
+        if ($status !== 'ALL') {
+            $this->db->where('Consumer_Sub_Status', $status);
+        }
+        
+        if ($scheme !== 'ALL') {
+            if ($scheme === 'PMUY') {
+                $this->db->where_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            } else {
+                $this->db->where_not_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            }
+        }
+        
+        if ($area !== 'ALL' && !empty($area)) {
+            $this->db->where('Area_Name', $area);
+        }
+        
+        // MI Due filter (within last 5 years)
+        $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+        $today = date('Y-m-d');
+        
+        $this->db->group_start();
+        $this->db->where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->group_end();
+        
+        // Only include customers with valid phone numbers
+        $this->db->where('Phone_Number IS NOT NULL');
+        $this->db->where('LENGTH(Phone_Number) =', 10);
+        $this->db->where("Phone_Number != ''");
+        
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('Consumer_ID', 'ASC');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_filtered_mi_customers_count($status, $scheme, $area) {
+        $userid = $this->session->userdata('user_id');
+        
+        $this->db->from('customer_register');
+        $this->db->where('Consumer_Category', 'domestic');
+        $this->db->where('userid', $userid);
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        
+        // Apply filters
+        if ($status !== 'ALL') {
+            $this->db->where('Consumer_Sub_Status', $status);
+        }
+        
+        if ($scheme !== 'ALL') {
+            if ($scheme === 'PMUY') {
+                $this->db->where_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            } else {
+                $this->db->where_not_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            }
+        }
+        
+        if ($area !== 'ALL' && !empty($area)) {
+            $this->db->where('Area_Name', $area);
+        }
+        
+        // MI Due filter (within last 5 years)
+        $fiveYearsAgo = date('Y-m-d', strtotime('-5 years'));
+        $today = date('Y-m-d');
+        
+        $this->db->group_start();
+        $this->db->where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y-%m-%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%Y/%m/%d') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->or_where("STR_TO_DATE(Mandatory_Inspection_Date, '%d/%m/%Y') BETWEEN '$fiveYearsAgo' AND '$today'");
+        $this->db->group_end();
+        
+        // Only include customers with valid phone numbers
+        $this->db->where('Phone_Number IS NOT NULL');
+        $this->db->where('LENGTH(Phone_Number) =', 10);
+        $this->db->where("Phone_Number != ''");
+        
+        return $this->db->count_all_results();
+    }
+
+
   
 }
