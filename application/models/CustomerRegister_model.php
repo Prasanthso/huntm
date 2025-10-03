@@ -1353,6 +1353,288 @@ class CustomerRegister_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    ///////////////////Nil Refill WhatsApp Messaging - UPDATED FOR LARGE VOLUMES/////////////////////////////
+// public function get_filtered_nilrefill_customers_chunk($status, $period, $scheme, $area, $limit, $offset = 0) {
+//     $userid = $this->session->userdata('user_id');
+    
+//     $this->db->select('*');
+//     $this->db->from('customer_register');
+//     $this->db->where('Consumer_Category', 'domestic');
+//     $this->db->where('userid', $userid);
+//     $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+//     $this->db->where('Last_Refill_Date IS NOT NULL');
+    
+//     // Apply filters
+//     if ($status !== 'overall_total' && $status !== 'ALL' && !empty($status)) {
+//         $this->db->where('Consumer_Sub_Status', strtoupper($status));
+//     }
+    
+//     if ($scheme !== 'total' && $scheme !== 'ALL' && !empty($scheme)) {
+//         if ($scheme === 'pmuy') {
+//             $this->db->where_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+//         } else if ($scheme === 'non_pmuy') {
+//             $this->db->where_not_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+//         }
+//     }
+    
+//     if ($area !== 'ALL' && !empty($area)) {
+//         $this->db->where('Area_Name', $area);
+//     }
+    
+//     // Apply period filter directly in SQL for better performance
+//     if ($period !== 'ALL' && !empty($period)) {
+//         switch($period) {
+//             case 'greater_than_3_months':
+//                 $this->db->where('days_since_refill >', 90);
+//                 $this->db->where('days_since_refill <=', 180);
+//                 break;
+//             case 'greater_than_6_months':
+//                 $this->db->where('days_since_refill >', 180);
+//                 $this->db->where('days_since_refill <=', 365);
+//                 break;
+//             case 'greater_than_1_year':
+//                 $this->db->where('days_since_refill >', 365);
+//                 break;
+//         }
+//     }
+    
+//     // Only include customers with valid phone numbers
+//     $this->db->where('Phone_Number IS NOT NULL');
+//     $this->db->where('LENGTH(Phone_Number) =', 10);
+//     $this->db->where("Phone_Number != ''");
+    
+//     $this->db->limit($limit, $offset);
+//     $this->db->order_by('Consumer_ID', 'ASC');
+    
+//     $query = $this->db->get();
+//     return $query->result_array();
+// }
+
+public function get_filtered_nilrefill_customers_count($status, $period, $scheme, $area) {
+    try {
+        $userid = $this->session->userdata('user_id');
+        
+        log_message('debug', "COUNT - Status: $status, Period: $period, Scheme: $scheme, Area: $area");
+        
+        // Get ALL customers first (same logic as chunk method)
+        $this->db->from('customer_register');
+        $this->db->where('Consumer_Category', 'domestic');
+        $this->db->where('userid', $userid);
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->where('Last_Refill_Date IS NOT NULL');
+        $this->db->where("Last_Refill_Date != ''");
+        $this->db->where("Last_Refill_Date != 'NULL'");
+        $this->db->where("Last_Refill_Date != 'null'");
+        
+        if (!empty($status) && $status !== 'overall_total' && $status !== 'ALL') {
+            $this->db->where('Consumer_Sub_Status', strtoupper($status));
+        }
+        
+        if (!empty($scheme) && $scheme !== 'total' && $scheme !== 'ALL') {
+            if ($scheme === 'pmuy') {
+                $this->db->where_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            } else if ($scheme === 'non_pmuy') {
+                $this->db->where_not_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            }
+        }
+        
+        if (!empty($area) && $area !== 'ALL') {
+            $this->db->where('Area_Name', $area);
+        }
+        
+        $this->db->where('Phone_Number IS NOT NULL');
+        $this->db->where('LENGTH(Phone_Number) =', 10);
+        $this->db->where("Phone_Number != ''");
+        
+        $query = $this->db->get();
+        $all_customers = $query->result_array();
+        
+        log_message('debug', "Raw count from DB: " . count($all_customers));
+        
+        // Apply period filter (same logic as chunk method)
+        if (!empty($period) && $period !== 'ALL') {
+            $filtered_customers = [];
+            foreach ($all_customers as $customer) {
+                $days_since_refill = $this->calculate_days_since_refill($customer['Last_Refill_Date']);
+                
+                switch($period) {
+                    case 'greater_than_3_months':
+                        if ($days_since_refill > 90 && $days_since_refill <= 180) {
+                            $filtered_customers[] = $customer;
+                        }
+                        break;
+                    case 'greater_than_6_months':
+                        if ($days_since_refill > 180 && $days_since_refill <= 365) {
+                            $filtered_customers[] = $customer;
+                        }
+                        break;
+                    case 'greater_than_1_year':
+                        if ($days_since_refill > 365) {
+                            $filtered_customers[] = $customer;
+                        }
+                        break;
+                    default:
+                        $filtered_customers[] = $customer;
+                }
+            }
+            $all_customers = $filtered_customers;
+        }
+        
+        $count = count($all_customers);
+        
+        log_message('debug', "Final count after period filter: " . $count);
+        
+        return $count;
+        
+    } catch (Exception $e) {
+        log_message('error', 'Error in get_filtered_nilrefill_customers_count: ' . $e->getMessage());
+        log_message('error', 'Last query: ' . $this->db->last_query());
+        throw $e;
+    }
+}
+
+public function get_filtered_nilrefill_customers_chunk($status, $period, $scheme, $area, $limit, $offset = 0) {
+    try {
+        $userid = $this->session->userdata('user_id');
+        
+        log_message('debug', "CHUNK QUERY - Status: $status, Period: $period, Scheme: $scheme, Area: $area, Limit: $limit, Offset: $offset");
+        
+        // First, get ALL customers without period filter from database
+        $this->db->select('*');
+        $this->db->from('customer_register');
+        $this->db->where('Consumer_Category', 'domestic');
+        $this->db->where('userid', $userid);
+        $this->db->where_in('Consumer_Sub_Status', ['ACTIVE', 'DEACTIVATED', 'SUSPENDED']);
+        $this->db->where('Last_Refill_Date IS NOT NULL');
+        $this->db->where("Last_Refill_Date != ''");
+        $this->db->where("Last_Refill_Date != 'NULL'");
+        $this->db->where("Last_Refill_Date != 'null'");
+        
+        // Apply filters that don't depend on period calculation
+        if (!empty($status) && $status !== 'overall_total' && $status !== 'ALL') {
+            $this->db->where('Consumer_Sub_Status', strtoupper($status));
+        }
+        
+        if (!empty($scheme) && $scheme !== 'total' && $scheme !== 'ALL') {
+            if ($scheme === 'pmuy') {
+                $this->db->where_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            } else if ($scheme === 'non_pmuy') {
+                $this->db->where_not_in('Scheme_Selected', ['Ujjwala', 'Ujjwala - Extended']);
+            }
+        }
+        
+        if (!empty($area) && $area !== 'ALL') {
+            $this->db->where('Area_Name', $area);
+        }
+        
+        $this->db->where('Phone_Number IS NOT NULL');
+        $this->db->where('LENGTH(Phone_Number) =', 10);
+        $this->db->where("Phone_Number != ''");
+        
+        $this->db->order_by('Consumer_ID', 'ASC');
+        
+        $query = $this->db->get();
+        $all_customers = $query->result_array();
+        
+        log_message('debug', "Raw database results before period filter: " . count($all_customers));
+
+        // Apply period filter to ALL customers first
+        if (!empty($period) && $period !== 'ALL') {
+            $filtered_customers = [];
+            foreach ($all_customers as $customer) {
+                $days_since_refill = $this->calculate_days_since_refill($customer['Last_Refill_Date']);
+                
+                $period_match = false;
+                switch($period) {
+                    case 'greater_than_3_months':
+                        $period_match = ($days_since_refill > 90 && $days_since_refill <= 180);
+                        break;
+                    case 'greater_than_6_months':
+                        $period_match = ($days_since_refill > 180 && $days_since_refill <= 365);
+                        break;
+                    case 'greater_than_1_year':
+                        $period_match = ($days_since_refill > 365);
+                        break;
+                    default:
+                        $period_match = true;
+                }
+                
+                if ($period_match) {
+                    $customer['days_since_refill'] = $days_since_refill;
+                    $customer['months_since_refill'] = floor($days_since_refill / 30);
+                    $filtered_customers[] = $customer;
+                }
+            }
+            $all_customers = $filtered_customers;
+            log_message('debug', "After period filter: " . count($all_customers) . " customers");
+        } else {
+            // Add days_since_refill even if no period filter
+            foreach ($all_customers as &$customer) {
+                $customer['days_since_refill'] = $this->calculate_days_since_refill($customer['Last_Refill_Date']);
+                $customer['months_since_refill'] = floor($customer['days_since_refill'] / 30);
+            }
+        }
+
+        // Now apply pagination to the filtered results
+        $total_customers = count($all_customers);
+        $start_index = $offset;
+        $end_index = min($start_index + $limit, $total_customers);
+        
+        $result = array_slice($all_customers, $start_index, $limit);
+        
+        log_message('debug', "Chunk result: " . count($result) . " customers (slice from $start_index to $end_index)");
+        
+        return $result;
+        
+    } catch (Exception $e) {
+        log_message('error', 'Error in get_filtered_nilrefill_customers_chunk: ' . $e->getMessage());
+        log_message('error', 'Last query: ' . $this->db->last_query());
+        throw $e;
+    }
+}
+
+// Improved helper function to handle various date formats in varchar field
+private function calculate_days_since_refill($last_refill_date) {
+    if (empty($last_refill_date)) {
+        return 0;
+    }
+    
+    // Clean the date string
+    $date_string = trim($last_refill_date);
+    
+    // Handle common date formats found in varchar fields
+    $formats = [
+        'Y-m-d',           // 2024-01-15
+        'd/m/Y',           // 15/01/2024
+        'd-m-Y',           // 15-01-2024
+        'm/d/Y',           // 01/15/2024
+        'd M Y',           // 15 Jan 2024
+        'd F Y',           // 15 January 2024
+        'Y-m-d H:i:s',     // 2024-01-15 10:30:00
+        'd/m/Y H:i:s',     // 15/01/2024 10:30:00
+    ];
+    
+    foreach ($formats as $format) {
+        $date = DateTime::createFromFormat($format, $date_string);
+        if ($date !== false) {
+            $today = new DateTime();
+            $interval = $today->diff($date);
+            return (int) $interval->format('%a');
+        }
+    }
+    
+    // If no format matches, try strtotime as fallback
+    $timestamp = strtotime($date_string);
+    if ($timestamp !== false) {
+        $today = time();
+        $diff_seconds = $today - $timestamp;
+        return (int) floor($diff_seconds / (60 * 60 * 24));
+    }
+    
+    // If all else fails, return 0
+    log_message('warning', "Unable to parse date: " . $date_string);
+    return 0;
+}
 
   
 }
