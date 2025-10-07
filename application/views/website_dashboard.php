@@ -3004,9 +3004,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
-                            if (pauseSending) {
-                                return; // Don't send if paused
-                            }
+                            if (pauseSending) return;
 
                             $.ajax({
                                 url: '<?php echo base_url('SBC_data/send_batch_messages'); ?>',
@@ -3019,66 +3017,65 @@ document.addEventListener('DOMContentLoaded', function() {
                                     current_batch: currentBatch,
                                     total_customers: totalCustomers
                                 },
-                                timeout: 300000, // 5 minute timeout for large batches
+                                timeout: 300000,
                                 success: function(response) {
                                     if (response.success) {
                                         currentBatch++;
                                         successCount += response.success_count;
                                         failCount += response.fail_count;
 
-                                        // Update progress
-                                        const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
-                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
-                                        
+                                        const processed = successCount + failCount;
+                                        const progress = Math.min((processed / totalCustomers) * 100, 100);
                                         const elapsed = Math.round((new Date() - startTime) / 1000);
                                         const elapsedFormatted = formatTime(elapsed);
-                                        const remaining = response.estimated_time_remaining || 'Calculating...';
-                                        
-                                        let statusHTML = `
-                                            <div style="text-align: left; font-size: 14px;">
-                                                <strong>Progress: ${progress.toFixed(1)}%</strong><br>
-                                                • Batch ${currentBatch}/${totalBatches} completed<br>
-                                                • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
-                                                • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
-                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
-                                                <small>${response.batch_info || ''}</small>
-                                        `;
-                                        
-                                        if (response.rate_limit_hit) {
-                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
-                                        }
-                                        
-                                        statusHTML += `</div>`;
-                                        statusDiv.innerHTML = statusHTML;
+                                        const avgTimePerBatch = elapsed / (currentBatch || 1);
+                                        const remainingBatches = totalBatches - currentBatch;
+                                        const remainingSeconds = Math.round(remainingBatches * avgTimePerBatch);
+                                        const remainingFormatted = formatTime(remainingSeconds);
 
-                                        if (response.completed) {
-                                            // Completion
+                                        // 🔥 Update progress bar visually
+                                        const bar = progressBar.querySelector('.progress-bar');
+                                        bar.style.width = progress.toFixed(2) + '%';
+                                        bar.innerText = progress.toFixed(1) + '%'; // show % text inside bar
+
+                                        // 🧩 Update detailed status
+                                        statusDiv.innerHTML = `
+                                            <div class="progress-info-box">
+                                                <strong>Progress:</strong> ${progress.toFixed(1)}%<br>
+                                                • Batch ${currentBatch}/${totalBatches}<br>
+                                                • Success: ${successCount} | Failed: ${failCount}<br>
+                                                • Processed: ${processed}/${totalCustomers}<br>
+                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remainingFormatted}<br>
+                                                <small>Batch ${currentBatch}: ${progress.toFixed(2)}% complete</small>
+                                            </div>
+                                        `;
+
+                                        if (processed >= totalCustomers || response.completed) {
                                             const totalTime = Math.round((new Date() - startTime) / 1000);
+                                            const successRate = ((successCount / totalCustomers) * 100).toFixed(1);
+                                            bar.classList.remove('progress-bar-animated');
+                                            bar.classList.add('bg-success');
+                                            bar.innerText = '100%';
+
                                             statusDiv.innerHTML = `
-                                                <div class="text-success" style="text-align: left;">
-                                                    <strong>✅ COMPLETED!</strong><br>
-                                                    • Success: ${successCount.toLocaleString()}<br>
-                                                    • Failed: ${failCount.toLocaleString()}<br>
-                                                    • Total: ${totalCustomers.toLocaleString()}<br>
+                                                <div style="text-align:left;" class="text-success">
+                                                    <strong>✅ Completed!</strong><br>
+                                                    • Success: ${successCount}<br>
+                                                    • Failed: ${failCount}<br>
+                                                    • Total: ${totalCustomers}<br>
                                                     • Time: ${formatTime(totalTime)}<br>
-                                                    • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                                                    • Success Rate: ${successRate}%
                                                 </div>
                                             `;
-                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
+
                                             resetButton(button, progressBar, statusDiv, true);
-                                            
-                                            // Show completion alert
-                                            setTimeout(() => {
-                                                alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
-                                            }, 1000);
                                         } else {
-                                            // Continue with next batch
-                                            const delay = response.rate_limit_hit ? 10000 : 3000; // 10s if rate limited, else 3s
+                                            // Continue next batch with slight delay
                                             setTimeout(() => {
                                                 if (!pauseSending) {
                                                     sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
                                                 }
-                                            }, delay);
+                                            }, 2500);
                                         }
                                     } else {
                                         statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
@@ -3087,16 +3084,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                 },
                                 error: function(xhr, status, error) {
                                     statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
-                                    // Auto-retry after 10 seconds
                                     setTimeout(() => {
                                         if (!pauseSending) {
-                                            statusDiv.innerHTML += '<br>Retrying...';
                                             sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
                                         }
                                     }, 10000);
                                 }
                             });
                         }
+
 
                         function calculateTotalTime(totalCustomers, batchSize) {
                             const batches = Math.ceil(totalCustomers / batchSize);
@@ -3133,7 +3129,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('.send-whatsapp-batch').prop('disabled', false);
                             
                             if (completed) {
-                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.innerHTML = '<i class="fas fa-sync"></i> Send Again';
                                 button.classList.add('btn-success');
                                 button.classList.remove('btn-warning');
                             } else {
@@ -3275,6 +3271,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 </script>
 
                 <style>
+                    .progress-bar {
+                        font-size: 13px;
+                        font-weight: bold;
+                        color: #fff;
+                        text-align: center;
+                    }
+
+                    .progress-info-box {
+                        margin-top: 8px;
+                        margin-bottom: 10px;
+                        padding: 15px 20px;
+                        background-color: #e3f2fd;     
+                        border: 1px solid #90caf9;     
+                        border-radius: 6px;
+                        font-size: 14px;
+                        color: #0d47a1;                 
+                        line-height: 1.6;
+                    }
+
+                    .progress-info-box.completed {
+                        background-color: #e8f5e9;      
+                        border: 1px solid #81c784;      
+                        border-radius: 6px;
+                        color: #1b5e20;                 
+                        line-height: 1.6;
+                    }
+
                     .progress-bar-animated {
                         animation: progress-bar-stripes 1s linear infinite;
                     }
@@ -4003,7 +4026,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('.send-whatsapp-batch').prop('disabled', false);
                             
                             if (completed) {
-                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.innerHTML = '<i class="fas fa-sync"></i> Send Again';
                                 button.classList.add('btn-success');
                                 button.classList.remove('btn-warning');
                             } else {
@@ -4743,7 +4766,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('.send-whatsapp-batch').prop('disabled', false);
                             
                             if (completed) {
-                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.innerHTML = '<i class="fas fa-sync"></i> Send Again';
                                 button.classList.add('btn-success');
                                 button.classList.remove('btn-warning');
                             } else {
@@ -5454,7 +5477,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('.send-whatsapp-batch').prop('disabled', false);
                             
                             if (completed) {
-                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.innerHTML = '<i class="fas fa-sync"></i> Send Again';
                                 button.classList.add('btn-success');
                                 button.classList.remove('btn-warning');
                             } else {
@@ -6190,7 +6213,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('.send-whatsapp-batch').prop('disabled', false);
                             
                             if (completed) {
-                                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                                button.innerHTML = '<i class="fas fa-sync"></i> Send Again';
                                 button.classList.add('btn-success');
                                 button.classList.remove('btn-warning');
                             } else {
