@@ -2904,9 +2904,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     style="background: #25D366; border-color: #25D366;">
                                                     <i class="fas fa-paper-plane"></i> Send WhatsApp
                                                 </button>
-                                                <div class="progress mt-2" style="display: none; height: 10px;">
+                                                <div class="progress mt-2" style="display: none; height: 18px;">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                                        role="progressbar" style="width: 0%"></div>
+                                                        role="progressbar" style="width: 0%; font-size:12px; transition: width 0.5s ease;"></div>
                                                 </div>
                                                 <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
                                             </td>
@@ -3732,9 +3732,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     style="background: #25D366; border-color: #25D366;">
                                                     <i class="fas fa-paper-plane"></i> Send WhatsApp
                                                 </button>
-                                                <div class="progress mt-2" style="display: none; height: 10px;">
+                                                <div class="progress mt-2" style="display: none; height: 18px;">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                                        role="progressbar" style="width: 0%"></div>
+                                                        role="progressbar" style="width: 0%" font-size:12px; transition: width 0.4s ease;></div>
                                                 </div>
                                                 <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
                                             </td>
@@ -3876,9 +3876,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         function sendNextBatch(status, period, scheme, area, button, progressBar, statusDiv, batchSize) {
-                            if (pauseSending) {
-                                return;
-                            }
+                            if (pauseSending) return;
 
                             console.log('Sending batch:', currentBatch, 'for area:', area);
 
@@ -3897,26 +3895,27 @@ document.addEventListener('DOMContentLoaded', function() {
                                 timeout: 300000,
                                 success: function(response) {
                                     console.log('Batch response:', response);
-                                    
+
                                     if (response.success) {
                                         currentBatch++;
-                                        
-                                        // Safely parse numbers to prevent NaN
+
                                         const batchSuccess = parseInt(response.success_count) || 0;
                                         const batchFail = parseInt(response.fail_count) || 0;
-                                        const batchProcessed = parseInt(response.processed_in_batch) || 0;
-                                        
-                                        successCount = (parseInt(successCount) || 0) + batchSuccess;
-                                        failCount = (parseInt(failCount) || 0) + batchFail;
 
-                                        // Update progress
+                                        successCount += batchSuccess;
+                                        failCount += batchFail;
+
+                                        // Update progress bar
                                         const progress = response.completion_percentage || 0;
-                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
-                                        
+                                        const bar = progressBar.querySelector('.progress-bar');
+                                        bar.style.width = progress + '%';
+                                        bar.style.backgroundColor = '#0d6efd'; // Blue while sending
+                                        bar.innerText = Math.floor(progress) + '%';
+
                                         const elapsed = Math.round((new Date() - startTime) / 1000);
                                         const elapsedFormatted = formatTime(elapsed);
                                         const remaining = response.estimated_time_remaining || 'Calculating...';
-                                        
+
                                         let statusHTML = `
                                             <div style="text-align: left; font-size: 14px;">
                                                 <strong>Progress: ${progress.toFixed(1)}%</strong><br>
@@ -3924,26 +3923,20 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 • Success: ${successCount} | Failed: ${failCount}<br>
                                                 • Processed: ${response.total_processed || 0}/${totalCustomers}<br>
                                                 • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
-                                                <small>${response.batch_info || ''}</small>
+                                            </div>
                                         `;
-                                        
-                                        if (response.rate_limit_hit) {
-                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
-                                        }
-                                        
-                                        if (response.warning) {
-                                            statusHTML += `<br><span class="text-warning">${response.warning}</span>`;
-                                        }
-                                        
-                                        statusHTML += `</div>`;
                                         statusDiv.innerHTML = statusHTML;
 
                                         if (response.completed) {
-                                            // Final completion
+                                            // Completed: turn green
+                                            bar.style.width = '100%';
+                                            bar.style.backgroundColor = '#28a745'; // Green
+                                            bar.innerText = '100%';
+
                                             const totalTime = Math.round((new Date() - startTime) / 1000);
                                             const finalTotal = successCount + failCount;
                                             const successRate = finalTotal > 0 ? ((successCount / finalTotal) * 100) : 0;
-                                            
+
                                             statusDiv.innerHTML = `
                                                 <div class="text-success" style="text-align: left;">
                                                     <strong>✅ BULK SENDING COMPLETED!</strong><br>
@@ -3955,21 +3948,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     • Success Rate: ${successRate.toFixed(1)}%
                                                 </div>
                                             `;
-                                            progressBar.querySelector('.progress-bar').style.width = '100%';
-                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
+
+                                            bar.classList.remove('progress-bar-animated');
                                             resetButton(button, progressBar, statusDiv, true);
-                                            
-                                            // Show completion alert
-                                            setTimeout(() => {
-                                                alert(`🎉 BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent successfully\n❌ ${failCount.toLocaleString()} failed\n📊 ${finalTotal.toLocaleString()} processed out of ${totalCustomers.toLocaleString()}\n⏱️ Total time: ${formatTime(totalTime)}\n📈 Success rate: ${successRate.toFixed(1)}%`);
-                                            }, 1000);
                                         } else {
-                                            // Continue with next batch
                                             const delay = response.rate_limit_hit ? 10000 : 3000;
                                             setTimeout(() => {
-                                                if (!pauseSending) {
-                                                    sendNextBatch(status, period, scheme, area, button, progressBar, statusDiv, batchSize);
-                                                }
+                                                if (!pauseSending) sendNextBatch(status, period, scheme, area, button, progressBar, statusDiv, batchSize);
                                             }, delay);
                                         }
                                     } else {
@@ -3980,7 +3965,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 error: function(xhr, status, error) {
                                     console.error('Batch error:', error);
                                     statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}. Retrying in 10 seconds...</span>`;
-                                    // Auto-retry after 10 seconds
                                     setTimeout(() => {
                                         if (!pauseSending) {
                                             statusDiv.innerHTML += '<br>🔄 Retrying...';
@@ -3990,6 +3974,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 }
                             });
                         }
+
 
                         function calculateTotalTime(totalCustomers, batchSize) {
                             const batches = Math.ceil(totalCustomers / batchSize);
@@ -4536,11 +4521,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     style="background: #25D366; border-color: #25D366;">
                                                     <i class="fas fa-paper-plane"></i> Send WhatsApp
                                                 </button>
-                                                <div class="progress mt-2" style="display: none; height: 10px;">
-                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                                        role="progressbar" style="width: 0%"></div>
+                                                <div class="progress mt-2" style="height: 18px; display: none;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                                        role="progressbar" style="width: 0%; font-size:12px; transition: width 0.5s ease;">
+                                                        0%
+                                                    </div>
                                                 </div>
-                                                <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
+                                                <div class="batch-status mt-1 mb-2" style="font-size: 12px; display: none;"></div>
                                             </td>
                                         </tr>
                                     `);
@@ -4637,9 +4624,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
-                            if (pauseSending) {
-                                return; // Don't send if paused
-                            }
+                            if (pauseSending) return;
 
                             $.ajax({
                                 url: '<?php echo base_url('KYC_data/send_batch_messages'); ?>',
@@ -4652,75 +4637,79 @@ document.addEventListener('DOMContentLoaded', function() {
                                     current_batch: currentBatch,
                                     total_customers: totalCustomers
                                 },
-                                timeout: 300000, // 5 minute timeout for large batches
-                                success: function(response) {
+                                timeout: 300000,
+                                success: function (response) {
                                     if (response.success) {
                                         currentBatch++;
                                         successCount += response.success_count;
                                         failCount += response.fail_count;
 
-                                        // Update progress
-                                        const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
-                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
-                                        
+                                        const totalProcessed = successCount + failCount;
+                                        const progress = Math.min((totalProcessed / totalCustomers) * 100, 100);
+
+                                        const $bar = $(progressBar).find('.progress-bar');
+
+                                        // 🟦 Blue during sending
+                                        if (progress < 100) {
+                                            $bar.removeClass('bg-success').addClass('bg-primary');
+                                        }
+
+                                        // Smooth animation and text
+                                        $bar.css({
+                                            width: progress + '%'
+                                        }).text(progress.toFixed(1) + '%');
+
                                         const elapsed = Math.round((new Date() - startTime) / 1000);
                                         const elapsedFormatted = formatTime(elapsed);
-                                        const remaining = response.estimated_time_remaining || 'Calculating...';
-                                        
-                                        let statusHTML = `
+                                        const remainingEst = progress > 0 ? Math.round((elapsed / progress) * (100 - progress)) : 0;
+                                        const remainingFormatted = formatTime(remainingEst);
+
+                                        statusDiv.innerHTML = `
                                             <div style="text-align: left; font-size: 14px;">
                                                 <strong>Progress: ${progress.toFixed(1)}%</strong><br>
-                                                • Batch ${currentBatch}/${totalBatches} completed<br>
+                                                • Batch ${currentBatch}/${totalBatches}<br>
                                                 • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
-                                                • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
-                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
-                                                <small>${response.batch_info || ''}</small>
+                                                • Total Sent: ${totalProcessed.toLocaleString()} / ${totalCustomers.toLocaleString()}<br>
+                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remainingFormatted}
+                                            </div>
                                         `;
-                                        
-                                        if (response.rate_limit_hit) {
-                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
-                                        }
-                                        
-                                        statusHTML += `</div>`;
-                                        statusDiv.innerHTML = statusHTML;
 
-                                        if (response.completed) {
-                                            // Completion
+                                        if (totalProcessed >= totalCustomers) {
                                             const totalTime = Math.round((new Date() - startTime) / 1000);
+
+                                            // ✅ Turn green on completion
+                                            $bar.removeClass('bg-primary progress-bar-animated')
+                                                .addClass('bg-success')
+                                                .css('width', '100%')
+                                                .text('100%');
+
                                             statusDiv.innerHTML = `
-                                                <div class="text-success" style="text-align: left;">
+                                                <div class="text-success" style="text-align:left;">
                                                     <strong>✅ COMPLETED!</strong><br>
-                                                    • Success: ${successCount.toLocaleString()}<br>
-                                                    • Failed: ${failCount.toLocaleString()}<br>
-                                                    • Total: ${totalCustomers.toLocaleString()}<br>
+                                                    • Success: ${successCount}<br>
+                                                    • Failed: ${failCount}<br>
+                                                    • Total: ${totalCustomers}<br>
                                                     • Time: ${formatTime(totalTime)}<br>
-                                                    • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                                                    • Success Rate: ${((successCount / totalCustomers) * 100).toFixed(1)}%
                                                 </div>
                                             `;
-                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
+
                                             resetButton(button, progressBar, statusDiv, true);
-                                            
-                                            // Show completion alert
-                                            setTimeout(() => {
-                                                alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
-                                            }, 1000);
                                         } else {
-                                            // Continue with next batch
-                                            const delay = response.rate_limit_hit ? 10000 : 3000; // 10s if rate limited, else 3s
+                                            // Continue next batch
                                             setTimeout(() => {
                                                 if (!pauseSending) {
                                                     sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
                                                 }
-                                            }, delay);
+                                            }, response.rate_limit_hit ? 10000 : 3000);
                                         }
                                     } else {
                                         statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
                                         resetButton(button, progressBar, statusDiv);
                                     }
                                 },
-                                error: function(xhr, status, error) {
+                                error: function (xhr, status, error) {
                                     statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
-                                    // Auto-retry after 10 seconds
                                     setTimeout(() => {
                                         if (!pauseSending) {
                                             statusDiv.innerHTML += '<br>Retrying...';
@@ -4730,6 +4719,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 }
                             });
                         }
+
 
                         function calculateTotalTime(totalCustomers, batchSize) {
                             const batches = Math.ceil(totalCustomers / batchSize);
@@ -5241,11 +5231,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     style="background: #25D366; border-color: #25D366;">
                                                     <i class="fas fa-paper-plane"></i> Send WhatsApp
                                                 </button>
-                                                <div class="progress mt-2" style="display: none; height: 10px;">
-                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                                        role="progressbar" style="width: 0%"></div>
+                                                <div class="progress mt-2" style="display:none; height: 18px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                                        role="progressbar" style="width: 0%; font-size:12px; transition: width 0.4s ease;">
+                                                        0%
+                                                    </div>
                                                 </div>
-                                                <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
+                                                <div class="batch-status mt-1" style="font-size:13px; display:none;"></div>
                                             </td>
                                         </tr>
                                     `);
@@ -5348,9 +5340,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
-                            if (pauseSending) {
-                                return; // Don't send if paused
-                            }
+                            if (pauseSending) return;
 
                             $.ajax({
                                 url: '<?php echo base_url('MI_due_data/send_batch_messages'); ?>',
@@ -5363,78 +5353,85 @@ document.addEventListener('DOMContentLoaded', function() {
                                     current_batch: currentBatch,
                                     total_customers: totalCustomers
                                 },
-                                timeout: 300000, // 5 minute timeout for large batches
+                                timeout: 300000,
                                 success: function(response) {
                                     if (response.success) {
                                         currentBatch++;
                                         successCount += response.success_count;
                                         failCount += response.fail_count;
 
-                                        // Update progress
-                                        const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
-                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
-                                        
+                                        // ✅ Calculate progress
+                                        const totalProcessed = Math.min(currentBatch * batchSize, totalCustomers);
+                                        const progress = Math.min((totalProcessed / totalCustomers) * 100, 100);
+
+                                        const bar = progressBar.querySelector('.progress-bar');
+                                        bar.style.width = progress + '%';
+                                        bar.textContent = progress.toFixed(1) + '%';
+
+                                        // ✅ Keep blue while sending
+                                        if (!bar.classList.contains('bg-primary')) {
+                                            bar.classList.remove('bg-success');
+                                            bar.classList.add('bg-primary');
+                                        }
+
+                                        // ✅ Update live status text
                                         const elapsed = Math.round((new Date() - startTime) / 1000);
                                         const elapsedFormatted = formatTime(elapsed);
-                                        const remaining = response.estimated_time_remaining || 'Calculating...';
-                                        
-                                        let statusHTML = `
-                                            <div style="text-align: left; font-size: 14px;">
-                                                <strong>Progress: ${progress.toFixed(1)}%</strong><br>
-                                                • Batch ${currentBatch}/${totalBatches} completed<br>
-                                                • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
-                                                • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
-                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
-                                                <small>${response.batch_info || ''}</small>
-                                        `;
-                                        
-                                        if (response.rate_limit_hit) {
-                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
-                                        }
-                                        
-                                        statusHTML += `</div>`;
-                                        statusDiv.innerHTML = statusHTML;
+                                        const remainingCount = totalCustomers - totalProcessed;
+                                        const estimatedRemaining = Math.ceil((remainingCount / batchSize) * 5);
+                                        const remainingFormatted = formatTime(estimatedRemaining);
 
-                                        if (response.completed) {
-                                            // Completion
+                                        statusDiv.innerHTML = `
+                                            <div style="text-align:left; font-size:13px;">
+                                                <strong>Progress:</strong> ${progress.toFixed(1)}%<br>
+                                                • Batch ${currentBatch}/${totalBatches}<br>
+                                                • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
+                                                • Total Sent: ${totalProcessed.toLocaleString()} / ${totalCustomers.toLocaleString()}<br>
+                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remainingFormatted}
+                                            </div>
+                                        `;
+
+                                        // ✅ When completed
+                                        if (totalProcessed >= totalCustomers) {
                                             const totalTime = Math.round((new Date() - startTime) / 1000);
+                                            const rate = ((successCount / totalCustomers) * 100).toFixed(1);
+
+                                            // Change color from blue → green
+                                            bar.classList.remove('bg-primary');
+                                            bar.classList.add('bg-success');
+                                            bar.classList.remove('progress-bar-animated');
+                                            bar.style.width = '100%';
+                                            bar.textContent = '100%';
+
                                             statusDiv.innerHTML = `
-                                                <div class="text-success" style="text-align: left;">
+                                                <div class="text-success" style="text-align:left;">
                                                     <strong>✅ COMPLETED!</strong><br>
-                                                    • Success: ${successCount.toLocaleString()}<br>
-                                                    • Failed: ${failCount.toLocaleString()}<br>
-                                                    • Total: ${totalCustomers.toLocaleString()}<br>
+                                                    • Success: ${successCount}<br>
+                                                    • Failed: ${failCount}<br>
+                                                    • Total: ${totalCustomers}<br>
                                                     • Time: ${formatTime(totalTime)}<br>
-                                                    • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                                                    • Success Rate: ${rate}%
                                                 </div>
                                             `;
-                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
                                             resetButton(button, progressBar, statusDiv, true);
-                                            
-                                            // Show completion alert
-                                            setTimeout(() => {
-                                                alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
-                                            }, 1000);
-                                        } else {
-                                            // Continue with next batch
-                                            const delay = response.rate_limit_hit ? 10000 : 3000; // 10s if rate limited, else 3s
-                                            setTimeout(() => {
-                                                if (!pauseSending) {
-                                                    sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
-                                                }
-                                            }, delay);
+                                            return;
                                         }
+
+                                        // Continue next batch
+                                        setTimeout(() => {
+                                            if (!pauseSending) {
+                                                sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                            }
+                                        }, 3000);
                                     } else {
                                         statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
                                         resetButton(button, progressBar, statusDiv);
                                     }
                                 },
                                 error: function(xhr, status, error) {
-                                    statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
-                                    // Auto-retry after 10 seconds
+                                    statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span><br>Retrying...`;
                                     setTimeout(() => {
                                         if (!pauseSending) {
-                                            statusDiv.innerHTML += '<br>Retrying...';
                                             sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
                                         }
                                     }, 10000);
@@ -5987,9 +5984,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     style="background: #25D366; border-color: #25D366;">
                                                     <i class="fas fa-paper-plane"></i> Send WhatsApp
                                                 </button>
-                                                <div class="progress mt-2" style="display: none; height: 10px;">
+                                                <div class="progress mt-2" style="display: none; height: 18px;">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                                        role="progressbar" style="width: 0%"></div>
+                                                        role="progressbar" style="width: 0%; font-size:12px; transition: width 0.4s ease;"></div>
                                                 </div>
                                                 <div class="batch-status mt-1" style="font-size: 12px; display: none;"></div>
                                             </td>
@@ -6091,9 +6088,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
 
                         function sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize) {
-                            if (pauseSending) {
-                                return;
-                            }
+                            if (pauseSending) return;
 
                             $.ajax({
                                 url: '<?php echo base_url('Hosedue_data/send_batch_messages'); ?>',
@@ -6113,55 +6108,51 @@ document.addEventListener('DOMContentLoaded', function() {
                                         successCount += response.success_count;
                                         failCount += response.fail_count;
 
-                                        const progress = response.completion_percentage || (response.total_processed / totalCustomers) * 100;
-                                        progressBar.querySelector('.progress-bar').style.width = progress + '%';
-                                        
+                                        const totalProcessed = successCount + failCount;
+                                        const progress = (totalProcessed / totalCustomers) * 100;
+
+                                        // Update progress bar width
+                                        const bar = progressBar.querySelector('.progress-bar');
+                                        bar.style.width = progress + '%';
+                                        bar.innerText = Math.floor(progress) + '%';
+
+                                        // Set sending color (blue)
+                                        bar.style.backgroundColor = '#0d6efd'; // Bootstrap blue
+
                                         const elapsed = Math.round((new Date() - startTime) / 1000);
                                         const elapsedFormatted = formatTime(elapsed);
-                                        const remaining = response.estimated_time_remaining || 'Calculating...';
-                                        
-                                        let statusHTML = `
+                                        const remaining = ((totalCustomers - totalProcessed) / batchSize) * 5;
+                                        const remainingFormatted = formatTime(Math.ceil(remaining));
+
+                                        statusDiv.innerHTML = `
                                             <div style="text-align: left; font-size: 14px;">
                                                 <strong>Progress: ${progress.toFixed(1)}%</strong><br>
-                                                • Batch ${currentBatch}/${totalBatches} completed<br>
-                                                • Success: ${successCount.toLocaleString()} | Failed: ${failCount.toLocaleString()}<br>
-                                                • Total: ${response.total_processed.toLocaleString()}/${totalCustomers.toLocaleString()}<br>
-                                                • Elapsed: ${elapsedFormatted} | Remaining: ${remaining}<br>
-                                                <small>${response.batch_info || ''}</small>
+                                                • Batch ${currentBatch}/${totalBatches}<br>
+                                                • Success: ${successCount} | Failed: ${failCount}<br>
+                                                • Total processed: ${totalProcessed}/${totalCustomers}<br>
+                                                • Elapsed: ${elapsedFormatted} | Estimated remaining: ${remainingFormatted}
+                                            </div>
                                         `;
-                                        
-                                        if (response.rate_limit_hit) {
-                                            statusHTML += `<br><span class="text-warning">⚠️ Rate limit approaching</span>`;
-                                        }
-                                        
-                                        statusHTML += `</div>`;
-                                        statusDiv.innerHTML = statusHTML;
 
-                                        if (response.completed) {
-                                            const totalTime = Math.round((new Date() - startTime) / 1000);
+                                        if (totalProcessed < totalCustomers) {
+                                            setTimeout(() => {
+                                                if (!pauseSending) sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
+                                            }, response.rate_limit_hit ? 10000 : 2000);
+                                        } else {
+                                            // COMPLETED: turn green
+                                            bar.style.width = '100%';
+                                            bar.innerText = '100%';
+                                            bar.style.backgroundColor = '#28a745'; // Green
                                             statusDiv.innerHTML = `
                                                 <div class="text-success" style="text-align: left;">
-                                                    <strong>✅ COMPLETED!</strong><br>
-                                                    • Success: ${successCount.toLocaleString()}<br>
-                                                    • Failed: ${failCount.toLocaleString()}<br>
-                                                    • Total: ${totalCustomers.toLocaleString()}<br>
-                                                    • Time: ${formatTime(totalTime)}<br>
-                                                    • Success Rate: ${((successCount/totalCustomers)*100).toFixed(1)}%
+                                                    ✅ COMPLETED!<br>
+                                                    • Success: ${successCount}<br>
+                                                    • Failed: ${failCount}<br>
+                                                    • Total: ${totalCustomers}<br>
+                                                    • Time: ${formatTime(Math.round((new Date() - startTime)/1000))}<br>
                                                 </div>
                                             `;
-                                            progressBar.querySelector('.progress-bar').classList.remove('progress-bar-animated');
                                             resetButton(button, progressBar, statusDiv, true);
-                                            
-                                            setTimeout(() => {
-                                                alert(`BULK SENDING COMPLETED!\n\n✅ ${successCount.toLocaleString()} sent\n❌ ${failCount.toLocaleString()} failed\n📊 ${totalCustomers.toLocaleString()} total\n⏱️ ${formatTime(totalTime)}`);
-                                            }, 1000);
-                                        } else {
-                                            const delay = response.rate_limit_hit ? 10000 : 3000;
-                                            setTimeout(() => {
-                                                if (!pauseSending) {
-                                                    sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
-                                                }
-                                            }, delay);
                                         }
                                     } else {
                                         statusDiv.innerHTML = `<span class="text-danger">Error: ${response.error}</span>`;
@@ -6169,12 +6160,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                     }
                                 },
                                 error: function(xhr, status, error) {
-                                    statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}</span>`;
+                                    statusDiv.innerHTML = `<span class="text-danger">Network error: ${error}. Retrying...</span>`;
                                     setTimeout(() => {
-                                        if (!pauseSending) {
-                                            statusDiv.innerHTML += '<br>Retrying...';
-                                            sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
-                                        }
+                                        sendNextBatch(status, scheme, area, button, progressBar, statusDiv, batchSize);
                                     }, 10000);
                                 }
                             });
