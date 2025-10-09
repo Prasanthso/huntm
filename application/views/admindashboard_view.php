@@ -735,7 +735,7 @@
                 <li class="nav-item">
                     <a href="<?php echo base_url('create-distributor'); ?>" 
                        class="nav-link <?php echo ($method == 'create_distributor') ? 'active' : ''; ?>">
-                        <i class="fas fa-user-plus text-white me-4"></i>
+                        <i class="fas fa-user-plus"></i>
                         <span>Create Distributor</span>
                     </a>
                 </li>
@@ -896,7 +896,7 @@
                                         <i class="fas fa-user-edit"></i> Update Profile
                                     </a>
                                     <a href="<?php echo base_url('Admindashboard/create_distributor'); ?>" class="btn btn-outline-primary">
-                                        <i class="fas fa-user-plus" style="color: #0A517F;"></i> Add Distributor
+                                        <i class="fas fa-user-plus"></i> Add Distributor
                                     </a>
                                     <a href="<?php echo base_url('Admindashboard/get_template_content'); ?>" class="btn btn-outline-primary">
                                         <i class="fas fa-file-invoice"></i> Create New Template

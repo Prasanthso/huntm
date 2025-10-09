@@ -18,7 +18,7 @@ class Admindashboard extends CI_Controller {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
             $this->session->set_flashdata('error', 'You must be logged in to view this page.');
-            redirect('login');
+            redirect('user_profile/login_form');
         }
         $data['method'] = "admindashboard";
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
@@ -30,7 +30,7 @@ class Admindashboard extends CI_Controller {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
             $this->session->set_flashdata('error', 'You must be logged in to view this page.');
-            redirect('login');
+            redirect('user_profile/login_form');
         }
         $data['method'] = "profile";
         $data['admin_data'] = $this->Admindashboard_model->get_admin_data_by_id($admin_id);
@@ -188,7 +188,7 @@ class Admindashboard extends CI_Controller {
     {
         // 1. Check if admin is logged in
         $admin_id = $this->session->userdata('user_id');
-        if (!$admin_id) redirect('login');
+        if (!$admin_id) redirect('user_profile/login_form');
 
         // 2. Load required models
         $this->load->model('Permission_model');
@@ -240,7 +240,7 @@ class Admindashboard extends CI_Controller {
     public function showing_distributor_remaining_data($distributor_id) {
          $admin_id = $this->session->userdata('user_id');
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('user_profile/login_form');
         }
 
         if (!$distributor_id) {
@@ -264,7 +264,7 @@ class Admindashboard extends CI_Controller {
     public function update_staff_limits() {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
-            redirect('login');
+            redirect('user_profile/login_form');
         }
 
         $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
@@ -288,7 +288,7 @@ class Admindashboard extends CI_Controller {
     public function delete_distributor($distributor_id) 
     {
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('user_profile/login_form');
         }
 
         if (!$distributor_id) {
@@ -311,7 +311,7 @@ class Admindashboard extends CI_Controller {
     public function get_template_content() {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
-            redirect('login');
+            redirect('user_profile/login_form');
         }
         
         $data['templates'] = $this->Admindashboard_model->get_template_content();
@@ -323,7 +323,7 @@ class Admindashboard extends CI_Controller {
     public function update_template_content() {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
-            redirect('login');
+            redirect('user_profile/login_form');
         }
 
         $this->form_validation->set_rules('template_id', 'Template ID', 'required|trim');
@@ -351,7 +351,7 @@ class Admindashboard extends CI_Controller {
     {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
-            redirect('login');
+            redirect('user_profile/login_form');
         }
 
         $this->form_validation->set_rules('template_name', 'Template Name', 'required|trim');
@@ -378,7 +378,7 @@ class Admindashboard extends CI_Controller {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('user_profile/process_login');
+        redirect('user_profile/login_form');
     }
   
 }
