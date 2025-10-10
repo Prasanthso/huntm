@@ -934,6 +934,9 @@
                     
                 <?php elseif ($method == "profile") : ?>
                     <div class="row">
+                        <div class="col-12 mb-4">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('Distributordashboard/dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-lg-12">
                             <div class="form-container w-100" style="max-width: 100%; width: 100%;">
                                 <div class="text-center mb-4">
@@ -1372,6 +1375,9 @@
 
                 <?php elseif ($method == "create_staff") : ?>
                     <section class="row">
+                        <div class="col-12 mb-4">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('Distributordashboard/dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-lg-8 mx-auto">
                             <div class="form-container">
                                 <div class="text-center mb-4">
@@ -1472,16 +1478,8 @@
 
                 <?php elseif($method == 'get_staff_data'): ?>
                     <div class="row fade-in">
-                        <div class="col-12">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h2 class="h3 mb-0 text-gray-800"><i class="fas fa-users me-2"></i>Staff Details</h2>
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="<?php echo base_url('Distributordashboard/dashboard'); ?>"><i class="fas fa-home"></i> Dashboard</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-users-cog"></i> Manage Staff</li>
-                                    </ol>
-                                </nav>
-                            </div>
+                        <div class="col-12 mb-4">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('Distributordashboard/dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
                         </div>
                     </div>
                     
@@ -1574,10 +1572,8 @@
 
                 <?php elseif($method == 'showing_staff_remaining_data'): ?>
                     <section class="fade-in">
-                        <div class="col-12 pt-0">
-                            <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
+                        <div class="col-12 mb-4">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('Distributordashboard/get_staff_data'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Staff List</a></button>
                         </div>
                         <div class="col-12">
                             <div class="card border-0 shadow-sm">

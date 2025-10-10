@@ -11,6 +11,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
             --sidebar-width: 260px;
@@ -818,7 +819,7 @@
             </nav> -->
 
             <!-- Page Title -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <!-- <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="page-title mb-0">
                     <?php if ($method == "admindashboard") : ?>
                         <i class="fas fa-tachometer-alt text-dark me-2"></i>Dashboard Overview
@@ -830,7 +831,7 @@
                         <i class="fas fa-tasks text-dark me-2"></i>Page Management
                     <?php endif; ?>
                 </h2>
-            </div>
+            </div> -->
 
             <!-- Dashboard Content -->
             <?php if ($method == "admindashboard") : ?>
@@ -915,7 +916,13 @@
 
             <?php elseif ($method == "profile") : ?>
                 <section>
+                    <div class="col-12 mb-2">
+                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                    </div>
                     <div class="col-lg-8 w-100">
+                        <div class="col-12">
+                            <h2 class="mb-4"><i class="fas fa-user-cog me-2 text-dark"></i>Profile Management</h2>
+                        </div>
                         <div class="form-container">
                             <form id="profileForm" method="post" action="<?php echo base_url('submit-data'); ?>">
 
@@ -1244,6 +1251,9 @@
 
             <?php elseif ($method == "create_distributor") : ?>
                 <section class="fade-in">
+                    <div class="col-12 mb-2">
+                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                    </div>
                     <div class="col-lg-8 mx-auto">
                         <div class="form-container">
                             <h2><i class="fas fa-user-plus me-2 text-dark"></i> New Distributor Account</h2>
@@ -1395,6 +1405,9 @@
 
             <?php elseif ($method == "get_distributor_data") : ?>
                 <div class="row">
+                    <div class="col-12 mb-2">
+                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                    </div>
                     <div class="col-12">
                         <h4 class="mb-4 fw-bold text-dark">
                             <i class="fas fa-users me-2 text-dark"></i> Distributor Details
@@ -1491,10 +1504,8 @@
 
                 
             <?php elseif ($method == "showing_distributor_remaining_data") : ?>
-                <div class="col-12 pt-0">
-                    <button class="btn btn-secondary back-btn mb-3" onclick="window.history.back();">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </button>
+                <div class="col-12 mb-2">
+                    <button class="btn btn-primary" ><a href="<?php echo base_url('get-distributor-data'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Distributor List</a></button>
                 </div>
 
                 <div class="col-12">
@@ -1627,6 +1638,9 @@
                 </div>
             <?php elseif ($method == "get_staff_limits") : ?>
                 <div class="row">
+                    <div class="col-12 mb-2">
+                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                    </div>
                     <div class="col-12">
                         <h4 class="mb-4 fw-bold text-dark">
                             <i class="bi bi-arrow-clockwise me-2 text-dark"></i> Update Staff Limit
@@ -1683,7 +1697,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="updateStaffLimitModalLabel">
-                                    <i class="fas fa-users-cog me-2 text-primary"></i>Update Staff Limit
+                                    <i class="fas fa-users-cog me-2 text-dark"></i>Update Staff Limit
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -1722,8 +1736,8 @@
                 </div>
             <?php elseif ($method == "get_template_content") : ?>
                 <div class="row">
-                    <div class="col-12">
-                        <button type="button" class="btn mb-3" style="background-color: black; color: white"><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white;"><i class="bi bi-arrow-left me-2"></i>Back To Dashboard</a></button>
+                    <div class="col-12 mb-2">
+                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2" style="font-size: 1rem; font-weight: 400;"></i>Back To Dashboard</a></button>
                     </div>
                     
                 </div>
@@ -1732,7 +1746,7 @@
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 class="fw-bold text-dark mb-0">
-                                <i class="bi bi-arrow-clockwise me-2 text-primary"></i> Update Template Content
+                                <i class="bi bi-arrow-clockwise me-2 text-dark"></i> Update Template Content
                             </h4>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTemplateModal">
                                 <i class="bi bi-plus-circle me-1"></i> Add Template
@@ -1856,6 +1870,12 @@
                     });
                 </script>
             <?php elseif ($method == "assign_same_pages_to_all_staff") : ?>
+                <div class="col-12 mb-2">
+                    <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                </div>
+                <h4 class="mb-4 fw-bold text-dark">
+                            <i class="bi bi-file-earmark-text me-2 text-dark"></i> Page Management
+                        </h4>
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
                         <div class="form-container">

@@ -11,6 +11,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     
     <style>
         :root {
@@ -349,14 +352,14 @@
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
-            padding: 12px 20px;
+            /* padding: 12px 20px; */
             border-radius: 8px;
             font-weight: 500;
             transition: var(--transition);
         }
         
         .btn-primary:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-color);
             border-color: #2980b9;
             transform: translateY(-2px);
         }
@@ -716,45 +719,50 @@
                     </div>
                 <?php elseif($method == 'get_admin_data') : ?>
                     <div class="row">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-12">
                             <h2 class="mb-4"><i class="fas fa-users me-2"></i>Admin Details</h2>
                             <div class="card border-0 shadow-sm">
-                                <div class="table-responsive">
-                                    <table class="table mb-0 table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Full Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $serialNo = 1; ?>
-                                            <?php foreach ($admin_data as $admin): ?>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0 table-bordered table-hover">
+                                            <thead>
                                                 <tr>
-                                                    <td><?php echo $serialNo; ?></td>
-                                                    <td><?php echo htmlspecialchars($admin->full_name); ?></td>
-                                                    <td><?php echo htmlspecialchars($admin->email); ?></td>
-                                                    <td><?php echo htmlspecialchars($admin->role); ?></td>
-                                                    <td>
-                                                        <a href="<?php echo base_url('showing-admin-remaining-data/' . $admin->id); ?>" class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
-                                                            <i class="fas fa-eye me-1"></i>
-                                                        </a>
-                                                        
-                                                        <button class="btn btn-sm btn-outline-danger p-1 px-2" 
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModal" 
-                                                                data-id="<?= $admin->id ?>">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </td>
+                                                    <th>S.No</th>
+                                                    <th>Full Name</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Actions</th>
                                                 </tr>
-                                                <?php $serialNo++; ?>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <?php $serialNo = 1; ?>
+                                                <?php foreach ($admin_data as $admin): ?>
+                                                    <tr>
+                                                        <td><?php echo $serialNo; ?></td>
+                                                        <td><?php echo htmlspecialchars($admin->full_name); ?></td>
+                                                        <td><?php echo htmlspecialchars($admin->email); ?></td>
+                                                        <td><?php echo htmlspecialchars($admin->role); ?></td>
+                                                        <td>
+                                                            <a href="<?php echo base_url('showing-admin-remaining-data/' . $admin->id); ?>" class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                                <i class="fas fa-eye me-1"></i>
+                                                            </a>
+                                                            
+                                                            <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteModal" 
+                                                                    data-id="<?= $admin->id ?>">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <?php $serialNo++; ?>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -790,10 +798,8 @@
                 </script>        
                 <?php elseif($method == 'showing_admin_remaining_data') : ?>
                     <div class="row">
-                        <div class="col-12">
-                            <button class="btn btn-secondary back-btn" onclick="window.history.back();">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('get-admin-data'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Admin List</a></button>
                         </div>
                         <div class="col-12">
                             <div class="card border-0 shadow-sm">
@@ -881,47 +887,52 @@
                     </div>
                 <?php elseif($method == 'get_distributor_data'): ?>
                     <div class="row">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-12">
                             <h2 class="mb-4"><i class="fas fa-users me-2"></i>Distributor Details</h2>
                             <div class="card border-0 shadow-sm">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Full Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $serialNo = 1; ?>
-                                            <?php foreach ($distributor_data as $distributor): ?>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover mb-0">
+                                            <thead>
                                                 <tr>
-                                                    <td><?php echo $serialNo; ?></td>
-                                                    <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
-                                                    <td><?php echo htmlspecialchars($distributor->email); ?></td>
-                                                    <td><?php echo htmlspecialchars($distributor->role); ?></td>
-                                                    <td>
-                                                        <a href="<?= base_url('showing-distributors-remaining-data/' . $distributor->id); ?>"
-                                                        class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
-                                                            <i class="fas fa-eye me-1"></i> 
-                                                        </a>
-                                                        <!-- Trigger Delete Modal -->
-                                                        <button class="btn btn-sm btn-outline-danger p-1 px-2" 
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModal" 
-                                                                data-id="<?= $distributor->id ?>">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </td>
+                                                    <th>S.No</th>
+                                                    <th>Full Name</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Actions</th>
                                                 </tr>
-                                                <?php $serialNo++; ?>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                                <?php $serialNo = 1; ?>
+                                                <?php foreach ($distributor_data as $distributor): ?>
+                                                    <tr>
+                                                        <td><?php echo $serialNo; ?></td>
+                                                        <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
+                                                        <td><?php echo htmlspecialchars($distributor->email); ?></td>
+                                                        <td><?php echo htmlspecialchars($distributor->role); ?></td>
+                                                        <td>
+                                                            <a href="<?= base_url('showing-distributors-remaining-data/' . $distributor->id); ?>"
+                                                            class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                                <i class="fas fa-eye me-1"></i> 
+                                                            </a>
+                                                            <!-- Trigger Delete Modal -->
+                                                            <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteModal" 
+                                                                    data-id="<?= $distributor->id ?>">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <?php $serialNo++; ?>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -957,10 +968,8 @@
                 </script>
                 <?php elseif($method == 'showing_distributor_remaining_data') : ?>
                     <div class="row">
-                        <div class="col-12">
-                            <button class="btn btn-secondary back-btn" onclick="window.history.back();">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('get-distributors-data'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Distributor List</a></button>
                         </div>
                         <div class="col-12">
                             <div class="card border-0 shadow-sm">
@@ -1048,46 +1057,51 @@
                     </div>
                 <?php elseif($method == 'get_staff_data'): ?>
                     <div class="row">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-12">
                             <h2 class="mb-4"><i class="fas fa-users me-2"></i>Staff Details</h2>
                             <div class="card border-0 shadow-sm">
-                                <div class="table-responsive">
-                                    <table class="table mb-0 table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Full Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $serialNo = 1; ?>
-                                            <?php foreach ($staff_data as $staff): ?>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0 table-bordered table-hover">
+                                            <thead>
                                                 <tr>
-                                                    <td><?php echo $serialNo; ?></td>
-                                                    <td><?php echo htmlspecialchars($staff->full_name); ?></td>
-                                                    <td><?php echo htmlspecialchars($staff->Email); ?></td>
-                                                    <td><?php echo htmlspecialchars($staff->role); ?></td>
-                                                    <td>
-                                                        <a href="<?= base_url('showing-staff-remaining-data/' . $staff->id); ?>"
-                                                        class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
-                                                            <i class="fas fa-eye me-1"></i> 
-                                                        </a>
-                                                        <!-- Trigger Delete Modal -->
-                                                        <button class="btn btn-sm btn-outline-danger p-1 px-2" 
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModal" 
-                                                                data-id="<?= $staff->id ?>">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </td>
+                                                    <th>S.No</th>
+                                                    <th>Full Name</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Actions</th>
                                                 </tr>
-                                                <?php $serialNo++; ?>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <?php $serialNo = 1; ?>
+                                                <?php foreach ($staff_data as $staff): ?>
+                                                    <tr>
+                                                        <td><?php echo $serialNo; ?></td>
+                                                        <td><?php echo htmlspecialchars($staff->full_name); ?></td>
+                                                        <td><?php echo htmlspecialchars($staff->Email); ?></td>
+                                                        <td><?php echo htmlspecialchars($staff->role); ?></td>
+                                                        <td>
+                                                            <a href="<?= base_url('showing-staff-remaining-data/' . $staff->id); ?>"
+                                                            class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                                <i class="fas fa-eye me-1"></i> 
+                                                            </a>
+                                                            <!-- Trigger Delete Modal -->
+                                                            <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteModal" 
+                                                                    data-id="<?= $staff->id ?>">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <?php $serialNo++; ?>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1124,10 +1138,8 @@
                     </script>
                 <?php elseif($method == 'showing_staff_remaining_data'): ?>
                     <div class="row">
-                        <div class="col-12">
-                            <button class="btn btn-secondary back-btn" onclick="window.history.back();">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </button>
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('get-staff-data'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Staff List</a></button>
                         </div>
                         <div class="col-12">
                             <div class="card border-0 shadow-sm">
@@ -1215,10 +1227,13 @@
                     </div>
                 <?php elseif($method == 'get_distributor_limits'): ?>
                     <div class="row">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-12">
-                            <h2 class="mb-4"><i class="fas fa-users me-2"></i>Update Distributor Limit</h2>
+                            <h2 class="mb-4"><i class="bi bi-arrow-clockwise me-2"></i>Update Distributor Limit</h2>
                             <div class="card border-0 shadow-sm">
-                                <!-- <div class="card-body"> -->
+                                <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-hover table-bordered">
                                             <thead>
@@ -1258,7 +1273,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                <!-- </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1269,7 +1284,7 @@
                             <form method="post" action="<?= base_url('update-distributor-limits'); ?>">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title"><i class="fas fa-users-cog me-2 text-primary"></i>Update Distributor Limit</h5>
+                                        <h5 class="modal-title"><i class="fas fa-users-cog me-2 text-dark"></i>Update Distributor Limit</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -1316,6 +1331,9 @@
                         </div>
                     </div> -->
                     <div class="row fade-in">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2" style="font-size: 1rem; font-weight: 400;"></i>Back To Dashboard</a></button>
+                        </div>
                         <div class="col-lg-8 mx-auto">
                             <div class="form-container">
                                 <div class="text-center mb-4">
