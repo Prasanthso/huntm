@@ -1511,21 +1511,21 @@
                         });
                     </script>
                     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const distributorSelect = document.getElementById('client_name');
-    const emailField = document.getElementById('client_email');
-    const phoneField = document.getElementById('client_phone');
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const distributorSelect = document.getElementById('client_name');
+                            const emailField = document.getElementById('client_email');
+                            const phoneField = document.getElementById('client_phone');
 
-    distributorSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const email = selectedOption.getAttribute('data-email');
-        const phone = selectedOption.getAttribute('data-phone');
+                            distributorSelect.addEventListener('change', function() {
+                                const selectedOption = this.options[this.selectedIndex];
+                                const email = selectedOption.getAttribute('data-email');
+                                const phone = selectedOption.getAttribute('data-phone');
 
-        emailField.value = email || '';
-        phoneField.value = phone || '';
-    });
-});
-</script>
+                                emailField.value = email || '';
+                                phoneField.value = phone || '';
+                            });
+                        });
+                    </script>
 
                 <?php elseif($method == 'prices_details') : ?>
                     <div class="row">
