@@ -623,6 +623,15 @@
                 <i class="bi bi-arrow-clockwise"></i>
                 <span>Update Distributor Limits</span>
             </a>
+            <a href="<?php echo base_url('Superadmindashboard/get_all_transactions'); ?>" 
+               class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/get_all_transactions')) ? 'active' : ''; ?>">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Client Amounts</span>
+            </a>
+            <a href="<?php echo base_url('Superadmindashboard/prices_details'); ?>" class="list-group-item list-group-item-action <?php echo (current_url() == base_url('Superadmindashboard/prices_details')) ? 'active' : ''; ?>">
+                <i class="fas fa-tags"></i>
+                <span>Product Prices</span>
+            </a>
         </div>
         <div class="logout-container">
             <a href="#" class="logout-btn" data-bs-toggle="modal" data-bs-target="#logoutModal">
@@ -727,7 +736,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table mb-0 table-bordered table-hover">
+                                        <table class="table mb-0 table-bordered ">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -895,7 +904,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-hover mb-0">
+                                        <table class="table table-bordered  mb-0">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1065,7 +1074,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table mb-0 table-bordered table-hover">
+                                        <table class="table mb-0 table-bordered ">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1235,7 +1244,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-bordered">
+                                        <table class="table  table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1317,6 +1326,448 @@
                             </form>
                         </div>
                     </div>
+                <?php elseif($method == 'get_all_transactions'): ?>
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                        </div>
+                        <div class="col-12">
+                            <div class="col-12 d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Transaction  Details</h2>
+                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAmountModal">
+                                    <i class="fas fa-plus-circle me-2"></i>Add Amount
+                                </button>
+                            </div>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="table-responsive mt-4">
+                                        <table class="table table-bordered align-middle">
+                                            <thead class="table-primary text-center">
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Date</th>
+                                                <th>Distributor Name</th>
+                                                <!-- <th>Client Email</th> -->
+                                                <th>Phone</th>
+                                                <th>Mode of Payment</th>
+                                                <th>Payment Details</th>
+                                                <th>Credited Amount (₹)</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php if (!empty($get_all_transactions)) { 
+                                                $i = 1;
+                                                foreach ($get_all_transactions as $row) { 
+                                                    $details = json_decode($row['payment_details'], true);
+                                            ?>
+                                                <tr>
+                                                <td class="text-center"><?php echo $i++; ?></td>
+                                                <td><?= date("d-m-Y", strtotime($row['credited_at'])); ?></td>
+                                                <td><?php echo htmlspecialchars($row['client_name']); ?></td>
+                                                <!-- <td><?php echo htmlspecialchars($row['client_email']); ?></td> -->
+                                                <td><?php echo htmlspecialchars($row['client_phone']); ?></td>
+                                                <td class="text-center text-capitalize"><?php echo $row['mode_of_payment']; ?></td>
+                                                <td>
+                                                    <?php 
+                                                    if ($row['mode_of_payment'] == 'neft') {
+                                                        echo "IFSC: " . htmlspecialchars($details['ifsc_code']) . "<br>Account: " . htmlspecialchars($details['account_number']);
+                                                    } elseif ($row['mode_of_payment'] == 'upi') {
+                                                        echo "Transaction ID: " . htmlspecialchars($details['transaction_id']);
+                                                    } elseif ($row['mode_of_payment'] == 'cash') {
+                                                        echo "Receipt No: " . htmlspecialchars($details['receipt_number']);
+                                                    } else {
+                                                        echo "-";
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td class="text-end"><?php echo number_format($row['amount'], 2); ?></td>
+                                                </tr>
+                                            <?php } } else { ?>
+                                                <tr>
+                                                <td colspan="8" class="text-center text-muted">No transactions found.</td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 💰 Add Amount Modal -->
+                    <div class="modal fade" id="addAmountModal" tabindex="-1" aria-labelledby="addAmountModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="<?= base_url('Superadmindashboard/add_amount'); ?>" method="post">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title" id="addAmountModalLabel"><i class="fas fa-plus-circle me-2"></i>Add Amount</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <!-- Distributor Dropdown -->
+                                        <div class="mb-3">
+                                            <label for="client_name" class="form-label">Distributor Name</label>
+                                            <select name="client_name" id="client_name" class="form-control" required>
+                                                <option value="">-- Select Distributor --</option>
+                                                <?php if (!empty($distributors)): ?>
+                                                    <?php foreach ($distributors as $dist): ?>
+                                                        <option 
+                                                            value="<?= htmlspecialchars($dist->full_name); ?>"
+                                                            data-email="<?= htmlspecialchars($dist->email); ?>"
+                                                            data-phone="<?= htmlspecialchars($dist->phone); ?>"
+                                                        >
+                                                            <?= htmlspecialchars($dist->full_name); ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <option value="">No distributors found</option>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Read-only email -->
+                                        <div class="mb-3">
+                                            <label for="client_email" class="form-label">Distributor Email</label>
+                                            <input type="email" name="client_email" id="client_email" class="form-control" readonly required>
+                                        </div>
+
+                                        <!-- Read-only phone -->
+                                        <div class="mb-3">
+                                            <label for="client_phone" class="form-label">Distributor Phone</label>
+                                            <input type="text" name="client_phone" id="client_phone" class="form-control" readonly required>
+                                        </div>
+
+                                        <!-- Mode of Payment -->
+                                        <div class="mb-3">
+                                            <label for="mode_of_payment" class="form-label">Mode of Payment</label>
+                                            <select name="mode_of_payment" id="mode_of_payment" class="form-control" required>
+                                                <option value="">-- Select Mode of Payment --</option>
+                                                <option value="neft">NEFT</option>
+                                                <option value="upi">UPI</option>
+                                                <option value="cash">Cash</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- NEFT Fields -->
+                                        <div id="neftFields" class="mb-3" style="display: none;">
+                                            <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                            <input type="text" name="ifsc_code" id="ifsc_code" class="form-control mb-2">
+                                            <label for="account_number" class="form-label">Account Number</label>
+                                            <input type="text" name="account_number" id="account_number" class="form-control">
+                                        </div>
+
+                                        <!-- UPI Fields -->
+                                        <div id="upiFields" class="mb-3" style="display: none;">
+                                            <label for="transaction_id" class="form-label">Transaction ID</label>
+                                            <input type="text" name="transaction_id" id="transaction_id" class="form-control">
+                                        </div>
+
+                                        <!-- Cash Fields -->
+                                        <div id="cashFields" class="mb-3" style="display: none;">
+                                            <label for="receipt_number" class="form-label">Receipt Number</label>
+                                            <input type="text" name="receipt_number" id="receipt_number" class="form-control">
+                                        </div>
+
+                                        <!-- Amount -->
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label">Enter Amount (₹)</label>
+                                            <input type="number" step="0.01" min="1" name="amount" id="amount" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-success">Credit Amount</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- JS to Show/Hide Payment Fields -->
+                    <script>
+                        document.getElementById('mode_of_payment').addEventListener('change', function () {
+                            const selected = this.value;
+
+                            // Hide all first
+                            document.getElementById('neftFields').style.display = 'none';
+                            document.getElementById('upiFields').style.display = 'none';
+                            document.getElementById('cashFields').style.display = 'none';
+
+                            // Clear all input values when hiding
+                            document.querySelectorAll('#neftFields input, #upiFields input, #cashFields input').forEach(input => {
+                            input.value = '';
+                            });
+
+                            // Show fields based on selection
+                            if (selected === 'neft') {
+                            document.getElementById('neftFields').style.display = 'block';
+                            } else if (selected === 'upi') {
+                            document.getElementById('upiFields').style.display = 'block';
+                            } else if (selected === 'cash') {
+                            document.getElementById('cashFields').style.display = 'block';
+                            }
+                        });
+                    </script>
+                    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const distributorSelect = document.getElementById('client_name');
+    const emailField = document.getElementById('client_email');
+    const phoneField = document.getElementById('client_phone');
+
+    distributorSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const email = selectedOption.getAttribute('data-email');
+        const phone = selectedOption.getAttribute('data-phone');
+
+        emailField.value = email || '';
+        phoneField.value = phone || '';
+    });
+});
+</script>
+
+                <?php elseif($method == 'prices_details') : ?>
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <button class="btn btn-primary">
+                                <a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration:none;color:white;">
+                                    <i class="fas fa-arrow-left me-2"></i>Back To Dashboard
+                                </a>
+                            </button>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Message Prices Details</h2>
+                        </div>
+
+                        <!-- Date Filter -->
+                        <div class="col-12 mb-3">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <label for="startDate" class="form-label">From Date:</label>
+                                    <input type="date" id="startDate" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="endDate" class="form-label">To Date:</label>
+                                    <input type="date" id="endDate" class="form-control">
+                                </div>
+                                <div class="col-md-4 mt-5">
+                                    <button id="filterBtn" class="btn btn-primary"><i class="fas fa-filter me-2"></i>Apply Filter</button>
+                                    <button id="resetBtn" class="btn btn-secondary ms-2">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">                                    
+                                     <!-- Price per Message Display -->
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <h6 class="me-2">
+                                            Price per Message: 
+                                            <span class="text-primary">
+                                                ₹<?= number_format($superadmin_data->price_per_message, 3); ?>
+                                            </span>
+                                        </h6>
+                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#updatePriceModal">
+                                            Edit
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table  table-bordered" id="pricesTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Date</th>
+                                                    <th>Total Messages</th>
+                                                    <th>Debited Amount (₹)</th>
+                                                    <th>Available Balance (₹)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="pricesBody">
+                                                <?php if (!empty($prices_details)): ?>
+                                                    <?php $serial = 1; ?>
+                                                    <?php foreach ($prices_details as $row): ?>
+                                                        <?php
+                                                            $balanceColor = $row->available_balance >= 0 ? 'text-success fw-bold' : 'text-danger fw-bold';
+                                                            $creditDisplay = $row->credited_amount > 0 
+                                                                ? '<span class="text-success fw-bold">+' . number_format($row->credited_amount, 2) . '</span><br><small>(' . $row->credited_note . ')</small>'
+                                                                : '-';
+                                                            $debitDisplay = $row->total_cost > 0
+                                                                ? '<span class="text-danger fw-bold">-' . number_format($row->total_cost, 2) . '</span>'
+                                                                : '-';
+                                                        ?>
+                                                        <tr>
+                                                            <td><?= $serial++; ?></td>
+                                                            <td><?= date("d-m-Y", strtotime($row->date)); ?></td>
+                                                            <td><?= number_format($row->total_messages); ?></td>
+                                                            <td><?= $debitDisplay; ?></td>
+                                                            <td class="<?= $balanceColor; ?>"><?= number_format($row->available_balance, 2); ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <tr>
+                                                        <td colspan="7" class="text-center text-danger py-4">
+                                                            <i class="fas fa-info-circle me-2"></i>No messages sent yet.
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- Pagination -->
+                                    <div class="mt-3 d-flex justify-content-center">
+                                        <nav>
+                                            <ul class="pagination" id="pagination"></ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Update Price Modal -->
+                    <div class="modal fade" id="updatePriceModal" tabindex="-1" aria-labelledby="updatePriceModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form action="<?= base_url('superadmindashboard/update_price_per_message'); ?>" method="post">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="updatePriceModalLabel">Update Price per Message</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="price_per_message" class="form-label">Price (₹)</label>
+                                            <input type="number" step="0.001" min="0" name="price_per_message" id="price_per_message" class="form-control" value="<?= $superadmin_data->price_per_message; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Update Price</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ✅ JS for Date Filter + Pagination -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const rows = Array.from(document.querySelectorAll('#pricesBody tr'));
+                            const rowsPerPage = 5;
+                            let currentPage = 1;
+
+                            const pagination = document.getElementById('pagination');
+                            const startDateInput = document.getElementById('startDate');
+                            const endDateInput = document.getElementById('endDate');
+                            const filterBtn = document.getElementById('filterBtn');
+                            const resetBtn = document.getElementById('resetBtn');
+
+                            // ✅ Display Rows
+                            function displayRows(page, filteredRows = rows) {
+                                const start = (page - 1) * rowsPerPage;
+                                const end = start + rowsPerPage;
+                                rows.forEach(r => r.style.display = 'none');
+                                filteredRows.slice(start, end).forEach(r => r.style.display = '');
+                                renderPagination(filteredRows.length, page, filteredRows);
+                            }
+
+                            // ✅ Pagination UI
+                            function renderPagination(totalRows, current, filteredRows) {
+                                const pageCount = Math.ceil(totalRows / rowsPerPage);
+                                pagination.innerHTML = '';
+
+                                if (pageCount <= 1) return;
+
+                                // Previous Button
+                                const prevLi = document.createElement('li');
+                                prevLi.className = 'page-item' + (current === 1 ? ' disabled' : '');
+                                prevLi.innerHTML = `<a class="page-link" href="#">Prev</a>`;
+                                prevLi.addEventListener('click', e => {
+                                    e.preventDefault();
+                                    if (current > 1) {
+                                        currentPage--;
+                                        displayRows(currentPage, filteredRows);
+                                    }
+                                });
+                                pagination.appendChild(prevLi);
+
+                                // Page Numbers
+                                for (let i = 1; i <= pageCount; i++) {
+                                    const li = document.createElement('li');
+                                    li.className = 'page-item' + (i === current ? ' active' : '');
+                                    li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                                    li.addEventListener('click', e => {
+                                        e.preventDefault();
+                                        currentPage = i;
+                                        displayRows(currentPage, filteredRows);
+                                    });
+                                    pagination.appendChild(li);
+                                }
+
+                                // Next Button
+                                const nextLi = document.createElement('li');
+                                nextLi.className = 'page-item' + (current === pageCount ? ' disabled' : '');
+                                nextLi.innerHTML = `<a class="page-link" href="#">Next</a>`;
+                                nextLi.addEventListener('click', e => {
+                                    e.preventDefault();
+                                    if (current < pageCount) {
+                                        currentPage++;
+                                        displayRows(currentPage, filteredRows);
+                                    }
+                                });
+                                pagination.appendChild(nextLi);
+                            }
+
+                            // ✅ Date Filter Logic
+                            function getFilteredRows() {
+                                const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
+                                const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
+
+                                // Swap if start > end
+                                if (startDate && endDate && startDate > endDate) {
+                                    const temp = startDateInput.value;
+                                    startDateInput.value = endDateInput.value;
+                                    endDateInput.value = temp;
+                                    return getFilteredRows(); // re-run after swap
+                                }
+
+                                return rows.filter(row => {
+                                    const rowDateStr = row.children[1].textContent.trim();
+                                    const rowDate = new Date(rowDateStr);
+
+                                    // inclusive range check
+                                    if (startDate && rowDate < startDate) return false;
+                                    if (endDate && rowDate > endDate) return false;
+                                    return true;
+                                });
+                            }
+
+                            // ✅ Event Listeners
+                            filterBtn.addEventListener('click', () => {
+                                const filtered = getFilteredRows();
+                                currentPage = 1;
+                                displayRows(currentPage, filtered);
+
+                                // If no records found
+                                if (filtered.length === 0) {
+                                    const tbody = document.getElementById('pricesBody');
+                                    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-3">No records found for selected date range.</td></tr>`;
+                                    pagination.innerHTML = '';
+                                }
+                            });
+
+                            resetBtn.addEventListener('click', () => {
+                                startDateInput.value = '';
+                                endDateInput.value = '';
+                                currentPage = 1;
+                                displayRows(currentPage);
+                            });
+
+                            // ✅ Initial Display
+                            displayRows(currentPage);
+                        });
+                    </script>
                 <?php elseif($method == 'create_admin') : ?>
                     <!-- <div class="row fade-in">
                         <div class="col-12 mb-4">
@@ -1332,7 +1783,7 @@
                     </div> -->
                     <div class="row fade-in">
                         <div class="col-12 mb-2">
-                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2" style="font-size: 1rem; font-weight: 400;"></i>Back To Dashboard</a></button>
+                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
                         </div>
                         <div class="col-lg-8 mx-auto">
                             <div class="form-container">

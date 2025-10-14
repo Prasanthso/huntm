@@ -1429,7 +1429,7 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered align-middle text-center mb-0">
+                                    <table class="table  table-bordered align-middle text-center mb-0">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th scope="col">S.No</th>
@@ -1648,7 +1648,7 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered mb-0 align-middle text-center">
+                                    <table class="table  table-bordered mb-0 align-middle text-center">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th scope="col">S.No</th>
@@ -1755,7 +1755,7 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered mb-0 align-middle text-center">
+                                    <table class="table  table-bordered mb-0 align-middle text-center">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th scope="col">S.No</th>

@@ -20,13 +20,15 @@ class Superadmindashboard_model extends CI_Model {
         return false; 
     }
     public function get_superadmin_data(){
-        $this->db->select('full_name');
-        $this->db->from('super_admin');
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-           return $query->row();;
+        $row = $this->db->select('full_name, price_per_message')->get('super_admin')->row();
+        if (!$row) {
+            // Return default object to prevent undefined property
+            return (object)[
+                'full_name' => '',
+                'price_per_message' => 0
+            ];
         }
-        return array();
+        return $row;
     }
     public function create_admin($admin_data) {
         return $this->db->insert('admin', $admin_data);
@@ -132,4 +134,87 @@ class Superadmindashboard_model extends CI_Model {
 
         return $this->db->affected_rows() >= 0;
     }
+
+    public function add_amount($client_data) {
+        return $this->db->insert('amount_transactions', $client_data);
+    }
+    
+    public function get_all_transactions() {
+        $query = $this->db->order_by('id', 'DESC')->get('amount_transactions');
+        return $query->result_array();
+    }
+
+    // Get all credited amounts with date
+    public function get_credited_amounts() {
+        $this->db->order_by('credited_at', 'ASC');
+        return $this->db->get('amount_transactions')->result();
+    }
+
+    // Get daily pricing summary
+    public function get_daily_pricing_summary() {
+        $price_per_message = $this->get_price_per_message();
+
+        $this->db->select("DATE(sent_at) as date, COUNT(id) as total_messages");
+        $this->db->from('whatsapp_messages');
+        $this->db->group_by("DATE(sent_at)");
+        $this->db->order_by("DATE(sent_at)", "ASC");
+        $query = $this->db->get();
+        $daily_data = $query->result();
+
+        $credits = $this->get_credited_amounts();
+        $balance = 0;
+        $result = [];
+        $credit_index = 0;
+
+        foreach ($daily_data as $row) {
+            $current_date = $row->date;
+            $credited_today = 0;
+            $credited_note = '';
+
+            while (
+                $credit_index < count($credits) &&
+                date('Y-m-d', strtotime($credits[$credit_index]->credited_at)) <= $current_date
+            ) {
+                $credited_today += $credits[$credit_index]->amount;
+                $balance += $credits[$credit_index]->amount;
+                $credited_note .= '₹' . number_format($credits[$credit_index]->amount, 2) .
+                    ' (' . date('d-m-Y', strtotime($credits[$credit_index]->credited_at)) . ') ';
+                $credit_index++;
+            }
+
+            $row->price_per_message = $price_per_message;
+            $row->total_cost = $row->total_messages * $price_per_message;
+
+            $balance -= $row->total_cost;
+
+            $row->credited_amount = $credited_today;
+            $row->credited_note = $credited_note ?: '-';
+            $row->available_balance = $balance;
+
+            $result[] = $row;
+        }
+
+        return array_reverse($result);
+    }
+
+    // Get current price per message
+    public function get_price_per_message() {
+        $row = $this->db->select('price_per_message')->get('super_admin')->row();
+        if (!$row || !isset($row->price_per_message)) {
+            return 0;
+        }
+        return $row->price_per_message;
+    }
+
+    // Update price per message
+    public function update_price_per_message($price) {
+        return $this->db->update('super_admin', ['price_per_message' => $price]);
+    }
+
+    public function get_all_distributors() {
+        $this->db->select('id, full_name,email,phone');
+        $this->db->from('distributor'); 
+        return $this->db->get()->result();
+    }
+
 }

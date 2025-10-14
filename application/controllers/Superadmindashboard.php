@@ -247,11 +247,91 @@ class Superadmindashboard extends CI_Controller {
             redirect('get-distributor-limits');
         }
     }
-    
+    //Client amount details
+    public function get_all_transactions(){
+        $data['get_all_transactions'] = $this->Superadmindashboard_model->get_all_transactions();
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
+        $data['distributors'] = $this->Superadmindashboard_model->get_all_distributors();
+        $data['method'] = 'get_all_transactions';
+        $this->load->view('superadmindashboard_view', $data);
+    }
+
+    // Add credited amount (deposit)
+    public function add_amount() {
+        $this->form_validation->set_rules('client_name', 'Client Name', 'required|trim');
+        // $this->form_validation->set_rules('client_email', 'Client Email', 'required|valid_email');
+        // $this->form_validation->set_rules('client_phone', 'Client Phone', 'required|trim');
+        $this->form_validation->set_rules('mode_of_payment', 'Mode of Payment', 'required|trim');
+        $this->form_validation->set_rules('amount', 'Amount', 'required|numeric|greater_than[0]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('Superadmindashboard/get_all_transactions');
+            return;
+        }
+
+        // Get mode of payment
+        $mode = $this->input->post('mode_of_payment');
+        $payment_details = [];
+
+        // Handle mode-specific fields
+        if ($mode == 'neft') {
+            $payment_details = [
+                'ifsc_code' => $this->input->post('ifsc_code'),
+                'account_number' => $this->input->post('account_number')
+            ];
+        } elseif ($mode == 'upi') {
+            $payment_details = [
+                'transaction_id' => $this->input->post('transaction_id')
+            ];
+        } elseif ($mode == 'cash') {
+            $payment_details = [
+                'receipt_number' => $this->input->post('receipt_number')
+            ];
+        }
+
+        // Final insert array
+        $client_data = [
+            'client_name'     => $this->input->post('client_name'),
+            'client_email'    => $this->input->post('client_email'),
+            'client_phone'    => $this->input->post('client_phone'),
+            'mode_of_payment' => $mode,
+            'payment_details' => json_encode($payment_details),
+            'amount'          => $this->input->post('amount'),
+            'credited_at'     => date('Y-m-d H:i:s')
+        ];
+
+        if ($this->Superadmindashboard_model->add_amount($client_data)) {
+            $this->session->set_flashdata('success', 'Amount credited successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to credit amount. Please try again.');
+        }
+
+        redirect('Superadmindashboard/get_all_transactions');
+    }
+  
+    //Prices Details
+    public function prices_details() {
+        $data['prices_details'] = $this->Superadmindashboard_model->get_daily_pricing_summary();
+        $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
+        $data['method'] = 'prices_details';
+        $this->load->view('superadmindashboard_view', $data);
+    }
+
+    public function update_price_per_message() {
+        $price = $this->input->post('price_per_message');
+        if ($this->Superadmindashboard_model->update_price_per_message($price)) {
+            $this->session->set_flashdata('success', 'Price per message updated successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to update price.');
+        }
+        redirect('superadmindashboard/prices_details');
+    }
+
     public function logout() {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
         redirect('super-admin-login');
-    }
+    }   
 }
