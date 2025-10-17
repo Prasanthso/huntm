@@ -49,13 +49,13 @@ class Superadmindashboard extends CI_Controller {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
             $this->session->set_flashdata('error', 'You must be logged in to view this page.');
-            redirect('login');
+            redirect('super-admin-login');
         }
         $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
         
         if (!$admin_data) {
             $this->session->set_flashdata('error', 'Unable to load admin data.');
-            redirect('login');
+            redirect('super-admin-login');
         }
         
         $data['method'] = "superadmindashboard";
@@ -105,7 +105,7 @@ class Superadmindashboard extends CI_Controller {
     public function showing_admin_remaining_data($admin_id) {
         // $admin_id = $this->session->userdata('user_id');
         if(!$this->session->userdata('user_id')){
-            redirect('login');
+            redirect('super-admin-login');
         }
         if (!$admin_id) {
             show_error("Student ID is required", 400);
@@ -119,7 +119,7 @@ class Superadmindashboard extends CI_Controller {
 
     public function delete_admin($admin_id) {
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('super-admin-login');
         }
         if (!$admin_id) {
             show_error("Admin ID is required", 400);
@@ -145,7 +145,7 @@ class Superadmindashboard extends CI_Controller {
     public function showing_distributor_remaining_data($distributor_id) {
         // $distributor_id = $this->session->userdata('user_id');
         if(!$this->session->userdata('user_id')){
-            redirect('login');
+            redirect('super-admin-login');
         }
         if (!$distributor_id) {
             show_error("Student ID is required", 400);
@@ -158,7 +158,7 @@ class Superadmindashboard extends CI_Controller {
 
     public function delete_distributor($distributor_id) {
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('super-admin-login');
         }
         if (!$distributor_id) {
             show_error("Distributor ID is required", 400);
@@ -183,7 +183,7 @@ class Superadmindashboard extends CI_Controller {
     public function showing_staff_remaining_data($staff_id) {
         // $distributor_id = $this->session->userdata('user_id');
         if(!$this->session->userdata('user_id')){
-            redirect('login');
+            redirect('super-admin-login');
         }
         if (!$staff_id) {
             show_error("Staff ID is required", 400);
@@ -196,7 +196,7 @@ class Superadmindashboard extends CI_Controller {
 
     public function delete_staff($staff_id) {
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('super-admin-login');
         }
         if (!$staff_id) {
             show_error("Staff ID is required", 400);
@@ -224,7 +224,7 @@ class Superadmindashboard extends CI_Controller {
     {
         $admin_id = $this->session->userdata('user_id');
         if (!$admin_id) {
-            redirect('login');
+            redirect('super-admin-login');
         }
 
         $this->form_validation->set_rules('distributor_limit', 'Distributor Limit', 'required|integer|greater_than[0]');
@@ -247,6 +247,7 @@ class Superadmindashboard extends CI_Controller {
             redirect('get-distributor-limits');
         }
     }
+
     //Client amount details
     public function get_all_transactions(){
         $data['get_all_transactions'] = $this->Superadmindashboard_model->get_all_transactions();
@@ -270,11 +271,9 @@ class Superadmindashboard extends CI_Controller {
             return;
         }
 
-        // Get mode of payment
         $mode = $this->input->post('mode_of_payment');
         $payment_details = [];
 
-        // Handle mode-specific fields
         if ($mode == 'neft') {
             $payment_details = [
                 'ifsc_code' => $this->input->post('ifsc_code'),
@@ -290,7 +289,6 @@ class Superadmindashboard extends CI_Controller {
             ];
         }
 
-        // Final insert array
         $client_data = [
             'client_name'     => $this->input->post('client_name'),
             'client_email'    => $this->input->post('client_email'),
@@ -309,8 +307,8 @@ class Superadmindashboard extends CI_Controller {
 
         redirect('Superadmindashboard/get_all_transactions');
     }
-  
-    //Prices Details
+
+    // Pricing details and update price per message
     public function prices_details() {
         $data['prices_details'] = $this->Superadmindashboard_model->get_daily_pricing_summary();
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
@@ -329,9 +327,28 @@ class Superadmindashboard extends CI_Controller {
     }
 
     public function logout() {
-        $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
+        $this->load->helper('cookie');
+
+        // Unset all session variables
+        $this->session->unset_userdata([
+            'user_id',
+            'email',
+            'full_name',
+            'role',
+            'logged_in'
+        ]);
+
+        // Destroy session data completely
         $this->session->sess_destroy();
-        $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('super-admin-login');
-    }   
+
+        // Remove session cookie manually
+        $cookie_name = $this->config->item('sess_cookie_name');
+        if (isset($_COOKIE[$cookie_name])) {
+            delete_cookie($cookie_name);
+        }
+
+        // Redirect to login
+        redirect(base_url('super-admin-login'), 'refresh');
+    }
+    
 }
