@@ -208,7 +208,7 @@
           </form>
 
           <div class="text-center mt-4">
-            <a href="<?php echo base_url(); ?>" class="text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to Home</a>
+            <a href="<?php echo base_url(); ?>" class="text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to Login</a>
           </div>
         </div>
       </div>

@@ -899,7 +899,7 @@
                                     <a href="<?php echo base_url('Admindashboard/create_distributor'); ?>" class="btn btn-outline-primary">
                                         <i class="fas fa-user-plus"></i> Add Distributor
                                     </a>
-                                    <a href="<?php echo base_url('Admindashboard/get_template_content'); ?>" class="btn btn-outline-primary">
+                                    <a href="<?php echo base_url('get-template'); ?>" class="btn btn-outline-primary">
                                         <i class="fas fa-file-invoice"></i> Create New Template
                                     </a>
                                 </div>
@@ -1737,7 +1737,7 @@
             <?php elseif ($method == "get_template_content") : ?>
                 <div class="row">
                     <div class="col-12 mb-2">
-                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2" style="font-size: 1rem; font-weight: 400;"></i>Back To Dashboard</a></button>
+                        <button class="btn btn-primary" ><a href="<?php echo base_url('admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
                     </div>
                     
                 </div>

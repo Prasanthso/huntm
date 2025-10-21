@@ -186,10 +186,12 @@ $route['showing-distributor-remaining-data/(:any)'] = 'Admindashboard/showing_di
 $route['get-staff-limits'] = 'Admindashboard/get_staff_limits';
 $route['update-staff-limits'] = 'Admindashboard/update_staff_limits';
 $route['delete-distributors/(:any)'] = 'Admindashboard/delete_distributor/$1';
+$route['get-template'] = 'Admindashboard/get_template_content';
+$route['update-template'] = 'AdminDashboard/update_template_content';
 $route['admin-logout'] = 'Admindashboard/logout';
 
 
-//Distributor Routes
+//Distributor Routes 
 $route['distributor-dashboard'] = 'Distributordashboard/dashboard';
 $route['distributor-profile'] = 'Distributordashboard/profile';
 $route['submit-distributor-data'] = 'Distributordashboard/add';
