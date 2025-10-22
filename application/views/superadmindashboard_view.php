@@ -1329,71 +1329,208 @@
                 <?php elseif($method == 'get_all_transactions'): ?>
                     <div class="row">
                         <div class="col-12 mb-2">
-                            <button class="btn btn-primary" ><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
+                            <button class="btn btn-primary"><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
                         </div>
                         <div class="col-12">
                             <div class="col-12 d-flex justify-content-between align-items-center mb-3">
-                                <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Transaction  Details</h2>
+                                <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Transaction Details</h2>
                                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAmountModal">
                                     <i class="fas fa-plus-circle me-2"></i>Add Amount
                                 </button>
                             </div>
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
+                                    <!-- Search input with clear button -->
+                                    <div class="mb-3 position-relative col-md-4 col-sm-6">
+                                        <input type="text" id="searchInput" class="form-control pe-5" placeholder="Search by Name and Phone Number">
+                                        <button id="clearSearch" class="btn position-absolute end-0 top-50 translate-middle-y" style="display: none; background: none; border: none;">
+                                            <i class="fas fa-times text-danger"></i>
+                                        </button>
+                                    </div>
+
                                     <div class="table-responsive mt-4">
-                                        <table class="table table-bordered align-middle">
+                                        <table class="table table-bordered align-middle" id="transactionsTable">
                                             <thead class="table-primary text-center">
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Date</th>
-                                                <th>Distributor Name</th>
-                                                <!-- <th>Client Email</th> -->
-                                                <th>Phone</th>
-                                                <th>Mode of Payment</th>
-                                                <th>Payment Details</th>
-                                                <th>Credited Amount (₹)</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Date</th>
+                                                    <th>Distributor Name</th>
+                                                    <th>Phone</th>
+                                                    <th>Mode of Payment</th>
+                                                    <th>Payment Details</th>
+                                                    <th>Credited Amount (₹)</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            <?php if (!empty($get_all_transactions)) { 
-                                                $i = 1;
-                                                foreach ($get_all_transactions as $row) { 
-                                                    $details = json_decode($row['payment_details'], true);
-                                            ?>
-                                                <tr>
-                                                <td class="text-center"><?php echo $i++; ?></td>
-                                                <td><?= date("d-m-Y", strtotime($row['credited_at'])); ?></td>
-                                                <td><?php echo htmlspecialchars($row['client_name']); ?></td>
-                                                <!-- <td><?php echo htmlspecialchars($row['client_email']); ?></td> -->
-                                                <td><?php echo htmlspecialchars($row['client_phone']); ?></td>
-                                                <td class="text-center text-capitalize"><?php echo $row['mode_of_payment']; ?></td>
-                                                <td>
-                                                    <?php 
-                                                    if ($row['mode_of_payment'] == 'neft') {
-                                                        echo "IFSC: " . htmlspecialchars($details['ifsc_code']) . "<br>Account: " . htmlspecialchars($details['account_number']);
-                                                    } elseif ($row['mode_of_payment'] == 'upi') {
-                                                        echo "Transaction ID: " . htmlspecialchars($details['transaction_id']);
-                                                    } elseif ($row['mode_of_payment'] == 'cash') {
-                                                        echo "Receipt No: " . htmlspecialchars($details['receipt_number']);
-                                                    } else {
-                                                        echo "-";
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td class="text-end"><?php echo number_format($row['amount'], 2); ?></td>
-                                                </tr>
-                                            <?php } } else { ?>
-                                                <tr>
-                                                <td colspan="8" class="text-center text-muted">No transactions found.</td>
-                                                </tr>
-                                            <?php } ?>
+                                                <?php if (!empty($get_all_transactions)) { 
+                                                    $i = 1;
+                                                    foreach ($get_all_transactions as $row) { 
+                                                        $details = json_decode($row['payment_details'], true);
+                                                ?>
+                                                    <tr data-distributor-name="<?php echo htmlspecialchars(strtolower($row['client_name'])); ?>">
+                                                        <td class="text-center"><?php echo $i++; ?></td>
+                                                        <td><?= date("d-m-Y", strtotime($row['credited_at'])); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['client_name']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['client_phone']); ?></td>
+                                                        <td class="text-center text-capitalize"><?php echo $row['mode_of_payment']; ?></td>
+                                                        <td>
+                                                            <?php 
+                                                            if ($row['mode_of_payment'] == 'neft') {
+                                                                echo "IFSC: " . htmlspecialchars($details['ifsc_code']) . "<br>Account: " . htmlspecialchars($details['account_number']);
+                                                            } elseif ($row['mode_of_payment'] == 'upi') {
+                                                                echo "Transaction ID: " . htmlspecialchars($details['transaction_id']);
+                                                            } elseif ($row['mode_of_payment'] == 'cash') {
+                                                                echo "Receipt No: " . htmlspecialchars($details['receipt_number']);
+                                                            } else {
+                                                                echo "-";
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-end"><?php echo number_format($row['amount'], 2); ?></td>
+                                                    </tr>
+                                                <?php } } else { ?>
+                                                    <tr>
+                                                        <td colspan="8" class="text-center text-muted">No transactions found.</td>
+                                                    </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- Pagination controls -->
+                                    <nav aria-label="Pagination" id="paginationNav" class="d-flex justify-content-center mt-3" style="display: none;">
+                                        <ul class="pagination">
+                                            <!-- Pagination links will be dynamically generated here -->
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
                     </div>
+                        
+                    <!-- JS for Search and Pagination -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const table = document.getElementById('transactionsTable');
+                            const tbody = table.querySelector('tbody');
+                            const rows = Array.from(tbody.querySelectorAll('tr:not(.no-results)'));
+                            const searchInput = document.getElementById('searchInput');
+                            const clearSearch = document.getElementById('clearSearch');
+                            const paginationNav = document.getElementById('paginationNav');
+                            const paginationUl = paginationNav.querySelector('.pagination');
+                            const recordsPerPage = 5;
+                            let currentPage = 1;
+                            let filteredRows = rows;
+
+                            // Function to display rows for the current page
+                            function displayPage(page) {
+                                const start = (page - 1) * recordsPerPage;
+                                const end = start + recordsPerPage;
+                                rows.forEach(row => row.style.display = 'none');
+                                filteredRows.slice(start, end).forEach(row => row.style.display = '');
+                            }
+
+                            // Function to generate pagination links
+                            function generatePagination() {
+                                paginationUl.innerHTML = '';
+                                const totalPages = Math.ceil(filteredRows.length / recordsPerPage);
+
+                                // Previous button
+                                const prevLi = document.createElement('li');
+                                prevLi.classList.add('page-item');
+                                if (currentPage === 1) prevLi.classList.add('disabled');
+                                prevLi.innerHTML = `<a class="page-link" href="#">Previous</a>`;
+                                prevLi.addEventListener('click', function(e) {
+                                    e.preventDefault();
+                                    if (currentPage > 1) {
+                                        currentPage--;
+                                        displayPage(currentPage);
+                                        generatePagination();
+                                    }
+                                });
+                                paginationUl.appendChild(prevLi);
+
+                                // Page numbers
+                                for (let i = 1; i <= totalPages; i++) {
+                                    const li = document.createElement('li');
+                                    li.classList.add('page-item');
+                                    if (i === currentPage) li.classList.add('active');
+                                    li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                                    li.addEventListener('click', function(e) {
+                                        e.preventDefault();
+                                        currentPage = i;
+                                        displayPage(currentPage);
+                                        generatePagination();
+                                    });
+                                    paginationUl.appendChild(li);
+                                }
+
+                                // Next button
+                                const nextLi = document.createElement('li');
+                                nextLi.classList.add('page-item');
+                                if (currentPage === totalPages) nextLi.classList.add('disabled');
+                                nextLi.innerHTML = `<a class="page-link" href="#">Next</a>`;
+                                nextLi.addEventListener('click', function(e) {
+                                    e.preventDefault();
+                                    if (currentPage < totalPages) {
+                                        currentPage++;
+                                        displayPage(currentPage);
+                                        generatePagination();
+                                    }
+                                });
+                                paginationUl.appendChild(nextLi);
+
+                                // Show pagination if there are pages
+                                if (totalPages > 1) {
+                                    paginationNav.style.display = 'flex';
+                                } else {
+                                    paginationNav.style.display = 'none';
+                                }
+                            }
+
+                            // Function to filter rows based on search
+                            function filterRows() {
+                                const searchTerm = searchInput.value.toLowerCase();
+                                filteredRows = rows.filter(row => {
+                                    const distributorName = row.getAttribute('data-distributor-name');
+                                    const phone = row.children[3]?.textContent.toLowerCase(); 
+                                    return (
+                                        distributorName.includes(searchTerm) ||
+                                        phone.includes(searchTerm)
+                                    );
+                                });
+
+                                // Show/hide clear button
+                                clearSearch.style.display = searchInput.value ? 'block' : 'none';
+
+                                // Handle no results
+                                const noResultsRow = tbody.querySelector('tr td[colspan="8"]');
+                                if (noResultsRow) {
+                                    noResultsRow.parentElement.style.display = filteredRows.length === 0 ? '' : 'none';
+                                }
+
+                                currentPage = 1;
+                                displayPage(currentPage);
+                                generatePagination();
+                            }
+
+                            // Clear search input
+                            clearSearch.addEventListener('click', function() {
+                                searchInput.value = '';
+                                clearSearch.style.display = 'none';
+                                filterRows();
+                            });
+
+                            // Search event listener
+                            searchInput.addEventListener('input', filterRows);
+
+                            // Initial setup
+                            if (rows.length > 0) {
+                                displayPage(currentPage);
+                                generatePagination();
+                            }
+                        });
+                    </script>
+
                     <!-- 💰 Add Amount Modal -->
                     <div class="modal fade" id="addAmountModal" tabindex="-1" aria-labelledby="addAmountModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -1510,6 +1647,8 @@
                             }
                         });
                     </script>
+                        
+                    <!-- JS to Auto-fill Email and Phone -->
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             const distributorSelect = document.getElementById('client_name');

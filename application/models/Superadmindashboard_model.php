@@ -153,48 +153,49 @@ class Superadmindashboard_model extends CI_Model {
     // Get daily pricing summary
     public function get_daily_pricing_summary() {
         $price_per_message = $this->get_price_per_message();
-
         $this->db->select("DATE(sent_at) as date, COUNT(id) as total_messages");
         $this->db->from('whatsapp_messages');
         $this->db->group_by("DATE(sent_at)");
         $this->db->order_by("DATE(sent_at)", "ASC");
         $query = $this->db->get();
         $daily_data = $query->result();
-
         $credits = $this->get_credited_amounts();
         $balance = 0;
-        $result = [];
-        $credit_index = 0;
-
-        foreach ($daily_data as $row) {
-            $current_date = $row->date;
-            $credited_today = 0;
-            $credited_note = '';
-
-            while (
-                $credit_index < count($credits) &&
-                date('Y-m-d', strtotime($credits[$credit_index]->credited_at)) <= $current_date
-            ) {
-                $credited_today += $credits[$credit_index]->amount;
-                $balance += $credits[$credit_index]->amount;
-                $credited_note .= '₹' . number_format($credits[$credit_index]->amount, 2) .
-                    ' (' . date('d-m-Y', strtotime($credits[$credit_index]->credited_at)) . ') ';
-                $credit_index++;
-            }
-
-            $row->price_per_message = $price_per_message;
-            $row->total_cost = $row->total_messages * $price_per_message;
-
-            $balance -= $row->total_cost;
-
-            $row->credited_amount = $credited_today;
-            $row->credited_note = $credited_note ?: '-';
-            $row->available_balance = $balance;
-
-            $result[] = $row;
+        $total_credited = 0;
+        foreach ($credits as $credit) {
+            $total_credited += $credit->amount;
         }
-
-        return array_reverse($result);
+        $total_messages = 0;
+        foreach ($daily_data as $msg) {
+            $total_messages += $msg->total_messages;
+        }
+        $total_debited = $total_messages * $price_per_message;
+        $balance = $total_credited - $total_debited;
+        $result = [];
+        foreach (array_reverse($daily_data) as $row) {
+            $total_cost = $row->total_messages * $price_per_message;
+            $result[] = (object)[
+                'date' => $row->date,
+                'total_messages' => $row->total_messages,
+                'price_per_message' => $price_per_message,
+                'total_cost' => $total_cost,
+                'credited_amount' => 0,
+                'credited_note' => '-',
+                'available_balance' => $balance, 
+            ];
+        }
+        if (empty($result)) {
+            $result[] = (object)[
+                'date' => date('Y-m-d'),
+                'total_messages' => 0,
+                'price_per_message' => $price_per_message,
+                'total_cost' => 0,
+                'credited_amount' => 0,
+                'credited_note' => '-',
+                'available_balance' => $balance,
+            ];
+        }
+        return $result;
     }
 
     // Get current price per message
