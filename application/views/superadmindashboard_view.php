@@ -9,7 +9,7 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -100,6 +100,7 @@
             flex-direction: column;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
             overflow-x: hidden;
+            overflow-y: auto;
         }
         
         #sidebar.expanded {
@@ -485,46 +486,148 @@
             animation: fadeIn 0.4s ease-out;
         }
         
+        /* Mobile Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            display: none;
+        }
+        
         /* Responsive Adjustments */
-        @media (max-width: 992px) {
+        @media (max-width: 768px) {
             #sidebar {
                 width: 0;
-                overflow: hidden;
+                /* overflow: hidden; */
+                transition: width 0.3s ease-in-out;
+                z-index: 999;
+                height: 100vh;
             }
-            
+            .logout-container {
+                margin-bottom: 50px;
+            }
             #sidebar.expanded {
-                width: var(--sidebar-width);
+                width: 100%;
                 box-shadow: 5px 0 15px rgba(0,0,0,0.2);
             }
             
             .main-content {
                 margin-left: 0;
+                padding: 15px;
             }
             
             .main-content.expanded {
-                margin-left: var(--sidebar-width);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 20px 15px;
-            }
-            
-            .form-container {
-                padding: 20px;
-            }
-            
-            .table-responsive {
-                border-radius: 8px;
+                margin-left: 0;
             }
             
             .user-greeting span {
                 display: none;
             }
+            
+            /* Mobile specific styles */
+            .mobile-overlay.active {
+                display: block;
+            }
+            
+            /* Improve card layout on mobile */
+            .card-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            /* Improve form layout on mobile */
+            .form-row-mobile {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            /* Improve table layout on mobile */
+            .table-mobile {
+                font-size: 0.8rem;
+            }
+            
+            .table-mobile th,
+            .table-mobile td {
+                padding: 8px 5px;
+            }
+            
+            /* Improve button sizing on mobile */
+            .btn-mobile {
+                /* width: 100%; */
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+            
+            /* Header adjustments for mobile */
+            header {
+                padding: 0 15px;
+            }
+            
+            .header-title {
+                font-size: 1.2rem;
+            }
+            
+            /* Dashboard card adjustments */
+            .dashboard-card .card-body {
+                padding: 15px;
+            }
+            
+            .dashboard-card h6 {
+                font-size: 0.9rem;
+            }
+            
+            .dashboard-card p {
+                font-size: 0.8rem;
+            }
+            
+            /* Form container adjustments */
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-container h2 {
+                font-size: 1.3rem;
+            }
+            
+            /* Table responsive adjustments */
+            .table-responsive {
+                border-radius: 8px;
+            }
+            
+            /* Section header adjustments */
+            .section-header {
+                font-size: 1.1rem;
+            }
+            
+            /* Modal adjustments */
+            .modal-dialog {
+                max-width: 95%;
+                margin: 10px auto;
+            }
         }
         
-        @media (min-width: 993px) {
+        @media (min-width: 769px) and (max-width: 1024px) {
+            /* Tablet specific adjustments */
+            .dashboard-card {
+                margin-bottom: 20px;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .main-content {
+                padding: 25px;
+            }
+        }
+        
+        @media (min-width: 1025px) {
             #sidebar {
                 width: var(--sidebar-collapsed-width);
             }
@@ -564,13 +667,83 @@
         .header-title {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
-            color: var(--dark-gray);
+            color: var(--secondary-color);
             margin: 0;
             font-size: 1.5rem;
+        }
+        
+        /* Mobile specific improvements */
+        @media (max-width: 576px) {
+            .container-fluid {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            .main-content {
+                padding: 10px;
+            }
+            
+            .dashboard-card .card-body {
+                padding: 12px;
+            }
+            
+            .dashboard-card h6 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dashboard-card h6 i {
+                margin-bottom: 5px;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .form-container h2 {
+                font-size: 1.2rem;
+            }
+            
+            .section-header {
+                font-size: 1rem;
+            }
+            
+            .table th, .table td {
+                padding: 8px 5px !important;
+                font-size: 0.75rem;
+            }
+            
+            .btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+            
+            /* Action buttons in tables */
+            .action-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+            }
+            
+            /* Search and filter sections */
+            .search-filter-section {
+                flex-direction: column;
+            }
+            
+            .search-filter-section .col-md-4 {
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
     <!-- Header -->
     <header class="shadow-sm">
         <div class="d-flex align-items-center">
@@ -736,7 +909,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table mb-0 table-bordered ">
+                                        <table class="table mb-0 table-bordered table-mobile">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -754,7 +927,7 @@
                                                         <td><?php echo htmlspecialchars($admin->full_name); ?></td>
                                                         <td><?php echo htmlspecialchars($admin->email); ?></td>
                                                         <td><?php echo htmlspecialchars($admin->role); ?></td>
-                                                        <td>
+                                                        <td class="action-buttons">
                                                             <a href="<?php echo base_url('showing-admin-remaining-data/' . $admin->id); ?>" class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                                 <i class="fas fa-eye me-1"></i>
                                                             </a>
@@ -817,50 +990,50 @@
                                     <form>
                                         <?php foreach ($admin_data as $admin): ?>
                                             <h5 class="section-header"><i class="fas fa-user me-2" style="color: #0A517F;"></i>Basic Information</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="full_name" class="form-label">Full Name</label>
                                                     <input type="text" class="form-control" id="full_name" name="full_name" 
                                                         value="<?php echo htmlspecialchars($admin->full_name ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" id="email" name="email" 
                                                         value="<?php echo htmlspecialchars($admin->email ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="phone" class="form-label">Phone</label>
                                                     <input type="text" class="form-control" id="phone" name="phone" 
                                                         value="<?php echo htmlspecialchars($admin->phone ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="sap_code" class="form-label">SAP Code</label>
                                                     <input type="text" class="form-control" id="sap_code" name="sap_code" 
                                                         value="<?php echo htmlspecialchars($admin->sap_code ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             <h5 class="section-header"><i class="fas fa-university me-2" style="color: #0A517F;"></i>Bank Details</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="account_holder_name" class="form-label">Account Holder Name</label>
                                                     <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
                                                         value="<?php echo htmlspecialchars($admin->account_holder_name ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="account_number" class="form-label">Account Number</label>
                                                     <input type="text" class="form-control" id="account_number" name="account_number" 
                                                         value="<?php echo htmlspecialchars($admin->account_number ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="ifsc_code" class="form-label">IFSC Code</label>
                                                     <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
                                                         value="<?php echo htmlspecialchars($admin->ifsc_code ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="bank_name" class="form-label">Bank Name</label>
                                                     <input type="text" class="form-control" id="bank_name" name="bank_name" 
                                                         value="<?php echo htmlspecialchars($admin->bank_name ?? ''); ?>" readonly>
@@ -871,18 +1044,18 @@
                                                 <label for="address" class="form-label">Address</label>
                                                 <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($admin->address ?? ''); ?></textarea>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-4 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="pin_code" class="form-label">Pin Code</label>
                                                     <input type="text" class="form-control" id="pin_code" name="pin_code" 
                                                         value="<?php echo htmlspecialchars($admin->pin_code ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="city" class="form-label">City</label>
                                                     <input type="text" class="form-control" id="city" name="city" 
                                                         value="<?php echo htmlspecialchars($admin->city ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="office_mobile" class="form-label">Office Mobile</label>
                                                     <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
                                                         value="<?php echo htmlspecialchars($admin->office_mobile ?? ''); ?>" readonly>
@@ -904,7 +1077,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered  mb-0">
+                                        <table class="table table-bordered table-mobile mb-0">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -922,7 +1095,7 @@
                                                         <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
                                                         <td><?php echo htmlspecialchars($distributor->email); ?></td>
                                                         <td><?php echo htmlspecialchars($distributor->role); ?></td>
-                                                        <td>
+                                                        <td class="action-buttons">
                                                             <a href="<?= base_url('showing-distributors-remaining-data/' . $distributor->id); ?>"
                                                             class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                                 <i class="fas fa-eye me-1"></i> 
@@ -987,50 +1160,50 @@
                                     <form>
                                         <?php foreach ($distributor_data as $distributor): ?>
                                             <h5 class="section-header"><i class="fas fa-user me-2" style="color: #0A517F;"></i>Basic Information</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="full_name" class="form-label">Full Name</label>
                                                     <input type="text" class="form-control" id="full_name" name="full_name" 
                                                         value="<?php echo htmlspecialchars($distributor->full_name ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" id="email" name="email" 
                                                         value="<?php echo htmlspecialchars($distributor->email ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="phone" class="form-label">Phone</label>
                                                     <input type="text" class="form-control" id="phone" name="phone" 
                                                         value="<?php echo htmlspecialchars($distributor->phone ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="sap_code" class="form-label">SAP Code</label>
                                                     <input type="text" class="form-control" id="sap_code" name="sap_code" 
                                                         value="<?php echo htmlspecialchars($distributor->sap_code ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             <h5 class="section-header"><i class="fas fa-university me-2" style="color: #0A517F;"></i>Bank Details</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="account_holder_name" class="form-label">Account Holder Name</label>
                                                     <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
                                                         value="<?php echo htmlspecialchars($distributor->account_holder_name ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="account_number" class="form-label">Account Number</label>
                                                     <input type="text" class="form-control" id="account_number" name="account_number" 
                                                         value="<?php echo htmlspecialchars($distributor->account_number ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="ifsc_code" class="form-label">IFSC Code</label>
                                                     <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
                                                         value="<?php echo htmlspecialchars($distributor->ifsc_code ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="bank_name" class="form-label">Bank Name</label>
                                                     <input type="text" class="form-control" id="bank_name" name="bank_name" 
                                                         value="<?php echo htmlspecialchars($distributor->bank_name ?? ''); ?>" readonly>
@@ -1041,18 +1214,18 @@
                                                 <label for="address" class="form-label">Address</label>
                                                 <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($distributor->address ?? ''); ?></textarea>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-4 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="pin_code" class="form-label">Pin Code</label>
                                                     <input type="text" class="form-control" id="pin_code" name="pin_code" 
                                                         value="<?php echo htmlspecialchars($distributor->pin_code ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="city" class="form-label">City</label>
                                                     <input type="text" class="form-control" id="city" name="city" 
                                                         value="<?php echo htmlspecialchars($distributor->city ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="office_mobile" class="form-label">Office Mobile</label>
                                                     <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
                                                         value="<?php echo htmlspecialchars($distributor->office_mobile ?? ''); ?>" readonly>
@@ -1074,7 +1247,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table mb-0 table-bordered ">
+                                        <table class="table mb-0 table-bordered table-mobile">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1092,7 +1265,7 @@
                                                         <td><?php echo htmlspecialchars($staff->full_name); ?></td>
                                                         <td><?php echo htmlspecialchars($staff->Email); ?></td>
                                                         <td><?php echo htmlspecialchars($staff->role); ?></td>
-                                                        <td>
+                                                        <td class="action-buttons">
                                                             <a href="<?= base_url('showing-staff-remaining-data/' . $staff->id); ?>"
                                                             class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
                                                                 <i class="fas fa-eye me-1"></i> 
@@ -1157,50 +1330,50 @@
                                     <form>
                                         <?php foreach ($staff_data as $staff): ?>
                                             <h5 class="section-header"><i class="fas fa-user me-2" style="color: #0A517F;"></i>Basic Information</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="full_name" class="form-label">Full Name</label>
                                                     <input type="text" class="form-control" id="full_name" name="full_name" 
                                                         value="<?php echo htmlspecialchars($staff->full_name ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" id="email" name="email" 
                                                         value="<?php echo htmlspecialchars($staff->Email ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="phone" class="form-label">Phone</label>
                                                     <input type="text" class="form-control" id="phone" name="phone" 
                                                         value="<?php echo htmlspecialchars($staff->phone ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="sap_code" class="form-label">SAP Code</label>
                                                     <input type="text" class="form-control" id="sap_code" name="sap_code" 
                                                         value="<?php echo htmlspecialchars($staff->sap_code ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
                                             <h5 class="section-header"><i class="fas fa-university me-2" style="color: #0A517F;"></i>Bank Details</h5>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="account_holder_name" class="form-label">Account Holder Name</label>
                                                     <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" 
                                                         value="<?php echo htmlspecialchars($staff->account_holder_name ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="account_number" class="form-label">Account Number</label>
                                                     <input type="text" class="form-control" id="account_number" name="account_number" 
                                                         value="<?php echo htmlspecialchars($staff->account_number ?? ''); ?>" readonly>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="ifsc_code" class="form-label">IFSC Code</label>
                                                     <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" 
                                                         value="<?php echo htmlspecialchars($staff->ifsc_code ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-12 col-md-6 mb-3">
                                                     <label for="bank_name" class="form-label">Bank Name</label>
                                                     <input type="text" class="form-control" id="bank_name" name="bank_name" 
                                                         value="<?php echo htmlspecialchars($staff->bank_name ?? ''); ?>" readonly>
@@ -1211,18 +1384,18 @@
                                                 <label for="address" class="form-label">Address</label>
                                                 <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo htmlspecialchars($staff->address ?? ''); ?></textarea>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-4 mb-3">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="pin_code" class="form-label">Pin Code</label>
                                                     <input type="text" class="form-control" id="pin_code" name="pin_code" 
                                                         value="<?php echo htmlspecialchars($staff->pin_code ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="city" class="form-label">City</label>
                                                     <input type="text" class="form-control" id="city" name="city" 
                                                         value="<?php echo htmlspecialchars($staff->city ?? ''); ?>" readonly>
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-12 col-md-4 mb-3">
                                                     <label for="office_mobile" class="form-label">Office Mobile</label>
                                                     <input type="text" class="form-control" id="office_mobile" name="office_mobile" 
                                                         value="<?php echo htmlspecialchars($staff->office_mobile ?? ''); ?>" readonly>
@@ -1244,7 +1417,7 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table  table-bordered">
+                                        <table class="table table-bordered table-mobile">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1264,9 +1437,9 @@
                                                         <td><?= htmlspecialchars($d->email); ?></td>
                                                         <td><?= htmlspecialchars($d->role); ?></td>
                                                         <td><?= htmlspecialchars($d->distributor_limit); ?></td>
-                                                        <td>
+                                                        <td class="action-buttons">
                                                             <button type="button"
-                                                                class="btn btn-primary update-distributor-limit-btn"
+                                                                class="btn btn-primary update-distributor-limit-btn btn-mobile"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#updateDistributorLimitModal"
                                                                 data-id="<?= $d->id ?>"
@@ -1332,9 +1505,9 @@
                             <button class="btn btn-primary"><a href="<?php echo base_url('super-admin-dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
                         </div>
                         <div class="col-12">
-                            <div class="col-12 d-flex justify-content-between align-items-center mb-3">
+                            <div class="col-12 d-flex justify-content-between align-items-center mb-3 search-filter-section">
                                 <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Transaction Details</h2>
-                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAmountModal">
+                                <button class="btn btn-success btn-mobile" data-bs-toggle="modal" data-bs-target="#addAmountModal">
                                     <i class="fas fa-plus-circle me-2"></i>Add Amount
                                 </button>
                             </div>
@@ -1349,7 +1522,7 @@
                                     </div>
 
                                     <div class="table-responsive mt-4">
-                                        <table class="table table-bordered align-middle" id="transactionsTable">
+                                        <table class="table table-bordered align-middle table-mobile" id="transactionsTable">
                                             <thead class="table-primary text-center">
                                                 <tr>
                                                     <th>S.No</th>
@@ -1676,12 +1849,12 @@
                             </button>
                         </div>
 
-                        <div class="col-12 d-flex justify-content-between align-items-center mb-3">
+                        <div class="col-12 d-flex justify-content-between align-items-center mb-3 search-filter-section">
                             <h2 class="mb-0"><i class="fas fa-tags me-2"></i>Message Prices Details</h2>
                         </div>
 
                         <!-- Date Filter -->
-                        <div class="col-12 mb-3">
+                        <div class="col-12 mb-3 search-filter-section">
                             <div class="row g-2">
                                 <div class="col-md-4">
                                     <label for="startDate" class="form-label">From Date:</label>
@@ -1692,7 +1865,7 @@
                                     <input type="date" id="endDate" class="form-control">
                                 </div>
                                 <div class="col-md-4 mt-5">
-                                    <button id="filterBtn" class="btn btn-primary"><i class="fas fa-filter me-2"></i>Apply Filter</button>
+                                    <button id="filterBtn" class="btn btn-primary btn-mobile"><i class="fas fa-filter me-2"></i>Apply Filter</button>
                                     <button id="resetBtn" class="btn btn-secondary ms-2">Reset</button>
                                 </div>
                             </div>
@@ -1714,7 +1887,7 @@
                                         </button>
                                     </div>
                                     <div class="table-responsive">
-                                        <table class="table  table-bordered" id="pricesTable">
+                                        <table class="table table-bordered table-mobile" id="pricesTable">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1963,7 +2136,7 @@
                                         <div class="form-text text-muted small">Maximum number of distributors this admin can create</div>
                                     </div>
                                     <div class="d-grid gap-2 mt-4">
-                                        <button type="submit" class="btn btn-primary py-2">
+                                        <button type="submit" class="btn btn-primary py-2 btn-mobile">
                                             <i class="fas fa-user-plus me-2"></i> Create Admin Account
                                         </button>
                                     </div>
@@ -2008,11 +2181,15 @@
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const toggleBtn = document.getElementById('sidebarToggle');
+            const mobileOverlay = document.getElementById('mobileOverlay');
 
             // Initialize sidebar state
             if (localStorage.getItem('sidebarExpanded') === 'true') {
                 sidebar.classList.add('expanded');
                 mainContent.classList.add('expanded');
+                if (window.innerWidth <= 768) {
+                    mobileOverlay.classList.add('active');
+                }
             }
 
             // Toggle sidebar
@@ -2020,14 +2197,32 @@
                 sidebar.classList.toggle('expanded');
                 mainContent.classList.toggle('expanded');
                 localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+                
+                // Show/hide mobile overlay
+                if (window.innerWidth <= 768) {
+                    if (sidebar.classList.contains('expanded')) {
+                        mobileOverlay.classList.add('active');
+                    } else {
+                        mobileOverlay.classList.remove('active');
+                    }
+                }
+            });
+
+            // Close sidebar on overlay click
+            mobileOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('expanded');
+                mainContent.classList.remove('expanded');
+                mobileOverlay.classList.remove('active');
+                localStorage.setItem('sidebarExpanded', false);
             });
 
             // Handle responsive behavior
             function handleResponsive() {
-                const isMobile = window.innerWidth <= 992;
+                const isMobile = window.innerWidth <= 768;
                 if (isMobile && sidebar.classList.contains('expanded')) {
                     sidebar.classList.remove('expanded');
                     mainContent.classList.remove('expanded');
+                    mobileOverlay.classList.remove('active');
                     localStorage.setItem('sidebarExpanded', false);
                 }
             }
@@ -2040,9 +2235,10 @@
 
             // Close sidebar when clicking outside on mobile
             document.addEventListener('click', function(event) {
-                if (window.innerWidth <= 992 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                if (window.innerWidth <= 768 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
                     sidebar.classList.remove('expanded');
                     mainContent.classList.remove('expanded');
+                    mobileOverlay.classList.remove('active');
                     localStorage.setItem('sidebarExpanded', false);
                 }
             });

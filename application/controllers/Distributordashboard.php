@@ -13,6 +13,11 @@ class Distributordashboard extends CI_Controller {
 
     public function dashboard(){
         $distributor_id = $this->session->userdata('user_id');
+        if (!$distributor_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['method'] = "distributordashboard";
         $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $this->load->view('distributordashboard_view', $data);
@@ -21,9 +26,11 @@ class Distributordashboard extends CI_Controller {
     public function profile() {
         $distributor_id = $this->session->userdata('user_id');
         if (!$distributor_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
-            redirect('login');
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
         }
+        
         $data['method'] = "profile";
         $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data_by_id($distributor_id);
         $data['validation_errors'] = $this->form_validation->error_array();
@@ -93,8 +100,9 @@ class Distributordashboard extends CI_Controller {
     $distributor_id = $this->session->userdata('user_id');
 
     if (!$distributor_id) {
-        $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
-        redirect('login');
+        $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+        redirect('user_profile_login');
+        return;
     }
 
     if ($this->input->post()) {
@@ -152,60 +160,62 @@ class Distributordashboard extends CI_Controller {
 
 
     public function create_staff() {
-        // Check if distributor is logged in
-        if (!$this->session->userdata('user_id')) {
-            redirect('login'); // Redirect to login if not authenticated
-        }
-
         $distributor_id = $this->session->userdata('user_id');
         $distributor = $this->Distributordashboard_model->get_distributor_data_by_id($distributor_id);
+
+        if (!$distributor_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
+
         $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $current_count = $this->Distributordashboard_model->count_staff($distributor_id);
 
-        // Set form validation rules
         $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
 
         if ($this->form_validation->run() == FALSE) {
-            // If form validation fails, reload the page with errors
             $data['method'] = 'create_staff';
             $data['staff_limit'] = $distributor->staff_limit;
             $data['current_staff_count'] = $current_count;
             $this->load->view('distributordashboard_view', $data);
         } else {
-            // Check staff limit before creating
             if ($current_count >= $distributor->staff_limit) {
                 $this->session->set_flashdata('error', 'You have reached your staff limit of '.$distributor->staff_limit);
                 redirect('Distributordashboard/create_staff');
-                return; // Important to prevent further execution
+                return;
             }
 
-            // Prepare staff data
             $staff_data = array(
                 'full_name' => $this->input->post('full_name'),
                 'email' => $this->input->post('email'),
                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                 'created_by' => $distributor_id,
-                'role' => 'staff' // Make sure to set the role
+                'role' => 'staff'
             );
 
             $result = $this->Distributordashboard_model->create_staff($staff_data);
-            
+
             if ($result) {
                 $this->session->set_flashdata('success', 'Staff created successfully!');
-                redirect('Distributordashboard/create_staff'); // Redirect to staff list instead of create form
+                redirect('Distributordashboard/create_staff');
             } else {
                 $this->session->set_flashdata('error', 'Failed to create staff. Please try again.');
                 redirect('Distributordashboard/create_staff');
             }
-        }
-
+        }   
     }
 
     public function get_staff_data() {
         $staff_id = $this->session->userdata('user_id');
         $distributor_id = $this->session->userdata('user_id');
+        if (!$distributor_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['staff_data'] = $this->Distributordashboard_model->get_staff_data($staff_id);
         $data['distributor_data'] = $this->Distributordashboard_model->get_distributor_data($distributor_id);
         $data['method'] = 'get_staff_data';
@@ -214,7 +224,8 @@ class Distributordashboard extends CI_Controller {
 
     public function showing_staff_remaining_data($staff_id) {
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('user_profile_login');
+            return;
         }
 
         if (!$staff_id) {
@@ -229,7 +240,7 @@ class Distributordashboard extends CI_Controller {
 
     public function delete_staff($staff_id) {
         if (!$this->session->userdata('user_id')) {
-            redirect('login');
+            redirect('user_profile_login');
         }
 
         if (!$staff_id) {
@@ -253,6 +264,6 @@ class Distributordashboard extends CI_Controller {
         $this->session->unset_userdata(['user_id', 'email', 'logged_in']);
         $this->session->sess_destroy();
         $this->session->set_flashdata('logout_success', 'You have been logged out successfully.');
-        redirect('user_profile/process_login');
+        redirect('user_profile_login');
     }
 }

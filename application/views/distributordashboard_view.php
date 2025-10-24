@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;700&display=stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --sidebar-width: 280px;
@@ -29,7 +29,7 @@
             --dark-gray: #343a40;
             --border-radius: 8px;
             --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --transition:  ;
+            --transition: all 0.3s ease;
         }
 
         body {
@@ -94,6 +94,7 @@
             box-shadow: 2px 0 10px rgba(0,0,0,0.05);
             border-right: 1px solid rgba(255,255,255,0.1);
             overflow-x: hidden;
+            overflow-y: auto;
         }
 
         #sidebar.expanded {
@@ -498,41 +499,6 @@
         }
 
         /* Table Styling */
-        /* .table {
-            background: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 0;
-        }
-
-        .table thead th {
-            background-color: var(--dark-gray);
-            color: white;
-            font-weight: 500;
-            border: none;
-            padding: 15px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .table tbody tr {
-            transition: var(--transition);
-        }
-
-        .table tbody tr:hover {
-            background-color: rgba(212, 180, 131, 0.1);
-        }
-
-        .table tbody td {
-            padding: 15px;
-            vertical-align: middle;
-            border-color: var(--light-gray);
-            font-size: 0.9rem;
-        } */
-
-        /* Table style */
         .table {
             background: white;
             border-radius: 10px;
@@ -612,11 +578,219 @@
             color: var(--accent-color);
         }
 
+        /* Mobile Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            display: none;
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             #sidebar {
                 width: 0;
                 overflow: hidden;
+                transition: width 0.3s ease-in-out;
+                z-index: 999;
+            }
+
+            #sidebar.expanded {
+                width: 100%;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .main-content.expanded {
+                margin-left: 0;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+            }
+
+            .user-greeting {
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+
+            .user-greeting i {
+                font-size: 0.8rem;
+            }
+
+            .dashboard-card {
+                margin-bottom: 20px;
+                padding: 10px;
+            }
+
+            .dashboard-card .card-header {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-card .card-body {
+                padding: 12px;
+            }
+
+            .dashboard-card h5 {
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+
+            .dashboard-card .detail-item {
+                font-size: 0.8rem;
+                margin-bottom: 8px;
+            }
+
+            .dashboard-card .detail-item i {
+                font-size: 0.8rem;
+                min-width: 18px;
+            }
+
+            .quick-actions .btn {
+                font-size: 0.8rem;
+                padding: 8px 10px;
+            }
+
+            .quick-actions .btn i {
+                font-size: 0.8rem;
+            }
+
+            .form-container {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            .form-container h2 {
+                font-size: 1.2rem;
+            }
+
+            .form-section-title {
+                font-size: 1rem;
+            }
+
+            .form-group-custom {
+                margin-bottom: 1.2rem;
+            }
+
+            .form-group-custom label {
+                font-size: 0.75rem;
+                top: -10px;
+                left: 10px;
+                padding: 0 4px;
+            }
+
+            .form-group-custom input,
+            .form-group-custom select,
+            .form-group-custom textarea {
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+
+            .form-group-custom input::placeholder,
+            .form-group-custom textarea::placeholder,
+            .form-group-custom select:invalid {
+                font-size: 0.75rem;
+            }
+
+            .form-group-custom .toggle-password {
+                font-size: 0.8rem;
+                right: 10px;
+            }
+
+            .btn-primary,
+            .btn-outline-primary {
+                font-size: 0.85rem;
+                padding: 8px 15px;
+            }
+
+            .error-message {
+                font-size: 0.75rem;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .table th, .table td {
+                font-size: 0.8rem;
+                padding: 10px !important;
+            }
+
+            .alert {
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+
+            .modal-dialog {
+                max-width: 90%;
+                margin: 1.75rem auto;
+            }
+            
+            /* Mobile specific styles */
+            .mobile-overlay.active {
+                display: block;
+            }
+            
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 15px;
+                background-color: white;
+                border-bottom: 1px solid var(--light-gray);
+            }
+            
+            .mobile-menu-btn {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                color: var(--dark-gray);
+            }
+            
+            /* Improve card layout on mobile */
+            .card-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            /* Improve form layout on mobile */
+            .form-row-mobile {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            /* Improve table layout on mobile */
+            .table-mobile {
+                font-size: 0.8rem;
+            }
+            
+            .table-mobile th,
+            .table-mobile td {
+                padding: 8px 5px;
+            }
+            
+            /* Improve button sizing on mobile */
+            .btn-mobile {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #sidebar {
+                width: var(--sidebar-collapsed-width);
             }
 
             #sidebar.expanded {
@@ -624,41 +798,24 @@
             }
 
             .main-content {
-                margin-left: 0;
-                padding: 20px 15px;
+                margin-left: var(--sidebar-collapsed-width);
             }
 
             .main-content.expanded {
                 margin-left: var(--sidebar-width);
             }
-
-            .header-title {
-                font-size: 1.2rem;
+            
+            /* Tablet specific adjustments */
+            .dashboard-card {
+                margin-bottom: 20px;
             }
-
-            .user-greeting {
-                padding: 5px 10px;
-                font-size: 0.8rem;
-            }
-
-            .user-greeting i {
-                font-size: 0.9rem;
-            }
-
-            .dashboard-card .card-header {
-                padding: 12px 15px;
-            }
-
-            .dashboard-card .card-body {
-                padding: 15px;
-            }
-
+            
             .form-container {
-                padding: 15px;
+                padding: 20px;
             }
         }
 
-        @media (min-width: 769px) {
+        @media (min-width: 1025px) {
             #sidebar {
                 width: var(--sidebar-collapsed-width);
             }
@@ -766,21 +923,71 @@
                 /* font-weight: bold; */
                 color: #0A517F;
             }
+            
+        /* Mobile specific improvements */
+        @media (max-width: 576px) {
+            .container-fluid {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            .main-content {
+                padding: 10px;
+            }
+            
+            .dashboard-card .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dashboard-card .card-header i {
+                margin-bottom: 5px;
+            }
+            
+            .quick-actions .btn {
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .form-container {
+                padding: 10px;
+            }
+            
+            .form-section-title {
+                font-size: 1rem;
+            }
+            
+            .section-header {
+                font-size: 1rem;
+            }
+            
+            .table th, .table td {
+                padding: 8px 5px !important;
+                font-size: 0.75rem;
+            }
+            
+            .btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
     <header class="shadow-sm d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center">
-            <button class="btn toggle-btn me-2" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <h1 class="header-title">Distributor Admin Portal</h1>
-        </div>
-        <div class="user-greeting">
-            <i class="fas fa-user-circle me-2"></i>
-            <span>Welcome, <?php echo htmlspecialchars($distributor_data->full_name ?? 'Distributor'); ?></span>
-        </div>
-    </header>
+    <div class="d-flex align-items-center">
+        <button class="btn toggle-btn me-2" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="header-title">Distributor Admin Portal</h1>
+    </div>
+    <div class="d-flex align-items-center user-greeting">
+        <i class="fas fa-user-circle me-2"></i>
+        <span class="text-nowrap">Welcome, <?php echo htmlspecialchars($distributor_data->full_name ?? 'Distributor'); ?></span>
+    </div>
+</header>
 
     <div id="sidebar">
         <div class="sidebar-header">
@@ -841,20 +1048,15 @@
                 <?php if ($method == "distributordashboard") : ?>
                     <div class="row fade-in">
                         <div class="col-12 mb-4">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
                                 <h2 class="h3 mb-0 text-gray-800"><i class="fas fa-tachometer-alt me-2" style="color: #0A517F;"></i>Dashboard Overview</h2>
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-home"></i> Dashboard</li>
-                                    </ol>
-                                </nav>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="row fade-in">
+                    <div class="row fade-in g-4">
                         <?php if (!empty($distributor_data)): ?>
-                            <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="col-sm-12 col-md-6 col-lg-4">
                                 <div class="dashboard-card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-user-shield"></i>
@@ -880,8 +1082,8 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="col-md-6 col-lg-4 mb-4">
+
+                            <div class="col-sm-12 col-md-6 col-lg-4">
                                 <div class="dashboard-card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-building"></i>
@@ -904,20 +1106,20 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="col-sm-12 col-md-6 col-lg-4">
                                 <div class="dashboard-card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-bolt"></i>
                                         <span>Quick Actions</span>
                                     </div>
                                     <div class="card-body quick-actions">
-                                        <a href="<?php echo base_url('Distributordashboard/profile'); ?>" class="btn btn-outline-primary">
+                                        <a href="<?php echo base_url('Distributordashboard/profile'); ?>" class="btn btn-outline-primary btn-mobile">
                                             <i class="fas fa-user-edit"></i> Update Profile
                                         </a>
-                                        <a href="<?php echo base_url('Distributordashboard/create_staff'); ?>" class="btn btn-outline-primary">
+                                        <a href="<?php echo base_url('Distributordashboard/create_staff'); ?>" class="btn btn-outline-primary btn-mobile">
                                             <i class="fas fa-user-plus"></i> Add Staff
                                         </a>
-                                        <a href="<?php echo base_url('Distributordashboard/get_staff_data'); ?>" class="btn btn-outline-primary">
+                                        <a href="<?php echo base_url('Distributordashboard/get_staff_data'); ?>" class="btn btn-outline-primary btn-mobile">
                                             <i class="fas fa-file-invoice"></i> Manage Staff
                                         </a>
                                     </div>
@@ -931,14 +1133,13 @@
                             </div>
                         <?php endif; ?>
                     </div>
-                    
                 <?php elseif ($method == "profile") : ?>
                     <div class="row">
                         <div class="col-12 mb-4">
                             <button class="btn btn-primary" ><a href="<?php echo base_url('Distributordashboard/dashboard'); ?>" style="text-decoration: none; color: white; padding: 0;"><i class="fas fa-arrow-left me-2"></i>Back To Dashboard</a></button>
                         </div>
                         <div class="col-lg-12">
-                            <div class="form-container w-100" style="max-width: 100%; width: 100%;">
+                            <div class="form-container w-100">
                                 <div class="text-center mb-4">
                                     <h2><i class="fas fa-user-circle"></i> Profile Information</h2>
                                     <p class="text-muted">Update your personal and business details</p>
@@ -961,7 +1162,7 @@
 
                                 <form id="profileForm" method="post" action="<?php echo base_url('distributordashboard/add'); ?>">
 
-                                    <section class="row">
+                                    <section class="row g-3">
                                         <h5 class="form-section-title"><i class="fas fa-user"></i> Basic Information</h5>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group-custom">
@@ -979,7 +1180,7 @@
                                         </div>
                                     </section>
 
-                                    <section class="row">
+                                    <section class="row g-3">
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group-custom">
                                                 <label for="phone">Phone <span class="text-danger">*</span></label>
@@ -1000,7 +1201,7 @@
 
                                     <h5 class="form-section-title"><i class="fas fa-university"></i> Bank Details</h5>
 
-                                    <section class="row">
+                                    <section class="row g-3">
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group-custom">
                                                 <label for="account_holder_name">Account Holder Name <span class="text-danger">*</span></label>
@@ -1019,7 +1220,7 @@
                                         </div>
                                     </section>
 
-                                    <section class="row">
+                                    <section class="row g-3">
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group-custom">
                                                 <label for="ifsc_code">IFSC Code <span class="text-danger">*</span></label>
@@ -1046,7 +1247,7 @@
                                         <div class="error-message" id="address-error"><?php echo form_error('address'); ?></div>
                                     </div>
 
-                                    <section class="row">
+                                    <section class="row g-3">
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group-custom">
                                                 <label for="pin_code">Pin Code <span class="text-danger">*</span></label>
@@ -1082,7 +1283,7 @@
                                     </section>
 
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                                        <button type="submit" class="btn btn-primary px-4">
+                                        <button type="submit" class="btn btn-primary px-4 btn-mobile">
                                             <i class="fas fa-save me-1"></i> Update Profile
                                         </button>
                                     </div>
@@ -1442,7 +1643,7 @@
                                     </div>
 
                                     <div class="d-grid gap-2 mt-4">
-                                        <button type="submit" class="btn btn-primary py-2">
+                                        <button type="submit" class="btn btn-primary py-2 btn-mobile">
                                             <i class="fas fa-user-plus me-2"></i> Create Staff Account
                                         </button>
                                     </div>
@@ -1485,6 +1686,7 @@
                     
                     <div class="row fade-in">
                         <div class="col-12">
+                            <h2><i class="fas fa-users me-2"></i>Staff Management</h2>
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
                                     <!-- Flash messages -->
@@ -1501,7 +1703,7 @@
                                     <?php endif; ?>
 
                                     <div class="table-responsive">
-                                        <table class="table table-bordered mb-0">
+                                        <table class="table table-bordered mb-0 table-mobile">
                                             <thead>
                                                 <tr>
                                                     <th>S.No</th>
@@ -1512,24 +1714,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $serialNo = 1; ?>
-                                                <?php foreach ($staff_data as $staff): ?>
+                                                <?php if (!empty($staff_data) && count($staff_data) > 0): ?>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($staff_data as $staff): ?>
+                                                        <tr>
+                                                            <td><?= $serialNo++ ?></td>
+                                                            <td><?= htmlspecialchars($staff->full_name) ?></td>
+                                                            <td><?= htmlspecialchars($staff->Email) ?></td>
+                                                            <td><?= htmlspecialchars($staff->role) ?></td>
+                                                            <td class="d-flex justify-content-center align-items-center gap-2">
+                                                                <a href="<?= base_url('Distributordashboard/showing_staff_remaining_data/' . $staff->id) ?>" 
+                                                                class="btn btn-sm btn-outline-primary">
+                                                                    <i class="fas fa-eye text-primary"></i>
+                                                                </a>
+                                                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteModal" data-id="<?= $staff->id ?>">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
                                                     <tr>
-                                                        <td><?= $serialNo++ ?></td>
-                                                        <td><?= htmlspecialchars($staff->full_name) ?></td>
-                                                        <td><?= htmlspecialchars($staff->Email) ?></td>
-                                                        <td><?= htmlspecialchars($staff->role) ?></td>
-                                                        <td>
-                                                            <a href="<?= base_url('Distributordashboard/showing_staff_remaining_data/' . $staff->id) ?>" class="btn btn-sm btn-outline-primary me-2">
-                                                                <i class="fas fa-eye me-1 text-primary"></i>
-                                                            </a>
-                                                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal" data-id="<?= $staff->id ?>">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
+                                                        <td colspan="5" class="text-center text-danger py-3">
+                                                            <i class="fas fa-exclamation-circle me-2 text-danger"></i>
+                                                            No staff found
                                                         </td>
                                                     </tr>
-                                                <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -1583,7 +1795,7 @@
                                         <?php foreach ($staff_data as $staff): ?>
 
                                             <section class="form-section">
-                                                <div class="row">
+                                                <div class="row g-3">
                                                     <div class="col-md-6 mb-3">
                                                         <div class="form-group-custom">
                                                             <label for="full_name">Full Name</label>
@@ -1602,7 +1814,7 @@
                                             </section>
 
                                             <section class="form-section">
-                                                <div class="row">
+                                                <div class="row g-3">
                                                     <div class="col-md-6 mb-3">
                                                         <div class="form-group-custom">
                                                             <label for="phone">Phone</label>
@@ -1623,7 +1835,7 @@
                                             <h5 class="section-header"><i class="fas fa-university text-dark me-2"></i>Bank Details</h5>
 
                                             <section class="form-section">
-                                                <div class="row">
+                                                <div class="row g-3">
                                                     <div class="col-md-6 mb-3">
                                                         <div class="form-group-custom">
                                                             <label for="account_holder_name">Account Holder Name</label>
@@ -1642,7 +1854,7 @@
                                             </section>
 
                                             <section class="form-section">
-                                                <div class="row">
+                                                <div class="row g-3">
                                                     <div class="col-md-6 mb-3">
                                                         <div class="form-group-custom">
                                                             <label for="ifsc_code">IFSC Code</label>
@@ -1672,7 +1884,7 @@
                                             </section>
 
                                             <section class="form-section">
-                                                <div class="row">
+                                                <div class="row g-3">
                                                     <div class="col-md-4 mb-3">
                                                         <div class="form-group-custom">
                                                             <label for="pin_code">Pin Code</label>
@@ -1734,11 +1946,16 @@
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const toggleBtn = document.getElementById('sidebarToggle');
+            const body = document.body;
+            const mobileOverlay = document.getElementById('mobileOverlay');
 
             // Initialize sidebar state
             if (localStorage.getItem('sidebarExpanded') === 'true') {
                 sidebar.classList.add('expanded');
                 mainContent.classList.add('expanded');
+                if (window.innerWidth <= 768) {
+                    mobileOverlay.classList.add('active');
+                }
             }
 
             // Toggle sidebar
@@ -1746,6 +1963,33 @@
                 sidebar.classList.toggle('expanded');
                 mainContent.classList.toggle('expanded');
                 localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+                
+                // Show/hide mobile overlay
+                if (window.innerWidth <= 768) {
+                    if (sidebar.classList.contains('expanded')) {
+                        mobileOverlay.classList.add('active');
+                    } else {
+                        mobileOverlay.classList.remove('active');
+                    }
+                }
+            });
+
+            // Close sidebar on overlay click
+            mobileOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('expanded');
+                mainContent.classList.remove('expanded');
+                mobileOverlay.classList.remove('active');
+                localStorage.setItem('sidebarExpanded', false);
+            });
+
+            // Close sidebar on outside click on mobile
+            body.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768 && sidebar.classList.contains('expanded') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                    mobileOverlay.classList.remove('active');
+                    localStorage.setItem('sidebarExpanded', false);
+                }
             });
 
             // Handle responsive behavior
@@ -1754,6 +1998,7 @@
                 if (isMobile && sidebar.classList.contains('expanded')) {
                     sidebar.classList.remove('expanded');
                     mainContent.classList.remove('expanded');
+                    mobileOverlay.classList.remove('active');
                     localStorage.setItem('sidebarExpanded', false);
                 }
             }
@@ -1795,7 +2040,7 @@
             function validatePhone(input) {
                 const error = document.getElementById('phone-error');
                 if (input.value && !/^\d{10}$/.test(input.value)) {
-                    error.textContent = 'Phone must be 10-15 digits.';
+                    error.textContent = 'Phone must be 10 digits.';
                     error.style.display = 'block';
                     input.classList.add('is-invalid');
                 } else {

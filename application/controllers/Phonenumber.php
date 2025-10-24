@@ -13,6 +13,11 @@ public function phonenumber_data() {
     $this->load->model('Permission_model');
 
     $user_id = $this->session->userdata('user_id');
+    if (!$user_id) {
+        $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+        redirect('user_profile_login');
+        return;
+    }
     $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
 
     if (!$this->Permission_model->is_allowed($route, $user_id)) {

@@ -62,8 +62,9 @@ class User extends CI_Controller {
     public function profile() {
         $staff_id = $this->session->userdata('user_id');
         if (!$staff_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
-            redirect('login');
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
         }
         $data['method'] = "profile";
         $data['distributor_data'] = $this->User_model->get_staff_data_by_id($staff_id);
@@ -75,8 +76,9 @@ class User extends CI_Controller {
         // Verify user is logged in
         $staff_id = $this->session->userdata('user_id');
         if (!$staff_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
-            redirect('login');
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
         }
         
         if ($this->input->post()) {
@@ -341,6 +343,11 @@ class User extends CI_Controller {
 
     public function dashboardview() {
         $user_id = $this->session->userdata('user_id');
+        if (!$user_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $route = strtolower($this->router->fetch_class() . '/' . $this->router->fetch_method());
         $data['access'] = [
             'customer_strength' => $this->Permission_model->is_allowed($route, $user_id),
@@ -444,12 +451,24 @@ class User extends CI_Controller {
     }
     
     public function stored_website() { 
+        $user_id = $this->session->userdata('user_id');
+        if (!$user_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['websites'] = $this->WebsiteModel->get_all_websites();
         $data['method'] = 'store_website';
         $this->load->view('website_dashboard', $data);
     }
 
     public function add_website() {
+        $user_id = $this->session->userdata('user_id');
+        if (!$user_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $url = trim($this->input->post('url'));
         $userId = trim($this->input->post('userId'));
         $password = trim($this->input->post('password'));

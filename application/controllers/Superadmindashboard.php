@@ -47,10 +47,13 @@ class Superadmindashboard extends CI_Controller {
 
     public function dashboard() {
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
+
         $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
         
         if (!$admin_data) {
@@ -66,6 +69,13 @@ class Superadmindashboard extends CI_Controller {
 
     public function create_admin() {
         $superadmin_id = $this->session->userdata('user_id');
+
+        if(!$superadmin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('super-admin-login');
+            return;
+        }
+
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[admin.email]');
@@ -95,7 +105,14 @@ class Superadmindashboard extends CI_Controller {
     }
 
     public function get_admin_data() {
-        // $admin_id = $this->session->userdata('user_id');
+        $admin_id = $this->session->userdata('user_id');
+
+        if(!$admin_id){
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('super-admin-login');
+            return;
+        }
+
         $data['admin_data'] = $this->Superadmindashboard_model->get_admin_data();
         $data['method'] = 'get_admin_data';
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
@@ -104,8 +121,10 @@ class Superadmindashboard extends CI_Controller {
 
     public function showing_admin_remaining_data($admin_id) {
         // $admin_id = $this->session->userdata('user_id');
-        if(!$this->session->userdata('user_id')){
+        if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
         if (!$admin_id) {
             show_error("Student ID is required", 400);
@@ -118,9 +137,13 @@ class Superadmindashboard extends CI_Controller {
     }
 
     public function delete_admin($admin_id) {
+
         if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
+
         if (!$admin_id) {
             show_error("Admin ID is required", 400);
         }
@@ -135,7 +158,12 @@ class Superadmindashboard extends CI_Controller {
     }
 
     public function get_distributor_data() {
-        //  $distributor_id = $this->session->userdata('user_id');
+        $distributor_id = $this->session->userdata('user_id');
+        if(!$distributor_id){
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('super-admin-login');
+            return;
+        }
         $data['distributor_data'] = $this->Superadmindashboard_model->get_distributor_data();
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_distributor_data';
@@ -144,8 +172,10 @@ class Superadmindashboard extends CI_Controller {
 
     public function showing_distributor_remaining_data($distributor_id) {
         // $distributor_id = $this->session->userdata('user_id');
-        if(!$this->session->userdata('user_id')){
+        if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
         if (!$distributor_id) {
             show_error("Student ID is required", 400);
@@ -158,7 +188,9 @@ class Superadmindashboard extends CI_Controller {
 
     public function delete_distributor($distributor_id) {
         if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
         if (!$distributor_id) {
             show_error("Distributor ID is required", 400);
@@ -174,6 +206,14 @@ class Superadmindashboard extends CI_Controller {
     }
 
     public function get_staff_data(){
+        $staff_id = $this->session->userdata('user_id');
+
+        if(!$staff_id){
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('super-admin-login');
+            return;
+        }
+
         $data['staff_data'] = $this->Superadmindashboard_model->get_staff_data();
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_staff_data';
@@ -181,9 +221,10 @@ class Superadmindashboard extends CI_Controller {
     }
 
     public function showing_staff_remaining_data($staff_id) {
-        // $distributor_id = $this->session->userdata('user_id');
-        if(!$this->session->userdata('user_id')){
+        if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
         if (!$staff_id) {
             show_error("Staff ID is required", 400);
@@ -196,7 +237,9 @@ class Superadmindashboard extends CI_Controller {
 
     public function delete_staff($staff_id) {
         if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
         if (!$staff_id) {
             show_error("Staff ID is required", 400);
@@ -214,6 +257,13 @@ class Superadmindashboard extends CI_Controller {
     public function get_distributor_limits()
     {
         $admin_id = $this->session->userdata('user_id');
+        
+        if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('super-admin-login');
+            return;
+        }
+
         $data['get_distributor_limits'] = $this->Superadmindashboard_model->get_distributor_limits($admin_id);
         $data['superadmin_data'] = $this->Superadmindashboard_model->get_superadmin_data();
         $data['method'] = 'get_distributor_limits';
@@ -223,8 +273,11 @@ class Superadmindashboard extends CI_Controller {
     public function update_distributor_limits()
     {
         $admin_id = $this->session->userdata('user_id');
+        
         if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('super-admin-login');
+            return;
         }
 
         $this->form_validation->set_rules('distributor_limit', 'Distributor Limit', 'required|integer|greater_than[0]');

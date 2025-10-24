@@ -8,7 +8,6 @@ class Admindashboard extends CI_Controller {
         $this->load->model('Admindashboard_model');
         $this->load->model('Distributordashboard_model');
         $this->load->model('Superadmindashboard_model');
-        // $this->load->;
         $this->load->helper('url');
         $this->load->library('session');
         $this->load->library('form_validation');
@@ -16,10 +15,13 @@ class Admindashboard extends CI_Controller {
 
     public function dashboard(){
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
+
         $data['method'] = "admindashboard";
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['admin_data'] = $this->Admindashboard_model->get_admin_data($admin_id);
@@ -28,10 +30,13 @@ class Admindashboard extends CI_Controller {
 
     public function profile() {
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
-            $this->session->set_flashdata('error', 'You must be logged in to view this page.');
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
+
         $data['method'] = "profile";
         $data['admin_data'] = $this->Admindashboard_model->get_admin_data_by_id($admin_id);
          $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
@@ -42,13 +47,13 @@ class Admindashboard extends CI_Controller {
     public function add() {
         $admin_id = $this->session->userdata('user_id');
 
-        // if (!$admin_id) {
-        //     $this->session->set_flashdata('error', 'You must be logged in to update your profile.');
-        //     redirect('login');
-        // }
-        
+        if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }  
+
         if ($this->input->post()) {
-            // Set validation rules
             $this->form_validation->set_rules('phone', 'Phone', 'trim|numeric|min_length[10]|max_length[15]');
             $this->form_validation->set_rules('sap_code', 'SAP Code', 'trim|alpha_numeric');
             $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|alpha_numeric_spaces');
@@ -94,53 +99,15 @@ class Admindashboard extends CI_Controller {
         }
     }
 
-    // public function create_distributor() {
-    //     $admin_id = $this->session->userdata('user_id');
-    //     $admin = $this->Admindashboard_model->get_admin($admin_id);
-    //     $current_distributor_count = $this->Admindashboard_model->count_distributors($admin_id);
-
-    //     // Check if admin has reached distributor limit
-        
-
-    //     $this->form_validation->set_rules('full_name', 'Full Name', 'required|trim');
-    //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[distributor.email]');
-    //     $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
-    //     $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
-
-    //     if ($this->form_validation->run() == FALSE) {
-    //     $data = [
-    //         'method' => 'create_distributor',
-    //         'distributor_limit' => $admin->distributor_limit,
-    //         'current_distributor_count' => $current_distributor_count,
-    //         'show_limit_modal' => ($current_distributor_count >= $admin->distributor_limit)
-    //     ];
-    //     $this->load->view('Admindashboard_view', $data);
-    //     } else {
-    //         if ($current_distributor_count >= $admin->distributor_limit) {
-    //         $this->session->set_flashdata('error', 'You have reached your distributor limit of '.$admin->distributor_limit.'. Cannot create more distributors.');
-    //         redirect('Admindashboard/create_distributor');
-    //         return;
-    //     }
-    //         $distributor_data = array(
-    //             'full_name' => $this->input->post('full_name'),
-    //             'email' => $this->input->post('email'),
-    //             'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-    //             'staff_limit' => $this->input->post('staff_limit'),
-    //             'created_by' => $admin_id,
-    //             'created_by_admin' => $admin_id 
-    //         );
-
-    //         $result = $this->Admindashboard_model->create_distributor($distributor_data);
-    //         if ($result) {
-    //             $this->session->set_flashdata('success', 'Distributor created successfully!');
-    //         } else {
-    //             $this->session->set_flashdata('error', 'Failed to create distributor. Please try again.');
-    //         }
-    //         redirect('Admindashboard/create_distributor');
-    //     }
-    // }
+    // Create Distributor Function
     public function create_distributor() {
     $admin_id = $this->session->userdata('user_id');
+
+    if (!$admin_id) {
+        $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+        redirect('user_profile_login');
+        return;
+    }
     $admin = $this->Admindashboard_model->get_admin($admin_id);
     $current_distributor_count = $this->Admindashboard_model->count_distributors($admin_id);
     $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
@@ -159,7 +126,7 @@ class Admindashboard extends CI_Controller {
             'admin_name' => $this->Admindashboard_model->get_admin($admin_id),
             'distributor_limit' => $admin->distributor_limit,
             'current_distributor_count' => $current_distributor_count,
-            'limit_reached' => $limit_reached, // This will trigger the modal
+            'limit_reached' => $limit_reached, 
             'current_limit' => $admin->distributor_limit
         ];
         $this->load->view('admindashboard_view', $data);
@@ -186,51 +153,46 @@ class Admindashboard extends CI_Controller {
 
     public function assign_same_pages_to_all_staff()
     {
-        // 1. Check if admin is logged in
         $admin_id = $this->session->userdata('user_id');
-        if (!$admin_id) redirect('user_profile_login');
 
-        // 2. Load required models
+        if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
+
         $this->load->model('Permission_model');
         $this->load->model('Admindashboard_model');
-
-        // 3. If the form is submitted
         if ($this->input->post()) {
             $selected_pages = $this->input->post('page_ids') ?: [];
-
-            // Get all staff users
             $staff_users = $this->Admindashboard_model->get_all_staff_users();
-
-            // Assign selected pages to every staff
             foreach ($staff_users as $staff) {
                 $this->Permission_model->update_staff_permissions($staff->id, $selected_pages);
             }
-
-            // Flash success message and reload
             $this->session->set_flashdata('success', 'Pages assigned to all staff successfully.');
             redirect('assign-same-pages-to-all-staff');
         }
-
-        // 4. Get selected pages from DB (from first staff as reference)
         $first_staff = $this->Admindashboard_model->get_first_staff_user();
         $selected_pages = [];
         if ($first_staff) {
             $selected_pages = $this->Permission_model->get_staff_permissions($first_staff->id);
         }
-
-        // 5. Pass data to view
         $data['method'] = 'assign_same_pages_to_all_staff';
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['all_pages'] = $this->Permission_model->get_all_pages();
         $data['selected_pages'] = $selected_pages;
-
-        // 6. Load the view
         $this->load->view('admindashboard_view', $data);
     }
 
     
     public function get_distributor_data() {
         $admin_id = $this->session->userdata('user_id');
+
+        if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['distributor_data'] = $this->Admindashboard_model->get_distributor_details($admin_id);
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_distributor_data';
@@ -238,9 +200,12 @@ class Admindashboard extends CI_Controller {
     }
 
     public function showing_distributor_remaining_data($distributor_id) {
-         $admin_id = $this->session->userdata('user_id');
-        if (!$this->session->userdata('user_id')) {
+        $admin_id = $this->session->userdata('user_id');
+
+        if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
 
         if (!$distributor_id) {
@@ -255,6 +220,12 @@ class Admindashboard extends CI_Controller {
 
     public function get_staff_limits() {
         $admin_id = $this->session->userdata('user_id');
+
+        if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['get_staff_limits'] = $this->Admindashboard_model->get_staff_limits($admin_id);
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_staff_limits';
@@ -263,8 +234,11 @@ class Admindashboard extends CI_Controller {
 
     public function update_staff_limits() {
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
 
         $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
@@ -310,8 +284,11 @@ class Admindashboard extends CI_Controller {
     
     public function get_template_content() {
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
         
         $data['templates'] = $this->Admindashboard_model->get_template_content();
@@ -322,8 +299,11 @@ class Admindashboard extends CI_Controller {
 
     public function update_template_content() {
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
 
         $this->form_validation->set_rules('template_id', 'Template ID', 'required|trim');
@@ -350,8 +330,11 @@ class Admindashboard extends CI_Controller {
     public function add_template()
     {
         $admin_id = $this->session->userdata('user_id');
+
         if (!$admin_id) {
+            $this->session->set_flashdata('error', 'Your session has expired. Please log in again.');
             redirect('user_profile_login');
+            return;
         }
 
         $this->form_validation->set_rules('template_name', 'Template Name', 'required|trim');
