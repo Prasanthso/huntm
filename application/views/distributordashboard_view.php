@@ -1725,7 +1725,7 @@
                                                             <td class="d-flex justify-content-center align-items-center gap-2">
                                                                 <a href="<?= base_url('Distributordashboard/showing_staff_remaining_data/' . $staff->id) ?>" 
                                                                 class="btn btn-sm btn-outline-primary">
-                                                                    <i class="fas fa-eye text-primary"></i>
+                                                                    <i class="fas fa-eye"></i>
                                                                 </a>
                                                                 <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                                                         data-bs-target="#deleteModal" data-id="<?= $staff->id ?>">

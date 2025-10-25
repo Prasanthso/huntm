@@ -920,28 +920,35 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $serialNo = 1; ?>
-                                                <?php foreach ($admin_data as $admin): ?>
+                                                <?php if (!empty($admin_data)): ?>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($admin_data as $admin): ?>
+                                                        <tr>
+                                                            <td><?= $serialNo++; ?></td>
+                                                            <td><?= htmlspecialchars($admin->full_name); ?></td>
+                                                            <td><?= htmlspecialchars($admin->email); ?></td>
+                                                            <td><?= htmlspecialchars($admin->role); ?></td>
+                                                            <td class="action-buttons">
+                                                                <a href="<?= base_url('showing-admin-remaining-data/' . $admin->id); ?>" 
+                                                                class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                                    <i class="fas fa-eye me-1"></i>
+                                                                </a>
+                                                                <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteModal" 
+                                                                        data-id="<?= $admin->id ?>">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
                                                     <tr>
-                                                        <td><?php echo $serialNo; ?></td>
-                                                        <td><?php echo htmlspecialchars($admin->full_name); ?></td>
-                                                        <td><?php echo htmlspecialchars($admin->email); ?></td>
-                                                        <td><?php echo htmlspecialchars($admin->role); ?></td>
-                                                        <td class="action-buttons">
-                                                            <a href="<?php echo base_url('showing-admin-remaining-data/' . $admin->id); ?>" class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
-                                                                <i class="fas fa-eye me-1"></i>
-                                                            </a>
-                                                            
-                                                            <button class="btn btn-sm btn-outline-danger p-1 px-2" 
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal" 
-                                                                    data-id="<?= $admin->id ?>">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
+                                                        <td colspan="5" class="text-center text-danger py-3">
+                                                            <i class="fas fa-exclamation-triangle me-2"></i>No admin found.
                                                         </td>
                                                     </tr>
-                                                    <?php $serialNo++; ?>
-                                                <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -1088,29 +1095,36 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $serialNo = 1; ?>
-                                                <?php foreach ($distributor_data as $distributor): ?>
+                                                <?php if (!empty($distributor_data)): ?>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($distributor_data as $distributor): ?>
+                                                        <tr>
+                                                            <td><?= $serialNo++; ?></td>
+                                                            <td><?= htmlspecialchars($distributor->full_name); ?></td>
+                                                            <td><?= htmlspecialchars($distributor->email); ?></td>
+                                                            <td><?= htmlspecialchars($distributor->role); ?></td>
+                                                            <td class="action-buttons">
+                                                                <a href="<?= base_url('showing-distributors-remaining-data/' . $distributor->id); ?>"
+                                                                class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                                    <i class="fas fa-eye me-1"></i>
+                                                                </a>
+                                                                <!-- Trigger Delete Modal -->
+                                                                <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteModal" 
+                                                                        data-id="<?= $distributor->id ?>">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
                                                     <tr>
-                                                        <td><?php echo $serialNo; ?></td>
-                                                        <td><?php echo htmlspecialchars($distributor->full_name); ?></td>
-                                                        <td><?php echo htmlspecialchars($distributor->email); ?></td>
-                                                        <td><?php echo htmlspecialchars($distributor->role); ?></td>
-                                                        <td class="action-buttons">
-                                                            <a href="<?= base_url('showing-distributors-remaining-data/' . $distributor->id); ?>"
-                                                            class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
-                                                                <i class="fas fa-eye me-1"></i> 
-                                                            </a>
-                                                            <!-- Trigger Delete Modal -->
-                                                            <button class="btn btn-sm btn-outline-danger p-1 px-2" 
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal" 
-                                                                    data-id="<?= $distributor->id ?>">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
+                                                        <td colspan="5" class="text-center text-danger py-3">
+                                                           <i class="fas fa-exclamation-triangle me-2"></i> No distributor found.
                                                         </td>
                                                     </tr>
-                                                    <?php $serialNo++; ?>
-                                                <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -1258,35 +1272,43 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $serialNo = 1; ?>
-                                                <?php foreach ($staff_data as $staff): ?>
+                                                <?php if (!empty($staff_data)): ?>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($staff_data as $staff): ?>
+                                                        <tr>
+                                                            <td><?= $serialNo++; ?></td>
+                                                            <td><?= htmlspecialchars($staff->full_name); ?></td>
+                                                            <td><?= htmlspecialchars($staff->Email); ?></td>
+                                                            <td><?= htmlspecialchars($staff->role); ?></td>
+                                                            <td class="action-buttons">
+                                                                <a href="<?= base_url('showing-staff-remaining-data/' . $staff->id); ?>"
+                                                                class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
+                                                                    <i class="fas fa-eye me-1"></i>
+                                                                </a>
+                                                                <!-- Trigger Delete Modal -->
+                                                                <button class="btn btn-sm btn-outline-danger p-1 px-2" 
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteModal" 
+                                                                        data-id="<?= $staff->id ?>">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
                                                     <tr>
-                                                        <td><?php echo $serialNo; ?></td>
-                                                        <td><?php echo htmlspecialchars($staff->full_name); ?></td>
-                                                        <td><?php echo htmlspecialchars($staff->Email); ?></td>
-                                                        <td><?php echo htmlspecialchars($staff->role); ?></td>
-                                                        <td class="action-buttons">
-                                                            <a href="<?= base_url('showing-staff-remaining-data/' . $staff->id); ?>"
-                                                            class="btn btn-sm btn-outline-primary p-1 px-2 me-1">
-                                                                <i class="fas fa-eye me-1"></i> 
-                                                            </a>
-                                                            <!-- Trigger Delete Modal -->
-                                                            <button class="btn btn-sm btn-outline-danger p-1 px-2" 
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal" 
-                                                                    data-id="<?= $staff->id ?>">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
+                                                        <td colspan="5" class="text-center text-danger py-3">
+                                                           <i class="fas fa-exclamation-triangle me-2"></i> No staff found.
                                                         </td>
                                                     </tr>
-                                                    <?php $serialNo++; ?>
-                                                <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                      <!-- Delete Confirmation Modal -->
                     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -1429,29 +1451,37 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $serialNo = 1; ?>
-                                                <?php foreach ($get_distributor_limits as $d): ?>
+                                                <?php if(!empty($get_distributor_limits)): ?>
+                                                    <?php $serialNo = 1; ?>
+                                                    <?php foreach ($get_distributor_limits as $d): ?>
+                                                        <tr>
+                                                            <td><?= $serialNo++; ?></td>
+                                                            <td><?= htmlspecialchars($d->full_name); ?></td>
+                                                            <td><?= htmlspecialchars($d->email); ?></td>
+                                                            <td><?= htmlspecialchars($d->role); ?></td>
+                                                            <td><?= htmlspecialchars($d->distributor_limit); ?></td>
+                                                            <td class="action-buttons">
+                                                                <button type="button"
+                                                                    class="btn btn-primary update-distributor-limit-btn btn-mobile"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#updateDistributorLimitModal"
+                                                                    data-id="<?= $d->id ?>"
+                                                                    data-name="<?= htmlspecialchars($d->full_name) ?>"
+                                                                    data-email="<?= htmlspecialchars($d->email) ?>"
+                                                                    data-role="<?= htmlspecialchars($d->role) ?>"
+                                                                    data-limit="<?= htmlspecialchars($d->distributor_limit) ?>">
+                                                                    <i class="fas fa-edit me-1"></i> Update Limit
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
                                                     <tr>
-                                                        <td><?= $serialNo++; ?></td>
-                                                        <td><?= htmlspecialchars($d->full_name); ?></td>
-                                                        <td><?= htmlspecialchars($d->email); ?></td>
-                                                        <td><?= htmlspecialchars($d->role); ?></td>
-                                                        <td><?= htmlspecialchars($d->distributor_limit); ?></td>
-                                                        <td class="action-buttons">
-                                                            <button type="button"
-                                                                class="btn btn-primary update-distributor-limit-btn btn-mobile"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#updateDistributorLimitModal"
-                                                                data-id="<?= $d->id ?>"
-                                                                data-name="<?= htmlspecialchars($d->full_name) ?>"
-                                                                data-email="<?= htmlspecialchars($d->email) ?>"
-                                                                data-role="<?= htmlspecialchars($d->role) ?>"
-                                                                data-limit="<?= htmlspecialchars($d->distributor_limit) ?>">
-                                                                <i class="fas fa-edit me-1"></i> Update Limit
-                                                            </button>
+                                                        <td colspan="6" class="text-center text-danger py-3">
+                                                           <i class="fas fa-exclamation-triangle me-2"></i> No distributor found.
                                                         </td>
                                                     </tr>
-                                                <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>

@@ -1540,30 +1540,38 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $serialNo = 1; ?>
-                                            <?php foreach ($distributor_data as $distributor): ?>
+                                            <?php if (!empty($distributor_data)): ?>
+                                                <?php $serialNo = 1; ?>
+                                                <?php foreach ($distributor_data as $distributor): ?>
+                                                    <tr>
+                                                        <td><?= $serialNo++; ?></td>
+                                                        <td><?= htmlspecialchars($distributor->full_name); ?></td>
+                                                        <td><?= htmlspecialchars($distributor->email); ?></td>
+                                                        <td class="text-capitalize"><?= htmlspecialchars($distributor->role); ?></td>
+                                                        <td>
+                                                            <div class="table-actions">
+                                                                <a href="<?= base_url('showing-distributor-remaining-data/' . $distributor->id); ?>"
+                                                                class="btn btn-sm btn-outline-primary">
+                                                                    <i class="fas fa-eye me-1"></i>
+                                                                </a>
+                                                                <!-- Trigger Delete Modal -->
+                                                                <button class="btn btn-sm btn-outline-danger" 
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#deleteModal" 
+                                                                        data-id="<?= $distributor->id ?>">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
                                                 <tr>
-                                                    <td><?= $serialNo++; ?></td>
-                                                    <td><?= htmlspecialchars($distributor->full_name); ?></td>
-                                                    <td><?= htmlspecialchars($distributor->email); ?></td>
-                                                    <td class="text-capitalize"><?= htmlspecialchars($distributor->role); ?></td>
-                                                    <td>
-                                                        <div class="table-actions">
-                                                            <a href="<?= base_url('showing-distributor-remaining-data/' . $distributor->id); ?>"
-                                                            class="btn btn-sm btn-outline-primary">
-                                                                <i class="fas fa-eye me-1"></i> 
-                                                            </a>
-                                                            <!-- Trigger Delete Modal -->
-                                                            <button class="btn btn-sm btn-outline-danger" 
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal" 
-                                                                    data-id="<?= $distributor->id ?>">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </div>
+                                                    <td colspan="5" class="text-center text-danger py-3">
+                                                        <i class="fas fa-exclamation-triangle me-1"></i>No distributor found.
                                                     </td>
                                                 </tr>
-                                            <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1768,31 +1776,39 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $serialNo = 1; ?>
-                                            <?php foreach ($get_staff_limits as $get_staff_limit): ?>
+                                            <?php if (!empty($get_staff_limits)): ?>
+                                                <?php $serialNo = 1; ?>
+                                                <?php foreach ($get_staff_limits as $get_staff_limit): ?>
+                                                    <tr>
+                                                        <td><?= $serialNo++; ?></td>
+                                                        <td><?= htmlspecialchars($get_staff_limit->full_name); ?></td>
+                                                        <td><?= htmlspecialchars($get_staff_limit->email); ?></td>
+                                                        <td class="text-capitalize"><?= htmlspecialchars($get_staff_limit->role); ?></td>
+                                                        <td><?= htmlspecialchars($get_staff_limit->staff_limit); ?></td>
+                                                        <td>
+                                                            <div class="table-actions">
+                                                                <button type="button"
+                                                                    class="btn btn-primary btn-sm update-staff-limit-btn"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#updateStaffLimitModal"
+                                                                    data-id="<?= $get_staff_limit->id; ?>"
+                                                                    data-name="<?= htmlspecialchars($get_staff_limit->full_name); ?>"
+                                                                    data-email="<?= htmlspecialchars($get_staff_limit->email); ?>"
+                                                                    data-role="<?= htmlspecialchars($get_staff_limit->role); ?>"
+                                                                    data-limit="<?= htmlspecialchars($get_staff_limit->staff_limit); ?>">
+                                                                    <i class="fas fa-edit me-1"></i> Update Limit
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
                                                 <tr>
-                                                    <td><?= $serialNo++; ?></td>
-                                                    <td><?= htmlspecialchars($get_staff_limit->full_name); ?></td>
-                                                    <td><?= htmlspecialchars($get_staff_limit->email); ?></td>
-                                                    <td class="text-capitalize"><?= htmlspecialchars($get_staff_limit->role); ?></td>
-                                                    <td><?= htmlspecialchars($get_staff_limit->staff_limit); ?></td>
-                                                    <td>
-                                                        <div class="table-actions">
-                                                            <button type="button"
-                                                                class="btn btn-primary btn-sm update-staff-limit-btn"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#updateStaffLimitModal"
-                                                                data-id="<?= $get_staff_limit->id; ?>"
-                                                                data-name="<?= htmlspecialchars($get_staff_limit->full_name); ?>"
-                                                                data-email="<?= htmlspecialchars($get_staff_limit->email); ?>"
-                                                                data-role="<?= htmlspecialchars($get_staff_limit->role); ?>"
-                                                                data-limit="<?= htmlspecialchars($get_staff_limit->staff_limit); ?>">
-                                                                <i class="fas fa-edit me-1"></i> Update Limit
-                                                            </button>
-                                                        </div>
+                                                    <td colspan="6" class="text-center text-danger py-3">
+                                                        <i class="fas fa-exclamation-triangle me-2"></i>No staff found.
                                                     </td>
                                                 </tr>
-                                            <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1877,32 +1893,41 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $serialNo = 1; ?>
-                                            <?php foreach ($templates as $template): ?>
+                                            <?php if (!empty($templates)): ?>
+                                                <?php $serialNo = 1; ?>
+                                                <?php foreach ($templates as $template): ?>
+                                                    <tr>
+                                                        <td><?= $serialNo++; ?></td>
+                                                        <td><?= htmlspecialchars($template->template_name); ?></td>
+                                                        <td><?= htmlspecialchars($template->template_content); ?></td>
+                                                        <td>
+                                                            <div class="table-actions">
+                                                                <button type="button"
+                                                                    class="btn btn-primary btn-sm edit-template-btn"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editTemplateModal"
+                                                                    data-id="<?= $template->id; ?>"
+                                                                    data-name="<?= htmlspecialchars($template->template_name); ?>"
+                                                                    data-content="<?= htmlspecialchars($template->template_content); ?>">
+                                                                    <i class="fas fa-edit me-1"></i> Edit Content
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
                                                 <tr>
-                                                    <td><?= $serialNo++; ?></td>
-                                                    <td><?= htmlspecialchars($template->template_name); ?></td>
-                                                    <td><?= htmlspecialchars($template->template_content); ?></td>
-                                                    <td>
-                                                        <div class="table-actions">
-                                                            <button type="button"
-                                                                class="btn btn-primary btn-sm edit-template-btn"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editTemplateModal"
-                                                                data-id="<?= $template->id; ?>"
-                                                                data-name="<?= htmlspecialchars($template->template_name); ?>"
-                                                                data-content="<?= htmlspecialchars($template->template_content); ?>">
-                                                                <i class="fas fa-edit me-1"></i> Edit Content
-                                                            </button>
-                                                        </div>
+                                                    <td colspan="4" class="text-center text-danger py-3">
+                                                        <i class="fas fa-exclamation-triangle me-2"></i>No template found.
                                                     </td>
                                                 </tr>
-                                            <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
