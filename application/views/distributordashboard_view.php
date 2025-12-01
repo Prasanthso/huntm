@@ -1002,7 +1002,7 @@
             <a href="<?php echo base_url('Distributordashboard/profile'); ?>" 
                class="list-group-item list-group-item-action <?php echo ($method == 'profile') ? 'active' : ''; ?>">
                 <i class="fas fa-user-cog"></i>
-                <span>Profile Settings</span>
+                <span>Profile Settings</span>o
             </a>
             <a href="<?php echo base_url('Distributordashboard/create_staff'); ?>" 
                class="list-group-item list-group-item-action <?php echo ($method == 'create_staff') ? 'active' : ''; ?>">

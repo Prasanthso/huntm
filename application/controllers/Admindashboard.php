@@ -159,7 +159,12 @@ class Admindashboard extends CI_Controller {
     // Assign Same Pages to All Staff
     public function assign_same_pages_to_all_staff() {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $this->load->model('Permission_model');
 
         if ($this->input->post()) {
@@ -190,6 +195,12 @@ class Admindashboard extends CI_Controller {
     // Get Distributor Data
     public function get_distributor_data() {
         $admin_id = $this->check_session();
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
 
         $data['distributor_data'] = $this->Admindashboard_model->get_distributor_details($admin_id);
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
@@ -200,7 +211,12 @@ class Admindashboard extends CI_Controller {
     // Show Remaining Distributor Data
     public function showing_distributor_remaining_data($distributor_id) {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         if (!$distributor_id) {
             show_error("Distributor ID is required", 400);
         }
@@ -214,7 +230,12 @@ class Admindashboard extends CI_Controller {
     // Get and Update Staff Limits
     public function get_staff_limits() {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['get_staff_limits'] = $this->Admindashboard_model->get_staff_limits($admin_id);
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_staff_limits';
@@ -223,7 +244,12 @@ class Admindashboard extends CI_Controller {
 
     public function update_staff_limits() {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $this->form_validation->set_rules('staff_limit', 'Staff Limit', 'required|integer|greater_than[0]');
 
         if ($this->form_validation->run() == FALSE) {
@@ -263,7 +289,12 @@ class Admindashboard extends CI_Controller {
     // Template Management
     public function get_template_content() {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $data['templates'] = $this->Admindashboard_model->get_template_content();
         $data['admin_name'] = $this->Admindashboard_model->get_admin($admin_id);
         $data['method'] = 'get_template_content';
@@ -272,7 +303,12 @@ class Admindashboard extends CI_Controller {
 
     public function update_template_content() {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $this->form_validation->set_rules('template_id', 'Template ID', 'required|trim');
         $this->form_validation->set_rules('template_name', 'Template Name', 'required|trim');
         $this->form_validation->set_rules('template_content', 'Template Content', 'required|trim');
@@ -296,7 +332,12 @@ class Admindashboard extends CI_Controller {
 
     public function add_template() {
         $admin_id = $this->check_session();
-
+        $admin_data = $this->Admindashboard_model->get_admin_data($admin_id);
+        if (!$admin_data) {
+            $this->session->set_flashdata('error', 'Unable to retrieve admin data. Please log in again.');
+            redirect('user_profile_login');
+            return;
+        }
         $this->form_validation->set_rules('template_name', 'Template Name', 'required|trim');
         $this->form_validation->set_rules('template_content', 'Template Content', 'required|trim');
 
